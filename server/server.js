@@ -5,7 +5,7 @@ This will allow listening for https requests, otherwise it will just do http.
 */
 const PRODUCTION = 1;
 const DEV = 0;
-const HTTP_PORT_NUM = 3001;
+const HTTP_PORT_NUM = 3000;
 let mode;
 
 if (process.argv.length > 2 && process.argv[2] === "-p") {
@@ -36,14 +36,14 @@ require('./uploadAPI.js');
 // { index : false } is to allow request for the webroot to get caught 
 // by 'app.get('/*', function(req, res)', allowing http to https redirects
 app.use(express.static(path.join(__dirname, '../build'), { index: false }));
-app.use(express.static(path.join(__dirname, '../public'), { index: false }));
+app.use(express.static(path.join(__dirname, '../gifs'), { index: false }));
 
-app.get('/*', function (req, res) {
+app.get('/', function (req, res) {
 	if (mode === PRODUCTION) {
 		// TODO handle https redirects here
 	}
 	else if(mode === DEV) {
-		res.sendFile(path.join(__dirname, '../public', 'index.html'));
+		res.sendFile(path.join(__dirname, '../build', 'index.html'));
 	}
 
 });

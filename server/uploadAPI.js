@@ -8,76 +8,92 @@ const { http } = require("./server");
 
 // for sockets
 const io = require('socket.io')(http);
+// for generating unique file names
+const crypto = require("crypto");
 
-// let interval;
+function getUniqueID() {
+  return crypto.randomBytes(16).toString("hex");
+}
 
-// io.on("connection", (socket) => {
-//   console.log("New client connected!");
-//   if (interval) {
-//     clearInterval(interval);
-//   }
-//   interval = setInterval(() => getApiAndEmit(socket), 1000);
-//   socket.on("disconnect", () => {
-//     console.log("Client disconnected");
-//     clearInterval(interval);
-//   });
-// });
+function getExtension(fileName) {
+  let extension = path.extname(fileName)
+  console.log(`This file's extension is ${extension}`);
+  return extension;
+}
 
-// const getApiAndEmit = socket => {
-//   const response = new Date();
-//   // Emitting a new message. Will be consumed by the client
-//   socket.emit("FromAPI", response);
-// };
+/**
+ * The socket for this connection
+ */
+let socket;
 
-let me_socket;
 
-io.on("connection", (socket) => {
+
+const UPLOAD_DIR = os.tmpdir + '/' + 'gif-it';
+const SERVE_DIR = path.join(__dirname, '../gifs');
+if(!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR);
+}
+if(!fs.existsSync(SERVE_DIR)) {
+  fs.mkdirSync(SERVE_DIR);
+}
+
+
+io.on("connection", (newSocket) => {
   console.log("New client connected!");
-  me_socket = socket;
+  socket = newSocket;
 
-  socket.on("disconnect", () => {
+  newSocket.on("disconnect", () => {
     console.log("Client disconnected");
   });
 
 });
 
-const getApiAndEmit = socket => {
-  const response = new Date();
-  // Emitting a new message. Will be consumed by the client
-  socket.emit("FromAPI", response);
-};
 
-
+/**
+ * This API handles a file upload and then coverts it to GIF
+ */
 app.post('/api/videoUpload', function (req, res) {
-    console.log('hit');
-    var busboy = new Busboy({ headers: req.headers });
-    let file_name;
+    let busboy = new Busboy({ headers: req.headers });
+    let bytesRecieved = 0;
+    let fileSize = req.headers["content-length"];
+    let newName = getUniqueID() + ".gif";
+    let uploadDst;
+    let convertDst;
 
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-      me_socket.emit("FromAPI", "uploading");
-      file_name = filename;
-      var saveTo = path.join(__dirname, 'uploads/' + filename);
-      file.pipe(fs.createWriteStream(saveTo));
+      uploadDst = path.join(UPLOAD_DIR + "/" + newName + getExtension(filename));
+      convertDst = path.join(SERVE_DIR + "/" + newName);
+      
+      file.on('data', function(data) {
+        bytesRecieved = bytesRecieved + data.length;
+        socket.emit("FromAPI", Math.round(bytesRecieved*100/fileSize) + '% Uploaded');
+      });
+
+      file.pipe(fs.createWriteStream(uploadDst));
     });
 
+
     busboy.on('finish', function() {
-      me_socket.emit("FromAPI", "converting");
+      socket.emit("FromAPI", "Converting to .gif...");
       const ffmpeg = spawn(
             'ffmpeg', 
-            ['-i', path.join(__dirname, 'uploads/' + file_name), 
-            path.join(__dirname, 'uploads/' + file_name + '.gif')]);
+            ['-i', uploadDst, 
+            convertDst]);
 
-            ffmpeg.stdout.on('data', (data) => {
-            console.log(`stdout: ${data}`);
+        ffmpeg.stdout.on('data', (data) => {
+          console.log(`stdout: ${data}`);
+          //socket.emit("FromAPI", data);
         });
         
         ffmpeg.stderr.on('data', (data) => {
           console.error(`stderr: ${data}`);
+          //socket.emit("FromAPI", data);
         });
         
         ffmpeg.on('close', (code) => {
             console.log(`child process exited with code ${code}`);
-            me_socket.emit("FromAPI", `child process exited with code ${code}`);
+            //socket.emit("FromAPI", `child process exited with code ${code}`);
+            socket.emit("complete", newName);
         });
         
         res.writeHead(200, { 'Connection': 'close' });

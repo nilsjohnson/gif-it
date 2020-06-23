@@ -1,0 +1,26 @@
+#main-header{
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	background: rgb(255,255,255);
+background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(218,218,218,1) 47%, rgba(255,255,255,1) 100%);
+}
+.main-navbar ul {
+	margin: 1em 0 .5em;
+	text-align: center;
+}
+
+#main-navbar li {
+	margin-left: 12 em;
+	display: inline;
+}
+
+#main-navbar a {
+	display: inline-block;
+	padding: .5em 1.5em;
+}
+
+#main-navbar a:link {
+	text-decoration: none;
+}

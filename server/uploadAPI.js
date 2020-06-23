@@ -2,14 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const Busboy = require('busboy');
-const { app } = require("./server");
+const { app, http, https, serveMode } = require("./server");
 const { spawn } = require('child_process');
-const { http } = require("./server");
-
-// for sockets
-const io = require('socket.io')(http);
-// for generating unique file names
 const crypto = require("crypto");
+
+const DEV = 0;
+
+const io = serveMode === DEV ? require('socket.io')(http) : require('socket.io').listen(https);
 
 function getUniqueID() {
   return crypto.randomBytes(16).toString("hex");
@@ -21,13 +20,6 @@ function getExtension(fileName) {
   return extension;
 }
 
-/**
- * The socket for this connection
- */
-let socket;
-
-
-
 const UPLOAD_DIR = os.tmpdir + '/' + 'gif-it';
 const SERVE_DIR = path.join(__dirname, '../gifs');
 if(!fs.existsSync(UPLOAD_DIR)) {
@@ -37,6 +29,7 @@ if(!fs.existsSync(SERVE_DIR)) {
   fs.mkdirSync(SERVE_DIR);
 }
 
+let socket;
 
 io.on("connection", (newSocket) => {
   console.log("New client connected!");
@@ -48,11 +41,11 @@ io.on("connection", (newSocket) => {
 
 });
 
-
 /**
  * This API handles a file upload and then coverts it to GIF
  */
 app.post('/api/videoUpload', function (req, res) {
+    // the socket for this connection
     let busboy = new Busboy({ headers: req.headers });
     let bytesRecieved = 0;
     let fileSize = req.headers["content-length"];

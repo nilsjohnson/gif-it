@@ -30,7 +30,8 @@ else {
 }
 
 let httpsServer;
-if(serveMode = PRODUCTION) {
+
+if(serveMode == PRODUCTION) {
 	const FULL_CHAIN = '/etc/letsencrypt/live/gif-it.io/cert.pem';
 	const PRIVATE_KEY = '/etc/letsencrypt/live/gif-it.io/privkey.pem';
 	const OPTIONS = {

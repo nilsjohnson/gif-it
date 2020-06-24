@@ -56,7 +56,7 @@ require('./uploadAPI.js');
 
 // { index : false } is to allow request for the webroot to get caught by app.get('/*'...)
 // since we need to handle redirects to https
-app.use(express.static(path.join(__dirname, '../build'), { index: false }));
+//app.use(express.static(path.join(__dirname, '../build'), { index: false }));
 app.use(express.static(path.join(__dirname, '../gifs'), { index: false }));
 
 app.get('/', function (req, res) {

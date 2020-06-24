@@ -10,7 +10,7 @@ function uploadFile(url = '', data = {}) {
   });
 }
 
-let files = [];
+let unprocessedFiles = [];
 
 class Uploader extends Component {
   constructor(props) {
@@ -19,10 +19,18 @@ class Uploader extends Component {
     this.state = ({
       response: "Please Choose file to convert to .gif",
       gif: "",
-      fileNames: []
+      files: []
     });
 
     let socket;
+  }
+
+  addFile = (file) => {
+    let temp = this.state.files;
+    temp.push(file);
+    this.setState({
+      files: temp
+    });
   }
 
   setResponse = (data) => {
@@ -32,39 +40,54 @@ class Uploader extends Component {
   }
 
   createSocket = () => {
-
-  }
-
-  upload = () => {
     this.socket = socketIOClient();
 
     this.socket.on("FromAPI", data => {
       this.setResponse(data);
     });
+
     this.socket.on("complete", data => {
       console.log("data: " + data);
       this.showGif(data);
     });
 
     this.socket.on("connect", () => {
-      let videos = document.querySelector('input[type="file"][multiple]');
-
-      // uploads each individual file
-      for (let i = 0; i < videos.files.length; i++) {
+      console.log("connected!");
+      for(let i = 0; i < unprocessedFiles.length; i++) {
+        console.log("Upoading file: " + i);
+        console.log(this.state.files[i]);
         let formData = new FormData();
-        formData.append('video', videos.files[i]);
-
+        formData.append('video', unprocessedFiles[i]);
         uploadFile('/api/videoUpload', formData)
-          .then(response => {
-            if (response.ok) {
-              console.log(response);
-            }
-          })
-          .catch(error => console.error('Error: ', error));
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+          else {
+            console.log("File Problem");
+          }
+        })
+        .then(resJson => {
+          console.log(resJson);
+          this.addFile(resJson);
+        })
+        .catch(error => console.error('Error: ', error));
       }
-      videos.value = "";
-
+      
+      unprocessedFiles = [];
     });
+  }
+
+  selectFilesUpload = () => {
+    let videos = document.querySelector('input[type="file"][multiple]');
+
+    // uploads each individual file
+    for (let i = 0; i < videos.files.length; i++) {
+      console.log("pushing file: " + videos.files[i].name);
+      unprocessedFiles.push(videos.files[i]);
+    }
+
+    this.createSocket();
   }
 
   showGif = (gifName) => {
@@ -76,9 +99,7 @@ class Uploader extends Component {
   // when the user drops the files into the box
   dropHandler = (ev) => {
     ev.preventDefault();
-    console.log("drop");
-
-
+    console.log("drop handler hit");
 
     if (ev.dataTransfer.items) {
       // Use DataTransferItemList interface to access the file(s)
@@ -87,52 +108,19 @@ class Uploader extends Component {
         if (ev.dataTransfer.items[i].kind === 'file') {
           var file = ev.dataTransfer.items[i].getAsFile();
           console.log('... file[' + i + '].name = ' + file.name);
-          files.push(file);
+          unprocessedFiles.push(file);
         }
       }
     } else {
       // Use DataTransfer interface to access the file(s)
       for (var i = 0; i < ev.dataTransfer.files.length; i++) {
         console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
-        files.push(ev.dataTransfer.files[i]);
+        unprocessedFiles.push(ev.dataTransfer.files[i]);
       }
     }
 
-    console.log(files);
-
-    let socket = socketIOClient();
-
-    socket.on("FromAPI", data => {
-      this.setResponse(data);
-    });
-
-    socket.on("complete", data => {
-      console.log("data: " + data);
-      this.showGif(data);
-    });
-  
-    socket.on("connect", () => {
-      console.log("Socket Connected");
-      for(let i = 0; i < files.length; i++) {
-        console.log(files[i]);
-      }
-
-      // uploads each individual file
-      for (let i = 0; i < files.length; i++) {
-        let formData = new FormData();
-        formData.append('video', files[i]);
-
-        uploadFile('/api/videoUpload', formData)
-          .then(response => {
-            if (response.ok) {
-              console.log(response);
-            }
-          })
-          .catch(error => console.error('Error: ', error));
-      }
-      files = [];
-
-    });
+    this.createSocket();
+    
   }
 
   dragStartHandler = (ev) => {
@@ -164,13 +152,13 @@ class Uploader extends Component {
           </div>
         </div>
         <div className="container">
-          <button onClick={this.upload}>Upload</button>
-          <button onClick={this.upload}>Cancel</button>
+          <button onClick={this.selectFilesUpload}>Upload</button>
+          <button>Cancel</button>
         </div>
         <div className="container">
           {
-            this.state.fileNames.map(fileName =>
-              <IndvidualWell key={"fileName"} fileName={"fileName"} size={"12345 kb"} />
+            this.state.files.map(file =>
+              <IndvidualWell key={file.newName} fileName={file.newName} size={file.size} />
             )
           }
         </div>

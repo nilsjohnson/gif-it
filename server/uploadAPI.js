@@ -89,9 +89,12 @@ app.post('/api/videoUpload', function (req, res) {
             socket.emit("complete", newName);
         });
         
-        res.writeHead(200, { 'Connection': 'close' });
-        res.end();
-
+        res.json({
+          newName: newName,
+          size: fileSize,
+          upoaded: "0%",
+          conversionStatus: "waiting for upload"
+        });
     });
 
     return req.pipe(busboy);

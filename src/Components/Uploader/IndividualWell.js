@@ -5,15 +5,17 @@ import PropTypes from 'prop-types';
 
 const IndvidualWell = (props) => (
     <div>
-        <h3>{props.fileName}</h3>
-        <p>{props.size}</p>
+        <p>File: {props.fileName}</p>
+        <p>Size: {props.size}</p>
+        <p>Uploaded: {props.percentUploaded}%</p>
         <button>Convert</button>
 	</div>
 );
 
 IndvidualWell.propTypes = {
     name: PropTypes.string,
-    size: PropTypes.object
+    size: PropTypes.string,
+    percentUploaded: PropTypes.number
   };
   
 

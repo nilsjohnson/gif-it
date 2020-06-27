@@ -2,5 +2,10 @@
     border: 2px dashed;
     border-radius: 5px;
     width:  50%;
-    height: 100px;
+    height: 200px;
   }
+
+.choosing-files {
+  border: 3px solid seagreen;
+  opacity: .6;
+}

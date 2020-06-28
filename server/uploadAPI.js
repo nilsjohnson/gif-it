@@ -34,6 +34,8 @@ if (!fs.existsSync(SERVE_DIR)) {
   fs.mkdirSync(SERVE_DIR);
 }
 
+let fileMap = {};
+
 let sockets = {};
 
 io.on("connection", (newSocket) => {
@@ -43,6 +45,11 @@ io.on("connection", (newSocket) => {
 
   sockets[id].on("disconnect", () => {
     console.log(`Socket ${id} disconnected`);
+  });
+
+  sockets[id].on("ConvertRequested", (fileId) => {
+    console.log(`fid ${fileId}`);
+    convertToGif(fileMap[fileId], path.join(SERVE_DIR, fileId + ".gif"), id, fileId);
   });
 });
 
@@ -60,10 +67,17 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
   let fileName;
   let fileID = getUniqueID();
 
+  // validaion here..
+  if(fileSize/ (1000*1000).toFixed(2) > 20) {
+    res.writeHead(400, { 'Connection': 'close' });
+    res.end();
+  }
+
   busboy.on('file', function (fieldname, file, givenFilename, encoding, mimetype) {
     fileName = givenFilename;
     newName = getFileName_noExtension(givenFilename) + ""
     uploadDst = path.join(UPLOAD_DIR + "/" + givenFilename);
+    fileMap[fileID] = uploadDst;
 
     sockets[socketId].emit("UploadStart", {fileId: fileID, percentUploaded: 0, size: fileSize});
 
@@ -74,9 +88,11 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
       sockets[socketId].emit("UploadProgress", {
         fileName: fileName,
         fileId: fileID, 
-        percentUploaded: 
-        percentUploaded, 
-        size: fileSize});
+        percentUploaded: percentUploaded, 
+        conversionStatus: null,
+        size: fileSize,
+        servePath: null
+       });
     });
 
     file.pipe(fs.createWriteStream(uploadDst));
@@ -92,25 +108,33 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
   return req.pipe(busboy);
 });
 
-function convertToGif(src, dst) {
+function convertToGif(src, dst, socketId, fileId) {
+  console.log("socketId: " + socketId);
   const ffmpegProcess = spawn(
     'ffmpeg',
     ['-i', src,
+    '-vf', 'scale=512:-1',
+    '-r', '30',
       dst]);
 
   ffmpegProcess.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);
-    //socket.emit("FromAPI", data);
+    sockets[socketId].emit("ConversionProgress", {fileId: fileId, conversionStatus: data.toString()});
   });
 
   ffmpegProcess.stderr.on('data', (data) => {
     console.error(`stderr: ${data}`);
-    //socket.emit("FromAPI", data);
+    sockets[socketId].emit("ConversionProgress", {fileId: fileId, conversionStatus: data.toString()});
   });
 
   ffmpegProcess.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
-    //socket.emit("FromAPI", `child process exited with code ${code}`);
-    socket.emit("complete", newName);
+    if(code === 0) {
+      sockets[socketId].emit("ConversionProgress", {fileId: fileId, conversionStatus: "done."});
+      sockets[socketId].emit("ConversionComplete", {fileId: fileId});
+    }
+    else {
+      sockets[socketId].emit("ConversionProgress", {fileId: fileId, conversionStatus: "Error."});
+    }
   });
 }

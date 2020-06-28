@@ -11,8 +11,7 @@ function uploadFile(url = '', data = {}) {
   });
 }
 
-let unprocessedFiles = [];
-let transactionID = null;
+
 
 class Uploader extends Component {
   constructor(props) {
@@ -25,6 +24,7 @@ class Uploader extends Component {
 
     this.socket = null;
     this.curUploadNum = 0;
+    this.unprocessedFiles = [];
   }
 
   // to flag or unflag if a user is dragging files over the drop zone
@@ -77,8 +77,8 @@ class Uploader extends Component {
     });
 
     // to signal upload is complete
-    this.socket.on("uploadComplete", data => {
-      console.log(data);
+    this.socket.on("uploadComplete", fileNum => {
+      console.log(`File ${fileNum} uploaded`);
       this.curUploadNum ++;
       //this.showGif(data);
     });
@@ -89,49 +89,83 @@ class Uploader extends Component {
       this.upload();
     });
 
+    this.socket.on("ConversionComplete", (conversionResult) => {
+      console.log(conversionResult);
+      let tmp = this.state.uploads;
+      for(let  i = 0; i < tmp.length; i++) {
+        if(tmp[i].fileId === conversionResult.fileId) {
+          tmp[i].servePath = conversionResult.fileId + ".gif";
+          break;
+        }
+      }
+
+      this.setState({
+        uploads: tmp
+      });
+
+    });
+
+    this.socket.on("ConversionProgress", (data) => {
+      console.log(data);
+      let tmp = this.state.uploads;
+      for(let  i = 0; i < tmp.length; i++) {
+        if(tmp[i].fileId === data.fileId) {
+          tmp[i].conversionStatus = data.conversionStatus;
+          break;
+        }
+      }
+
+      this.setState({
+        uploads: tmp
+      });
+    })
   }
 
 
   upload = () => {
-    console.log('starting upload');
-    console.log(unprocessedFiles);
     let formData = new FormData();
-    if(unprocessedFiles.length === 0) {
+    if(this.unprocessedFiles.length === 0) {
       return;
     }
     
-    formData.append(transactionID, unprocessedFiles.shift());
+    formData.append("files", this.unprocessedFiles.shift());
 
     uploadFile('/api/videoUpload/' + this.socket.id, formData)
       .then(response => {
         if (response.ok) {
-          console.log(response);
-          console.log(this);
-          this.upload();
+          console.log("Upload Complete")
         }
         else {
-          console.log("File Problem");
+          alert("file too large.");
         }
+        // upload next one
+        this.upload();
       })
       .catch(error => console.error('Error: ', error));
   }
 
   initUpload = () => {
-    let tmpUploads = [];
-    
-    for(let i = 0; i < unprocessedFiles.length; i++) {
+    // populates array of temporary objects
+    // as placeholders until server responds
+    let placeHoldrs = [];
+    for(let i = 0; i < this.unprocessedFiles.length; i++) {
       let temp = {
-        fileName: unprocessedFiles[i].name,
+        fileName: this.unprocessedFiles[i].name,
         fileId: i,
-        fileName: unprocessedFiles[i].name,
-        size: unprocessedFiles[i].size.toString(),
+        size: this.unprocessedFiles[i].size.toString(),
         percentUploaded: 0
       }
-      tmpUploads.push(temp);
+      placeHoldrs.push(temp);
     }
-    
-    this.addUploads(tmpUploads);
-    this.createSocket();
+
+    // add the temp objects and create socket
+    this.addUploads(placeHoldrs);
+    if(this.socket === null) {
+      this.createSocket();
+    }
+    else {
+      this.upload();
+    }
   }
 
   // adds all the files to unproccessedFiles array 
@@ -142,7 +176,7 @@ class Uploader extends Component {
 
     for (let i = 0; i < videos.files.length; i++) {
       console.log("pushing file: " + videos.files[i].name);
-      unprocessedFiles.push(videos.files[i]);
+      this.unprocessedFiles.push(videos.files[i]);
     }
 
     this.initUpload();
@@ -162,14 +196,14 @@ class Uploader extends Component {
         if (ev.dataTransfer.items[i].kind === 'file') {
           var file = ev.dataTransfer.items[i].getAsFile();
           console.log('... file[' + i + '].name = ' + file.name);
-          unprocessedFiles.push(file);
+          this.unprocessedFiles.push(file);
         }
       }
     } else {
       // Use DataTransfer interface to access the file(s)
       for (var j = 0; j < ev.dataTransfer.files.length; j++) {
         console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[j].name);
-        unprocessedFiles.push(ev.dataTransfer.files[j]);
+        this.unprocessedFiles.push(ev.dataTransfer.files[j]);
       }
     }
 
@@ -184,6 +218,11 @@ class Uploader extends Component {
 
   dragEndHandler = (ev) => {
     this.setFilesHovering(false);
+  }
+
+  convert = (upload) => {
+    console.log(`convert: ${upload}`);
+    this.socket.emit("ConvertRequested", upload);
   }
 
   render() {
@@ -214,10 +253,15 @@ class Uploader extends Component {
           this.state.uploads.map(upload =>
             <div className="container" key={upload.fileId}>
               <IndvidualWell
+                fileId={upload.fileId}
                 key={upload.fileId}
                 fileName={upload.fileName}
                 size={upload.size}
-                percentUploaded={upload.percentUploaded} />
+                percentUploaded={upload.percentUploaded} 
+                convert={this.convert}
+                servePath={upload.servePath}
+                conversionStatus={upload.conversionStatus}
+                />
             </div>
           )
         }

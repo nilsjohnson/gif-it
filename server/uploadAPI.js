@@ -14,7 +14,7 @@ const DEV = 0;
 const io = serveMode === DEV ? require('socket.io')(http) : require('socket.io').listen(https);
 
 function getUniqueID() {
-  return crypto.randomBytes(6).toString("hex");
+  return crypto.randomBytes(6).toString("base64");
 }
 
 function getExtension(fileName) {
@@ -108,22 +108,32 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
   return req.pipe(busboy);
 });
 
+function extractDuration(str) {
+  let arr = str.match(/Duration:\s\d{2}:\d{2}:\d{2}\.\d{2}/)
+  return arr;
+}
+
 function convertToGif(src, dst, socketId, fileId) {
-  console.log("socketId: " + socketId);
+  let duration = null;
+
   const ffmpegProcess = spawn(
     'ffmpeg',
-    ['-i', src,
+    [ '-i', src,
     '-vf', 'scale=512:-1',
-    '-r', '30',
+    '-r', '30', 
+    '-nostdin', // disable interaction
       dst]);
 
   ffmpegProcess.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
     sockets[socketId].emit("ConversionProgress", {fileId: fileId, conversionStatus: data.toString()});
   });
 
   ffmpegProcess.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
+    if(duration === null && extractDuration(data.toString())) {
+      duration = (extractDuration(data.toString())[0]);
+      
+    }
+    // console.log("stderr: " + data.toString());
     sockets[socketId].emit("ConversionProgress", {fileId: fileId, conversionStatus: data.toString()});
   });
 

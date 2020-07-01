@@ -4,4 +4,12 @@ function getNew() {
     });
 }
 
-export { getNew };
+function uploadFile(url = '', data = {}) {
+    console.log('build fetch request');
+    return fetch(url, {
+      method: 'POST',
+      body: data
+    });
+  }
+
+export { getNew, uploadFile };

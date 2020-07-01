@@ -2,16 +2,7 @@ import React, { Component } from "react";
 import socketIOClient from "socket.io-client";
 import './style.css';
 import UploadWell from "./UploadWell";
-
-function uploadFile(url = '', data = {}) {
-  console.log('build fetch request');
-  return fetch(url, {
-    method: 'POST',
-    body: data
-  });
-}
-
-
+import { uploadFile } from "../../util/data"
 
 class Uploader extends Component {
   constructor(props) {
@@ -22,21 +13,24 @@ class Uploader extends Component {
       filesHovering: false
     });
 
+    // the socket for this upload session
     this.socket = null;
+    // The current upload. We upload 1 file at a time.
     this.curUploadNum = 0;
+    // holding bin for files after the user has dragged/dropped or selected them.
     this.unprocessedFiles = [];
   }
 
-  componentWillUnmount = () => { }
-
-  // to flag or unflag if a user is dragging files over the drop zone
+  // to flag or unflag if a user is dragging files over the drop-zone
   setFilesHovering = (val) => {
     this.setState({
       filesHovering: val
     });
   }
 
-  // adds an object representing a file uploaded to server
+  // adds an object representing a file uploaded to server.
+  // object will intitially be a placeholder which will be 
+  // gradually upldated as the session progresses
   addUploads = (uploads) => {
     console.log(this.state.uploads);
     this.setState({
@@ -47,14 +41,20 @@ class Uploader extends Component {
     });
   }
 
+  /*
+    opens the socket and defines the communication actions.
+  */
   createSocket = () => {
     this.socket = socketIOClient();
 
-    // to handle upload progress updates
+    /*
+      to handle upload progress updates
+    */
     this.socket.on("UploadProgress", data => {
       for (let i = 0; i < this.state.uploads.length; i++) {
         if (this.state.uploads[i].fileId === data.fileId) {
           let temp = this.state.uploads;
+          // TODO only update percent field
           temp[i] = data;
           this.setState({
             uploads: temp
@@ -63,8 +63,10 @@ class Uploader extends Component {
       }
     });
 
-    // to create the upload object on this (client) side
-    // which will be updated on UploadProgress
+    /*
+      Updates the placeholder upload data with 'real' data
+      about the upload from the server.
+    */
     this.socket.on("UploadStart", uploadData => {
       console.log(`upload started: ${uploadData}`);
 
@@ -77,10 +79,14 @@ class Uploader extends Component {
 
     });
 
-    // to signal upload is complete
+    /*
+      Provides the upload with metadata about the video to 
+      determine conversion options and marks the upload as complete.
+      Note: the next upload gets triggered by a 200 from the POST and not here.
+    */
     this.socket.on("uploadComplete", (data) => {
+      console.log(`'uploadComplete' triggered. Here's the data:`);
       console.log(data);
-      console.log("File " + this.curUploadNum + " Uploaded");
 
       let tmp = this.state.uploads;
 
@@ -94,18 +100,19 @@ class Uploader extends Component {
       }
 
       this.setState({uploads: tmp});
-
-      console.log(this.state.uploads);
-      // TODO, should this go after the post?
-      this.curUploadNum++;
     });
 
-    // to POST the data as soon as we are connected
+    /**
+     * Upon connect, we start uploading.
+     */
     this.socket.on("connect", () => {
       console.log(`Socket ${this.socket.id} connected`);
       this.upload();
     });
 
+    /**
+     * Marks the conversion as complete so we can serve the .gif
+     */
     this.socket.on("ConversionComplete", (conversionResult) => {
       console.log(conversionResult);
 
@@ -123,6 +130,9 @@ class Uploader extends Component {
 
     });
 
+    /**
+     * To handle conversion progress updates
+     */
     this.socket.on("ConversionProgress", (data) => {
       console.log(data);
       let tmp = this.state.uploads;
@@ -136,22 +146,22 @@ class Uploader extends Component {
       this.setState({
         uploads: tmp
       });
-    })
+    });
   }
 
-
+  /**
+   * Takes files from unprocessedFiles and recursively uploads them.
+   */
   upload = () => {
+    if (this.unprocessedFiles.length === 0) { return; }
+
     let formData = new FormData();
-    if (this.unprocessedFiles.length === 0) {
-      return;
-    }
-
     formData.append("files", this.unprocessedFiles.shift());
-
     uploadFile('/api/videoUpload/' + this.socket.id, formData)
       .then(response => {
         if (response.ok) {
-          console.log("Upload POST succeeded")
+          console.log(`Upload #${this.curUploadNum + 1} successfully uploaded.`)
+          this.curUploadNum++;
         }
         else {
           alert("Problem With upload.");
@@ -162,9 +172,12 @@ class Uploader extends Component {
       .catch(error => console.error('Error: ', error));
   }
 
+  /**
+   * Adds placeholder objects to the stateful upload array
+   * so the user knows what files are waiting to be uploaded,
+   * then kicks off the upload.
+   */
   initUpload = () => {
-    // populates array of temporary objects
-    // as placeholders until server responds
     let placeHoldrs = [];
     for (let i = 0; i < this.unprocessedFiles.length; i++) {
       let temp = {
@@ -176,7 +189,6 @@ class Uploader extends Component {
       placeHoldrs.push(temp);
     }
 
-    // add the temp objects and create socket
     this.addUploads(placeHoldrs);
     if (this.socket === null) {
       this.createSocket();
@@ -186,8 +198,9 @@ class Uploader extends Component {
     }
   }
 
-  // adds all the files to unproccessedFiles array 
-  // if the user selects them from file system
+  /**
+   * Adds all the files unproccessedFiles via select.
+   */
   selectFilesUpload = () => {
     console.log("select files hit!");
     let videos = document.querySelector('input[type="file"][multiple]');
@@ -200,27 +213,23 @@ class Uploader extends Component {
     this.initUpload();
   }
 
-  // adds all the files to unproccessedFiles array 
-  // if the user selects them from file system
+  /**
+   * Add files to unproccessedFiles via drag/drop. 
+   */
   dropHandler = (ev) => {
     ev.preventDefault();
-    console.log("drop handler hit");
     this.setFilesHovering(false);
 
     if (ev.dataTransfer.items) {
-      // Use DataTransferItemList interface to access the file(s)
-      for (var i = 0; i < ev.dataTransfer.items.length; i++) {
-        // If dropped items aren't files, reject them
+      for (let i = 0; i < ev.dataTransfer.items.length; i++) {
         if (ev.dataTransfer.items[i].kind === 'file') {
-          var file = ev.dataTransfer.items[i].getAsFile();
-          console.log('... file[' + i + '].name = ' + file.name);
+          let file = ev.dataTransfer.items[i].getAsFile();
           this.unprocessedFiles.push(file);
         }
       }
-    } else {
-      // Use DataTransfer interface to access the file(s)
+    }
+    else {
       for (var j = 0; j < ev.dataTransfer.files.length; j++) {
-        console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[j].name);
         this.unprocessedFiles.push(ev.dataTransfer.files[j]);
       }
     }
@@ -234,15 +243,24 @@ class Uploader extends Component {
     this.setFilesHovering(true);
   }
 
+  /**
+   * Deactivates drop-zone if user hovers but doesn't drop files.
+   */
   dragEndHandler = (ev) => {
     this.setFilesHovering(false);
   }
 
+  /**
+   * Tells the server to convert an upload.
+   */
   convert = (upload) => {
     console.log(`convert: ${upload}`);
     this.socket.emit("ConvertRequested", upload);
   }
 
+  /**
+   * Tells the server to add file to database with given tags.
+   */
   share = (fileId, path, tags) => {
     console.log("Cher is the best!");
     console.log(tags);
@@ -267,15 +285,7 @@ class Uploader extends Component {
 
           </div>
         </div>
-        <div className="container">
-          <div className="">
-            <p>{this.state.response}</p>
-
-            {/* <img className="" src={'/' + this.state.gif}/> */}
-          </div>
-        </div>
-        {
-          this.state.uploads.map(upload =>
+        {this.state.uploads.map(upload =>
             <div className="container" key={upload.fileId}>
               <UploadWell
                 key={upload.fileId}
@@ -291,11 +301,8 @@ class Uploader extends Component {
                 share={this.share}
               />
             </div>
-          )
-        }
-      </div>
-
-    );
+          )}
+      </div>);
   }
 }
 

@@ -99,7 +99,7 @@ class Uploader extends Component {
         }
       }
 
-      this.setState({uploads: tmp});
+      this.setState({ uploads: tmp });
     });
 
     /**
@@ -157,19 +157,35 @@ class Uploader extends Component {
 
     let formData = new FormData();
     formData.append("files", this.unprocessedFiles.shift());
-    uploadFile('/api/videoUpload/' + this.socket.id, formData)
+
+    return uploadFile('/api/videoUpload/' + this.socket.id, formData)
       .then(response => {
         if (response.ok) {
           console.log(`Upload #${this.curUploadNum + 1} successfully uploaded.`)
           this.curUploadNum++;
+          this.upload();
         }
         else {
-          alert("Problem With upload.");
+          console.log("response not ok..");
+          response.json().then(resJson => {
+            console.log(resJson);
+
+            let tmp = this.state.uploads;
+            tmp[this.curUploadNum].error = resJson.err;
+            this.setState({
+              uploads : tmp
+            });
+
+            this.curUploadNum++;
+            this.upload();
+          });
         }
-        // upload next one
-        this.upload();
       })
-      .catch(error => console.error('Error: ', error));
+      .catch(err =>{
+        console.log("Upload error:" + err)
+        this.curUploadNum++;
+        this.upload();
+      });
   }
 
   /**
@@ -202,7 +218,6 @@ class Uploader extends Component {
    * Adds all the files unproccessedFiles via select.
    */
   selectFilesUpload = () => {
-    console.log("select files hit!");
     let videos = document.querySelector('input[type="file"][multiple]');
 
     for (let i = 0; i < videos.files.length; i++) {
@@ -265,7 +280,7 @@ class Uploader extends Component {
     console.log("Cher is the best!");
     console.log(tags);
     console.log(fileId);
-    this.socket.emit("ShareRequest", {fileId: fileId, path: path, tags: tags});
+    this.socket.emit("ShareRequest", { fileId: fileId, path: path, tags: tags });
   }
 
   render() {
@@ -286,22 +301,23 @@ class Uploader extends Component {
           </div>
         </div>
         {this.state.uploads.map(upload =>
-            <div className="container" key={upload.fileId}>
-              <UploadWell
-                key={upload.fileId}
-                fileId={upload.fileId}
-                fileName={upload.fileName}
-                size={upload.size}
-                percentUploaded={upload.percentUploaded}
-                convert={this.convert}
-                servePath={upload.servePath}
-                conversionStatus={upload.conversionStatus}
-                uploadComplete={upload.uploadComplete}
-                videoLength={upload.videoLength}
-                share={this.share}
-              />
-            </div>
-          )}
+          <div className="container" key={upload.fileId}>
+            <UploadWell
+              key={upload.fileId}
+              fileId={upload.fileId}
+              fileName={upload.fileName}
+              size={upload.size}
+              percentUploaded={upload.percentUploaded}
+              convert={this.convert}
+              servePath={upload.servePath}
+              conversionStatus={upload.conversionStatus}
+              uploadComplete={upload.uploadComplete}
+              videoLength={upload.videoLength}
+              share={this.share}
+              error={upload.error}
+            />
+          </div>
+        )}
       </div>);
   }
 }

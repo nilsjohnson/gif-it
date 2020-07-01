@@ -10,28 +10,34 @@ const http = require('http').createServer(app);
 const https = require('https');
 const fs = require('fs');
 
-const PRODUCTION = 1;
-const DEV = 0;
-const HTTP_PORT_NUM = 3001;
-const HTTPS_PORT_NUM = 443;
+const { Ports, ServeModes, FilePaths} = require('./const');
 
+// default serv mode and debug
+let serveMode = ServeModes.DEV;
+global.DEBUG = false;
 
-// to signal if we are serving https
-let serveMode;
-
-// to see if the production flag was passed in
-if (process.argv.length > 2 && process.argv[2] === "-p") {
-	console.log("Server running in prodcution. Will listen for https requests.");
-	serveMode = PRODUCTION;
+for(let i = 0; i < process.argv.length; i++) {
+	switch(process.argv[i]) {
+		case '-p':
+			serveMode = ServeModes.PRODUCTION;
+			break; 
+		case '-d':
+			DEBUG = true;
+			break;	
+	}
 }
-else {
-	serveMode = DEV;
-	console.log("Server running in DEV mode. Will not listen for https requests");
+
+if(DEBUG) {
+	console.log("App in debug mode.");
+}
+
+if(serveMode === ServeModes.DEV) {
+	console.log("App in development mode.")
 }
 
 let httpsServer;
 
-if(serveMode == PRODUCTION) {
+if(serveMode == ServeModes.PRODUCTION) {
 	const FULL_CHAIN = '/etc/letsencrypt/live/gif-it.io/cert.pem';
 	const PRIVATE_KEY = '/etc/letsencrypt/live/gif-it.io/privkey.pem';
 	const OPTIONS = {
@@ -48,8 +54,8 @@ if(serveMode == PRODUCTION) {
 // exports
 exports.app = app;
 exports.http = http;
-exports.serveMode = serveMode;
 exports.https = httpsServer;
+exports.serveMode = serveMode;
 
 // APIs
 require('./uploadAPI');
@@ -59,10 +65,10 @@ require('./exploreAPI');
 // { index : false } is to allow request for the webroot to get caught by app.get('/*'...)
 // since we need to handle redirects to https
 app.use(express.static(path.join(__dirname, '../build'), { index: false }));
-app.use(express.static(path.join(__dirname, '../gifs'), { index: false }));
+app.use(express.static(FilePaths.GIF_SERVE_DIR, { index: false }));
 
 app.get('/*', function (req, res) {
-	if (serveMode === PRODUCTION) {
+	if (serveMode === ServeModes.PRODUCTION) {
 		let usingHttps = req.secure;
 		let hasSubDomain = req.headers.host.startsWith("www");
 
@@ -74,15 +80,16 @@ app.get('/*', function (req, res) {
 			res.redirect("https://gif-it.io");
 		}
 	}
-	else if(serveMode === DEV) {
+	else if(serveMode === ServeModes.DEV) {
 		res.sendFile(path.join(__dirname, '../build', 'index.html'));
 	}
 });
 
-http.listen(HTTP_PORT_NUM, () => {
-    console.log(`App listening on port ${HTTP_PORT_NUM}`);
+http.listen(Ports.HTTP_PORT_NUM, () => {
+    console.log(`App listening on port ${Ports.HTTP_PORT_NUM}`);
 });
 
-if (serveMode === PRODUCTION) {
+if (serveMode === ServeModes.PRODUCTION) {
+	console.log("Serving over https.")
 	httpsServer.listen(HTTPS_PORT_NUM);
 }

@@ -12,6 +12,7 @@ class UploadWell extends Component {
     this.state = ({
       tags: ""
     });
+
   }
 
   setTags = (event) => {
@@ -44,7 +45,8 @@ class UploadWell extends Component {
     return (<UploadProgressBox
               fileName={this.props.fileName}
               size={this.props.size}
-              percentUploaded={this.props.percentUploaded}/>
+              percentUploaded={this.props.percentUploaded}
+              message={this.props.error ? this.props.error : "Please Wait...."}/>
     );
   }
 

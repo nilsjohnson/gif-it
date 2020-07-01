@@ -1,71 +1,79 @@
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 const Busboy = require('busboy');
-const { app, http, https, serveMode } = require("./server");
+const { app, http, https, serveMode } = require('./server');
+const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
 const { spawn } = require('child_process');
-const crypto = require("crypto");
 const bodyParser = require('body-parser');
 const { addGif } = require('./dataAccess');
+const { getFileName_noExtension, getUniqueID } = require("./fileUtil");
 
 app.use(bodyParser.json());
+const io = (serveMode === ServeModes.DEV ? require('socket.io')(http) : require('socket.io').listen(https));
 
-const DEV = 0;
 
-const io = serveMode === DEV ? require('socket.io')(http) : require('socket.io').listen(https);
-
-function getUniqueID() {
-  return crypto.randomBytes(6).toString("base64");
-}
-
-function getExtension(fileName) {
-  return path.extname(fileName);
-}
-
-function getFileName_noExtension(fileName) {
-  return path.parse(fileName).name
-}
-
-const UPLOAD_DIR = os.tmpdir + '/' + 'gif-it';
-const SERVE_DIR = path.join(__dirname, '../gifs');
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR);
-}
-if (!fs.existsSync(SERVE_DIR)) {
-  fs.mkdirSync(SERVE_DIR);
-}
-
+/**
+ * Holds locations of file uploads - { uploadId : filePath }
+ */
 let fileMap = {};
-
+/**
+ * Holds open sockets - { socketId : socket}
+ */
 let sockets = {};
 
-io.on("connection", (newSocket) => {
-  console.log("New client connected!");
+/**
+ * deletes a socket by its id;
+ */
+function deleteSocket(socketId) {
+  if(delete sockets[socketId]) {
+    console.log(`Socket ${socketId} has been deleted`);
+  } else {
+    console.log(`Problem deleting ${socketId}.`);
+  }
+}
+
+/**
+ * adds a socket to sockets and defines its listeners
+ */
+function addSocket(newSocket) {
   let id = newSocket.id;
   sockets[id] = newSocket; 
 
+  if(DEBUG) {
+    let numSockets = Object.keys(sockets).length;
+    console.log(`There ${numSockets > 1 ? "are" : "is"} ${numSockets} socket${numSockets > 1 ? "s" : ""} open right now.`);
+  }
+
   sockets[id].on("disconnect", () => {
     console.log(`Socket ${id} disconnected`);
+    deleteSocket(id);
   });
 
   sockets[id].on("ConvertRequested", (fileId) => {
     console.log(`fid ${fileId}`);
-    convertToGif(fileMap[fileId], path.join(SERVE_DIR, fileId + ".gif"), id, fileId);
+    convertToGif(fileMap[fileId], path.join(FilePaths.GIF_SERVE_DIR, fileId + ".gif"), id, fileId);
   });
 
   sockets[id].on("ShareRequest", (data) => {
     console.log(data);
     addGif(data.fileId, data.fileId + ".gif");
   }); 
+}
+
+/**
+ * on connection handler. Defines actions for each socket as it connects.
+ */
+io.on("connection", (newSocket) => {
+  addSocket(newSocket);
 });
 
 /**
  * This API handles a file upload and then coverts it to GIF
  */
 app.post('/api/videoUpload/:socketId', function (req, res) {
-  console.log("started upload");
+  if(DEBUG) {console.log(`video upload hit by socket ${req.params.socketId}.`);}
+ 
   let socketId = req.params.socketId;
-
   let busboy = new Busboy({ headers: req.headers });
   let bytesRecieved = 0;
   let fileSize = req.headers["content-length"];
@@ -74,15 +82,19 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
   let fileID = getUniqueID();
 
   // validaion here..
-  if(fileSize/ (1000*1000).toFixed(2) > 100) {
-    res.writeHead(400, { 'Connection': 'close' });
-    res.end();
+  if(fileSize/ (1000*1000).toFixed(2) > MAX_UPLOAD_SIZE) {
+    if(DEBUG) { 
+      console.log(`Chosen file is ${fileSize/ (1000*1000).toFixed(2)} MB, while ${MAX_UPLOAD_SIZE} MB is the maximum. Returning 400..`)
+    };
+    res.status(400);
+    res.send({err: "File Too Large."});
+    return;
   }
 
   busboy.on('file', function (fieldname, file, givenFilename, encoding, mimetype) {
     fileName = givenFilename;
     newName = getFileName_noExtension(givenFilename) + ""
-    uploadDst = path.join(UPLOAD_DIR + "/" + givenFilename);
+    uploadDst = path.join(FilePaths.UPLOAD_DIR + "/" + givenFilename);
     fileMap[fileID] = uploadDst;
 
     sockets[socketId].emit("UploadStart", {fileId: fileID, percentUploaded: 0, size: fileSize});

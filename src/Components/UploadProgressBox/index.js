@@ -9,7 +9,7 @@ function UploadProgressBox(props) {
           <p>File: {props.fileName}</p>
           <p>Size: {formatBytes(props.size)}</p>
           <p>Uploaded: {props.percentUploaded}%</p>
-          <p>Please wait for upload to complete...</p>
+          <p>{props.message}</p>
         </div>
     );
 }

@@ -5,7 +5,8 @@ const Busboy = require('busboy');
 const { app, http, https, serveMode } = require("./server");
 const { spawn } = require('child_process');
 const crypto = require("crypto");
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const { addGif } = require('./dataAccess');
 
 app.use(bodyParser.json());
 
@@ -51,6 +52,11 @@ io.on("connection", (newSocket) => {
     console.log(`fid ${fileId}`);
     convertToGif(fileMap[fileId], path.join(SERVE_DIR, fileId + ".gif"), id, fileId);
   });
+
+  sockets[id].on("ShareRequest", (data) => {
+    console.log(data);
+    addGif(data.fileId, data.fileId + ".gif");
+  }); 
 });
 
 /**
@@ -68,7 +74,7 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
   let fileID = getUniqueID();
 
   // validaion here..
-  if(fileSize/ (1000*1000).toFixed(2) > 20) {
+  if(fileSize/ (1000*1000).toFixed(2) > 100) {
     res.writeHead(400, { 'Connection': 'close' });
     res.end();
   }
@@ -91,7 +97,7 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
         percentUploaded: percentUploaded, 
         conversionStatus: null,
         size: fileSize,
-        servePath: null
+        servePath: null,
        });
     });
 
@@ -100,9 +106,40 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
 
 
   busboy.on('finish', function () {
-    sockets[socketId].emit("uploadComplete", Date.now())
-    res.writeHead(200, { 'Connection': 'close' });
-    res.end();
+    let videoLength;
+    const ffpropeProcess = spawn(
+      'ffprobe', [
+        '-v', '16',
+        '-show_entries', 'format=duration',
+        '-of', 'default=noprint_wrappers=1:nokey=1',
+        uploadDst
+      ]);
+  
+    ffpropeProcess.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+      videoLength = parseFloat(data);
+    });
+  
+    ffpropeProcess.stderr.on('data', (data) => {
+      console.log(`stderr: ${data}`);
+    });
+  
+    ffpropeProcess.on('close', (code) => {
+      console.log(`close: ${code}`);
+      console.log(`duration: ${videoLength}`);
+
+      sockets[socketId].emit("uploadComplete", {
+        videoLength: videoLength,
+        uploadedTime: new Date(),
+        fileId: fileID
+      });
+
+      // finish was called so upload was success.
+      res.writeHead(200, { 'Connection': 'close' });
+      res.end();
+    });
+
+   
   });
 
   return req.pipe(busboy);

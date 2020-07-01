@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import socketIOClient from "socket.io-client";
 import './style.css';
-import IndvidualWell from "./IndividualWell";
+import UploadWell from "./UploadWell";
 
 function uploadFile(url = '', data = {}) {
   console.log('build fetch request');
@@ -27,6 +27,8 @@ class Uploader extends Component {
     this.unprocessedFiles = [];
   }
 
+  componentWillUnmount = () => { }
+
   // to flag or unflag if a user is dragging files over the drop zone
   setFilesHovering = (val) => {
     this.setState({
@@ -50,7 +52,6 @@ class Uploader extends Component {
 
     // to handle upload progress updates
     this.socket.on("UploadProgress", data => {
-      // console.log(data);
       for (let i = 0; i < this.state.uploads.length; i++) {
         if (this.state.uploads[i].fileId === data.fileId) {
           let temp = this.state.uploads;
@@ -77,10 +78,26 @@ class Uploader extends Component {
     });
 
     // to signal upload is complete
-    this.socket.on("uploadComplete", fileNum => {
-      console.log(`File ${fileNum} uploaded`);
-      this.curUploadNum ++;
-      //this.showGif(data);
+    this.socket.on("uploadComplete", (data) => {
+      console.log(data);
+      console.log("File " + this.curUploadNum + " Uploaded");
+
+      let tmp = this.state.uploads;
+
+      for (let i = 0; i < tmp.length; i++) {
+        if (tmp[i].fileId === data.fileId) {
+          tmp[i].videoLength = data.videoLength;
+          tmp[i].uploadedTime = data.uploadedTime;
+          tmp[i].uploadComplete = true;
+          break;
+        }
+      }
+
+      this.setState({uploads: tmp});
+
+      console.log(this.state.uploads);
+      // TODO, should this go after the post?
+      this.curUploadNum++;
     });
 
     // to POST the data as soon as we are connected
@@ -91,9 +108,10 @@ class Uploader extends Component {
 
     this.socket.on("ConversionComplete", (conversionResult) => {
       console.log(conversionResult);
+
       let tmp = this.state.uploads;
-      for(let  i = 0; i < tmp.length; i++) {
-        if(tmp[i].fileId === conversionResult.fileId) {
+      for (let i = 0; i < tmp.length; i++) {
+        if (tmp[i].fileId === conversionResult.fileId) {
           tmp[i].servePath = conversionResult.fileId + ".gif";
           break;
         }
@@ -108,8 +126,8 @@ class Uploader extends Component {
     this.socket.on("ConversionProgress", (data) => {
       console.log(data);
       let tmp = this.state.uploads;
-      for(let  i = 0; i < tmp.length; i++) {
-        if(tmp[i].fileId === data.fileId) {
+      for (let i = 0; i < tmp.length; i++) {
+        if (tmp[i].fileId === data.fileId) {
           tmp[i].conversionStatus = data.conversionStatus;
           break;
         }
@@ -124,19 +142,19 @@ class Uploader extends Component {
 
   upload = () => {
     let formData = new FormData();
-    if(this.unprocessedFiles.length === 0) {
+    if (this.unprocessedFiles.length === 0) {
       return;
     }
-    
+
     formData.append("files", this.unprocessedFiles.shift());
 
     uploadFile('/api/videoUpload/' + this.socket.id, formData)
       .then(response => {
         if (response.ok) {
-          console.log("Upload Complete")
+          console.log("Upload POST succeeded")
         }
         else {
-          alert("file too large.");
+          alert("Problem With upload.");
         }
         // upload next one
         this.upload();
@@ -148,7 +166,7 @@ class Uploader extends Component {
     // populates array of temporary objects
     // as placeholders until server responds
     let placeHoldrs = [];
-    for(let i = 0; i < this.unprocessedFiles.length; i++) {
+    for (let i = 0; i < this.unprocessedFiles.length; i++) {
       let temp = {
         fileName: this.unprocessedFiles[i].name,
         fileId: i,
@@ -160,7 +178,7 @@ class Uploader extends Component {
 
     // add the temp objects and create socket
     this.addUploads(placeHoldrs);
-    if(this.socket === null) {
+    if (this.socket === null) {
       this.createSocket();
     }
     else {
@@ -225,6 +243,13 @@ class Uploader extends Component {
     this.socket.emit("ConvertRequested", upload);
   }
 
+  share = (fileId, path, tags) => {
+    console.log("Cher is the best!");
+    console.log(tags);
+    console.log(fileId);
+    this.socket.emit("ShareRequest", {fileId: fileId, path: path, tags: tags});
+  }
+
   render() {
     return (
       <div className={`${this.state.filesHovering ? "choosing-files" : ""}`}
@@ -252,16 +277,19 @@ class Uploader extends Component {
         {
           this.state.uploads.map(upload =>
             <div className="container" key={upload.fileId}>
-              <IndvidualWell
-                fileId={upload.fileId}
+              <UploadWell
                 key={upload.fileId}
+                fileId={upload.fileId}
                 fileName={upload.fileName}
                 size={upload.size}
-                percentUploaded={upload.percentUploaded} 
+                percentUploaded={upload.percentUploaded}
                 convert={this.convert}
                 servePath={upload.servePath}
                 conversionStatus={upload.conversionStatus}
-                />
+                uploadComplete={upload.uploadComplete}
+                videoLength={upload.videoLength}
+                share={this.share}
+              />
             </div>
           )
         }

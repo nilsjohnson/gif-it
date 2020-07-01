@@ -88,6 +88,7 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
     };
     res.status(400);
     res.send({err: "File Too Large."});
+    res.end();
     return;
   }
 

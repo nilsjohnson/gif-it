@@ -91,5 +91,5 @@ http.listen(Ports.HTTP_PORT_NUM, () => {
 
 if (serveMode === ServeModes.PRODUCTION) {
 	console.log("Serving over https.")
-	httpsServer.listen(HTTPS_PORT_NUM);
+	httpsServer.listen(Ports.HTTPS_PORT_NUM);
 }

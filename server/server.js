@@ -52,15 +52,16 @@ exports.serveMode = serveMode;
 exports.https = httpsServer;
 
 // APIs
-require('./uploadAPI.js');
+require('./uploadAPI');
+require('./dataAccess')
+require('./exploreAPI');
 
 // { index : false } is to allow request for the webroot to get caught by app.get('/*'...)
 // since we need to handle redirects to https
-//app.use(express.static(path.join(__dirname, '../build'), { index: false }));
+app.use(express.static(path.join(__dirname, '../build'), { index: false }));
 app.use(express.static(path.join(__dirname, '../gifs'), { index: false }));
 
-app.get('/', function (req, res) {
-	console.log("Hello amanda :)");
+app.get('/*', function (req, res) {
 	if (serveMode === PRODUCTION) {
 		let usingHttps = req.secure;
 		let hasSubDomain = req.headers.host.startsWith("www");

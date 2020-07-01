@@ -28,6 +28,10 @@ CREATE TABLE gif_tag (
 	FOREIGN KEY (tag_id) REFERENCES tag(id)
 );
 
+create user 'bryn'@'localhost' IDENTIFIED BY 'doggie';
+GRANT ALL PRIVILEGES ON * TO 'bryn'@'localhost';
+
+
 INSERT INTO tag (tag) VALUES ("cat");
 INSERT INTO tag (tag) VALUES ("dog");
 

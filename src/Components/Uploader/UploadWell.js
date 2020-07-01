@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
-import UploadProgressBox from './UploadProgressBox';
-import ConversionProgressBox from './ConversionProgressBox';
-import GifBox from './GifBox';
+import UploadProgressBox from '../UploadProgressBox';
+import ConversionProgressBox from '../ConversionProgressBox';
+import GifBox from '../GifBox';
 
 class UploadWell extends Component {
   constructor(props) {

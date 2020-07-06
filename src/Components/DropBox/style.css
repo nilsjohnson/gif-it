@@ -1,0 +1,13 @@
+#drop-box {
+    margin-top: 1em;
+    border: 2px dashed;
+    border-radius: 5px;
+    width:  50%;
+    height: 200px;
+    background-color: #0FDCC9;
+  }
+
+.choosing-files {
+  border: 3px solid seagreen;
+  opacity: .6;
+}

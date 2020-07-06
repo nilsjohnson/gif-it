@@ -3,6 +3,7 @@ import socketIOClient from "socket.io-client";
 import './style.css';
 import UploadWell from "./UploadWell";
 import { uploadFile } from "../../util/data"
+import { DropBox } from "../DropBox";
 
 class Uploader extends Component {
   constructor(props) {
@@ -173,7 +174,7 @@ class Uploader extends Component {
             let tmp = this.state.uploads;
             tmp[this.curUploadNum].error = resJson.err;
             this.setState({
-              uploads : tmp
+              uploads: tmp
             });
 
             this.curUploadNum++;
@@ -181,7 +182,7 @@ class Uploader extends Component {
           });
         }
       })
-      .catch(err =>{
+      .catch(err => {
         console.log("Upload error:" + err)
         this.curUploadNum++;
         this.upload();
@@ -285,39 +286,37 @@ class Uploader extends Component {
 
   render() {
     return (
-      <div className={`${this.state.filesHovering ? "choosing-files" : ""}`}
-        onDrop={this.dropHandler}
-        onDragOver={this.dragOverHandler}
-        onDragLeave={this.dragEndHandler}>
-        <div className="container">
-          <div id="drop-box">
-            <div className="container">
-              <p>Drag and Drop Files or</p>
-            </div>
-            <div className="container">
-              <input type="file" multiple onChange={this.selectFilesUpload} />
-            </div>
+      <div className='v-box'>
 
-          </div>
+        <DropBox 
+          onDrop={this.dropHandler}
+          onDragOver={this.dragOverHandler}
+          onDragLeave={this.dragEndHandler}
+          hovering={this.state.filesHovering}
+          selectFilesUpload={this.selectFilesUpload}
+        />
+
+        <div className='tile-box'>
+          {this.state.uploads.map(upload =>
+            <div className="tile-box-item">
+              <UploadWell
+                key={upload.fileId}
+                fileId={upload.fileId}
+                fileName={upload.fileName}
+                size={upload.size}
+                percentUploaded={upload.percentUploaded}
+                convert={this.convert}
+                servePath={upload.servePath}
+                conversionStatus={upload.conversionStatus}
+                uploadComplete={upload.uploadComplete}
+                videoLength={upload.videoLength}
+                share={this.share}
+                error={upload.error}
+              />
+            </div>
+          )}
         </div>
-        {this.state.uploads.map(upload =>
-          <div className="container" key={upload.fileId}>
-            <UploadWell
-              key={upload.fileId}
-              fileId={upload.fileId}
-              fileName={upload.fileName}
-              size={upload.size}
-              percentUploaded={upload.percentUploaded}
-              convert={this.convert}
-              servePath={upload.servePath}
-              conversionStatus={upload.conversionStatus}
-              uploadComplete={upload.uploadComplete}
-              videoLength={upload.videoLength}
-              share={this.share}
-              error={upload.error}
-            />
-          </div>
-        )}
+
       </div>);
   }
 }

@@ -3,13 +3,7 @@
     align-items: center;
     justify-content: space-around;
     flex-wrap: wrap;
-    background: rgb(255, 166, 98);
-    background: linear-gradient(90deg, rgba(255, 166, 98, 1) 0%, rgba(208, 17, 194, 1) 100%)
-}
-
-.main-navbar ul {
-    margin: 1em 0 .5em;
-    text-align: center;
+   /* background-color: #1AACC5; */
 }
 
 #main-navbar li {

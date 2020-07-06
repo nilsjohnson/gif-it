@@ -38,10 +38,12 @@ class Explore extends Component {
     return (
       <div>
         <Header/>
-        
-        <div className="container-vert">
-           {this.state.gifs.map(gif => 
-            <img className="img-responsive" key={gif.filename} src={"/" + gif.filename}/>
+        <div className="tile-box">
+           {this.state.gifs.map(gif =>
+            <div className="tile-box-item">
+              <img key={gif.filename} src={"/" + gif.filename}/>
+           <h4>{gif.filename}</h4>
+            </div> 
           )}
         </div>
       </div>

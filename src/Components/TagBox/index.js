@@ -3,15 +3,18 @@ import './style.css';
 
 export function TagBox(props) {
     return (
-        <div className="container">
-            <div className="container">
-                <input className="input-wide"
+        <div className="v-box">
+            <div className="">
+                <input
                     type="text"
                     placeholder="Enter Some Tags..."
                     onChange={props.setTags}
                 />
             </div>
-            <button onClick={props.share} > Tag it and Share! </button>
+            <div className="button-box">
+                <button onClick={props.share} > Tag it and Share! </button>
+            </div>
+            
         </div>
     );
 }

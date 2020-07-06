@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import UploadProgressBox from '../UploadProgressBox';
 import ConversionProgressBox from '../ConversionProgressBox';
 import GifBox from '../GifBox';
+import { TagBox } from '../TagBox';
 
 class UploadWell extends Component {
   constructor(props) {
@@ -52,11 +53,18 @@ class UploadWell extends Component {
 
   getGifBox = () => {
     return (
-      <GifBox
-        servePath={this.props.servePath}
-        share={this.share}
-        setTags={this.setTags}
-      />
+      <div>
+         <GifBox
+          servePath={this.props.servePath}
+          share={this.share}
+          setTags={this.setTags}
+        />
+        <TagBox
+          setTags={this.setTags}
+          share={this.share}
+        />
+      </div>
+     
     );
   }
 
@@ -74,11 +82,7 @@ class UploadWell extends Component {
   }
 
   render() {
-    return(
-      <div className="upload-box">
-        {this.getView()}
-      </div>
-    );
+    return this.getView();
   }
 }
   

@@ -4,6 +4,7 @@ import './style.css';
 import UploadWell from "./UploadWell";
 import { uploadFile } from "../../util/data"
 import { DropBox } from "../DropBox";
+import {Grid, GridList, GridListTile, Card } from "@material-ui/core";
 
 class Uploader extends Component {
   constructor(props) {
@@ -286,9 +287,14 @@ class Uploader extends Component {
 
   render() {
     return (
-      <div className='v-box'>
+      <Grid
+        container
+        direction="column"
+        justify="flex-start"
+        alignItems="center"
+      >
 
-        <DropBox 
+        <DropBox
           onDrop={this.dropHandler}
           onDragOver={this.dragOverHandler}
           onDragLeave={this.dragEndHandler}
@@ -296,28 +302,30 @@ class Uploader extends Component {
           selectFilesUpload={this.selectFilesUpload}
         />
 
-        <div className='tile-box'>
+        <GridList cellHeight={'auto'} cols={3}>
           {this.state.uploads.map(upload =>
-            <div className="tile-box-item">
-              <UploadWell
-                key={upload.fileId}
-                fileId={upload.fileId}
-                fileName={upload.fileName}
-                size={upload.size}
-                percentUploaded={upload.percentUploaded}
-                convert={this.convert}
-                servePath={upload.servePath}
-                conversionStatus={upload.conversionStatus}
-                uploadComplete={upload.uploadComplete}
-                videoLength={upload.videoLength}
-                share={this.share}
-                error={upload.error}
-              />
-            </div>
+            <GridListTile>
+              <Card>
+                <UploadWell
+                  key={upload.fileId}
+                  fileId={upload.fileId}
+                  fileName={upload.fileName}
+                  size={upload.size}
+                  percentUploaded={upload.percentUploaded}
+                  convert={this.convert}
+                  servePath={upload.servePath}
+                  conversionStatus={upload.conversionStatus}
+                  uploadComplete={upload.uploadComplete}
+                  videoLength={upload.videoLength}
+                  share={this.share}
+                  error={upload.error}
+                />
+              </Card>
+            </GridListTile>
           )}
-        </div>
+        </GridList>
 
-      </div>);
+      </Grid>);
   }
 }
 

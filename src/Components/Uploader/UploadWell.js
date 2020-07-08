@@ -5,6 +5,8 @@ import UploadProgressBox from '../UploadProgressBox';
 import ConversionProgressBox from '../ConversionProgressBox';
 import GifBox from '../GifBox';
 import { TagBox } from '../TagBox';
+import { Card } from '@material-ui/core';
+import { sizing } from '@material-ui/system';
 
 class UploadWell extends Component {
   constructor(props) {
@@ -22,9 +24,14 @@ class UploadWell extends Component {
     });
   }
 
+
   convert = () => {
     let id = this.props.fileId;
     this.props.convert(id)
+  }
+
+  cancelUpload = () => {
+    alert("Cancel Functionality Not Yet Implemented.");
   }
 
   share = () => {
@@ -47,6 +54,8 @@ class UploadWell extends Component {
               fileName={this.props.fileName}
               size={this.props.size}
               percentUploaded={this.props.percentUploaded}
+              convert={this.convert}
+              cancelUpload={this.cancelUpload}
               message={this.props.error ? this.props.error : "Please Wait...."}/>
     );
   }
@@ -82,7 +91,13 @@ class UploadWell extends Component {
   }
 
   render() {
-    return this.getView();
+    let content = this.getView();
+    return (
+      <Card width={'50%'}>
+        {content}
+      </Card>
+    )
+
   }
 }
   

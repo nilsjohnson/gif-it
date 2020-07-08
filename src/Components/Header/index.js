@@ -1,24 +1,37 @@
 import React from 'react';
-import './style.css';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
 
-const Header = ( props ) => (
-    <div id="main-header">
-		<h1>gif-it.io</h1>
-		<nav id="main-navbar">
-			<ul>
-				<li>
-					<a href="/">Convert to .gif</a>
-				</li>
-				<li>
-					<a href="/explore">Explore</a>
-				</li>
-			</ul>
-		</nav>
-	</div>
-);
+    flexGrow: 1,
+  },
+}));
 
+export default function Header() {
+  const classes = useStyles();
 
-
-
-export default Header;
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" className={classes.title}>
+            Gif-it.io
+          </Typography>
+          <Button color="inherit" href="./">Convert to .gif</Button>
+		      <Button color="inherit" href='./explore'>Explore</Button>
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
+}

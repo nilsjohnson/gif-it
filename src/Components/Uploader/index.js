@@ -87,8 +87,7 @@ class Uploader extends Component {
       Note: the next upload gets triggered by a 200 from the POST and not here.
     */
     this.socket.on("uploadComplete", (data) => {
-      console.log(`'uploadComplete' triggered. Here's the data:`);
-      console.log(data);
+      console.log(`'uploadComplete' triggered.`);
 
       let tmp = this.state.uploads;
 
@@ -293,38 +292,31 @@ class Uploader extends Component {
         justify="flex-start"
         alignItems="center"
       >
-
         <DropBox
-          onDrop={this.dropHandler}
-          onDragOver={this.dragOverHandler}
-          onDragLeave={this.dragEndHandler}
-          hovering={this.state.filesHovering}
-          selectFilesUpload={this.selectFilesUpload}
-        />
-
-        <GridList cellHeight={'auto'} cols={3}>
-          {this.state.uploads.map(upload =>
-            <GridListTile>
-              <Card>
-                <UploadWell
-                  key={upload.fileId}
-                  fileId={upload.fileId}
-                  fileName={upload.fileName}
-                  size={upload.size}
-                  percentUploaded={upload.percentUploaded}
-                  convert={this.convert}
-                  servePath={upload.servePath}
-                  conversionStatus={upload.conversionStatus}
-                  uploadComplete={upload.uploadComplete}
-                  videoLength={upload.videoLength}
-                  share={this.share}
-                  error={upload.error}
-                />
-              </Card>
-            </GridListTile>
-          )}
-        </GridList>
-
+            onDrop={this.dropHandler}
+            onDragOver={this.dragOverHandler}
+            onDragLeave={this.dragEndHandler}
+            hovering={this.state.filesHovering}
+            selectFilesUpload={this.selectFilesUpload}
+          />
+        {this.state.uploads.map(upload =>
+        <Grid item>
+            <UploadWell
+                key={upload.fileId}
+                fileId={upload.fileId}
+                fileName={upload.fileName}
+                size={upload.size}
+                percentUploaded={upload.percentUploaded}
+                convert={this.convert}
+                servePath={upload.servePath}
+                conversionStatus={upload.conversionStatus}
+                uploadComplete={upload.uploadComplete}
+                videoLength={upload.videoLength}
+                share={this.share}
+                error={upload.error}
+              />
+        </Grid>
+        )}
       </Grid>);
   }
 }

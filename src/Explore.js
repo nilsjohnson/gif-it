@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import './css/style.css';
 import Header from "./Components/Header";
 import { getNew } from "./util/data";
-import { Container, Box, GridList, GridListTile } from '@material-ui/core';
+import { Container, Box, Grid, Card } from '@material-ui/core';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import GifCard from "./Components/GifCard";
 
 class Explore extends Component {
   constructor(props) {
@@ -37,45 +38,28 @@ class Explore extends Component {
       })
   }
 
-  getGridListCols = () => {
-    if (this.props.width) {
-      console.log("width: " + this.props.width);
-    }
-    else {
-      console.log("was null man!");
-    }
-
-    if (isWidthUp('xl', this.props.width)) {
-      return 4;
-    }
-
-    if (isWidthUp('lg', this.props.width)) {
-      return 3;
-    }
-
-    if (isWidthUp('md', this.props.width)) {
-      return 2;
-    }
-
-    return 1;
-  }
-
   render() {
     return (
-      <Container>
+      <div>
         <Header />
-        <GridList cellHeight={'auto'} cols={this.getGridListCols()} >
-          {this.state.gifs.map((gif) => (
-            <GridListTile key={gif.id}>
-              <Box>
-                <img src={gif.filename} />
-                <h5>{gif.filename}</h5>
-              </Box>
-            </GridListTile>
-          ))}
-        </GridList>
-      </Container>
-
+        <Container>
+          <Grid container
+            direction="row"
+            justify="center"
+            alignItems="center" 
+            spacing={1}
+          >
+            {this.state.gifs.map((gif) => (
+                <Grid item xs={12} sm={6} md={4}>
+                  <GifCard
+                  key={gif.id}
+                  src={gif.filename}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </div>
     );
   }
 }

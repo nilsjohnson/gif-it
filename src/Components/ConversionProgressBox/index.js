@@ -8,12 +8,6 @@ class ConversionProgressBox extends Component {
         super(props)
     }
 
-    componentDidMount = () => {
-        // this is to trigger automatic conversion,
-        // since we dont have any options yet
-        this.props.convert();
-    }
-
     convert = (event) => {
         console.log("convert button pressed");
     }
@@ -25,9 +19,9 @@ class ConversionProgressBox extends Component {
                 <p>Size: {formatBytes(this.props.size)}</p>
                 <p>Length: {this.props.videoLength} seconds</p>
                 <p>Status: {this.props.conversionStatus}</p>
-                {/* <div className="container">
+                <div className="">
                     <button onClick={this.props.convert}>Convert To Gif!</button>
-                </div> */}
+                </div> 
             </div>
         );
     }

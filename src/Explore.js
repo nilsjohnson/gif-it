@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import './css/style.css';
 import Header from "./Components/Header";
-import { getNew } from "./util/data";
+import { getNew, search } from "./util/data";
 import { Container, TextField, Grid, Button, InputBase } from '@material-ui/core';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import GifCard from "./Components/GifCard";
@@ -28,23 +28,35 @@ class Explore extends Component {
     })
   }
 
+  /**
+   * Performs a default search
+   */
   componentDidMount() {
+    getNew().then(res => {
+      if(res.ok) {
+        res.json().then(resJson => {
+          this.setGifs(resJson)
+        }).catch(err => console.log(`Problem parsing JSON from request: ${err}`))
+      } else {
+        console.log(`Server had a problem fetching gifs ${res}`);
+      }
+    }).catch(err => console.log(`Problem fetching newest gifs: ${err}`));
+  }
 
-    let cb = this.setGifs;
-    getNew()
-      .then((response) => {
-        response.json().then((jsn) => {
-          cb(jsn);
-          console.log(jsn);
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+  search = (query) => {
+    search(query).then(res => {
+      if(res.ok) {
+        res.json().then(resJson => {
+          this.setGifs(resJson)
+        }).catch(err => console.log(`Problem parsing JSON from request: ${err}`))
+      } else {
+        console.log(`Server had a problem fetching gifs ${res}`);
+      }
+    }).catch(err => console.log(`Problem fetching gifs: ${err}`));
+
   }
 
 
-  
 
   render() {
 
@@ -63,8 +75,10 @@ class Explore extends Component {
               direction="row"
               justify="center"
               alignItems="center"
-              >
-                <SearchBar/>
+            >
+              <SearchBar
+                search={this.search}
+              />
 
             </Grid>
 

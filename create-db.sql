@@ -25,7 +25,8 @@ CREATE TABLE gif_tag (
 	gif_id varchar(32),
 	tag_id int,
 	FOREIGN KEY (gif_id) REFERENCES gif(id),
-	FOREIGN KEY (tag_id) REFERENCES tag(id)
+	FOREIGN KEY (tag_id) REFERENCES tag(id),
+	primary KEY (gif_id, tag_id)
 );
 
 create user 'bryn'@'localhost' IDENTIFIED BY 'doggie';

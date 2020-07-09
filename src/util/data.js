@@ -10,12 +10,10 @@ function uploadFile(url = '', data = {}) {
 }
 
 function search(searchInput) { 
-  return fetch("/api/explore", {
-    method: "GET",
-    body: searchInput
-  });
+  console.log("data.search: " + searchInput);
+  const params = { input: searchInput };
+  const paramString = new URLSearchParams(params);
+  return fetch(`/api/search?${paramString.toString()}`);
 }
 
-
-
-export { getNew, uploadFile };
+export { getNew, uploadFile, search };

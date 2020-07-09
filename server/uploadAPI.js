@@ -4,7 +4,7 @@ const Busboy = require('busboy');
 const { app, http, https, serveMode } = require('./server');
 const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
 const bodyParser = require('body-parser');
-const { addGif } = require('./dataAccess');
+const { addGif, addTags, addGifTags } = require('./dataAccess');
 const { getFileName_noExtension, getUniqueID, checkUnique } = require("./fileUtil");
 const { convertToGif } = require('./util/ffmpegWrapper');
 
@@ -72,8 +72,13 @@ function addSocket(newSocket) {
   });
 
   sockets[socketId].on("ShareRequest", (data) => {
+    console.log("data:");
     console.log(data);
     addGif(data.fileId, data.fileId + ".gif");
+    let tags = data.tags.split(" ");
+    console.log(tags);
+    addTags(tags)
+    addGifTags(data.fileId, tags);
   }); 
 }
 

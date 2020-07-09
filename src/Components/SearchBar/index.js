@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import DirectionsIcon from '@material-ui/icons/Directions';
-import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 
 
@@ -40,13 +35,19 @@ class SearchBar extends Component {
 
     this.state = {
       input: ""
-    };
+    }; 
+  }
 
-    
+  setInput = (event) => {
+    console.log(event.target.value);
+    this.setState({
+      input: event.target.value.trim()
+    })
   }
 
   search = () => {
     console.log("searching for " + this.state.input);
+    this.props.search(this.state.input);
   }
 
   render() {
@@ -55,6 +56,7 @@ class SearchBar extends Component {
     return (
       <Paper component="form" className={classes.root}>
         <InputBase
+          onChange={this.setInput}
           className={classes.input}
           placeholder="Search For Gifs"
           inputProps={{ 'aria-label': 'Search For Gifs' }}
@@ -62,7 +64,6 @@ class SearchBar extends Component {
         <IconButton onClick={this.search} className={classes.iconButton} aria-label="search">
           <SearchIcon />
         </IconButton>
-        {/* <Button onClick={search}>Search</Button> */}
       </Paper>
     );
 

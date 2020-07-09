@@ -17,5 +17,5 @@ app.get('/api/explore', function (req, res) {
 
 app.get('/api/search', function(req, res) {
   console.log(req.query);
-
+  getAllGifs(result => res.send(result))
 });

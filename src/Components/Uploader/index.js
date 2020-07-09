@@ -4,7 +4,7 @@ import './style.css';
 import UploadWell from "./UploadWell";
 import { uploadFile } from "../../util/data"
 import { DropBox } from "../DropBox";
-import {Grid, GridList, GridListTile, Card } from "@material-ui/core";
+import { Grid, GridList, GridListTile, Card } from "@material-ui/core";
 
 class Uploader extends Component {
   constructor(props) {
@@ -53,8 +53,10 @@ class Uploader extends Component {
       to handle upload progress updates
     */
     this.socket.on("UploadProgress", data => {
+      console.log("up progress");
+      console.log(data);
       for (let i = 0; i < this.state.uploads.length; i++) {
-        if (this.state.uploads[i].fileId === data.fileId) {
+        if (this.state.uploads[i].uploadId === data.uploadId) {
           let temp = this.state.uploads;
           // TODO only update percent field
           temp[i] = data;
@@ -70,7 +72,8 @@ class Uploader extends Component {
       about the upload from the server.
     */
     this.socket.on("UploadStart", uploadData => {
-      console.log(`upload started: ${uploadData}`);
+      console.log('Upload Started, upload object returned: ');
+      console.log(uploadData);
 
       let tmp = this.state.uploads;
       tmp[this.curUploadNum] = uploadData;
@@ -119,8 +122,8 @@ class Uploader extends Component {
 
       let tmp = this.state.uploads;
       for (let i = 0; i < tmp.length; i++) {
-        if (tmp[i].fileId === conversionResult.fileId) {
-          tmp[i].servePath = conversionResult.fileId + ".gif";
+        if (tmp[i].uploadId === conversionResult.uploadId) {
+          tmp[i].servePath = conversionResult.servePath;
           break;
         }
       }
@@ -138,7 +141,7 @@ class Uploader extends Component {
       console.log(data);
       let tmp = this.state.uploads;
       for (let i = 0; i < tmp.length; i++) {
-        if (tmp[i].fileId === data.fileId) {
+        if (tmp[i].uploadId === data.uploadId) {
           tmp[i].conversionStatus = data.conversionStatus;
           break;
         }
@@ -199,7 +202,7 @@ class Uploader extends Component {
     for (let i = 0; i < this.unprocessedFiles.length; i++) {
       let temp = {
         fileName: this.unprocessedFiles[i].name,
-        fileId: i,
+        uploadId: "temp_id" + i,
         size: this.unprocessedFiles[i].size.toString(),
         percentUploaded: 0
       }
@@ -293,29 +296,29 @@ class Uploader extends Component {
         alignItems="center"
       >
         <DropBox
-            onDrop={this.dropHandler}
-            onDragOver={this.dragOverHandler}
-            onDragLeave={this.dragEndHandler}
-            hovering={this.state.filesHovering}
-            selectFilesUpload={this.selectFilesUpload}
-          />
+          onDrop={this.dropHandler}
+          onDragOver={this.dragOverHandler}
+          onDragLeave={this.dragEndHandler}
+          hovering={this.state.filesHovering}
+          selectFilesUpload={this.selectFilesUpload}
+        />
         {this.state.uploads.map(upload =>
-        <Grid item>
+          <Grid item key={upload.uploadId}>
             <UploadWell
-                key={upload.fileId}
-                fileId={upload.fileId}
-                fileName={upload.fileName}
-                size={upload.size}
-                percentUploaded={upload.percentUploaded}
-                convert={this.convert}
-                servePath={upload.servePath}
-                conversionStatus={upload.conversionStatus}
-                uploadComplete={upload.uploadComplete}
-                videoLength={upload.videoLength}
-                share={this.share}
-                error={upload.error}
-              />
-        </Grid>
+              key={upload.uploadId}
+              fileId={upload.uploadId}
+              fileName={upload.fileName}
+              size={upload.size}
+              percentUploaded={upload.percentUploaded}
+              convert={this.convert}
+              servePath={upload.servePath}
+              conversionStatus={upload.conversionStatus}
+              uploadComplete={upload.uploadComplete}
+              videoLength={upload.videoLength}
+              share={this.share}
+              error={upload.error}
+            />
+          </Grid>
         )}
       </Grid>);
   }

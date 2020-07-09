@@ -1,7 +1,5 @@
 function getNew() {
-    return fetch("/api/explore", {
-
-    });
+    return fetch("/api/explore");
 }
 
 function uploadFile(url = '', data = {}) {
@@ -9,6 +7,15 @@ function uploadFile(url = '', data = {}) {
       method: 'POST',
       body: data
     });
-  }
+}
+
+function search(searchInput) { 
+  return fetch("/api/explore", {
+    method: "GET",
+    body: searchInput
+  });
+}
+
+
 
 export { getNew, uploadFile };

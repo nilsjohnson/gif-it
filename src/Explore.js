@@ -2,9 +2,14 @@ import React, { Component } from "react";
 import './css/style.css';
 import Header from "./Components/Header";
 import { getNew } from "./util/data";
-import { Container, Box, Grid, Card } from '@material-ui/core';
+import { Container, TextField, Grid, Button, InputBase } from '@material-ui/core';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import GifCard from "./Components/GifCard";
+import { makeStyles } from '@material-ui/core/styles';
+import SearchBar from "./Components/SearchBar";
+
+
+
 
 class Explore extends Component {
   constructor(props) {
@@ -38,7 +43,12 @@ class Explore extends Component {
       })
   }
 
+
+  
+
   render() {
+
+
     return (
       <div>
         <Header />
@@ -46,12 +56,21 @@ class Explore extends Component {
           <Grid container
             direction="row"
             justify="center"
-            alignItems="center" 
+            alignItems="center"
             spacing={1}
           >
+            <Grid container
+              direction="row"
+              justify="center"
+              alignItems="center"
+              >
+                <SearchBar/>
+
+            </Grid>
+
             {this.state.gifs.map((gif) => (
-                <Grid item xs={12} sm={6} md={4}>
-                  <GifCard
+              <Grid item xs={12} sm={6} md={4} key={gif.id}>
+                <GifCard
                   key={gif.id}
                   src={gif.filename}
                 />

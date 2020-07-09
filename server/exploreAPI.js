@@ -14,3 +14,8 @@ const { getAllGifs } = require('./dataAccess');
 app.get('/api/explore', function (req, res) {
     getAllGifs(result => res.send(result));
 });
+
+app.get('/api/search', function(req, res) {
+  console.log(req.query);
+
+});

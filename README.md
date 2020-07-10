@@ -1,11 +1,12 @@
 # gif-it.io
-## This is an app to convert videos to GIFs.
-___
+
+### gif-it.io is a website where users can create a share gifs.
 
 To run project:
 
 1.) Install FFMpeg if neccessary. 
 
+```$ sudo apt update```
 ```$ sudo apt install ffmpeg```
 
 2.) Install mySQL and run the script in ./sql/create-db.sql

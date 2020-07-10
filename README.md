@@ -7,6 +7,7 @@ To run project:
 #### 1.) Install FFMpeg if neccessary. 
 
 ```$ sudo apt update```
+
 ```$ sudo apt install ffmpeg```
 
 #### 2.) Install mySQL and run the script in ./sql/create-db.sql
@@ -18,6 +19,7 @@ To run project:
 #### 4.) Start the app for development using the create-react-app scripts
 
 ```$ node ./server/server.js```
+
 ```$ npm run start```
 
 And the app should now be running running on port 3001 with http requests forwarded from 3000!

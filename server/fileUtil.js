@@ -22,9 +22,17 @@ function getFileName_noExtension(fileName) {
 }
 
 function getUniqueID() {
-    return crypto.randomBytes(6).toString("base64");
-  }
+    let id = crypto.randomBytes(8).toString("hex");
+    return id;
+}
+
+// TODO, if fileName already exists, 
+// increment it.
+function checkUnique(fileName) {
+    return fileName;
+}
 
 exports.getExtension = getExtension;
 exports.getFileName_noExtension = getFileName_noExtension;
 exports.getUniqueID = getUniqueID;
+exports.checkUnique = checkUnique;

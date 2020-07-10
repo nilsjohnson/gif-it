@@ -3,12 +3,12 @@ import './css/style.css';
 import Uploader from "./Components/Uploader";
 import Header from "./Components/Header";
 import Box from "@material-ui/core/Box"
-import { Container, Button } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 
 class Home extends Component { 
   render() {
     return (
-      <Box div>
+      <Box>
         <Header/>
         <Container>
         <Uploader/>

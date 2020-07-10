@@ -1,7 +1,5 @@
 function getNew() {
-    return fetch("/api/explore", {
-
-    });
+    return fetch("/api/explore");
 }
 
 function uploadFile(url = '', data = {}) {
@@ -9,6 +7,13 @@ function uploadFile(url = '', data = {}) {
       method: 'POST',
       body: data
     });
-  }
+}
 
-export { getNew, uploadFile };
+function search(searchInput) { 
+  console.log("data.search: " + searchInput);
+  const params = { input: searchInput };
+  const paramString = new URLSearchParams(params);
+  return fetch(`/api/search?${paramString.toString()}`);
+}
+
+export { getNew, uploadFile, search };

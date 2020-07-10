@@ -3,19 +3,19 @@ const path = require('path');
 const Busboy = require('busboy');
 const { app, http, https, serveMode } = require('./server');
 const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
-const { spawn } = require('child_process');
 const bodyParser = require('body-parser');
-const { addGif } = require('./dataAccess');
-const { getFileName_noExtension, getUniqueID } = require("./fileUtil");
+const { addGif, addTags, addGifTags, addGif_2 } = require('./dataAccess');
+const { getFileName_noExtension, getUniqueID, checkUnique } = require("./fileUtil");
+const { convertToGif } = require('./util/ffmpegWrapper');
 
 app.use(bodyParser.json());
 const io = (serveMode === ServeModes.DEV ? require('socket.io')(http) : require('socket.io').listen(https));
 
 
 /**
- * Holds locations of file uploads - { uploadId : filePath }
+ * Maps an uploadId to an object holding the originalFileName, uploadDst, and ipAddr
  */
-let fileMap = {};
+let uploadMap = {};
 /**
  * Holds open sockets - { socketId : socket}
  */
@@ -32,31 +32,52 @@ function deleteSocket(socketId) {
   }
 }
 
+
+function sendConversionProgress(socketId, uploadId, data) {
+  sockets[socketId].emit("ConversionProgress", {uploadId: uploadId, conversionStatus: data.toString()});
+}
+
+function finishConversion(socketId, uploadId) {
+  // let the conversionProgress know so that it doesnt display 99% but still move on to the next step.
+  sockets[socketId].emit("ConversionProgress", { uploadId: uploadId, conversionStatus: "done." });
+  sockets[socketId].emit("ConversionComplete", { uploadId: uploadId, servePath: uploadId + '.gif' });
+}
+
 /**
  * adds a socket to sockets and defines its listeners
  */
 function addSocket(newSocket) {
-  let id = newSocket.id;
-  sockets[id] = newSocket; 
+  let socketId = newSocket.id;
+  sockets[socketId] = newSocket; 
 
   if(DEBUG) {
     let numSockets = Object.keys(sockets).length;
     console.log(`There ${numSockets > 1 ? "are" : "is"} ${numSockets} socket${numSockets > 1 ? "s" : ""} open right now.`);
   }
 
-  sockets[id].on("disconnect", () => {
-    console.log(`Socket ${id} disconnected`);
-    deleteSocket(id);
+  sockets[socketId].on("disconnect", () => {
+    console.log(`Socket ${socketId} disconnected`);
+    deleteSocket(socketId);
   });
 
-  sockets[id].on("ConvertRequested", (fileId) => {
-    console.log(`fid ${fileId}`);
-    convertToGif(fileMap[fileId], path.join(FilePaths.GIF_SERVE_DIR, fileId + ".gif"), id, fileId);
+  sockets[socketId].on("ConvertRequested", (uploadId) => {
+    console.log(`Client using socket ${socketId} requesting uploadId ${uploadId} to be converted.`);
+    convertToGif(uploadMap[uploadId].uploadDst,
+                path.join(FilePaths.GIF_SERVE_DIR, uploadId + ".gif"), 
+                socketId, 
+                uploadId, 
+                null, 
+                sendConversionProgress, 
+                finishConversion);
   });
 
-  sockets[id].on("ShareRequest", (data) => {
+  sockets[socketId].on("ShareRequest", (data) => {
+    console.log("data:");
     console.log(data);
-    addGif(data.fileId, data.fileId + ".gif");
+    let ipAddr = uploadMap[data.fileId].ipAddr;
+    let originalFileName = uploadMap[data.fileId].originalFileName;
+    let tags = data.tags.split(" ");
+    addGif(data.fileId, data.fileId + ".gif", tags, ipAddr, originalFileName);
   }); 
 }
 
@@ -79,7 +100,8 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
   let fileSize = req.headers["content-length"];
   let uploadDst;
   let fileName;
-  let fileID = getUniqueID();
+  let uploadId = getUniqueID();
+  let ipAddr = req.ip;
 
   // validaion here..
   if(fileSize/ (1000*1000).toFixed(2) > MAX_UPLOAD_SIZE) {
@@ -92,13 +114,21 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
     return;
   }
 
-  busboy.on('file', function (fieldname, file, givenFilename, encoding, mimetype) {
-    fileName = givenFilename;
-    newName = getFileName_noExtension(givenFilename) + ""
-    uploadDst = path.join(FilePaths.UPLOAD_DIR + "/" + givenFilename);
-    fileMap[fileID] = uploadDst;
-
-    sockets[socketId].emit("UploadStart", {fileId: fileID, percentUploaded: 0, size: fileSize});
+  busboy.on('file', function (fieldName, file, givenFileName, encoding, mimetype) {
+    // set the fileName
+    fileName = checkUnique(givenFileName);
+    // set the upload dst
+    uploadDst = path.join(FilePaths.UPLOAD_DIR + "/" + fileName);
+    // map this uploadId to this file and fileName
+    uploadMap[uploadId] = {};
+    uploadMap[uploadId].uploadDst = uploadDst;
+    uploadMap[uploadId].originalFileName = givenFileName;
+    uploadMap[uploadId].ipAddr = ipAddr;
+    // signal to client that we are starting the upload shortly
+    sockets[socketId].emit("UploadStart", { 
+      uploadId: uploadId, 
+      percentUploaded: 0, 
+      size: fileSize });
 
     file.on('data', function (data) {
       bytesRecieved = bytesRecieved + data.length;
@@ -106,7 +136,7 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
       let percentUploaded = Math.round(bytesRecieved * 100 / fileSize);
       sockets[socketId].emit("UploadProgress", {
         fileName: fileName,
-        fileId: fileID, 
+        uploadId: uploadId, 
         percentUploaded: percentUploaded, 
         conversionStatus: null,
         size: fileSize,
@@ -117,84 +147,18 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
     file.pipe(fs.createWriteStream(uploadDst));
   });
 
-
   busboy.on('finish', function () {
-    let videoLength;
-    const ffpropeProcess = spawn(
-      'ffprobe', [
-        '-v', '16',
-        '-show_entries', 'format=duration',
-        '-of', 'default=noprint_wrappers=1:nokey=1',
-        uploadDst
-      ]);
-  
-    ffpropeProcess.stdout.on('data', (data) => {
-      console.log(`stdout: ${data}`);
-      videoLength = parseFloat(data);
-    });
-  
-    ffpropeProcess.stderr.on('data', (data) => {
-      console.log(`stderr: ${data}`);
-    });
-  
-    ffpropeProcess.on('close', (code) => {
-      console.log(`close: ${code}`);
-      console.log(`duration: ${videoLength}`);
-
-      sockets[socketId].emit("uploadComplete", {
-        videoLength: videoLength,
-        uploadedTime: new Date(),
-        fileId: fileID
-      });
-
-      // finish was called so upload was success.
-      res.writeHead(200, { 'Connection': 'close' });
-      res.end();
+    sockets[socketId].emit("uploadComplete", {
+      videoLength: null,
+      uploadFinishTime: new Date(),
+      uploadId: uploadId
     });
 
-   
+    // finish was called so upload was success.
+    res.writeHead(200, { 'Connection': 'close' });
+    res.end();
   });
 
   return req.pipe(busboy);
 });
 
-function extractDuration(str) {
-  let arr = str.match(/Duration:\s\d{2}:\d{2}:\d{2}\.\d{2}/)
-  return arr;
-}
-
-function convertToGif(src, dst, socketId, fileId) {
-  let duration = null;
-
-  const ffmpegProcess = spawn(
-    'ffmpeg',
-    [ '-i', src,
-    '-vf', 'scale=512:-1',
-    '-r', '30', 
-    '-nostdin', // disable interaction
-      dst]);
-
-  ffmpegProcess.stdout.on('data', (data) => {
-    sockets[socketId].emit("ConversionProgress", {fileId: fileId, conversionStatus: data.toString()});
-  });
-
-  ffmpegProcess.stderr.on('data', (data) => {
-    if(duration === null && extractDuration(data.toString())) {
-      duration = (extractDuration(data.toString())[0]);
-      
-    }
-    // console.log("stderr: " + data.toString());
-    sockets[socketId].emit("ConversionProgress", {fileId: fileId, conversionStatus: data.toString()});
-  });
-
-  ffmpegProcess.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-    if(code === 0) {
-      sockets[socketId].emit("ConversionProgress", {fileId: fileId, conversionStatus: "done."});
-      sockets[socketId].emit("ConversionComplete", {fileId: fileId});
-    }
-    else {
-      sockets[socketId].emit("ConversionProgress", {fileId: fileId, conversionStatus: "Error."});
-    }
-  });
-}

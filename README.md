@@ -35,7 +35,7 @@ On a production server, to server over https, pass in the '-p' flag
 ```$ node ./server/server.js -p```
 
 ## // TODO List in order of importance
-- ~~Users have a cool, soothing and linear gradient to look at.
+- ~~Users have a cool, soothing and linear gradient to look at.~~
 - ~~users can upload and convert video files to gif~~
 - ~~users can tag gifs they upload~~
 - ~~users can search for gifs by tag~~

@@ -45,6 +45,12 @@ class SearchBar extends Component {
     })
   }
 
+  handleEnter = (event) => {
+    if(event.keyCode === 13) {
+      this.search();
+    }
+  }
+
   search = () => {
     console.log("searching for " + this.state.input);
     this.props.search(this.state.input);
@@ -54,8 +60,9 @@ class SearchBar extends Component {
     const { classes } = this.props;
 
     return (
-      <Paper component="form" className={classes.root}>
+      <Paper className={classes.root}>
         <InputBase
+          onKeyDown={this.handleEnter}
           onChange={this.setInput}
           className={classes.input}
           placeholder="Search For Gifs"

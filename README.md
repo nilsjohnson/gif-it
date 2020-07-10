@@ -1,4 +1,4 @@
-# [https://gif-it.io](https://gif-it.io "Free + Easy Gif Conversion")
+# [gif-it.io](https://gif-it.io "Free + Easy Gif Conversion")
 
 ### gif-it.io is a website where users can create and share gifs.
 

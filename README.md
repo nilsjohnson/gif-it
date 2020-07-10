@@ -1,23 +1,23 @@
-#gif-it.io
-##This is an app to convert videos to GIFs.
+# gif-it.io
+## This is an app to convert videos to GIFs.
 ___
 
 To run project:
 
 1.) Install FFMpeg if neccessary. 
 
-   ``` $ sudo apt install ffmpeg```
+```$ sudo apt install ffmpeg```
 
 2.) Install mySQL and run the script in ./sql/create-db.sql
 
 3.) Install dependencies
-     
-     ```$ npm install```
+
+```$ npm install```
 
 4.) Start the app for development using the create-react-app scripts
-   
-   ``` $ node ./server/server.js```
-    ```$ npm run start```
+
+```$ node ./server/server.js```
+```$ npm run start```
 
 And the app should nw be running running on port 3001 with http requests forwarded from 3000!
 

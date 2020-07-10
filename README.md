@@ -39,11 +39,14 @@ On a production server, to server over https, pass in the '-p' flag
 - ~~users can upload and convert video files to gif~~
 - ~~users can tag gifs they upload~~
 - ~~users can search for gifs by tag~~
+- Sanitze inputs so that if a user enters tags as like "cat, cute, kitten" the tags table does not contain "cat," and "cute,".
 - During upload and conversion, make the Paper stay the same size thoughout the process.
 - During conversion, only report the speed and percentage done.
 - Turn off "Convert To Gif" Button after it's been pressed.
 - Notify user if when successfully share thier gif.
-- categorize gifs (educational, funny, pets, etc.)
+- Users can give gifs descriptions
+- Users can search by description
+- Users can categorize gifs (educational, funny, pets, etc.)
 - allow users to flag inappropriate gifs
 - allow users to search by popular tags, date added, and description
 - create thumbnail gifs and only show the fullsize gif when clicked on in both the gallery and the uploader.

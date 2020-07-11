@@ -4,8 +4,11 @@ import './style.css';
 import UploadWell from "./UploadWell";
 import { uploadFile } from "../../util/data"
 import { DropBox } from "../DropBox";
-import { Grid, GridList, GridListTile, Card } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
+/**
+ * This Componenent allows users to upload files and convert them to gifs
+ */
 class Uploader extends Component {
   constructor(props) {
     super(props);
@@ -303,7 +306,7 @@ class Uploader extends Component {
           selectFilesUpload={this.selectFilesUpload}
         />
         {this.state.uploads.map(upload =>
-          <Grid item key={upload.uploadId}>
+          <Grid container item key={upload.uploadId}>
             <UploadWell
               key={upload.uploadId}
               fileId={upload.uploadId}

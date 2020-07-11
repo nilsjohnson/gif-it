@@ -40,7 +40,7 @@ On a production server, to server over https, pass in the '-p' flag
 - ~~users can tag gifs they upload~~
 - ~~users can search for gifs by tag~~
 - Sanitze inputs so that if a user enters tags as like "cat, cute, kitten" the tags table does not contain "cat," and "cute,".
-- During upload and conversion, make the Paper stay the same size thoughout the process.
+- ~~During upload and conversion, make the Paper stay the same size thoughout the process.~~
 - During conversion, only report the speed and percentage done.
 - Turn off "Convert To Gif" Button after it's been pressed.
 - Notify user if when successfully share thier gif.

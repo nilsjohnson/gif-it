@@ -221,8 +221,6 @@ class Uploader extends Component {
     else {
       this.upload();
     }
-    
-    this.unprocessedFiles = [];
   }
 
   /**

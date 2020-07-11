@@ -15,7 +15,7 @@ export function DropBox(props) {
           id="drop-box"
         >
         
-        <p>Drag and Drop Files or</p>
+        <p>Drag and Drop Video Files or</p>
         <input id="file-input" type="file" multiple onChange={props.selectFilesUpload} />
            
         </Grid>

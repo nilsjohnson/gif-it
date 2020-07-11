@@ -6,10 +6,19 @@ import { formatBytes } from '../../util/util';
 class ConversionProgressBox extends Component {
     constructor(props) {
         super(props)
+
+        this.state = {
+            convertClicked: false
+        };
     }
 
     convert = (event) => {
         console.log("convert button pressed");
+        this.setState({
+            convertClicked: true
+        });
+
+        this.props.convert();
     }
 
     render() {
@@ -17,7 +26,7 @@ class ConversionProgressBox extends Component {
             <div className=''>
                 <p>Status: {this.props.conversionStatus || "Click Convert When Upload Completes."}</p>
                 <div className="">
-                    <button disabled={this.props.enableBtn ? false : true} onClick={this.props.convert}>Convert To Gif!</button>
+                    <button disabled={this.state.convertClicked || !this.props.enableBtn } onClick={this.convert}>Convert To Gif!</button>
                 </div> 
             </div>
         );

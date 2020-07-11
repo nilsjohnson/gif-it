@@ -121,9 +121,7 @@ class UploadWell extends Component {
 
   render() {
     const { classes } = this.props;
-    const bull = <span className={classes.bullet}>•</span>;
 
-    let content = this.getView();
     return (
       <Card className={classes.root}>
         <CardContent>
@@ -141,15 +139,17 @@ class UploadWell extends Component {
             </Grid>
           </Grid>
 
-
+          {
+            this.props.servePath ? this.getGifBox() : 
             <ConversionProgressBox
-              conversionStatus={this.props.conversionStatus}
-              videoLength={this.props.videoLength}
-              convert={this.convert} 
-              enableBtn={this.props.uploadComplete}
-            />
+            conversionStatus={this.props.conversionStatus}
+            videoLength={this.props.videoLength}
+            convert={this.convert} 
+            enableBtn={this.props.uploadComplete}
+
+          />
+          }
             
-            {this.getGifBox()}
         </CardContent>
       </Card>
     )

@@ -15,12 +15,9 @@ class ConversionProgressBox extends Component {
     render() {
         return (
             <div className=''>
-                <p>File: {this.props.fileName}</p>
-                <p>Size: {formatBytes(this.props.size)}</p>
-                <p>Length: {this.props.videoLength} seconds</p>
-                <p>Status: {this.props.conversionStatus}</p>
+                <p>Status: {this.props.conversionStatus || "Click Convert When Upload Completes."}</p>
                 <div className="">
-                    <button onClick={this.props.convert}>Convert To Gif!</button>
+                    <button disabled={this.props.enableBtn ? false : true} onClick={this.props.convert}>Convert To Gif!</button>
                 </div> 
             </div>
         );
@@ -30,4 +27,3 @@ class ConversionProgressBox extends Component {
 
 
 export default ConversionProgressBox;
-

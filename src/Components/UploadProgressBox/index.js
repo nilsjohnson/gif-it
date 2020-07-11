@@ -9,7 +9,7 @@ import { formatBytes } from '../../util/util';
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 300,
+    minWidth: 700,
   },
   title: {
     fontSize: 14,

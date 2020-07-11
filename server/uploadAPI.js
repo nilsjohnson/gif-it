@@ -4,8 +4,8 @@ const Busboy = require('busboy');
 const { app, http, https, serveMode } = require('./server');
 const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
 const bodyParser = require('body-parser');
-const { addGif, addTags, addGifTags, addGif_2 } = require('./dataAccess');
-const { getFileName_noExtension, getUniqueID, checkUnique } = require("./fileUtil");
+const { addGif } = require('./dataAccess');
+const { getUniqueID, checkUnique } = require("./fileUtil");
 const { convertToGif } = require('./util/ffmpegWrapper');
 
 app.use(bodyParser.json());

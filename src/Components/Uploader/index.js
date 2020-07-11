@@ -95,10 +95,12 @@ class Uploader extends Component {
     this.socket.on("uploadComplete", (data) => {
       console.log(`'uploadComplete' triggered.`);
 
+      console.log(data);
+
       let tmp = this.state.uploads;
 
       for (let i = 0; i < tmp.length; i++) {
-        if (tmp[i].fileId === data.fileId) {
+        if (tmp[i].uploadId === data.uploadId) {
           tmp[i].videoLength = data.videoLength;
           tmp[i].uploadedTime = data.uploadedTime;
           tmp[i].uploadComplete = true;
@@ -219,6 +221,8 @@ class Uploader extends Component {
     else {
       this.upload();
     }
+    
+    this.unprocessedFiles = [];
   }
 
   /**

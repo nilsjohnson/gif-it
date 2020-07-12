@@ -179,8 +179,6 @@ class Uploader extends Component {
           response.json().then(resJson => {
             console.log(resJson);
 
-            alert("Error. Perhaps your file is too large. 75 Mb is the limit. Sorry :(");
-
             let tmp = this.state.uploads;
             tmp[this.curUploadNum].error = resJson.err;
             this.setState({
@@ -209,7 +207,7 @@ class Uploader extends Component {
     for (let i = 0; i < this.unprocessedFiles.length; i++) {
       let temp = {
         fileName: this.unprocessedFiles[i].name,
-        uploadId: "temp_id" + i,
+        uploadId: "temp_id_" + i,
         size: this.unprocessedFiles[i].size.toString(),
         percentUploaded: 0
       }
@@ -326,7 +324,9 @@ class Uploader extends Component {
               error={upload.error}
             />
           </Grid>
+         
         )}
+         <p>hii</p>
       </Grid>);
   }
 }

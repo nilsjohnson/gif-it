@@ -126,7 +126,7 @@ class UploadWell extends Component {
       <Card className={classes.root}>
         <CardContent>
           <Grid spacing={3} container>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <Typography variant="h5" component="h2">
                 {this.props.fileName}
               </Typography>
@@ -134,7 +134,7 @@ class UploadWell extends Component {
                 {formatBytes(this.props.size)}
               </Typography>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <ProgressBar value={this.props.percentUploaded} />
             </Grid>
           </Grid>
@@ -142,7 +142,7 @@ class UploadWell extends Component {
           {
             this.props.servePath ? this.getGifBox() : 
             <ConversionProgressBox
-            conversionStatus={this.props.conversionStatus}
+            conversionStatus={this.props.error || this.props.conversionStatus}
             videoLength={this.props.videoLength}
             convert={this.convert} 
             enableBtn={this.props.uploadComplete}

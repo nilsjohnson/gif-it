@@ -109,7 +109,7 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
       console.log(`Chosen file is ${fileSize/ (1000*1000).toFixed(2)} MB, while ${MAX_UPLOAD_SIZE} MB is the maximum. Returning 400..`)
     };
     res.status(400);
-    res.send({err: "File Too Large."});
+    res.send({err: `File Too Large. Max Size: ${MAX_UPLOAD_SIZE} Mb.`});
     res.end();
     return;
   }

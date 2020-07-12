@@ -326,7 +326,6 @@ class Uploader extends Component {
           </Grid>
          
         )}
-         <p>hii</p>
       </Grid>);
   }
 }

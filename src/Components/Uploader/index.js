@@ -58,28 +58,33 @@ class Uploader extends Component {
     this.socket.on("UploadProgress", data => {
       console.log("up progress");
       console.log(data);
-      for (let i = 0; i < this.state.uploads.length; i++) {
-        if (this.state.uploads[i].uploadId === data.uploadId) {
-          let temp = this.state.uploads;
-          // TODO only update percent field
-          temp[i] = data;
-          this.setState({
-            uploads: temp
-          });
+      let temp = this.state.uploads;
+
+      for (let i = 0; i < temp.length; i++) {
+        if (temp[i].uploadId === data.uploadId) {
+          temp[i].percentUploaded = data.percentUploaded;
+          console.log("percent set..");
+          break;
         }
       }
+
+      this.setState({
+        uploads: temp
+      });
+
     });
 
     /*
       Updates the placeholder upload data with 'real' data
       about the upload from the server.
     */
-    this.socket.on("UploadStart", uploadData => {
+    this.socket.on("UploadStart", data => {
       console.log('Upload Started, upload object returned: ');
-      console.log(uploadData);
+      console.log(data);
 
       let tmp = this.state.uploads;
-      tmp[this.curUploadNum] = uploadData;
+      tmp[this.curUploadNum].status = "uploading";
+      tmp[this.curUploadNum].uploadId = data.uploadId;
 
       this.setState({
         uploads: tmp
@@ -93,17 +98,14 @@ class Uploader extends Component {
       Note: the next upload gets triggered by a 200 from the POST and not here.
     */
     this.socket.on("uploadComplete", (data) => {
-      console.log(`'uploadComplete' triggered.`);
-
+      console.log(`Upload Complete: `);
       console.log(data);
 
       let tmp = this.state.uploads;
 
       for (let i = 0; i < tmp.length; i++) {
         if (tmp[i].uploadId === data.uploadId) {
-          tmp[i].videoLength = data.videoLength;
-          tmp[i].uploadedTime = data.uploadedTime;
-          tmp[i].uploadComplete = true;
+          tmp[i].status = "settingOptions";
           break;
         }
       }
@@ -122,17 +124,19 @@ class Uploader extends Component {
     /**
      * Marks the conversion as complete so we can serve the .gif
      */
-    this.socket.on("ConversionComplete", (conversionResult) => {
-      console.log(conversionResult);
+    this.socket.on("ConversionComplete", (data) => {
+      console.log(data);
 
       let tmp = this.state.uploads;
       for (let i = 0; i < tmp.length; i++) {
-        if (tmp[i].uploadId === conversionResult.uploadId) {
-          tmp[i].servePath = conversionResult.servePath;
+        if (tmp[i].uploadId === data.uploadId) {
+          console.log("found it!");
+          console.log(tmp[i]);
+          tmp[i].servePath = data.servePath;
+          tmp[i].status = "complete";
           break;
         }
       }
-
       this.setState({
         uploads: tmp
       });
@@ -147,7 +151,7 @@ class Uploader extends Component {
       let tmp = this.state.uploads;
       for (let i = 0; i < tmp.length; i++) {
         if (tmp[i].uploadId === data.uploadId) {
-          tmp[i].conversionStatus = data.conversionStatus;
+          tmp[i].conversionData = data.conversionData;
           break;
         }
       }
@@ -209,7 +213,8 @@ class Uploader extends Component {
         fileName: this.unprocessedFiles[i].name,
         uploadId: "temp_id_" + i,
         size: this.unprocessedFiles[i].size.toString(),
-        percentUploaded: 0
+        percentUploaded: 0,
+        status: "uploading"
       }
       placeHoldrs.push(temp);
     }
@@ -277,9 +282,23 @@ class Uploader extends Component {
   /**
    * Tells the server to convert an upload.
    */
-  convert = (upload) => {
-    console.log(`convert: ${upload}`);
-    this.socket.emit("ConvertRequested", upload);
+  convert = (uploadId) => {
+    console.log(uploadId);
+    console.log(`convert: ${uploadId}`);
+    this.socket.emit("ConvertRequested", uploadId);
+
+     let tmp = this.state.uploads;
+      for (let i = 0; i < tmp.length; i++) {
+        if (tmp[i].uploadId === uploadId) {
+          tmp[i].status = "converting";
+          break;
+        }
+      }
+
+      this.setState({
+        uploads: tmp
+      });
+
   }
 
   /**
@@ -311,16 +330,16 @@ class Uploader extends Component {
           <Grid container item key={upload.uploadId}>
             <UploadWell
               key={upload.uploadId}
-              fileId={upload.uploadId}
+              uploadId={upload.uploadId}
               fileName={upload.fileName}
               size={upload.size}
               percentUploaded={upload.percentUploaded}
+              conversionData={upload.conversionData}
+              status={upload.status}
+              conversionComplete={upload.conversionComplete}
+              share={this.share}
               convert={this.convert}
               servePath={upload.servePath}
-              conversionStatus={upload.conversionStatus}
-              uploadComplete={upload.uploadComplete}
-              videoLength={upload.videoLength}
-              share={this.share}
               error={upload.error}
             />
           </Grid>

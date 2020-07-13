@@ -5,33 +5,27 @@ import UploadProgressBox from '../UploadProgressBox';
 import ConversionProgressBox from '../ConversionProgressBox';
 import GifBox from '../GifBox';
 import { TagBox } from '../TagBox';
-import { withStyles } from '@material-ui/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { Card, Grid } from '@material-ui/core';
 import { formatBytes } from '../../util/util';
-import { Grid, Box } from '@material-ui/core';
-import ProgressBar from '../ProgressBar/index.js';
+import GifOptionsBox from '../GifOptionsBox';
 
-const styles = (theme) => ({
-  root: {
-    width: '100%',
-    margin: "8px"
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
+
+import { withStyles } from '@material-ui/core/styles';
+
+const useStyles = theme => ({
+    root: {
+        width: '100%',
+        margin: "8px"
+    },
+    title: {
+        fontSize: 14,
+    },
+    center: {
+        textAlign: 'center'
+    }
 });
+
+
 
 class UploadWell extends Component {
   constructor(props) {
@@ -51,7 +45,7 @@ class UploadWell extends Component {
 
 
   convert = () => {
-    let id = this.props.fileId;
+    let id = this.props.uploadId;
     this.props.convert(id)
   }
 
@@ -60,100 +54,80 @@ class UploadWell extends Component {
   }
 
   share = () => {
-    this.props.share(this.props.fileId, this.props.servePath, this.state.tags);
+    this.props.share(this.props.uploadId, this.props.servePath, this.state.tags);
     alert("Gif Added To Gallery! Thanks!");
   }
 
-  getConversionProgressBox = () => {
-    return (
-      <ConversionProgressBox
-        fileName={this.props.fileName}
-        size={this.props.size}
-        conversionStatus={this.props.conversionStatus}
-        videoLength={this.props.videoLength}
-        convert={this.convert} />
-    );
-  }
+  getElement = () => {
 
-  getUploadProgressBox = () => {
-    return (<UploadProgressBox
-      fileName={this.props.fileName}
-      size={this.props.size}
-      percentUploaded={this.props.percentUploaded}
-      convert={this.convert}
-      cancelUpload={this.cancelUpload}
-      message={this.props.error ? this.props.error : "Please Wait...."} />
-    );
-  }
+    const { 
+      conversionData = {},
+      fileName,
+      size,
+      percentUploaded,
+      servePath,
+      status
+    } = this.props;
 
-  getGifBox = () => {
-    if(this.props.servePath) {
+    const { curSpeed, progress } = conversionData;
+
+    if(status === "uploading") {
       return (
-        <div>
-          <GifBox
-            servePath={this.props.servePath}
-            share={this.share}
-            setTags={this.setTags}
+        <UploadProgressBox 
+          fileName={ fileName }
+          fileSize={ formatBytes(size) }
+          percentUploaded={ percentUploaded }
+        /> );
+    }
+    else if (status === "settingOptions") {
+        return (
+          <GifOptionsBox 
+            fileName={ fileName }
+            convert={this.convert}
           />
-          <TagBox
-            setTags={this.setTags}
-            share={this.share}
-          />
-        </div>
+
+        );
+    }
+    else if (status === "converting") {
+      return (
+        <ConversionProgressBox
+          fileName={ fileName }
+          speed={ curSpeed }
+          progress={ progress }
+          convert={ this.convert }
+        />
       );
     }
-
-    return "";
+    else if (status === "complete") {
+      return (
+        <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+      >
+          <GifBox
+            servePath={ servePath }
+          />
+          <TagBox 
+            setTags={ this.setTags }
+            share={ this.share }
+          />
+        </Grid>
+        
+      );
+    }
   }
 
-  getView = () => {
-    if (this.props.servePath) {
-      return this.getGifBox();
-    }
-    else if (this.props.uploadComplete) {
-      return this.getConversionProgressBox();
-    }
-    else {
-      return this.getUploadProgressBox();
-    }
-
-  }
 
   render() {
     const { classes } = this.props;
 
-    return (
+    return(
       <Card className={classes.root}>
-        <CardContent>
-          <Grid spacing={3} container>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="h5" component="h2">
-                {this.props.fileName}
-              </Typography>
-              <Typography className={classes.title} color="textSecondary" gutterBottom>
-                {formatBytes(this.props.size)}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <ProgressBar value={this.props.percentUploaded} />
-            </Grid>
-          </Grid>
-
-          {
-            this.props.servePath ? this.getGifBox() : 
-            <ConversionProgressBox
-            conversionStatus={this.props.error || this.props.conversionStatus}
-            videoLength={this.props.videoLength}
-            convert={this.convert} 
-            enableBtn={this.props.uploadComplete}
-
-          />
-          }
-            
-        </CardContent>
+        {this.getElement()}
       </Card>
-    )
-
+    );
   }
 }
 
@@ -165,5 +139,4 @@ UploadWell.propTypes = {
 
 
 
-export default withStyles(styles)(UploadWell);
-
+export default withStyles(useStyles)(UploadWell);

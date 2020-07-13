@@ -1,9 +1,28 @@
 import React, { Component } from 'react';
-import './style.css';
-import { formatBytes } from '../../util/util';
+import Card from '@material-ui/core/Card';
+//import { withStyles } from '@material-ui/core/styles';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { Grid, Box } from '@material-ui/core';
+import ProgressBar from '../ProgressBar';
+import { withStyles } from '@material-ui/core/styles';
 
+const useStyles = theme => ({
+    root: {
+        width: '100%',
+        margin: "8px"
+    },
+    title: {
+        fontSize: 14,
+    },
+    center: {
+        textAlign: 'center'
+    }
+});
 
-class ConversionProgressBox extends Component {
+class ConversionBox extends Component {
     constructor(props) {
         super(props)
 
@@ -22,17 +41,24 @@ class ConversionProgressBox extends Component {
     }
 
     render() {
+        const { classes } = this.props;
         return (
-            <div className=''>
-                <p>Status: {this.props.conversionStatus || "Click Convert When Upload Completes."}</p>
-                <div className="">
-                    <button disabled={this.state.convertClicked || !this.props.enableBtn } onClick={this.convert}>Convert To Gif!</button>
-                </div> 
-            </div>
+            <CardContent>
+                <Grid container>
+                    <Typography variant="h5" component="h2">
+                        {this.props.fileName}
+                    </Typography>
+                </Grid>
+                <Grid container>
+                    <Box component="div">
+                        <p>Speed: {this.props.speed} </p>
+                        <p>Progress: {this.props.progress}% </p>
+                    </Box>
+                </Grid>
+            </CardContent>
+
         );
     }
 }
 
-
-
-export default ConversionProgressBox;
+export default withStyles(useStyles)(ConversionBox);

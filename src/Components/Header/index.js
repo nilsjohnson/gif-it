@@ -26,7 +26,7 @@ export default function Header() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Gif-it.io
+            gif-it.io
           </Typography>
           <Button color="inherit" href="./">Convert to .gif</Button>
 		      <Button color="inherit" href='./explore'>Explore</Button>

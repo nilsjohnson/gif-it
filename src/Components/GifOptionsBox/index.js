@@ -1,9 +1,8 @@
 import React from 'react';
-import { Card, Grid, CardContent, Typography } from '@material-ui/core';
-import ProgressBar from '../ProgressBar';
+import { Button, Card, CardActions, Grid, CardContent, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles ({
+const useStyles = makeStyles({
   root: {
     width: '100%',
     margin: "8px"
@@ -16,10 +15,11 @@ const useStyles = makeStyles ({
   }
 });
 
-export default function UploadProgresBox(props) {
+export default function GifOptionsBox(props) {
   const classes = useStyles();
 
   return (
+    <div>
       <CardContent>
         <Grid spacing={3} container>
           <Grid item xs={12} sm={6}>
@@ -30,18 +30,19 @@ export default function UploadProgresBox(props) {
               {props.fileSize}
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <ProgressBar value={props.percentUploaded} />
-          </Grid>
         </Grid>
         <Grid container
           direction="row"
           justify="center"
           alignItems="center">
           <Typography>
-            Please Wait...
-            </Typography>
+          // TODO, add some options here
+          </Typography>
         </Grid>
       </CardContent>
+      <CardActions>
+        <Button onClick={props.convert}>Convert To Gif</Button>
+      </CardActions>
+    </div>
   );
 }

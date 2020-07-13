@@ -1,20 +1,20 @@
 import React from 'react';
 import './style.css';
+import { Grid } from '@material-ui/core';
 
 export function TagBox(props) {
     return (
-        <div className="v-box">
-            <div className="">
+        <div>
+            <Grid item>
                 <input
                     type="text"
                     placeholder="Enter Some Tags..."
                     onChange={props.setTags}
                 />
-            </div>
-            <div className="button-box">
+            </Grid>
+            <Grid item>
                 <button onClick={props.share} > Tag it and Share! </button>
-            </div>
-            
+            </Grid>
         </div>
     );
 }

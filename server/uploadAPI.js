@@ -34,12 +34,10 @@ function deleteSocket(socketId) {
 
 
 function sendConversionProgress(socketId, uploadId, data) {
-  sockets[socketId].emit("ConversionProgress", {uploadId: uploadId, conversionStatus: data.toString()});
+  sockets[socketId].emit("ConversionProgress", {uploadId: uploadId, conversionData: data});
 }
 
 function finishConversion(socketId, uploadId) {
-  // let the conversionProgress know so that it doesnt display 99% but still move on to the next step.
-  sockets[socketId].emit("ConversionProgress", { uploadId: uploadId, conversionStatus: "done." });
   sockets[socketId].emit("ConversionComplete", { uploadId: uploadId, servePath: uploadId + '.gif' });
 }
 
@@ -126,21 +124,16 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
     uploadMap[uploadId].ipAddr = ipAddr;
     // signal to client that we are starting the upload shortly
     sockets[socketId].emit("UploadStart", { 
-      uploadId: uploadId, 
-      percentUploaded: 0, 
-      size: fileSize });
+      uploadId: uploadId
+    });
 
     file.on('data', function (data) {
       bytesRecieved = bytesRecieved + data.length;
       // sockets[socketId].emit("FromAPI", Math.round(bytesRecieved * 100 / fileSize) + '% Uploaded');
       let percentUploaded = Math.round(bytesRecieved * 100 / fileSize);
       sockets[socketId].emit("UploadProgress", {
-        fileName: fileName,
         uploadId: uploadId, 
         percentUploaded: percentUploaded, 
-        conversionStatus: null,
-        size: fileSize,
-        servePath: null,
        });
     });
 

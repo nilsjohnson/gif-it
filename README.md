@@ -41,9 +41,9 @@ On a production server, to server over https, pass in the '-p' flag
 - ~~users can search for gifs by tag~~
 - Sanitze inputs so that if a user enters tags as like "cat, cute, kitten" the tags table does not contain "cat," and "cute,".
 - ~~During upload and conversion, make the Paper stay the same size thoughout the process.~~
-- During conversion, only report the speed and percentage done.
-- Turn off "Convert To Gif" Button after it's been pressed.
-- Notify user if when successfully share thier gif.
+- ~~During conversion, only report the speed and percentage done.~~
+- ~~Turn off "Convert To Gif" Button after it's been pressed.~~
+- Notify user when they successfully share gif. // (currently always alerts success..) 
 - Users can give gifs descriptions
 - Users can search by description
 - Users can categorize gifs (educational, funny, pets, etc.)

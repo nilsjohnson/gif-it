@@ -8,7 +8,7 @@ function convertToGif(src, dst, socketId, uploadId, onStdout, onStderr, onClose)
   const ffmpegProcess = spawn(
     'ffmpeg',
     ['-i', src,
-      '-vf', 'scale=512:-1',
+      '-vf', 'scale=256:-1',
       '-r', '30',
       '-nostdin', // disable interaction
       dst]);

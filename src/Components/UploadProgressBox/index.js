@@ -3,7 +3,7 @@ import { Card, Grid, CardContent, Typography } from '@material-ui/core';
 import ProgressBar from '../ProgressBar';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles ({
   root: {
     width: '100%',
     margin: "8px"

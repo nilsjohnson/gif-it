@@ -8,17 +8,15 @@ const theme = createMuiTheme({
       main: '#19D192',
     },
     secondary: {
-      main: '#19D192',
-      light: '#1AACC5'
-    },
+      main: '#0F5FD1',
+    }
   },
 });
 
 export default theme;
 
-// #0F5FD1 blue
+// #0F5FD1 blue [Secondary]
 // #1AACC5 lt ble
 // #0D91DB blue teal
 // #0FDCC9 teal
-// #19D192 grean
-
+// #19D192 grean [Primary]

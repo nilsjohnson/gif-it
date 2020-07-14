@@ -298,7 +298,6 @@ class Uploader extends Component {
       this.setState({
         uploads: tmp
       });
-
   }
 
   /**
@@ -316,18 +315,22 @@ class Uploader extends Component {
       <Grid
         container
         direction="column"
-        justify="flex-start"
+        justify="space-evenly"
         alignItems="center"
+        spacing={2}
       >
-        <DropBox
-          onDrop={this.dropHandler}
-          onDragOver={this.dragOverHandler}
-          onDragLeave={this.dragEndHandler}
-          hovering={this.state.filesHovering}
-          selectFilesUpload={this.selectFilesUpload}
-        />
+        <Grid item container>
+          <DropBox
+              onDrop={this.dropHandler}
+              onDragOver={this.dragOverHandler}
+              onDragLeave={this.dragEndHandler}
+              hovering={this.state.filesHovering}
+              selectFilesUpload={this.selectFilesUpload}
+            />
+        </Grid>
+
+        
         {this.state.uploads.map(upload =>
-          <Grid container item key={upload.uploadId}>
             <UploadWell
               key={upload.uploadId}
               uploadId={upload.uploadId}
@@ -339,11 +342,10 @@ class Uploader extends Component {
               conversionComplete={upload.conversionComplete}
               share={this.share}
               convert={this.convert}
+              removeUpload={this.removeUpload}
               servePath={upload.servePath}
               error={upload.error}
             />
-          </Grid>
-         
         )}
       </Grid>);
   }

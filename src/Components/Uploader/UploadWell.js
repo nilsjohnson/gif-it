@@ -3,9 +3,8 @@ import './style.css';
 import PropTypes from 'prop-types';
 import UploadProgressBox from '../UploadProgressBox';
 import ConversionProgressBox from '../ConversionProgressBox';
-import GifBox from '../GifBox';
 import { TagBox } from '../TagBox';
-import { Card, Grid } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import { formatBytes } from '../../util/util';
 import GifOptionsBox from '../GifOptionsBox';
 
@@ -13,16 +12,24 @@ import GifOptionsBox from '../GifOptionsBox';
 import { withStyles } from '@material-ui/core/styles';
 
 const useStyles = theme => ({
-    root: {
-        width: '100%',
-        margin: "8px"
-    },
-    title: {
-        fontSize: 14,
-    },
-    center: {
-        textAlign: 'center'
-    }
+  root: {
+    width: '100%',
+    margin: "8px",
+    backgroundColor: theme.palette.primary.light
+  },
+  title: {
+    fontSize: 14,
+  },
+  center: {
+    textAlign: 'center'
+  },
+  image: {
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%',
+    padding: theme.spacing(1)
+  }
 });
 
 
@@ -49,8 +56,8 @@ class UploadWell extends Component {
     this.props.convert(id)
   }
 
-  cancelUpload = () => {
-    alert("Cancel Functionality Not Yet Implemented.");
+  cancel = () => {
+    this.props.removeUpload(this.props.uploadId);
   }
 
   share = () => {
@@ -60,73 +67,76 @@ class UploadWell extends Component {
 
   getElement = () => {
 
-    const { 
+    const {
       conversionData = {},
       fileName,
       size,
       percentUploaded,
       servePath,
-      status
+      status,
+      classes
     } = this.props;
 
     const { curSpeed, progress } = conversionData;
 
-    if(status === "uploading") {
+    if (status === "uploading") {
       return (
-        <UploadProgressBox 
-          fileName={ fileName }
-          fileSize={ formatBytes(size) }
-          percentUploaded={ percentUploaded }
-        /> );
+        <UploadProgressBox
+          fileName={fileName}
+          fileSize={formatBytes(size)}
+          percentUploaded={percentUploaded}
+        />);
     }
     else if (status === "settingOptions") {
-        return (
-          <GifOptionsBox 
-            fileName={ fileName }
-            convert={this.convert}
-          />
+      return (
+        <GifOptionsBox
+          fileName={fileName}
+          convert={this.convert}
+        />
 
-        );
+      );
     }
     else if (status === "converting") {
       return (
         <ConversionProgressBox
-          fileName={ fileName }
-          speed={ curSpeed }
-          progress={ progress }
-          convert={ this.convert }
+          fileName={fileName}
+          speed={curSpeed}
+          progress={progress}
+          convert={this.convert}
         />
       );
     }
     else if (status === "complete") {
       return (
         <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-      >
-          <GifBox
-            servePath={ servePath }
-          />
-          <TagBox 
-            setTags={ this.setTags }
-            share={ this.share }
-          />
+          container item
+          direction="row"
+          justify="space-evenly"
+          alignItems="center"
+          spacing={2}
+        >
+          <Grid item xs={12} sm={6}>
+            <img className={classes.image} src={servePath} />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TagBox 
+              convert={this.convert}
+              share={this.share}
+              cancel={this.cancel}
+            />
+          </Grid>
         </Grid>
-        
       );
     }
   }
 
-
   render() {
-    const { classes } = this.props;
+    const {classes} = this.props;
 
-    return(
-      <Card className={classes.root}>
+    return (
+      <Box className={classes.root}>
         {this.getElement()}
-      </Card>
+      </Box>
     );
   }
 }

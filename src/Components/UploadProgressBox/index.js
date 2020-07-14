@@ -20,28 +20,37 @@ export default function UploadProgresBox(props) {
   const classes = useStyles();
 
   return (
-      <CardContent>
-        <Grid spacing={3} container>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="h5" component="h2">
-              {props.fileName}
-            </Typography>
-            <Typography className={classes.title} color="textSecondary" gutterBottom>
-              {props.fileSize}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <ProgressBar value={props.percentUploaded} />
-          </Grid>
+    <Grid
+      item
+      container
+      direction="row"
+      justify="space-evenly"
+      alignItems="flex-start"
+    >
+      <Grid item
+        container
+        direction="row"
+        justify="space-evenly"
+        alignItems="flex-start"
+      >
+        <Grid item xs={12} sm={6}>
+          <Typography variant="h5" component="h2">
+            {props.fileName}
+          </Typography>
+          <Typography className={classes.title} color="textSecondary" gutterBottom>
+            {props.fileSize}
+          </Typography>
         </Grid>
-        <Grid container
-          direction="row"
-          justify="center"
-          alignItems="center">
-          <Typography>
-            Please Wait...
-            </Typography>
+        <Grid xs={12} sm={6}>
+          <ProgressBar value={props.percentUploaded} />
         </Grid>
-      </CardContent>
+          
+        
+      </Grid>
+
+      <Typography>
+        Please Wait...
+            </Typography>
+    </Grid>
   );
 }

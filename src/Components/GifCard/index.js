@@ -37,7 +37,7 @@ export default function GifCard(props) {
           image={props.src}
           title={props.src}
         />
-        <Typography variant="h5" component="h2">{props.src}</Typography>
+        <Typography variant="h5" component="h2">{props.description}</Typography>
       </CardContent>
     </Card>
   );

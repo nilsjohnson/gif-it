@@ -40,7 +40,7 @@ function convertToGif(src, dst, socketId, uploadId, onStdout, onStderr, onClose)
 
   ffmpegProcess.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
-    onClose(socketId, uploadId);
+    onClose(socketId, uploadId, `${uploadId}.gif`);
   });
 }
 

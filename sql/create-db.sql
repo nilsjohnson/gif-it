@@ -3,6 +3,7 @@ USE gif_it;
 
 CREATE TABLE gif (
 	id varchar(32),
+	descript varchar(1000),
 	fileName varchar(32),
 	PRIMARY KEY (id)
 );

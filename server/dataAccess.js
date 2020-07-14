@@ -43,25 +43,28 @@ function getAllGifs(callback) {
  *  4.) retreives all the tag ids from tags inserted in step 3.
  *  5.) Insert new entry into the gif_tag join table
  * 
- * @param {*} gifId - The id of the gif.
+ * @param {*} uploadId - The id of the gif.
  * @param {*} fileName - The name of the file
  * @param {*} tags - Array of tags
+ * @param {*} description - description of gif
  * @param {*} ipAddr - uploaders ip address
  * @param {*} originalFileName - The orignal fileName on the client machine
  */
-function addGif(gifId, fileName, tags, ipAddr, originalFileName) {
+function addGif(uploadId, fileName, tags, description, ipAddr, originalFileName) {
     pool.getConnection((err, connection) => {
         connection.beginTransaction(function (err) {
             if (err) {
-                console.log(`There was a problem beginning SQL transaction - no attempt to insert gifId ${gifId} was made.`);
+                console.log(`There was a problem beginning SQL transaction - no attempt to insert gifId ${uploadId} was made.`);
                 console.log(err);
                 return;
             }
 
             // 1.) insert the gif
-            let gif_sql = `INSERT INTO gif VALUES('${gifId}', '${fileName}')`;
+            let gif_sql = `INSERT INTO gif SET ?`;
+            // let gif_sql = `INSERT INTO gif VALUES('${uploadId}', '${fileName}')`;
             console.log("gif_sql: " + gif_sql);
-            connection.query(gif_sql, (error, results, fields) => {
+            let insertObj = {id: uploadId, descript: description, fileName: fileName};
+            connection.query(gif_sql, insertObj, (error, results, fields) => {
                 console.log(results);
                 if (error) {
                     console.log(error);
@@ -71,7 +74,7 @@ function addGif(gifId, fileName, tags, ipAddr, originalFileName) {
                 // 2.) insert the upload
                 let upload_sql = `INSERT INTO upload SET id = ?, date = ?, ipAddr = ?, originalFileName = ?`;
                 console.log("upload_sql: " + upload_sql);
-                connection.query(upload_sql, [gifId, getDateTime(), ipAddr, originalFileName], (error, results, fields) => {
+                connection.query(upload_sql, [uploadId, getDateTime(), ipAddr, originalFileName], (error, results, fields) => {
                     console.log(results);
                     if (error) {
                         console.log(error);
@@ -79,6 +82,9 @@ function addGif(gifId, fileName, tags, ipAddr, originalFileName) {
                     }
 
                     // 3.) insert the tags
+                    if(!tags) {
+                        tags = []; // this is a temp hack..
+                    }
                     let tag_str = "";
                     for (let i = 0; i < tags.length; i++) {
                         let tmp = "('" + tags[i] + "')";
@@ -128,7 +134,7 @@ function addGif(gifId, fileName, tags, ipAddr, originalFileName) {
 
                             let id_tag_str = "";
                             for (let i = 0; i < tags.length; i++) {
-                                let tmp = `('${gifId}', '${tagIds[i]}')`;
+                                let tmp = `('${uploadId}', '${tagIds[i]}')`;
                                 id_tag_str += tmp;
                                 if (i < tags.length - 1) {
                                     id_tag_str += ", ";
@@ -151,7 +157,7 @@ function addGif(gifId, fileName, tags, ipAddr, originalFileName) {
                                         return;
                                     }
                                     else {
-                                        console.log(`Insertion of gifId ${gifId} success.`);
+                                        console.log(`Insertion of gifId ${uploadId} success.`);
                                     }
 
                                 });
@@ -173,7 +179,7 @@ function getGifsByTag(tags, callback)  {
         }
 
         let getGif_sql = 
-            "SELECT gif.fileName from gif \
+            "SELECT gif.fileName, gif.descript from gif \
                 JOIN gif_tag ON gif.id = gif_tag.gif_id \
                 JOIN tag ON gif_tag.tag_id = tag.id \
             WHERE ";

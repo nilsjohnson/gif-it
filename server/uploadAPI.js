@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const { addGif } = require('./dataAccess');
 const { getUniqueID, checkUnique } = require("./fileUtil");
 const { convertToGif } = require('./util/ffmpegWrapper');
+const { splitTags } = require('./util/util');
 
 app.use(bodyParser.json());
 const io = (serveMode === ServeModes.DEV ? require('socket.io')(http) : require('socket.io').listen(https));
@@ -37,7 +38,8 @@ function sendConversionProgress(socketId, uploadId, data) {
   sockets[socketId].emit("ConversionProgress", {uploadId: uploadId, conversionData: data});
 }
 
-function finishConversion(socketId, uploadId) {
+function finishConversion(socketId, uploadId, fileName) {
+  uploadMap[uploadId].fileName = fileName;
   sockets[socketId].emit("ConversionComplete", { uploadId: uploadId, servePath: uploadId + '.gif' });
 }
 
@@ -72,10 +74,14 @@ function addSocket(newSocket) {
   sockets[socketId].on("ShareRequest", (data) => {
     console.log("data:");
     console.log(data);
-    let ipAddr = uploadMap[data.fileId].ipAddr;
-    let originalFileName = uploadMap[data.fileId].originalFileName;
-    let tags = data.tags.split(" ");
-    addGif(data.fileId, data.fileId + ".gif", tags, ipAddr, originalFileName);
+    console.log(uploadMap);
+    const { uploadId, tags, description } = data;
+
+    let ipAddr = uploadMap[uploadId].ipAddr;
+    let originalFileName = uploadMap[uploadId].originalFileName;
+    let fileName = uploadMap[uploadId].fileName
+    let tagArr = splitTags(tags);
+    addGif(uploadId, fileName, tagArr, description, ipAddr, originalFileName);
   }); 
 }
 

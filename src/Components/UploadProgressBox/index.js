@@ -5,8 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles ({
   root: {
-    width: '100%',
-    margin: "8px"
+    padding: "8px"
   },
   title: {
     fontSize: 14,
@@ -26,12 +25,14 @@ export default function UploadProgresBox(props) {
       direction="row"
       justify="space-evenly"
       alignItems="flex-start"
+      className={classes.root}
     >
       <Grid item
         container
         direction="row"
         justify="space-evenly"
         alignItems="flex-start"
+        spacing={2}
       >
         <Grid item xs={12} sm={6}>
           <Typography variant="h5" component="h2">

@@ -15,7 +15,7 @@ const useStyles = theme => ({
   root: {
     width: '100%',
     margin: "8px",
-    backgroundColor: theme.palette.primary.light
+    backgroundColor: theme.palette.primary.dark
   },
   title: {
     fontSize: 14,
@@ -39,14 +39,23 @@ class UploadWell extends Component {
     super(props)
 
     this.state = ({
-      tags: ""
+      tags: "",
+      description: ""
     });
 
   }
 
   setTags = (event) => {
+    console.log(`tags: ${event.target.value.trim()}`);
     this.setState({
-      tags: event.target.value
+      tags: event.target.value.trim()
+    });
+  }
+
+  setDescription = (event) => {
+    console.log(`description: ${event.target.value.trim()}`);
+    this.setState({
+      description: event.target.value.trim()
     });
   }
 
@@ -61,8 +70,13 @@ class UploadWell extends Component {
   }
 
   share = () => {
-    this.props.share(this.props.uploadId, this.props.servePath, this.state.tags);
-    alert("Gif Added To Gallery! Thanks!");
+    const { uploadId } = this.props;
+    const { tags, description } = this.state;
+    this.props.share(uploadId, tags, description);
+  }
+
+  triggerDownload = () => {
+    alert("download not yet implemented");
   }
 
   getElement = () => {
@@ -123,6 +137,9 @@ class UploadWell extends Component {
               convert={this.convert}
               share={this.share}
               cancel={this.cancel}
+              setTags={this.setTags}
+              setDescription={this.setDescription}
+              download={this.triggerDownload}
             />
           </Grid>
         </Grid>

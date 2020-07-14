@@ -300,14 +300,37 @@ class Uploader extends Component {
       });
   }
 
+  removeUpload = (uploadId) => {
+    console.log(`removing upload ${uploadId}`);
+    let tmp = this.state.uploads;
+    let i = 0;
+
+    while (i < tmp.length) {
+      if(tmp[i].uploadId === uploadId) {
+        tmp.splice(i, 1);
+        break;
+      }
+      i++;
+    }
+
+    this.setState({uploads: tmp});
+    this.curUploadNum--;
+
+  }
+
   /**
    * Tells the server to add file to database with given tags.
    */
-  share = (fileId, path, tags) => {
-    console.log("Cher is the best!");
+  share = (uploadId, tags, description) => {
+    console.log(uploadId);
     console.log(tags);
-    console.log(fileId);
-    this.socket.emit("ShareRequest", { fileId: fileId, path: path, tags: tags });
+    console.log(description);
+    
+    this.socket.emit("ShareRequest", { 
+      uploadId: uploadId, 
+      tags: tags, 
+      description: description 
+    });
   }
 
   render() {

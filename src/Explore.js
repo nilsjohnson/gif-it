@@ -82,6 +82,7 @@ class Explore extends Component {
                 <GifCard
                   key={gif.id}
                   src={gif.fileName}
+                  description={gif.descript}
                 />
               </Grid>
             ))}

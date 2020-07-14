@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import './css/style.css';
 import Uploader from "./Components/Uploader";
 import Header from "./Components/Header";
 import Box from "@material-ui/core/Box"
@@ -11,8 +10,8 @@ class Home extends Component {
       <Box>
         <Header/>
         <Container>
-        <Uploader/>
-      </Container>
+          <Uploader/>
+        </Container>
       </Box>
     );
   }

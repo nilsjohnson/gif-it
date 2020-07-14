@@ -1,15 +1,10 @@
 import React, { Component } from "react";
-import './css/style.css';
 import Header from "./Components/Header";
 import { getNew, search } from "./util/data";
 import { Container, TextField, Grid, Button, InputBase } from '@material-ui/core';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import GifCard from "./Components/GifCard";
-import { makeStyles } from '@material-ui/core/styles';
 import SearchBar from "./Components/SearchBar";
-
-
-
 
 class Explore extends Component {
   constructor(props) {

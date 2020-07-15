@@ -38,8 +38,9 @@ function sendConversionProgress(socketId, uploadId, data) {
   sockets[socketId].emit("ConversionProgress", {uploadId: uploadId, conversionData: data});
 }
 
-function finishConversion(socketId, uploadId, fileName) {
+function finishConversion(socketId, uploadId, fileName, thumbFileName) {
   uploadMap[uploadId].fileName = fileName;
+  uploadMap[uploadId].thumbFileName = thumbFileName
   sockets[socketId].emit("ConversionComplete", { uploadId: uploadId, servePath: uploadId + '.gif' });
 }
 
@@ -79,9 +80,10 @@ function addSocket(newSocket) {
 
     let ipAddr = uploadMap[uploadId].ipAddr;
     let originalFileName = uploadMap[uploadId].originalFileName;
-    let fileName = uploadMap[uploadId].fileName
+    let fileName = uploadMap[uploadId].fileName;
+    let thumbFileName = uploadMap[uploadId].thumbFileName;
     let tagArr = splitTags(tags);
-    addGif(uploadId, fileName, tagArr, description, ipAddr, originalFileName);
+    addGif(uploadId, fileName, thumbFileName, tagArr, description, ipAddr, originalFileName);
   }); 
 }
 

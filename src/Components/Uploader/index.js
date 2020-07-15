@@ -331,6 +331,8 @@ class Uploader extends Component {
       tags: tags, 
       description: description 
     });
+
+    alert("Thank you for sharing!");
   }
 
   render() {

@@ -45,12 +45,13 @@ function getAllGifs(callback) {
  * 
  * @param {*} uploadId - The id of the gif.
  * @param {*} fileName - The name of the file
+ * @param {*} thumbFileName - The name of the file's thumbnail
  * @param {*} tags - Array of tags
  * @param {*} description - description of gif
  * @param {*} ipAddr - uploaders ip address
  * @param {*} originalFileName - The orignal fileName on the client machine
  */
-function addGif(uploadId, fileName, tags, description, ipAddr, originalFileName) {
+function addGif(uploadId, fileName, thumbFileName, tags, description, ipAddr, originalFileName) {
     pool.getConnection((err, connection) => {
         connection.beginTransaction(function (err) {
             if (err) {
@@ -63,7 +64,7 @@ function addGif(uploadId, fileName, tags, description, ipAddr, originalFileName)
             let gif_sql = `INSERT INTO gif SET ?`;
             // let gif_sql = `INSERT INTO gif VALUES('${uploadId}', '${fileName}')`;
             console.log("gif_sql: " + gif_sql);
-            let insertObj = {id: uploadId, descript: description, fileName: fileName};
+            let insertObj = {id: uploadId, descript: description, fileName: fileName, thumbName:thumbFileName };
             connection.query(gif_sql, insertObj, (error, results, fields) => {
                 console.log(results);
                 if (error) {

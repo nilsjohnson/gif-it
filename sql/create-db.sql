@@ -2,29 +2,32 @@ CREATE DATABASE gif_it;
 USE gif_it;
 
 CREATE TABLE gif (
-	id varchar(32),
-	descript varchar(1000),
-	fileName varchar(32),
+	id VARCHAR(32), -- The id
+	descript VARCHAR(1000), -- A description, ie. 'This is how my dog playing fetch'
+	fileName VARCHAR(32), -- The name of the file, ie. '8374jf7.gif'
+	thumbName VARCHAR(38), -- The name of the gifs thumbnail, ie. '8374jf7.thumb.gif'
+	dimensions VARCHAR(12),	-- The dimensions, ie. '800x600'
+	duration float, -- The length of the gif in seconds, ie '47.32'
 	PRIMARY KEY (id)
 );
 
 CREATE TABLE upload (
-	id varchar(32),
+	id VARCHAR(32),
 	date DATETIME,
-	ipAddr varchar(45),
-	originalFilename varchar(40),
+	ipAddr VARCHAR(45),
+	originalFilename VARCHAR(40),
 	PRIMARY KEY (id) -- id is not a foreign key so that we can maintain
 );					 -- record of uploads when a gif is deleted.
 
 CREATE TABLE tag (
-	id int NOT NULL AUTO_INCREMENT,
-	tag varchar(32) NOT NULL UNIQUE,
+	id INT NOT NULL AUTO_INCREMENT,
+	tag VARCHAR(32) NOT NULL UNIQUE,
 	PRIMARY KEY (id)
 );
 
 CREATE TABLE gif_tag (
-	gif_id varchar(32),
-	tag_id int,
+	gif_id VARCHAR(32),
+	tag_id INT,
 	FOREIGN KEY (gif_id) 
 		REFERENCES gif(id)
 		ON DELETE CASCADE,

@@ -81,7 +81,7 @@ class Explore extends Component {
               <Grid item xs={12} sm={6} md={4} key={gif.id}>
                 <GifCard
                   key={gif.id}
-                  src={gif.fileName}
+                  src={gif.thumbName}
                   description={gif.descript}
                 />
               </Grid>

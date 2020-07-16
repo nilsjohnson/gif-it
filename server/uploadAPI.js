@@ -44,6 +44,8 @@ function finishConversion(socketId, uploadId, fileName, thumbFileName) {
   sockets[socketId].emit("ConversionComplete", { uploadId: uploadId, servePath: uploadId + '.gif' });
 }
 
+
+
 /**
  * adds a socket to sockets and defines its listeners
  */
@@ -61,12 +63,14 @@ function addSocket(newSocket) {
     deleteSocket(socketId);
   });
 
-  sockets[socketId].on("ConvertRequested", (uploadId) => {
+  sockets[socketId].on("ConvertRequested", (data) => {
+    const { uploadId, quality } = data;
     console.log(`Client using socket ${socketId} requesting uploadId ${uploadId} to be converted.`);
     convertToGif(uploadMap[uploadId].uploadDst,
                 path.join(FilePaths.GIF_SERVE_DIR, uploadId + ".gif"), 
                 socketId, 
-                uploadId, 
+                uploadId,
+                quality, 
                 null, 
                 sendConversionProgress, 
                 finishConversion);
@@ -78,12 +82,30 @@ function addSocket(newSocket) {
     console.log(uploadMap);
     const { uploadId, tags, description } = data;
 
+    if(!tags) {
+      sockets[socketId].emit("ShareResult", {uploadId: uploadId, message: "Please Provide a Tag."})
+      return;
+    }
+
     let ipAddr = uploadMap[uploadId].ipAddr;
     let originalFileName = uploadMap[uploadId].originalFileName;
     let fileName = uploadMap[uploadId].fileName;
     let thumbFileName = uploadMap[uploadId].thumbFileName;
     let tagArr = splitTags(tags);
-    addGif(uploadId, fileName, thumbFileName, tagArr, description, ipAddr, originalFileName);
+
+    addGif(uploadId, 
+      fileName, 
+      thumbFileName, 
+      tagArr, 
+      description, 
+      ipAddr, 
+      originalFileName
+      ).then((result) => {
+        console.log(result);
+        sockets[socketId].emit("ShareResult", {uploadId: uploadId, message: "Thank You!"})
+      }).catch(err => {
+        sockets[socketId].emit("ShareResult", {uploadId: uploadId, message: err.toString()})
+      });
   }); 
 }
 

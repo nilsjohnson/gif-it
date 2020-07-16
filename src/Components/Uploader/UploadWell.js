@@ -4,31 +4,28 @@ import PropTypes from 'prop-types';
 import UploadProgressBox from '../UploadProgressBox';
 import ConversionProgressBox from '../ConversionProgressBox';
 import { TagBox } from '../TagBox';
-import { Box, Grid } from '@material-ui/core';
+import { Box, Grid, Typography, Button, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 import { formatBytes } from '../../util/util';
-import GifOptionsBox from '../GifOptionsBox';
-
 
 import { withStyles } from '@material-ui/core/styles';
 
 const useStyles = theme => ({
   root: {
-    width: '100%',
-    margin: "8px",
-    backgroundColor: theme.palette.primary.dark
+    margin: theme.spacing(2),
+    padding: theme.spacing(2),
+    backgroundColor: theme.palette.primary.dark,
+    borderRadius: theme.spacing(2)
   },
   title: {
     fontSize: 14,
   },
-  center: {
-    textAlign: 'center'
+  btn: {
+    margin: theme.spacing(2)
   },
   image: {
-    margin: 'auto',
-    display: 'block',
     maxWidth: '100%',
     maxHeight: '100%',
-    padding: theme.spacing(1)
+    paddingBottom: theme.spacing(1)
   }
 });
 
@@ -40,9 +37,14 @@ class UploadWell extends Component {
 
     this.state = ({
       tags: "",
-      description: ""
+      description: "",
+      quality: 'sm'
     });
 
+  }
+
+  setConversionQuality = (event) => {
+    this.setState({quality: event.target.value});
   }
 
   setTags = (event) => {
@@ -62,7 +64,7 @@ class UploadWell extends Component {
 
   convert = () => {
     let id = this.props.uploadId;
-    this.props.convert(id)
+    this.props.convert(id, this.state.quality);
   }
 
   cancel = () => {
@@ -103,11 +105,57 @@ class UploadWell extends Component {
     }
     else if (status === "settingOptions") {
       return (
-        <GifOptionsBox
-          fileName={fileName}
-          convert={this.convert}
-        />
+        <Grid
+          container item
+          direction="column"
+          justify="flex-start"
+          alignItems="flex-start"
+          spacing={1}
+        >
+          <Grid item xs={12}>
+            <Typography variant="h5" component="h2">
+              {fileName}
+            </Typography>
+            <Typography className={classes.title} color="textSecondary" gutterBottom>
+              {formatBytes(size)}
+            </Typography>
+          </Grid>
 
+          <Grid
+            container item xs={12}
+            direction="row"
+            justify="space-around"
+            alignItems="flex-start"
+            spacing={0}
+          >
+            <Grid item spacing={2} xs={1}></Grid>
+            <Grid item xs={10} sm={5}>
+            <FormControl component="fieldset">
+                <FormLabel component="legend">Output Size:</FormLabel>
+                  <RadioGroup aria-label="Size" name="size" onChange={this.setConversionQuality}>
+                    <FormControlLabel checked={this.state.quality === 'sm' ? true : false} value="sm" control={<Radio />} label="Small (256 pixels wide)" />
+                    <FormControlLabel checked={this.state.quality === 'md' ? true : false} value="md" control={<Radio />} label="Medium (512 pixels wide)" />
+                    <FormControlLabel checked={this.state.quality === 'lg' ? true : false} value="lg" control={<Radio />} label="Large (640 pixels wide)" />
+                  </RadioGroup>
+                </FormControl>
+            </Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={10} sm={5}>
+              {/* Nothing here yet */}
+            </Grid>
+
+          </Grid>
+
+          <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+          >
+            <Button className={classes.btn} onClick={this.cancel} variant="contained" color="primary">Cancel</Button>
+            <Button className={classes.btn} onClick={this.convert} variant="contained" color="secondary">Convert</Button>
+          </Grid>
+        </Grid>
       );
     }
     else if (status === "converting") {
@@ -123,23 +171,23 @@ class UploadWell extends Component {
     else if (status === "complete") {
       return (
         <Grid
-          container item
-          direction="row"
-          justify="space-evenly"
-          alignItems="center"
-          spacing={2}
+        container item
+        direction="row"
+        justify="center"
+        alignItems="center"
         >
-          <Grid item xs={12} sm={6}>
+          <Grid item>
             <img className={classes.image} src={servePath} />
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TagBox 
+          <Grid item xs={12}>
+            <TagBox
               convert={this.convert}
               share={this.share}
               cancel={this.cancel}
               setTags={this.setTags}
               setDescription={this.setDescription}
               download={this.triggerDownload}
+              servePath={servePath}
             />
           </Grid>
         </Grid>
@@ -148,12 +196,13 @@ class UploadWell extends Component {
   }
 
   render() {
-    const {classes} = this.props;
+    const { classes } = this.props;
 
     return (
       <Box className={classes.root}>
         {this.getElement()}
       </Box>
+
     );
   }
 }

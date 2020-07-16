@@ -4,7 +4,7 @@ import './style.css';
 import UploadWell from "./UploadWell";
 import { uploadFile } from "../../util/data"
 import { DropBox } from "../DropBox";
-import { Grid } from "@material-ui/core";
+import { Grid, Box } from "@material-ui/core";
 
 /**
  * This Componenent allows users to upload files and convert them to gifs
@@ -160,6 +160,15 @@ class Uploader extends Component {
         uploads: tmp
       });
     });
+
+    this.socket.on("ShareResult", (data) => {
+      console.log("ShareResult hit");
+      console.log(data);
+      const { message } = data;
+      if(message) {
+        alert(message);
+      }
+    });
   }
 
   /**
@@ -282,22 +291,21 @@ class Uploader extends Component {
   /**
    * Tells the server to convert an upload.
    */
-  convert = (uploadId) => {
-    console.log(uploadId);
+  convert = (uploadId, quality) => {
     console.log(`convert: ${uploadId}`);
-    this.socket.emit("ConvertRequested", uploadId);
+    this.socket.emit("ConvertRequested", { uploadId: uploadId, quality: quality });
 
-     let tmp = this.state.uploads;
-      for (let i = 0; i < tmp.length; i++) {
-        if (tmp[i].uploadId === uploadId) {
-          tmp[i].status = "converting";
-          break;
-        }
+    let tmp = this.state.uploads;
+    for (let i = 0; i < tmp.length; i++) {
+      if (tmp[i].uploadId === uploadId) {
+        tmp[i].status = "converting";
+        break;
       }
+    }
 
-      this.setState({
-        uploads: tmp
-      });
+    this.setState({
+      uploads: tmp
+    });
   }
 
   removeUpload = (uploadId) => {
@@ -306,14 +314,14 @@ class Uploader extends Component {
     let i = 0;
 
     while (i < tmp.length) {
-      if(tmp[i].uploadId === uploadId) {
+      if (tmp[i].uploadId === uploadId) {
         tmp.splice(i, 1);
         break;
       }
       i++;
     }
 
-    this.setState({uploads: tmp});
+    this.setState({ uploads: tmp });
     this.curUploadNum--;
 
   }
@@ -325,54 +333,73 @@ class Uploader extends Component {
     console.log(uploadId);
     console.log(tags);
     console.log(description);
-    
-    this.socket.emit("ShareRequest", { 
-      uploadId: uploadId, 
-      tags: tags, 
-      description: description 
-    });
 
-    alert("Thank you for sharing!");
+    this.socket.emit("ShareRequest", {
+      uploadId: uploadId,
+      tags: tags,
+      description: description
+    });
   }
 
   render() {
     return (
-      <Grid
-        container
-        direction="column"
-        justify="space-evenly"
-        alignItems="center"
-        spacing={2}
-      >
-        <Grid item container>
-          <DropBox
+      <Box>
+        <Grid
+          container
+          direction="column"
+          justify="space-evenly"
+          alignItems="center"
+        >
+          <Grid item container>
+            <DropBox
               onDrop={this.dropHandler}
               onDragOver={this.dragOverHandler}
               onDragLeave={this.dragEndHandler}
               hovering={this.state.filesHovering}
               selectFilesUpload={this.selectFilesUpload}
             />
+          </Grid>
         </Grid>
 
-        
-        {this.state.uploads.map(upload =>
-            <UploadWell
-              key={upload.uploadId}
-              uploadId={upload.uploadId}
-              fileName={upload.fileName}
-              size={upload.size}
-              percentUploaded={upload.percentUploaded}
-              conversionData={upload.conversionData}
-              status={upload.status}
-              conversionComplete={upload.conversionComplete}
-              share={this.share}
-              convert={this.convert}
-              removeUpload={this.removeUpload}
-              servePath={upload.servePath}
-              error={upload.error}
-            />
-        )}
-      </Grid>);
+        {/* Upload Wells start here */}
+        <Grid
+          container
+          direction="row"
+          justify="space-evenly"
+          alignItems="flex-start"
+        >
+          {/* Padding element */}
+          <Grid item xs={0} sm={2}></Grid>
+
+          {/* The upload container */}
+          <Grid item container xs={12} sm={8}>
+            {this.state.uploads.map(upload =>
+            <Grid item xs={12}>
+              <UploadWell
+                key={upload.uploadId}
+                uploadId={upload.uploadId}
+                fileName={upload.fileName}
+                size={upload.size}
+                percentUploaded={upload.percentUploaded}
+                conversionData={upload.conversionData}
+                status={upload.status}
+                conversionComplete={upload.conversionComplete}
+                share={this.share}
+                convert={this.convert}
+                removeUpload={this.removeUpload}
+                servePath={upload.servePath}
+                error={upload.error}
+              />
+            </Grid>
+            )}
+          </Grid>
+
+          {/* Padding element */}
+          <Grid item xs={0} sm={2}></Grid>
+
+        </Grid>
+
+      </Box>);
   }
 }
 

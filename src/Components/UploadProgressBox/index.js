@@ -51,7 +51,7 @@ export default function UploadProgresBox(props) {
 
       <Typography>
         Please Wait...
-            </Typography>
+      </Typography>
     </Grid>
   );
 }

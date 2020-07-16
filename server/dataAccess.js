@@ -52,115 +52,117 @@ function getAllGifs(callback) {
  * @param {*} originalFileName - The orignal fileName on the client machine
  */
 function addGif(uploadId, fileName, thumbFileName, tags, description, ipAddr, originalFileName) {
-    pool.getConnection((err, connection) => {
-        connection.beginTransaction(function (err) {
-            if (err) {
-                console.log(`There was a problem beginning SQL transaction - no attempt to insert gifId ${uploadId} was made.`);
-                console.log(err);
-                return;
-            }
-
-            // 1.) insert the gif
-            let gif_sql = `INSERT INTO gif SET ?`;
-            // let gif_sql = `INSERT INTO gif VALUES('${uploadId}', '${fileName}')`;
-            console.log("gif_sql: " + gif_sql);
-            let insertObj = {id: uploadId, descript: description, fileName: fileName, thumbName:thumbFileName };
-            connection.query(gif_sql, insertObj, (error, results, fields) => {
-                console.log(results);
-                if (error) {
-                    console.log(error);
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            connection.beginTransaction(function (err) {
+                if (err) {
+                    console.log(`There was a problem beginning SQL transaction - no attempt to insert gifId ${uploadId} was made.`);
+                    console.log(err);
                     return;
                 }
 
-                // 2.) insert the upload
-                let upload_sql = `INSERT INTO upload SET id = ?, date = ?, ipAddr = ?, originalFileName = ?`;
-                console.log("upload_sql: " + upload_sql);
-                connection.query(upload_sql, [uploadId, getDateTime(), ipAddr, originalFileName], (error, results, fields) => {
+                // 1.) insert the gif
+                let gif_sql = `INSERT INTO gif SET ?`;
+                // let gif_sql = `INSERT INTO gif VALUES('${uploadId}', '${fileName}')`;
+                console.log("gif_sql: " + gif_sql);
+                let insertObj = { id: uploadId, descript: description, fileName: fileName, thumbName: thumbFileName };
+                connection.query(gif_sql, insertObj, (error, results, fields) => {
                     console.log(results);
                     if (error) {
-                        console.log(error);
+                        reject(error);
                         return;
                     }
 
-                    // 3.) insert the tags
-                    if(!tags) {
-                        tags = []; // this is a temp hack..
-                    }
-                    let tag_str = "";
-                    for (let i = 0; i < tags.length; i++) {
-                        let tmp = "('" + tags[i] + "')";
-                        tag_str += tmp;
-                        if (i < tags.length - 1) {
-                            tag_str += ", ";
-                        }
-                    }
-
-                    let tag_sql = `INSERT IGNORE INTO tag (tag) VALUES ${tag_str}`;
-                    console.log("tag_sql " + tag_sql);
-                    connection.query(tag_sql, (error, results, fields) => {
+                    // 2.) insert the upload
+                    let upload_sql = `INSERT INTO upload SET id = ?, date = ?, ipAddr = ?, originalFileName = ?`;
+                    console.log("upload_sql: " + upload_sql);
+                    connection.query(upload_sql, [uploadId, getDateTime(), ipAddr, originalFileName], (error, results, fields) => {
                         console.log(results);
-                        connection.release();
                         if (error) {
-                            console.log(error);
-                            connection.rollback();
+                            reject(err);;
                             return;
                         }
 
-                        // 4.) get the tag_ids
-                        let tagId_sql = "SELECT tag.id FROM tag WHERE ";
-                        let tagIds = [];
-
-                        for (let j = 0; j < tags.length; j++) {
-                            tagId_sql += (j === 0 ? "" : " OR ");
-                            tagId_sql += `tag.tag = '${tags[j]}'`
+                        // 3.) insert the tags
+                        if (!tags) {
+                            tags = []; // this is a temp hack..
+                        }
+                        let tag_str = "";
+                        for (let i = 0; i < tags.length; i++) {
+                            let tmp = "('" + tags[i] + "')";
+                            tag_str += tmp;
+                            if (i < tags.length - 1) {
+                                tag_str += ", ";
+                            }
                         }
 
-                        connection.query(tagId_sql, function (error, results, fields) {
+                        let tag_sql = `INSERT IGNORE INTO tag (tag) VALUES ${tag_str}`;
+                        console.log("tag_sql " + tag_sql);
+                        connection.query(tag_sql, (error, results, fields) => {
+                            console.log(results);
+                            connection.release();
                             if (error) {
-                                console.log(error);
+                                reject(error);
                                 connection.rollback();
                                 return;
                             }
 
-                            console.log("data from tagId_sql");
-                            console.log(results);
-                            for (let i = 0; i < results.length; i++) {
-                                tagIds.push(results[i].id);
+                            // 4.) get the tag_ids
+                            let tagId_sql = "SELECT tag.id FROM tag WHERE ";
+                            let tagIds = [];
+
+                            for (let j = 0; j < tags.length; j++) {
+                                tagId_sql += (j === 0 ? "" : " OR ");
+                                tagId_sql += `tag.tag = '${tags[j]}'`
                             }
 
-                            console.log("here are the ids..");
-                            console.log(tagIds);
-
-                            // 5.) insert into the gif_tag table
-
-                            let id_tag_str = "";
-                            for (let i = 0; i < tags.length; i++) {
-                                let tmp = `('${uploadId}', '${tagIds[i]}')`;
-                                id_tag_str += tmp;
-                                if (i < tags.length - 1) {
-                                    id_tag_str += ", ";
-                                }
-                            }
-
-                            let gif_tag_sql = `INSERT IGNORE INTO gif_tag (gif_id, tag_id) VALUES ${id_tag_str}`;
-                            console.log(gif_tag_sql);
-                            connection.query(gif_tag_sql, (error, results, fields) => {
+                            connection.query(tagId_sql, function (error, results, fields) {
                                 if (error) {
-                                    console.log(error);
+                                    reject(error);
                                     connection.rollback();
                                     return;
                                 }
 
-                                connection.commit(function (err) {
-                                    if (err) {
-                                        console.log(err);
+                                console.log("data from tagId_sql");
+                                console.log(results);
+                                for (let i = 0; i < results.length; i++) {
+                                    tagIds.push(results[i].id);
+                                }
+
+                                console.log("here are the ids..");
+                                console.log(tagIds);
+
+                                // 5.) insert into the gif_tag table
+
+                                let id_tag_str = "";
+                                for (let i = 0; i < tags.length; i++) {
+                                    let tmp = `('${uploadId}', '${tagIds[i]}')`;
+                                    id_tag_str += tmp;
+                                    if (i < tags.length - 1) {
+                                        id_tag_str += ", ";
+                                    }
+                                }
+
+                                let gif_tag_sql = `INSERT IGNORE INTO gif_tag (gif_id, tag_id) VALUES ${id_tag_str}`;
+                                console.log(gif_tag_sql);
+                                connection.query(gif_tag_sql, (error, results, fields) => {
+                                    if (error) {
+                                        reject(error);
                                         connection.rollback();
                                         return;
                                     }
-                                    else {
-                                        console.log(`Insertion of gifId ${uploadId} success.`);
-                                    }
 
+                                    connection.commit(function (error) {
+                                        if (error) {
+                                            connection.rollback();
+                                            reject(error);
+                                            return;
+                                        }
+                                        else {
+                                            resolve("Insertion Completed.");
+                                        }
+
+                                    });
                                 });
                             });
                         });
@@ -172,23 +174,23 @@ function addGif(uploadId, fileName, thumbFileName, tags, description, ipAddr, or
 }
 
 
-function getGifsByTag(tags, callback)  {
+function getGifsByTag(tags, callback) {
     console.log(tags);
     pool.getConnection((err, connection) => {
         if (err) {
             throw err;
         }
 
-        let getGif_sql = 
+        let getGif_sql =
             "SELECT gif.fileName, gif.descript from gif \
                 JOIN gif_tag ON gif.id = gif_tag.gif_id \
                 JOIN tag ON gif_tag.tag_id = tag.id \
             WHERE ";
 
-        for(let i = 0; i < tags.length; i++) {
+        for (let i = 0; i < tags.length; i++) {
             getGif_sql += `tag = ?`;
-            getGif_sql += (i+1 < tags.length ? " OR " : " ");
-        }    
+            getGif_sql += (i + 1 < tags.length ? " OR " : " ");
+        }
 
         console.log(`getGif_sql: ${getGif_sql}`);
         connection.query(getGif_sql, tags, (error, results, fields) => {

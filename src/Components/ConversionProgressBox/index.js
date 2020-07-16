@@ -43,19 +43,24 @@ class ConversionBox extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <CardContent>
-                <Grid container>
+            <Grid
+                container item
+                direction="column"
+                justify="flex-start"
+                alignItems="flex-start"
+            >
+                <Grid item>
                     <Typography variant="h5" component="h2">
                         {this.props.fileName}
                     </Typography>
                 </Grid>
-                <Grid container>
+                <Grid item>
                     <Box component="div">
                         <p>Speed: {this.props.speed} </p>
                         <p>Progress: {this.props.progress}% </p>
                     </Box>
                 </Grid>
-            </CardContent>
+            </Grid>
 
         );
     }

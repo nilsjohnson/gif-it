@@ -30,7 +30,7 @@ export function DropBox(props) {
         className={props.hovering ? `${classes.chooseFiles} ${classes.dropBox}` : classes.dropBox}
       >
           <p>Drag and Drop Video Files or</p>
-          <input className={classes.fileInput} type="file" multiple onChange={props.selectFilesUpload} />
+          <input className={classes.fileInput} type="file" accept="video/*, image/*" multiple onChange={props.selectFilesUpload} />
       </Grid>
 
   );

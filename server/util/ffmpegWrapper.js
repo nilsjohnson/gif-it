@@ -2,7 +2,9 @@ const { spawn } = require('child_process');
 
 const QUALITY = {
   THUMB: 1,
-  WEB: 2
+  SM: 2,
+  MD: 3,
+  LG: 4
 }
 
 function getOptions(src, dst, quality) {
@@ -14,9 +16,23 @@ function getOptions(src, dst, quality) {
       '-nostdin', // disable interaction
       dst]
   }
-  if (quality === QUALITY.WEB) {
+  if (quality === QUALITY.SM) {
     return ['-i', src,
       '-vf', 'fps=10,scale=256:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse',
+      '-loop', '0', // infinate loop
+      '-nostdin', // disable interaction
+      dst];
+  }
+  if (quality === QUALITY.MD) {
+    return ['-i', src,
+      '-vf', 'fps=10,scale=512:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse',
+      '-loop', '0', // infinate loop
+      '-nostdin', // disable interaction
+      dst];
+  }
+  if (quality === QUALITY.LG) {
+    return ['-i', src,
+      '-vf', 'fps=10,scale=640:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse',
       '-loop', '0', // infinate loop
       '-nostdin', // disable interaction
       dst];
@@ -45,16 +61,16 @@ function makeThumbnail(src, dst, uploadId) {
 
 
 
-function convertToGif(src, dst, socketId, uploadId, onStdout, onStderr, onClose) {
+function convertToGif(src, dst, socketId, uploadId, quality, onStdout, onStderr, onClose) {
   // make the thumbnail
   let thumbDst = dst.replace('.gif', '.thumb.gif');
-  const ffmpegProcess = spawn('ffmpeg', getOptions(src, thumbDst, 1));
-  ffmpegProcess.stdout.on('data', (data) => {});
-  ffmpegProcess.stderr.on('data', (data) => {});
+  const ffmpegProcess = spawn('ffmpeg', getOptions(src, thumbDst, QUALITY.THUMB));
+  ffmpegProcess.stdout.on('data', (data) => { });
+  ffmpegProcess.stderr.on('data', (data) => { });
   ffmpegProcess.on('close', (code) => {
-    if(code === 0) {
-      thumbDst = 
-      console.log("thumbnail created.");
+    if (code === 0) {
+      thumbDst =
+        console.log("thumbnail created.");
     } else {
       thumbDst = null;
       console.log(`Thumbnail not created. Returned ${code}`);
@@ -64,9 +80,20 @@ function convertToGif(src, dst, socketId, uploadId, onStdout, onStderr, onClose)
     let curSpeed = null;
     let progress = null;
 
+    switch (quality) {
+      case "sm":
+        quality = QUALITY.SM;
+        break;
+      case "lg":
+        quality = QUALITY.LG;
+        break;
+      default:
+        quality = QUALITY.MD;
+    }
+
     const ffmpegProcess = spawn(
       'ffmpeg',
-      getOptions(src, dst, 2));
+      getOptions(src, dst, quality));
 
     ffmpegProcess.stdout.on('data', (data) => {
       // FFmpeg uses the stderr stream for information
@@ -95,7 +122,7 @@ function convertToGif(src, dst, socketId, uploadId, onStdout, onStderr, onClose)
 
     ffmpegProcess.on('close', (code) => {
       console.log(`child process exited with code ${code}`);
-      onClose(socketId, uploadId, `${uploadId}.gif`, `${uploadId}.thumb.gif`, );
+      onClose(socketId, uploadId, `${uploadId}.gif`, `${uploadId}.thumb.gif`,);
     });
   });
 }

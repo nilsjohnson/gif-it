@@ -16,4 +16,8 @@ function search(searchInput) {
   return fetch(`/api/search?${paramString.toString()}`);
 }
 
-export { getNew, uploadFile, search };
+function getGifById(gifId) {
+  return fetch(`/api/${gifId}`);
+}
+
+export {getGifById, getNew, uploadFile, search };

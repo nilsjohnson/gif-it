@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "./Components/Header";
-import { getNew, search } from "./util/data";
+import { getNew, search, getGifById } from "./util/data";
 import { Container, Box, Grid, Button, InputBase } from '@material-ui/core';
 import GifCard from "./Components/GifCard";
 import SearchBar from "./Components/SearchBar";
@@ -49,19 +49,30 @@ class Explore extends Component {
 
   }
 
+  getGif = (gifId) => {
+    getGifById(gifId).then(res => {
+      if(res.ok) {
+        res.json().then(resJson => {
+          console.log(resJosn);
+        })
+      }
+    }).catch(err => console.log(err));
+  }
+
   getView = (query) => {
 
     if (query) {
-      console.log(`Looking for gif ${query}`);
       return (
         <Grid
           container
           direction="row"
+          justify="center"
           alignItems="center"
-          spacing={3}
         >
           <Grid item>
-            <img src={`${query}.gif`} />
+            <Box m={2}>
+              <img src={`${query}.gif`} />
+            </Box>
           </Grid>
         </Grid>
       );

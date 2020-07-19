@@ -11,3 +11,9 @@ app.get('/api/search', function(req, res) {
   let tags = req.query.input.split(" ");
   getGifsByTag(tags, (result => res.send(result)))
 });
+
+app.get('/api/:gifId', function(req, res) {
+  let gifId = req.param.gifId;
+  console.log(gifId);
+
+});

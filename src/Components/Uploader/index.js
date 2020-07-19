@@ -151,7 +151,7 @@ class Uploader extends Component {
       let tmp = this.state.uploads;
       for (let i = 0; i < tmp.length; i++) {
         if (tmp[i].uploadId === data.uploadId) {
-          tmp[i].conversionData = data.conversionData;
+          tmp[i].conversionData = data;
           break;
         }
       }

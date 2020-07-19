@@ -57,7 +57,7 @@ class ConversionBox extends Component {
                 <Grid item>
                     <Box component="div">
                         <p>Speed: {this.props.speed} </p>
-                        <p>Progress: {this.props.progress}% </p>
+                        <p>Progress: {this.props.progress} </p>
                     </Box>
                 </Grid>
             </Grid>

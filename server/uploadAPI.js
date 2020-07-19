@@ -34,10 +34,11 @@ function deleteSocket(socketId) {
 }
 
 
-function sendConversionProgress(socketId, uploadId, data) {
-  sockets[socketId].emit("ConversionProgress", {uploadId: uploadId, conversionData: data});
+function sendConversionProgress(socketId, data) {
+  sockets[socketId].emit("ConversionProgress", data);
 }
 
+//onClose(socketId, uploadId, `${uploadId}.gif`, `${uploadId}.thumb.gif`);
 function finishConversion(socketId, uploadId, fileName, thumbFileName) {
   uploadMap[uploadId].fileName = fileName;
   uploadMap[uploadId].thumbFileName = thumbFileName

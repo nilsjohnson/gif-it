@@ -39,91 +39,87 @@ function getOptions(src, dst, quality) {
   }
 }
 
-function makeThumbnail(src, dst, uploadId) {
-
-  const ffmpegProcess = spawn(
-    'ffmpeg',
-    getOptions(src, dst, 1));
-
-  ffmpegProcess.stdout.on('data', (data) => {
-    // FFmpeg uses the stderr stream for information
-    // and reserves this stream for streaming video and similar.
-  });
-
-  ffmpegProcess.stderr.on('data', (data) => {
-  });
-
-  ffmpegProcess.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-    onClose(socketId, uploadId, `${uploadId}.gif`);
-  });
-}
-
-
-
 function convertToGif(src, dst, socketId, uploadId, quality, onStdout, onStderr, onClose) {
-  // make the thumbnail
-  let thumbDst = dst.replace('.gif', '.thumb.gif');
-  const ffmpegProcess = spawn('ffmpeg', getOptions(src, thumbDst, QUALITY.THUMB));
+  // make the gif
+  let totalDuration = null;
+  let curSpeed = null;
+  let progress = null;
+
+  switch (quality) {
+    case "sm":
+      quality = QUALITY.SM;
+      break;
+    case "lg":
+      quality = QUALITY.LG;
+      break;
+    default:
+      quality = QUALITY.MD;
+  }
+
+  const ffmpegProcess = spawn('ffmpeg', getOptions(src, dst, quality));
   ffmpegProcess.stdout.on('data', (data) => { });
-  ffmpegProcess.stderr.on('data', (data) => { });
+  ffmpegProcess.stderr.on('data', (output) => {
+    let temp, data;
+    let output_str = output.toString();
+    console.log(output_str);
+
+    temp = extractSpeed(output_str);
+    curSpeed = (temp ? temp : curSpeed);
+
+    if (!totalDuration) {
+      totalDuration = extractDuration(output_str);
+    }
+    temp = caclulateProgress(output_str, totalDuration);
+    progress = (temp ? temp : progress);
+
+    console.log(`${progress}% converted`);
+
+    // if we have progress and speed values
+    if(progress && curSpeed) {
+      data = { curSpeed: curSpeed, progress: progress + '%' };
+    } 
+    // if we dont have progress but do have speed
+    else if(!progress && curSpeed) {
+      data = { curSpeed: curSpeed, progress: 'Please Wait...' };
+    }
+    // if we have progress not not speed
+    else if(progress && !curSpeed) {
+      data = { curSpeed: '-', progress: progress };
+    }
+    // if we dont know either
+    else {
+      data = { curSpeed: '-', progress: 'Please Wait...' };
+    }
+
+    data.curOutput = output_str;
+    data.uploadId = uploadId;
+    onStderr(socketId, data );
+  });
   ffmpegProcess.on('close', (code) => {
     if (code === 0) {
-      thumbDst =
-        console.log("thumbnail created.");
-    } else {
-      thumbDst = null;
-      console.log(`Thumbnail not created. Returned ${code}`);
+      // as far as user knows, we are done, however, we silently make a 
+      // thumbnail now in the background
+      onClose(socketId, uploadId, `${uploadId}.gif`, `${uploadId}.thumb.gif`);
+
+      let thumbDst = dst.replace('.gif', '.thumb.gif');
+      const ffmpegProcess = spawn(
+        'ffmpeg',
+        getOptions(src, thumbDst, QUALITY.THUMB));
+
+      ffmpegProcess.stdout.on('data', (data) => { });
+
+      ffmpegProcess.stderr.on('data', (data) => {
+        console.log(data.toString());
+      });
+
+      ffmpegProcess.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
+        
+      });
     }
-
-    let totalDuration = null;
-    let curSpeed = null;
-    let progress = null;
-
-    switch (quality) {
-      case "sm":
-        quality = QUALITY.SM;
-        break;
-      case "lg":
-        quality = QUALITY.LG;
-        break;
-      default:
-        quality = QUALITY.MD;
+    else {
+      // there was an error
     }
-
-    const ffmpegProcess = spawn(
-      'ffmpeg',
-      getOptions(src, dst, quality));
-
-    ffmpegProcess.stdout.on('data', (data) => {
-      // FFmpeg uses the stderr stream for information
-      // and reserves this stream for streaming video and similar.
-    });
-
-    ffmpegProcess.stderr.on('data', (data) => {
-      let temp
-      let conversionOutput = data.toString();
-      console.log(conversionOutput);
-
-      temp = extractSpeed(conversionOutput);
-      curSpeed = (temp ? temp : curSpeed);
-
-      if (!totalDuration) {
-        totalDuration = extractDuration(conversionOutput);
-      }
-      temp = caclulateProgress(conversionOutput, totalDuration);
-      progress = (temp ? temp : progress);
-
-      console.log(`${progress}% converted`);
-
-
-      onStderr(socketId, uploadId, { curSpeed: curSpeed, progress: progress });
-    });
-
-    ffmpegProcess.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
-      onClose(socketId, uploadId, `${uploadId}.gif`, `${uploadId}.thumb.gif`,);
-    });
   });
 }
 

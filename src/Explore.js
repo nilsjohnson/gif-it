@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Header from "./Components/Header";
 import { getNew, search } from "./util/data";
-import { Container, TextField, Grid, Button, InputBase } from '@material-ui/core';
-import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import { Container, Box, Grid, Button, InputBase } from '@material-ui/core';
 import GifCard from "./Components/GifCard";
 import SearchBar from "./Components/SearchBar";
 
@@ -10,10 +9,9 @@ class Explore extends Component {
   constructor(props) {
     super(props);
 
-    console.log(`width ${props.width}`);
-
     this.state = ({
-      gifs: []
+      gifs: [],
+      curGif: ""
     });
   }
 
@@ -28,7 +26,7 @@ class Explore extends Component {
    */
   componentDidMount() {
     getNew().then(res => {
-      if(res.ok) {
+      if (res.ok) {
         res.json().then(resJson => {
           this.setGifs(resJson)
         }).catch(err => console.log(`Problem parsing JSON from request: ${err}`))
@@ -40,7 +38,7 @@ class Explore extends Component {
 
   search = (query) => {
     search(query).then(res => {
-      if(res.ok) {
+      if (res.ok) {
         res.json().then(resJson => {
           this.setGifs(resJson)
         }).catch(err => console.log(`Problem parsing JSON from request: ${err}`))
@@ -51,46 +49,65 @@ class Explore extends Component {
 
   }
 
+  getView = (query) => {
 
-
-  render() {
-
-
-    return (
-      <div>
-        <Header />
-        <Container>
-          <Grid container
+    if (query) {
+      console.log(`Looking for gif ${query}`);
+      return (
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
+          spacing={3}
+        >
+          <Grid item>
+            <img src={`${query}.gif`} />
+          </Grid>
+        </Grid>
+      );
+    }
+    else {
+      return (
+        <Box>
+          <SearchBar
+            search={this.search}
+          />
+          <Grid
+            container
             direction="row"
-            justify="center"
+            justify="flex-start"
             alignItems="center"
-            spacing={1}
+            spacing={2}
           >
-            <Grid container
-              direction="row"
-              justify="center"
-              alignItems="center"
-            >
-              <SearchBar
-                search={this.search}
-              />
-
-            </Grid>
-
             {this.state.gifs.map((gif) => (
               <Grid item xs={12} sm={6} md={4} key={gif.id}>
                 <GifCard
                   key={gif.id}
                   src={gif.thumbName}
+                  id={gif.id}
                   description={gif.descript}
                 />
               </Grid>
             ))}
           </Grid>
+        </Box>
+      );
+    }
+  }
+
+  render() {
+    let url = new URL(window.location.href);
+    let query = url.searchParams.get("gid");
+
+    return (
+      <div>
+        <Header />
+        <Container>
+          {this.getView(query)}
         </Container>
       </div>
     );
   }
 }
 
-export default withWidth()(Explore);
+export default Explore;

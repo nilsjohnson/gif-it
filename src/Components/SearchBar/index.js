@@ -4,28 +4,29 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/styles';
+import { Box, Grid, FormControl, InputLabel, Select } from '@material-ui/core';
 
 
 
 const styles = (theme) => ({
   root: {
-    marginTop: '16px',
-    marginBottom: '8px',
-    padding: '2px 4px',
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(),
+    padding: theme.spacing(1),
     display: 'flex',
     alignItems: 'center',
-    width: 400,
+    width: "100%",
   },
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
   },
-  iconButton: {
-    padding: 10,
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
   },
-  divider: {
-    height: 28,
-    margin: 4,
+  selectEmpty: {
+    marginTop: theme.spacing(2),
   },
 });
 
@@ -35,7 +36,7 @@ class SearchBar extends Component {
 
     this.state = {
       input: ""
-    }; 
+    };
   }
 
   setInput = (event) => {
@@ -46,7 +47,7 @@ class SearchBar extends Component {
   }
 
   handleEnter = (event) => {
-    if(event.keyCode === 13) {
+    if (event.keyCode === 13) {
       this.search();
     }
   }
@@ -60,18 +61,31 @@ class SearchBar extends Component {
     const { classes } = this.props;
 
     return (
-      <Paper className={classes.root}>
-        <InputBase
-          onKeyDown={this.handleEnter}
-          onChange={this.setInput}
-          className={classes.input}
-          placeholder="Search For Gifs"
-          inputProps={{ 'aria-label': 'Search For Gifs' }}
-        />
-        <IconButton onClick={this.search} className={classes.iconButton} aria-label="search">
-          <SearchIcon />
-        </IconButton>
-      </Paper>
+      <Box>
+        <Grid container item
+          direction="row"
+          justify="center"
+          alignItems="center" spacing={1}>
+          <Grid item sm={2}></Grid>
+          <Grid item xs={12} sm={8}>
+            <Grid container item>
+              <Paper className={classes.root}>
+                <InputBase
+                  onKeyDown={this.handleEnter}
+                  onChange={this.setInput}
+                  className={classes.input}
+                  placeholder="Search For Gifs"
+                  inputProps={{ 'aria-label': 'Search For Gifs' }}
+                />
+                <IconButton onClick={this.search} className={classes.iconButton} aria-label="search">
+                  <SearchIcon />
+                </IconButton>
+              </Paper>
+            </Grid>
+          </Grid>
+          <Grid item sm={2}></Grid>
+        </Grid>
+      </Box>
     );
 
   }

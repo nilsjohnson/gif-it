@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
@@ -30,13 +31,20 @@ export default function GifCard(props) {
   return (
     <Card className={classes.root}>
       <CardContent>
-      <CardMedia
-          component="img"
-          alt="Cool Gif"
-          height="auto"
-          image={props.src}
-          title={props.src}
-        />
+        <Link
+          to={{
+            pathname: '/explore',
+            search: '?gid=' + props.id
+          }}
+        >
+          <CardMedia
+            component="img"
+            alt="Cool Gif"
+            height="auto"
+            image={props.src}
+            title={props.src}
+          />
+        </Link>
         <Typography variant="h5" component="h2">{props.description}</Typography>
       </CardContent>
     </Card>

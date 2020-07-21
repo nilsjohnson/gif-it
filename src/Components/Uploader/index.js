@@ -126,15 +126,19 @@ class Uploader extends Component {
      */
     this.socket.on("ConversionComplete", (data) => {
       console.log(data);
+      let { servePath } = data;
 
       let tmp = this.state.uploads;
       for (let i = 0; i < tmp.length; i++) {
         if (tmp[i].uploadId === data.uploadId) {
-          console.log("found it!");
-          console.log(tmp[i]);
-          tmp[i].servePath = data.servePath;
-          tmp[i].status = "complete";
-          break;
+          if(servePath) {
+            tmp[i].servePath = servePath;
+            tmp[i].status = "complete";
+            break;
+          } 
+          else {
+            tmp[i].error = "File could not be converted. The video is most likely not a supported format."
+          }
         }
       }
       this.setState({

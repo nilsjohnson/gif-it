@@ -26,6 +26,9 @@ const useStyles = theme => ({
     maxWidth: '100%',
     maxHeight: '100%',
     paddingBottom: theme.spacing(1)
+  },
+  error:  {
+    border: '2px solid ' + theme.palette.error.main
   }
 });
 
@@ -90,7 +93,8 @@ class UploadWell extends Component {
       percentUploaded,
       servePath,
       status,
-      classes
+      classes,
+      error
     } = this.props;
 
     const { curSpeed, progress } = conversionData;
@@ -101,6 +105,8 @@ class UploadWell extends Component {
           fileName={fileName}
           fileSize={formatBytes(size)}
           percentUploaded={percentUploaded}
+          error={error}
+          cancel={this.cancel}
         />);
     }
     else if (status === "settingOptions") {
@@ -165,6 +171,8 @@ class UploadWell extends Component {
           speed={curSpeed}
           progress={progress}
           convert={this.convert}
+          error={error}
+          cancel={this.cancel}
         />
       );
     }
@@ -196,10 +204,10 @@ class UploadWell extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, error } = this.props;
 
     return (
-      <Box className={classes.root}>
+      <Box className={`${classes.root} ${this.props.error ? classes.error : ""}`}>
         {this.getElement()}
       </Box>
 

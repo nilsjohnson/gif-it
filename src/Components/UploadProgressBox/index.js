@@ -1,9 +1,9 @@
 import React from 'react';
-import { Card, Grid, CardContent, Typography } from '@material-ui/core';
+import { Card, Grid, Button, Typography } from '@material-ui/core';
 import ProgressBar from '../ProgressBar';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles ({
+const useStyles = makeStyles({
   root: {
     padding: "8px"
   },
@@ -45,13 +45,27 @@ export default function UploadProgresBox(props) {
         <Grid xs={12} sm={6}>
           <ProgressBar value={props.percentUploaded} />
         </Grid>
-          
+      </Grid>
+
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        spacing={1}
+      >
+        <Grid item>
+          {(props.error ? props.error : "Please Wait...")}
+        </Grid>
+        
+          {props.error ? 
+          <Grid item>
+            <Button variant="contained" color="secondary" onClick={props.cancel}>Close</Button>
+          </Grid> : ""}
         
       </Grid>
 
-      <Typography>
-        Please Wait...
-      </Typography>
+
     </Grid>
   );
 }

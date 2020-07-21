@@ -49,15 +49,15 @@ class Explore extends Component {
 
   }
 
-  getGif = (gifId) => {
-    getGifById(gifId).then(res => {
-      if(res.ok) {
-        res.json().then(resJson => {
-          console.log(resJosn);
-        })
-      }
-    }).catch(err => console.log(err));
-  }
+  // getGif = (gifId) => {
+  //   getGifById(gifId).then(res => {
+  //     if(res.ok) {
+  //       res.json().then(resJson => {
+  //         console.log(resJosn);
+  //       })
+  //     }
+  //   }).catch(err => console.log(err));
+  // }
 
   getView = (query) => {
 

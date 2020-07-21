@@ -9,8 +9,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
+  btn: {
+    margin: theme.spacing(2),
   },
   title: {
 
@@ -28,8 +28,8 @@ export default function Header() {
           <Typography variant="h6" className={classes.title}>
             gif-it.io
           </Typography>
-          <Button color="inherit" href="./">Convert to .gif</Button>
-		      <Button color="inherit" href='./explore'>Explore</Button>
+          <Button className={classes.btn} variant="outlined" color="secondary" href="./">Convert to .gif</Button>
+		      <Button className={classes.btn} variant="outlined" color="secondary" href='./explore'>Explore</Button>
         </Toolbar>
       </AppBar>
     </div>

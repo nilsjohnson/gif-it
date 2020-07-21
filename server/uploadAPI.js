@@ -42,7 +42,7 @@ function sendConversionProgress(socketId, data) {
 function finishConversion(socketId, uploadId, fileName, thumbFileName) {
   uploadMap[uploadId].fileName = fileName;
   uploadMap[uploadId].thumbFileName = thumbFileName
-  sockets[socketId].emit("ConversionComplete", { uploadId: uploadId, servePath: uploadId + '.gif' });
+  sockets[socketId].emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
 }
 
 
@@ -144,6 +144,12 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
   }
 
   busboy.on('file', function (fieldName, file, givenFileName, encoding, mimetype) {
+    if(!mimetype.startsWith('video')) {
+      res.status(400);
+      res.send({err: `File Not Supported Format.`});
+      res.end();
+      return;
+    }
     // set the fileName
     fileName = checkUnique(givenFileName);
     // set the upload dst

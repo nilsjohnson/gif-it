@@ -1,25 +1,10 @@
 import React, { Component } from 'react';
-import Card from '@material-ui/core/Card';
-//import { withStyles } from '@material-ui/core/styles';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Grid, Box } from '@material-ui/core';
-import ProgressBar from '../ProgressBar';
+import { Grid, Box, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const useStyles = theme => ({
-    root: {
-        width: '100%',
-        margin: "8px"
-    },
-    title: {
-        fontSize: 14,
-    },
-    center: {
-        textAlign: 'center'
-    }
+
 });
 
 class ConversionBox extends Component {
@@ -43,24 +28,46 @@ class ConversionBox extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <Grid
-                container item
-                direction="column"
-                justify="flex-start"
-                alignItems="flex-start"
-            >
-                <Grid item>
-                    <Typography variant="h5" component="h2">
-                        {this.props.fileName}
-                    </Typography>
+            <Box>
+                <Grid
+                    container item
+                    direction="column"
+                    justify="flex-start"
+                    alignItems="flex-start"
+                    className={this.props.error && classes.error}
+                >
+                    <Grid item>
+                        <Typography variant="h5" component="h2">
+                            {this.props.fileName}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Box component="div">
+                            <p>Speed: {this.props.speed} </p>
+                            <p>Progress: {this.props.error ? "error" : "" || this.props.progress} </p>
+                        </Box>
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    <Box component="div">
-                        <p>Speed: {this.props.speed} </p>
-                        <p>Progress: {this.props.progress} </p>
-                    </Box>
-                </Grid>
-            </Grid>
+                {this.props.error ?
+                    <Grid
+                        container
+                        direction="column"
+                        justify="center"
+                        alignItems="center"
+                        spacing={1}
+                    >
+                        <Grid item>
+                            <Typography variant="subtitle1" component="h5">
+                                {this.props.error}
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                        <Button variant="contained" color="secondary" onClick={this.props.cancel}>Close</Button>
+                        </Grid>
+                    </Grid>
+                    : ""}
+            </Box>
+
 
         );
     }

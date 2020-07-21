@@ -118,7 +118,7 @@ function convertToGif(src, dst, socketId, uploadId, quality, onStdout, onStderr,
       });
     }
     else {
-      // there was an error
+      onClose(socketId, uploadId, null, null);
     }
   });
 }

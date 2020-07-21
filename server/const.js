@@ -1,16 +1,16 @@
 const os = require('os');
 
-Ports = {
+const Ports = {
     HTTP_PORT_NUM: 3001,
     HTTPS_PORT_NUM: 443
 }
 
-ServeModes = {
+const ServeModes = {
     PRODUCTION: "Production",
     DEV: "Development"
 }
 
-FilePaths = {
+const FilePaths = {
     UPLOAD_DIR: os.tmpdir + '/' + 'gif-it',
     GIF_SERVE_DIR: os.homedir + '/gifs'
 }

@@ -5,6 +5,9 @@ import UploadWell from "./UploadWell";
 import { uploadFile } from "../../util/data"
 import { DropBox } from "../DropBox";
 import { Grid, Box } from "@material-ui/core";
+import { formatBytes } from "../../util/util";
+
+const MAX_UPLOAD_SIZE = 70; // MB
 
 /**
  * This Componenent allows users to upload files and convert them to gifs
@@ -21,7 +24,7 @@ class Uploader extends Component {
     // the socket for this upload session
     this.socket = null;
     // The current upload. We upload 1 file at a time.
-    this.curUploadNum = 0;
+    this.curUploadIndex = 0;
     // holding bin for files after the user has dragged/dropped or selected them.
     this.unprocessedFiles = [];
   }
@@ -81,10 +84,12 @@ class Uploader extends Component {
     this.socket.on("UploadStart", data => {
       console.log('Upload Started, upload object returned: ');
       console.log(data);
+      console.log("curUploadNum: " + this.curUploadIndex);
+      console.log("this.state.uploads.length: " + this.state.uploads.length);
 
       let tmp = this.state.uploads;
-      tmp[this.curUploadNum].status = "uploading";
-      tmp[this.curUploadNum].uploadId = data.uploadId;
+      tmp[this.curUploadIndex].status = "uploading";
+      tmp[this.curUploadIndex].uploadId = data.uploadId;
 
       this.setState({
         uploads: tmp
@@ -181,14 +186,26 @@ class Uploader extends Component {
   upload = () => {
     if (this.unprocessedFiles.length === 0) { return; }
 
+    let curFile = this.unprocessedFiles.shift();
+    if(curFile.size / (1000 * 1000) > MAX_UPLOAD_SIZE) {
+      let tmp = this.state.uploads;
+            tmp[this.curUploadIndex].error = `File Must Not Exceed ${formatBytes(MAX_UPLOAD_SIZE*1000*1000)}`;
+            this.setState({
+              uploads: tmp
+            });
+
+            this.curUploadIndex++;
+            this.upload();
+            return;
+    }
     let formData = new FormData();
-    formData.append("files", this.unprocessedFiles.shift());
+    formData.append("files", curFile);
 
     return uploadFile('/api/videoUpload/' + this.socket.id, formData)
       .then(response => {
         if (response.ok) {
-          console.log(`Upload #${this.curUploadNum + 1} successfully uploaded.`)
-          this.curUploadNum++;
+          console.log(`Upload #${this.curUploadIndex + 1} successfully uploaded.`)
+          this.curUploadIndex++;
           this.upload();
         }
         else {
@@ -197,19 +214,19 @@ class Uploader extends Component {
             console.log(resJson);
 
             let tmp = this.state.uploads;
-            tmp[this.curUploadNum].error = resJson.err;
+            tmp[this.curUploadIndex].error = resJson.error;
             this.setState({
               uploads: tmp
             });
 
-            this.curUploadNum++;
+            this.curUploadIndex++;
             this.upload();
           });
         }
       })
       .catch(err => {
         console.log("Upload error:" + err)
-        this.curUploadNum++;
+        this.curUploadIndex++;
         this.upload();
       });
   }
@@ -326,7 +343,7 @@ class Uploader extends Component {
     }
 
     this.setState({ uploads: tmp });
-    this.curUploadNum--;
+    this.curUploadIndex--;
 
   }
 

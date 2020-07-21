@@ -26,7 +26,7 @@ let sockets = {};
  * deletes a socket by its id;
  */
 function deleteSocket(socketId) {
-  if(delete sockets[socketId]) {
+  if (delete sockets[socketId]) {
     console.log(`Socket ${socketId} has been deleted`);
   } else {
     console.log(`Problem deleting ${socketId}.`);
@@ -52,9 +52,9 @@ function finishConversion(socketId, uploadId, fileName, thumbFileName) {
  */
 function addSocket(newSocket) {
   let socketId = newSocket.id;
-  sockets[socketId] = newSocket; 
+  sockets[socketId] = newSocket;
 
-  if(DEBUG) {
+  if (DEBUG) {
     let numSockets = Object.keys(sockets).length;
     console.log(`There ${numSockets > 1 ? "are" : "is"} ${numSockets} socket${numSockets > 1 ? "s" : ""} open right now.`);
   }
@@ -68,13 +68,13 @@ function addSocket(newSocket) {
     const { uploadId, quality } = data;
     console.log(`Client using socket ${socketId} requesting uploadId ${uploadId} to be converted.`);
     convertToGif(uploadMap[uploadId].uploadDst,
-                path.join(FilePaths.GIF_SERVE_DIR, uploadId + ".gif"), 
-                socketId, 
-                uploadId,
-                quality, 
-                null, 
-                sendConversionProgress, 
-                finishConversion);
+      path.join(FilePaths.GIF_SERVE_DIR, uploadId + ".gif"),
+      socketId,
+      uploadId,
+      quality,
+      null,
+      sendConversionProgress,
+      finishConversion);
   });
 
   sockets[socketId].on("ShareRequest", (data) => {
@@ -83,8 +83,8 @@ function addSocket(newSocket) {
     console.log(uploadMap);
     const { uploadId, tags, description } = data;
 
-    if(!tags) {
-      sockets[socketId].emit("ShareResult", {uploadId: uploadId, message: "Please Provide a Tag."})
+    if (!tags) {
+      sockets[socketId].emit("ShareResult", { uploadId: uploadId, message: "Please Provide a Tag." })
       return;
     }
 
@@ -94,20 +94,20 @@ function addSocket(newSocket) {
     let thumbFileName = uploadMap[uploadId].thumbFileName;
     let tagArr = splitTags(tags);
 
-    addGif(uploadId, 
-      fileName, 
-      thumbFileName, 
-      tagArr, 
-      description, 
-      ipAddr, 
+    addGif(uploadId,
+      fileName,
+      thumbFileName,
+      tagArr,
+      description,
+      ipAddr,
       originalFileName
-      ).then((result) => {
-        console.log(result);
-        sockets[socketId].emit("ShareResult", {uploadId: uploadId, message: "Thank You!"})
-      }).catch(err => {
-        sockets[socketId].emit("ShareResult", {uploadId: uploadId, message: err.toString()})
-      });
-  }); 
+    ).then((result) => {
+      console.log(result);
+      sockets[socketId].emit("ShareResult", { uploadId: uploadId, message: "Thank You!" })
+    }).catch(err => {
+      sockets[socketId].emit("ShareResult", { uploadId: uploadId, message: err.toString() })
+    });
+  });
 }
 
 /**
@@ -121,10 +121,9 @@ io.on("connection", (newSocket) => {
  * This API handles a file upload and then coverts it to GIF
  */
 app.post('/api/videoUpload/:socketId', function (req, res) {
-  if(DEBUG) {console.log(`video upload hit by socket ${req.params.socketId}.`);}
- 
+  if (DEBUG) { console.log(`video upload hit by socket ${req.params.socketId}.`); }
+
   let socketId = req.params.socketId;
-  let busboy = new Busboy({ headers: req.headers });
   let bytesRecieved = 0;
   let fileSize = req.headers["content-length"];
   let uploadDst;
@@ -132,63 +131,61 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
   let uploadId = getUniqueID();
   let ipAddr = req.ip;
 
-  // validaion here..
-  if(fileSize/ (1000*1000).toFixed(2) > MAX_UPLOAD_SIZE) {
-    if(DEBUG) { 
-      console.log(`Chosen file is ${fileSize/ (1000*1000).toFixed(2)} MB, while ${MAX_UPLOAD_SIZE} MB is the maximum. Returning 400..`)
-    };
-    res.status(400);
-    res.send({err: `File Too Large. Max Size: ${MAX_UPLOAD_SIZE} Mb.`});
-    res.end();
-    return;
+  // validaion size
+  if (fileSize / (1000 * 1000).toFixed(2) > MAX_UPLOAD_SIZE ) {
+    if (DEBUG) { console.log(`Chosen file is ${fileSize / (1000 * 1000).toFixed(2)} MB, while ${MAX_UPLOAD_SIZE} MB is the maximum. Returning 400..`) };
+    res.status(400).send({ error: `File Too Large. Max Size: ${MAX_UPLOAD_SIZE} Mb.` });
   }
+  else {
+    let busboy = new Busboy({ headers: req.headers });
 
-  busboy.on('file', function (fieldName, file, givenFileName, encoding, mimetype) {
-    if(!mimetype.startsWith('video')) {
-      res.status(400);
-      res.send({err: `File Not Supported Format.`});
+    busboy.on('file', function (fieldName, file, givenFileName, encoding, mimetype) {
+      if (!mimetype.startsWith('video')) {
+        // res.writeHead(400, { error: 'File Not Supported Format.' });
+        // res.end();
+        res.status(400).send({ error: `Unsupported Format` });
+        return;
+      }
+      // set the fileName
+      fileName = checkUnique(givenFileName);
+      // set the upload dst
+      uploadDst = path.join(FilePaths.UPLOAD_DIR + "/" + fileName);
+      // map this uploadId to this file and fileName
+      uploadMap[uploadId] = {};
+      uploadMap[uploadId].uploadDst = uploadDst;
+      uploadMap[uploadId].originalFileName = givenFileName;
+      uploadMap[uploadId].ipAddr = ipAddr;
+      // signal to client that we are starting the upload shortly
+      sockets[socketId].emit("UploadStart", {
+        uploadId: uploadId
+      });
+
+      file.on('data', function (data) {
+        bytesRecieved = bytesRecieved + data.length;
+        // sockets[socketId].emit("FromAPI", Math.round(bytesRecieved * 100 / fileSize) + '% Uploaded');
+        let percentUploaded = Math.round(bytesRecieved * 100 / fileSize);
+        sockets[socketId].emit("UploadProgress", {
+          uploadId: uploadId,
+          percentUploaded: percentUploaded,
+        });
+      });
+
+      file.pipe(fs.createWriteStream(uploadDst));
+    });
+
+    busboy.on('finish', function () {
+      sockets[socketId].emit("uploadComplete", {
+        videoLength: null,
+        uploadFinishTime: new Date(),
+        uploadId: uploadId
+      });
+
+      // finish was called so upload was success.
+      res.writeHead(200, { 'Connection': 'close' });
       res.end();
-      return;
-    }
-    // set the fileName
-    fileName = checkUnique(givenFileName);
-    // set the upload dst
-    uploadDst = path.join(FilePaths.UPLOAD_DIR + "/" + fileName);
-    // map this uploadId to this file and fileName
-    uploadMap[uploadId] = {};
-    uploadMap[uploadId].uploadDst = uploadDst;
-    uploadMap[uploadId].originalFileName = givenFileName;
-    uploadMap[uploadId].ipAddr = ipAddr;
-    // signal to client that we are starting the upload shortly
-    sockets[socketId].emit("UploadStart", { 
-      uploadId: uploadId
     });
 
-    file.on('data', function (data) {
-      bytesRecieved = bytesRecieved + data.length;
-      // sockets[socketId].emit("FromAPI", Math.round(bytesRecieved * 100 / fileSize) + '% Uploaded');
-      let percentUploaded = Math.round(bytesRecieved * 100 / fileSize);
-      sockets[socketId].emit("UploadProgress", {
-        uploadId: uploadId, 
-        percentUploaded: percentUploaded, 
-       });
-    });
-
-    file.pipe(fs.createWriteStream(uploadDst));
-  });
-
-  busboy.on('finish', function () {
-    sockets[socketId].emit("uploadComplete", {
-      videoLength: null,
-      uploadFinishTime: new Date(),
-      uploadId: uploadId
-    });
-
-    // finish was called so upload was success.
-    res.writeHead(200, { 'Connection': 'close' });
-    res.end();
-  });
-
-  return req.pipe(busboy);
+    return req.pipe(busboy);
+  }
 });
 

@@ -42,7 +42,7 @@ export default function UploadProgresBox(props) {
             {props.fileSize}
           </Typography>
         </Grid>
-        <Grid xs={12} sm={6}>
+        <Grid item xs={12} sm={6}>
           <ProgressBar value={props.percentUploaded} />
         </Grid>
       </Grid>

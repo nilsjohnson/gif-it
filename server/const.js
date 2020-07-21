@@ -15,7 +15,7 @@ const FilePaths = {
     GIF_SERVE_DIR: os.homedir + '/gifs'
 }
 
-MAX_UPLOAD_SIZE = 75; // in MB
+MAX_UPLOAD_SIZE = 70; // in MB
 
 
 

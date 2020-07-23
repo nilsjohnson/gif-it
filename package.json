@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^7.1.2",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "immutability-helper": "^3.1.1",
     "moment": "^2.27.0",
     "mysql": "^2.18.1",
     "react": "^16.13.1",

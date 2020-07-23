@@ -5,7 +5,7 @@ import UploadWell from "./UploadWell";
 import { uploadFile } from "../../util/data"
 import { DropBox } from "../DropBox";
 import { Grid, Box } from "@material-ui/core";
-import { formatBytes } from "../../util/util";
+import { formatBytes } from '../../util/util';
 
 const MAX_UPLOAD_SIZE = 70; // MB
 
@@ -21,10 +21,11 @@ class Uploader extends Component {
       filesHovering: false
     });
 
+    this.curFileNum = 0;
+    this.uploads = [];
+
     // the socket for this upload session
     this.socket = null;
-    // The current upload. We upload 1 file at a time.
-    this.curUploadIndex = 0;
     // holding bin for files after the user has dragged/dropped or selected them.
     this.unprocessedFiles = [];
   }
@@ -36,43 +37,31 @@ class Uploader extends Component {
     });
   }
 
-  // adds an object representing a file uploaded to server.
-  // object will intitially be a placeholder which will be 
-  // gradually upldated as the session progresses
-  addUploads = (uploads) => {
-    console.log(this.state.uploads);
-    this.setState({
-      uploads: [
-        ...this.state.uploads,
-        ...uploads,
-      ],
-    });
-  }
-
   /*
     opens the socket and defines the communication actions.
   */
   createSocket = () => {
+    console.log("creating socket");
     this.socket = socketIOClient();
 
     /*
       to handle upload progress updates
     */
     this.socket.on("UploadProgress", data => {
-      console.log("up progress");
-      console.log(data);
-      let temp = this.state.uploads;
+      const { uploadId, percentUploaded } = data;
 
-      for (let i = 0; i < temp.length; i++) {
-        if (temp[i].uploadId === data.uploadId) {
-          temp[i].percentUploaded = data.percentUploaded;
+      // console.log("upload prog: ");
+      // console.log(data);
+      for (let i = 0; i < this.uploads.length; i++) {
+        if(this.uploads[i].uploadId === uploadId) {
+          this.uploads[i].percentUploaded = percentUploaded;
           console.log("percent set..");
           break;
         }
       }
 
       this.setState({
-        uploads: temp
+        uploads: this.uploads
       });
 
     });
@@ -84,15 +73,19 @@ class Uploader extends Component {
     this.socket.on("UploadStart", data => {
       console.log('Upload Started, upload object returned: ');
       console.log(data);
-      console.log("curUploadNum: " + this.curUploadIndex);
-      console.log("this.state.uploads.length: " + this.state.uploads.length);
 
-      let tmp = this.state.uploads;
-      tmp[this.curUploadIndex].status = "uploading";
-      tmp[this.curUploadIndex].uploadId = data.uploadId;
+      const { fileName, uploadId } = data;
+
+      //let tmp = this.state.uploads;
+      for (let i = 0; i < this.uploads.length; i++) {
+        if (this.uploads[i].file.name === fileName) {
+          this.uploads[i].status = "uploading";
+          this.uploads[i].uploadId = uploadId;
+        }
+      }
 
       this.setState({
-        uploads: tmp
+        uploads: this.uploads
       });
 
     });
@@ -103,19 +96,17 @@ class Uploader extends Component {
       Note: the next upload gets triggered by a 200 from the POST and not here.
     */
     this.socket.on("uploadComplete", (data) => {
-      console.log(`Upload Complete: `);
-      console.log(data);
-
-      let tmp = this.state.uploads;
-
-      for (let i = 0; i < tmp.length; i++) {
-        if (tmp[i].uploadId === data.uploadId) {
-          tmp[i].status = "settingOptions";
+      const { uploadId } = data;
+   
+      for (let i = 0; i < this.uploads.length; i++) {
+        if (this.uploads[i].uploadId === uploadId) {
+          this.uploads[i].status = "settingOptions";
+          console.log(`Marked ${uploadId} as 'settingOptions'`);
           break;
         }
       }
 
-      this.setState({ uploads: tmp });
+      this.setState({ uploads: this.uploads });
     });
 
     /**
@@ -133,21 +124,20 @@ class Uploader extends Component {
       console.log(data);
       let { servePath } = data;
 
-      let tmp = this.state.uploads;
-      for (let i = 0; i < tmp.length; i++) {
-        if (tmp[i].uploadId === data.uploadId) {
-          if(servePath) {
-            tmp[i].servePath = servePath;
-            tmp[i].status = "complete";
+      for (let i = 0; i < this.uploads.length; i++) {
+        if (this.uploads[i].uploadId === data.uploadId) {
+          if (servePath) {
+            this.uploads[i].servePath = servePath;
+            this.uploads[i].status = "complete";
             break;
-          } 
+          }
           else {
-            tmp[i].error = "File could not be converted. The video is most likely not a supported format."
+            this.uploads[i].error = "File could not be converted. The video is most likely not a supported format."
           }
         }
       }
       this.setState({
-        uploads: tmp
+        uploads: this.state.uploads
       });
 
     });
@@ -156,17 +146,17 @@ class Uploader extends Component {
      * To handle conversion progress updates
      */
     this.socket.on("ConversionProgress", (data) => {
-      console.log(data);
-      let tmp = this.state.uploads;
-      for (let i = 0; i < tmp.length; i++) {
-        if (tmp[i].uploadId === data.uploadId) {
-          tmp[i].conversionData = data;
+      // console.log("Conversion Data:");
+      // console.log(data);
+      for (let i = 0; i < this.uploads.length; i++) {
+        if (this.uploads[i].uploadId === data.uploadId) {
+          this.uploads[i].conversionData = data;
           break;
         }
       }
 
       this.setState({
-        uploads: tmp
+        uploads: this.uploads
       });
     });
 
@@ -174,7 +164,7 @@ class Uploader extends Component {
       console.log("ShareResult hit");
       console.log(data);
       const { message } = data;
-      if(message) {
+      if (message) {
         alert(message);
       }
     });
@@ -184,17 +174,21 @@ class Uploader extends Component {
    * Takes files from unprocessedFiles and recursively uploads them.
    */
   upload = () => {
-    if (this.unprocessedFiles.length === 0) { return; }
+    console.log(`Starting upload at index ${this.curFileNum}`);
+    console.log(this.uploads);
+    if(this.curFileNum >= this.uploads.length) {
+      console.log("not uploading.."); 
+      return; 
+    }
 
-    let curFile = this.unprocessedFiles.shift();
+    let curFile = this.uploads[this.curFileNum].file;
     if(curFile.size / (1000 * 1000) > MAX_UPLOAD_SIZE) {
-      let tmp = this.state.uploads;
-            tmp[this.curUploadIndex].error = `File Must Not Exceed ${formatBytes(MAX_UPLOAD_SIZE*1000*1000)}`;
+            this.uploads[this.curFileNum].error = `File Must Not Exceed ${formatBytes(MAX_UPLOAD_SIZE*1000*1000)}`;
             this.setState({
-              uploads: tmp
+              uploads: this.uploads
             });
 
-            this.curUploadIndex++;
+            this.curFileNum++;
             this.upload();
             return;
     }
@@ -204,53 +198,54 @@ class Uploader extends Component {
     return uploadFile('/api/videoUpload/' + this.socket.id, formData)
       .then(response => {
         if (response.ok) {
-          console.log(`Upload #${this.curUploadIndex + 1} successfully uploaded.`)
-          this.curUploadIndex++;
+          console.log(`Upload #${this.curFileNum + 1} successfully uploaded.`)
+          this.curFileNum++;
           this.upload();
         }
         else {
           console.log("response not ok..");
           response.json().then(resJson => {
             console.log(resJson);
+            this.uploads[this.curFileNum].error = resJson.error;
 
-            let tmp = this.state.uploads;
-            tmp[this.curUploadIndex].error = resJson.error;
             this.setState({
-              uploads: tmp
+              uploads: this.uploads
             });
-
-            this.curUploadIndex++;
+            
+            this.curFileNum++;
             this.upload();
           });
         }
       })
       .catch(err => {
         console.log("Upload error:" + err)
-        this.curUploadIndex++;
+        this.curFileNum++;
         this.upload();
       });
   }
 
   /**
-   * Adds placeholder objects to the stateful upload array
-   * so the user knows what files are waiting to be uploaded,
-   * then kicks off the upload.
+   * Given that there are three possible entry points for files, we
+   * use this method to funnel them all down into one single array.
    */
   initUpload = () => {
-    let placeHoldrs = [];
     for (let i = 0; i < this.unprocessedFiles.length; i++) {
       let temp = {
-        fileName: this.unprocessedFiles[i].name,
-        uploadId: "temp_id_" + i,
-        size: this.unprocessedFiles[i].size.toString(),
+        uploadId: `temp_id_${i + this.curFileNum}_${this.unprocessedFiles[i].name}`,
         percentUploaded: 0,
-        status: "uploading"
+        status: "uploading",
+        file: this.unprocessedFiles[i]
       }
-      placeHoldrs.push(temp);
+      this.uploads.push(temp);
     }
+    
+    // reset this array so that user can add more files and update the state.
+    this.unprocessedFiles = [];
+    this.setState({ uploads: this.uploads});
 
-    this.addUploads(placeHoldrs);
+    // open the socket if necessary
     if (this.socket === null) {
+      // this will trigger an upload.
       this.createSocket();
     }
     else {
@@ -316,34 +311,31 @@ class Uploader extends Component {
     console.log(`convert: ${uploadId}`);
     this.socket.emit("ConvertRequested", { uploadId: uploadId, quality: quality });
 
-    let tmp = this.state.uploads;
-    for (let i = 0; i < tmp.length; i++) {
-      if (tmp[i].uploadId === uploadId) {
-        tmp[i].status = "converting";
+    for (let i = 0; i < this.uploads.length; i++) {
+      if (this.uploads[i].uploadId === uploadId) {
+        this.uploads[i].status = "converting";
         break;
       }
     }
 
     this.setState({
-      uploads: tmp
+      uploads: this.uploads
     });
   }
 
   removeUpload = (uploadId) => {
     console.log(`removing upload ${uploadId}`);
-    let tmp = this.state.uploads;
     let i = 0;
-
-    while (i < tmp.length) {
-      if (tmp[i].uploadId === uploadId) {
-        tmp.splice(i, 1);
+    while (i < this.uploads.length) {
+      if (this.uploads[i].uploadId === uploadId) {
+        this.uploads.splice(i, 1);
         break;
       }
       i++;
     }
 
-    this.setState({ uploads: tmp });
-    this.curUploadIndex--;
+    this.setState({ uploads: this.uploads });
+    this.curFileNum--;
 
   }
 
@@ -390,33 +382,33 @@ class Uploader extends Component {
           alignItems="flex-start"
         >
           {/* Padding element */}
-          <Grid item xs={0} sm={2}></Grid>
+          <Grid item sm={2}></Grid>
 
           {/* The upload container */}
           <Grid item container xs={12} sm={8}>
             {this.state.uploads.map(upload =>
-            <Grid item xs={12}>
-              <UploadWell
-                key={upload.uploadId}
-                uploadId={upload.uploadId}
-                fileName={upload.fileName}
-                size={upload.size}
-                percentUploaded={upload.percentUploaded}
-                conversionData={upload.conversionData}
-                status={upload.status}
-                conversionComplete={upload.conversionComplete}
-                share={this.share}
-                convert={this.convert}
-                removeUpload={this.removeUpload}
-                servePath={upload.servePath}
-                error={upload.error}
-              />
-            </Grid>
+              <Grid item xs={12} key={upload.uploadId + "_grid"}>
+                <UploadWell
+                  key={upload.uploadId}
+                  uploadId={upload.uploadId}
+                  fileName={upload.file.name}
+                  size={upload.file.size}
+                  percentUploaded={upload.percentUploaded}
+                  conversionData={upload.conversionData}
+                  status={upload.status}
+                  conversionComplete={upload.conversionComplete}
+                  share={this.share}
+                  convert={this.convert}
+                  removeUpload={this.removeUpload}
+                  servePath={upload.servePath}
+                  error={upload.error}
+                />
+              </Grid>
             )}
           </Grid>
 
           {/* Padding element */}
-          <Grid item xs={0} sm={2}></Grid>
+          <Grid item sm={2}></Grid>
 
         </Grid>
 

@@ -27,7 +27,7 @@ const useStyles = theme => ({
     maxHeight: '100%',
     paddingBottom: theme.spacing(1)
   },
-  error:  {
+  error: {
     border: '2px solid ' + theme.palette.error.main
   }
 });
@@ -47,7 +47,7 @@ class UploadWell extends Component {
   }
 
   setConversionQuality = (event) => {
-    this.setState({quality: event.target.value});
+    this.setState({ quality: event.target.value });
   }
 
   setTags = (event) => {
@@ -132,19 +132,19 @@ class UploadWell extends Component {
             direction="row"
             justify="space-around"
             alignItems="flex-start"
-            spacing={0}
+            spacing={1}
           >
-            <Grid item spacing={2} xs={1}></Grid>
-            <Grid item xs={10} sm={5}>
-            <FormControl component="fieldset">
-                <FormLabel component="legend">Output Size:</FormLabel>
+            <Grid item xs={1}></Grid>
+              <Grid item xs={10} sm={5}>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">Output Size:</FormLabel>
                   <RadioGroup aria-label="Size" name="size" onChange={this.setConversionQuality}>
                     <FormControlLabel checked={this.state.quality === 'sm' ? true : false} value="sm" control={<Radio />} label="Small (256 pixels wide)" />
                     <FormControlLabel checked={this.state.quality === 'md' ? true : false} value="md" control={<Radio />} label="Medium (512 pixels wide)" />
                     <FormControlLabel checked={this.state.quality === 'lg' ? true : false} value="lg" control={<Radio />} label="Large (640 pixels wide)" />
                   </RadioGroup>
                 </FormControl>
-            </Grid>
+              </Grid>
             <Grid item xs={1}></Grid>
             <Grid item xs={10} sm={5}>
               {/* Nothing here yet */}
@@ -179,10 +179,10 @@ class UploadWell extends Component {
     else if (status === "complete") {
       return (
         <Grid
-        container item
-        direction="row"
-        justify="center"
-        alignItems="center"
+          container item
+          direction="row"
+          justify="center"
+          alignItems="center"
         >
           <Grid item>
             <img className={classes.image} src={servePath} />
@@ -217,7 +217,7 @@ class UploadWell extends Component {
 
 UploadWell.propTypes = {
   name: PropTypes.string,
-  size: PropTypes.string,
+  size: PropTypes.number,
   percentUploaded: PropTypes.number
 };
 

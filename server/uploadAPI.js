@@ -141,9 +141,9 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
 
     busboy.on('file', function (fieldName, file, givenFileName, encoding, mimetype) {
       if (!mimetype.startsWith('video')) {
-        // res.writeHead(400, { error: 'File Not Supported Format.' });
-        // res.end();
-        res.status(400).send({ error: `Unsupported Format` });
+        console.log(givenFileName + " is invalid");
+        res.status(400);
+        res.json({ error: `${givenFileName}: Unsupported Format` });
         return;
       }
       // set the fileName
@@ -157,7 +157,8 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
       uploadMap[uploadId].ipAddr = ipAddr;
       // signal to client that we are starting the upload shortly
       sockets[socketId].emit("UploadStart", {
-        uploadId: uploadId
+        uploadId: uploadId,
+        fileName: givenFileName
       });
 
       file.on('data', function (data) {

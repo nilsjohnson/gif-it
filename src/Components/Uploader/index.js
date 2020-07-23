@@ -53,7 +53,7 @@ class Uploader extends Component {
       // console.log("upload prog: ");
       // console.log(data);
       for (let i = 0; i < this.uploads.length; i++) {
-        if(this.uploads[i].uploadId === uploadId) {
+        if (this.uploads[i].uploadId === uploadId) {
           this.uploads[i].percentUploaded = percentUploaded;
           console.log("percent set..");
           break;
@@ -97,7 +97,7 @@ class Uploader extends Component {
     */
     this.socket.on("uploadComplete", (data) => {
       const { uploadId } = data;
-   
+
       for (let i = 0; i < this.uploads.length; i++) {
         if (this.uploads[i].uploadId === uploadId) {
           this.uploads[i].status = "settingOptions";
@@ -170,28 +170,36 @@ class Uploader extends Component {
     });
   }
 
+  setError = (index, error) => {
+    this.uploads[index].error = error;
+    this.setState({
+      uploads: this.uploads
+    });
+  }
+
   /**
    * Takes files from unprocessedFiles and recursively uploads them.
    */
   upload = () => {
     console.log(`Starting upload at index ${this.curFileNum}`);
     console.log(this.uploads);
-    if(this.curFileNum >= this.uploads.length) {
-      console.log("not uploading.."); 
-      return; 
+    if (this.curFileNum >= this.uploads.length) {
+      console.log("not uploading..");
+      return;
     }
 
     let curFile = this.uploads[this.curFileNum].file;
-    if(curFile.size / (1000 * 1000) > MAX_UPLOAD_SIZE) {
-            this.uploads[this.curFileNum].error = `File Must Not Exceed ${formatBytes(MAX_UPLOAD_SIZE*1000*1000)}`;
-            this.setState({
-              uploads: this.uploads
-            });
-
-            this.curFileNum++;
-            this.upload();
-            return;
+    if (curFile.size / (1000 * 1000) > MAX_UPLOAD_SIZE) {
+      this.setError(this.curFileNum, `File Must Not Exceed ${formatBytes(MAX_UPLOAD_SIZE * 1000 * 1000)}`);
+      this.curFileNum++;
+      return this.upload();
     }
+    if (!curFile.type.startsWith('video/')) {
+      this.setError(this.curFileNum, `File must be of type video. '${curFile.type}' was provided`);
+      this.curFileNum++;
+      return this.upload();
+    }
+
     let formData = new FormData();
     formData.append("files", curFile);
 
@@ -211,7 +219,7 @@ class Uploader extends Component {
             this.setState({
               uploads: this.uploads
             });
-            
+
             this.curFileNum++;
             this.upload();
           });
@@ -238,10 +246,10 @@ class Uploader extends Component {
       }
       this.uploads.push(temp);
     }
-    
+
     // reset this array so that user can add more files and update the state.
     this.unprocessedFiles = [];
-    this.setState({ uploads: this.uploads});
+    this.setState({ uploads: this.uploads });
 
     // open the socket if necessary
     if (this.socket === null) {

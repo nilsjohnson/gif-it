@@ -120,10 +120,11 @@ io.on("connection", (newSocket) => {
 /**
  * This API handles a file upload and then coverts it to GIF
  */
-app.post('/api/videoUpload/:socketId', function (req, res) {
+app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
   if (DEBUG) { console.log(`video upload hit by socket ${req.params.socketId}.`); }
 
   let socketId = req.params.socketId;
+  let tempUploadId = req.params.tempUploadId;
   let bytesRecieved = 0;
   let fileSize = req.headers["content-length"];
   let uploadDst;
@@ -158,7 +159,7 @@ app.post('/api/videoUpload/:socketId', function (req, res) {
       // signal to client that we are starting the upload shortly
       sockets[socketId].emit("UploadStart", {
         uploadId: uploadId,
-        fileName: givenFileName
+        tempUploadId: tempUploadId
       });
 
       file.on('data', function (data) {

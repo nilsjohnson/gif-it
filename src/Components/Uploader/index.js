@@ -21,6 +21,7 @@ class Uploader extends Component {
       filesHovering: false
     });
 
+    this.numFilesChosen = 0;
     this.curFileNum = 0;
     this.uploads = [];
 
@@ -74,11 +75,11 @@ class Uploader extends Component {
       console.log('Upload Started, upload object returned: ');
       console.log(data);
 
-      const { fileName, uploadId } = data;
+      const { uploadId, tempUploadId } = data;
 
       //let tmp = this.state.uploads;
       for (let i = 0; i < this.uploads.length; i++) {
-        if (this.uploads[i].file.name === fileName) {
+        if (this.uploads[i].uploadId === tempUploadId) {
           this.uploads[i].status = "uploading";
           this.uploads[i].uploadId = uploadId;
         }
@@ -189,6 +190,7 @@ class Uploader extends Component {
     }
 
     let curFile = this.uploads[this.curFileNum].file;
+    let tempUploadId = this.uploads[this.curFileNum].uploadId;
     if (curFile.size / (1000 * 1000) > MAX_UPLOAD_SIZE) {
       this.setError(this.curFileNum, `File Must Not Exceed ${formatBytes(MAX_UPLOAD_SIZE * 1000 * 1000)}`);
       this.curFileNum++;
@@ -203,7 +205,7 @@ class Uploader extends Component {
     let formData = new FormData();
     formData.append("files", curFile);
 
-    return uploadFile('/api/videoUpload/' + this.socket.id, formData)
+    return uploadFile(`/api/videoUpload/${this.socket.id}/${tempUploadId}`, formData)
       .then(response => {
         if (response.ok) {
           console.log(`Upload #${this.curFileNum + 1} successfully uploaded.`)
@@ -238,8 +240,9 @@ class Uploader extends Component {
    */
   initUpload = () => {
     for (let i = 0; i < this.unprocessedFiles.length; i++) {
+      this.numFilesChosen++;
       let temp = {
-        uploadId: `temp_id_${i + this.curFileNum}_${this.unprocessedFiles[i].name}`,
+        uploadId: `temp_id_${i + this.numFilesChosen}_${this.unprocessedFiles[i].name}`,
         percentUploaded: 0,
         status: "uploading",
         file: this.unprocessedFiles[i]

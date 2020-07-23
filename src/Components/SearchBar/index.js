@@ -65,7 +65,7 @@ class SearchBar extends Component {
         <Grid container item
           direction="row"
           justify="center"
-          alignItems="center" spacing={1}>
+          alignItems="center" >
           <Grid item sm={2}></Grid>
           <Grid item xs={12} sm={8}>
             <Grid container item>

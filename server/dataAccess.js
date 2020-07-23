@@ -32,6 +32,26 @@ function getAllGifs(callback) {
     return [];
 }
 
+function getGifById(gifId, callback) {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            throw err;
+        }
+        let sql = `SELECT gif.descript, gif.fileName, JSON_ARRAYAGG(tag.tag) as tags 
+        FROM gif
+            JOIN gif_tag ON gif.id = gif_tag.gif_id
+            JOIN tag ON gif_tag.tag_id = tag.id
+        WHERE gif.id = ?`
+
+        connection.query(sql, gifId, (error, results, fields) => {
+            callback(results);
+            connection.release();
+            if (error) {
+                throw error;
+            }
+        });
+    });
+}
 
 
 /**
@@ -208,3 +228,4 @@ function getGifsByTag(tags, callback) {
 module.exports.getAllGifs = getAllGifs;
 module.exports.addGif = addGif;
 module.exports.getGifsByTag = getGifsByTag;
+module.exports.getGifById = getGifById;

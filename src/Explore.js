@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import Header from "./Components/Header";
 import { getNew, search, getGifById } from "./util/data";
-import { Container, Box, Grid, Button, InputBase } from '@material-ui/core';
+import { Container, Box, Grid, Button, InputBase, Card } from '@material-ui/core';
 import GifCard from "./Components/GifCard";
 import SearchBar from "./Components/SearchBar";
+import GifBox from "./Components/GifBox";
 
 class Explore extends Component {
   constructor(props) {
@@ -49,32 +50,14 @@ class Explore extends Component {
 
   }
 
-  // getGif = (gifId) => {
-  //   getGifById(gifId).then(res => {
-  //     if(res.ok) {
-  //       res.json().then(resJson => {
-  //         console.log(resJosn);
-  //       })
-  //     }
-  //   }).catch(err => console.log(err));
-  // }
+  getView = (gifId) => {
 
-  getView = (query) => {
-
-    if (query) {
+    if (gifId) {
       return (
-        <Grid
-          container
-          direction="row"
-          justify="center"
-          alignItems="center"
-        >
-          <Grid item>
-            <Box m={2}>
-              <img src={`${query}.gif`} />
-            </Box>
-          </Grid>
-        </Grid>
+        <GifBox 
+          gifId={gifId}
+        />
+
       );
     }
     else {
@@ -108,13 +91,13 @@ class Explore extends Component {
 
   render() {
     let url = new URL(window.location.href);
-    let query = url.searchParams.get("gid");
+    let gifId = url.searchParams.get("gid");
 
     return (
       <div>
         <Header />
         <Container>
-          {this.getView(query)}
+          {this.getView(gifId)}
         </Container>
       </div>
     );

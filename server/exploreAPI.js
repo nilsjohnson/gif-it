@@ -1,5 +1,5 @@
 const { app } = require("./server");
-const { getAllGifs, getGifsByTag } = require('./dataAccess');
+const { getAllGifs, getGifsByTag, getGifById } = require('./dataAccess');
 
 
 app.get('/api/explore', function (req, res) {
@@ -13,7 +13,11 @@ app.get('/api/search', function(req, res) {
 });
 
 app.get('/api/:gifId', function(req, res) {
-  let gifId = req.param.gifId;
-  console.log(gifId);
+  let gifId = req.params.gifId;
+  console.log("fetching gif: " + gifId);
+
+  getGifById(gifId, (results) => {
+    res.json(results[0]);
+  });
 
 });

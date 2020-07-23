@@ -17,7 +17,9 @@ function search(searchInput) {
 }
 
 function getGifById(gifId) {
-  return fetch(`/api/${gifId}`);
+  let endpoint = `/api/${gifId}`;
+  console.log(endpoint);
+  return fetch(endpoint);
 }
 
-export {getGifById, getNew, uploadFile, search };
+export { getGifById, getNew, uploadFile, search }

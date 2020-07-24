@@ -44,7 +44,7 @@ class SearchBar extends Component {
   constructor(props) {
     super(props);
 
-    
+
     this.state = {
       input: ""
     };
@@ -52,7 +52,7 @@ class SearchBar extends Component {
     this.arrLength = this.props.popularTags.length;
   }
 
-  
+
   setInput = (event) => {
     console.log(event.target.value);
     this.setState({
@@ -78,8 +78,8 @@ class SearchBar extends Component {
         <Grid container item
           direction="row"
           justify="center"
-          alignItems="center" 
-          >
+          alignItems="center"
+        >
           <Grid item sm={2}></Grid>
           <Grid item xs={12} sm={8}>
             <Grid container item className={classes.root}>
@@ -102,15 +102,18 @@ class SearchBar extends Component {
                 alignItems="center"
                 spacing={2}
               >
-                <p>Try a popular tag like {
-                    this.props.popularTags.map((tag, index, arr) => 
-                    <span key={index}>
+                <Box p={1}>
+                  <p>Try a popular tag like {
+                    this.props.popularTags.map((tag, index, arr) =>
+                      <span key={index}>
                         <span className={classes.tag}>{tag}</span>
-                        <span>{index < arr.length-2 ? ", " : ""}</span>
-                        <span>{index === arr.length-2 ? " or " : ""}</span>
-                    </span>  
+                        <span>{index < arr.length - 2 ? ", " : ""}</span>
+                        <span>{index === arr.length - 2 ? " or " : ""}</span>
+                      </span>
                     )
                   }!</p>
+                </Box>
+
               </Grid>
             </Grid>
           </Grid>

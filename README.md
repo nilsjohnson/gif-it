@@ -43,8 +43,8 @@ On a production server, to server over https, pass in the '-p' flag
 - ~~During upload and conversion, make the Paper stay the same size thoughout the process.~~
 - ~~During conversion, only report the speed and percentage done.~~
 - ~~Turn off "Convert To Gif" Button after it's been pressed.~~
-- ~~Notify user when they successfully share gif. // (currently always alerts success..) ~~
-- ~~Users can give gifs descriptions ~~
+- ~~Notify user when they successfully share gif. // (currently always alerts success..)~~
+- ~~Users can give gifs descriptions~~
 - Users can search by description
 - Users can categorize gifs (educational, funny, pets, etc.)
 - allow users to flag inappropriate gifs

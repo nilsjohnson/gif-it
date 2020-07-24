@@ -16,6 +16,28 @@ function getDateTime() {
     return d;
 }
 
+function getMostPopularTags(qty, callback) {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            throw err;
+        }
+        let sql = `SELECT tag.tag, COUNT(gif_tag.tag_id) as numUses
+        FROM tag
+            JOIN gif_tag ON tag.id = gif_tag.tag_id
+        GROUP BY tag.tag
+        ORDER BY numUses desc
+        limit ${qty};`;
+
+        connection.query(sql, (error, results, fields) => {
+            callback(results);
+            connection.release();
+            if (error) {
+                throw error;
+            }
+        });
+    });
+}
+
 function getMostRecent(qty, callback) {
     pool.getConnection((err, connection) => {
         if (err) {
@@ -34,7 +56,6 @@ function getMostRecent(qty, callback) {
             }
         });
     });
-    return [];
 }
 
 function getGifById(gifId, callback) {
@@ -234,3 +255,4 @@ module.exports.getAllGifs = getMostRecent;
 module.exports.addGif = addGif;
 module.exports.getGifsByTag = getGifsByTag;
 module.exports.getGifById = getGifById;
+module.exports.getMostPopularTags = getMostPopularTags;

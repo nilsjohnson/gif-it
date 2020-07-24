@@ -11,12 +11,10 @@ import { Box, Grid, FormControl, InputLabel, Select } from '@material-ui/core';
 const styles = (theme) => ({
   root: {
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2)
-  },
-  searchContainer: {
-    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
     padding: theme.spacing(1),
+  },
+  searchContainer: {
     display: 'flex',
     alignItems: 'center',
     width: "100%",
@@ -73,7 +71,7 @@ class SearchBar extends Component {
           <Grid item sm={2}></Grid>
           <Grid item xs={12} sm={8}>
             <Grid container item className={classes.root}>
-              <Paper className={classes.searchContainer}>
+              <Paper className={classes.searchContainer} >
                 <InputBase
                   onKeyDown={this.handleEnter}
                   onChange={this.setInput}

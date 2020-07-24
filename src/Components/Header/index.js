@@ -30,9 +30,9 @@ function Header(props) {
     <AppBar position="static" className={classes.navigation}>
       <Toolbar>
         <Typography
-          variant="title"
+          variant="h4"
           color="inherit"
-          component="h2"
+          component="h1"
           className={classes.appTitle}
         >
           gif-it.io
@@ -48,42 +48,3 @@ Header.propTypes = {
 };
 
 export default withStyles(styles)(Header);
-
-
-// import React from 'react';
-// import { makeStyles } from '@material-ui/core/styles';
-// import AppBar from '@material-ui/core/AppBar';
-// import Toolbar from '@material-ui/core/Toolbar';
-// import Typography from '@material-ui/core/Typography';
-// import Button from '@material-ui/core/Button';
-
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     flexGrow: 1,
-//   },
-//   btn: {
-//     margin: theme.spacing(2),
-//   },
-//   title: {
-
-//     flexGrow: 1,
-//   },
-// }));
-
-// export default function Header() {
-//   const classes = useStyles();
-
-//   return (
-//     <div className={classes.root}>
-//       <AppBar position="static">
-//         <Toolbar>
-//           <Typography variant="h6" className={classes.title}>
-//             gif-it.io
-//           </Typography>
-//           <Button className={classes.btn} variant="outlined" color="secondary" href="./">Convert to .gif</Button>
-// 		      <Button className={classes.btn} variant="outlined" color="secondary" href='./explore'>Explore</Button>
-//         </Toolbar>
-//       </AppBar>
-//     </div>
-//   );
-// }

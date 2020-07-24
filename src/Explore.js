@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "./Components/Header";
-import { getNew, search, getGifById } from "./util/data";
+import { getNew, search, getGifById, getPopularTags } from "./util/data";
 import { Container, Box, Grid, Button, InputBase, Card } from '@material-ui/core';
 import GifCard from "./Components/GifCard";
 import SearchBar from "./Components/SearchBar";
@@ -12,7 +12,8 @@ class Explore extends Component {
 
     this.state = ({
       gifs: [],
-      curGif: ""
+      curGif: "",
+      popularTags: []
     });
   }
 
@@ -35,6 +36,23 @@ class Explore extends Component {
         console.log(`Server had a problem fetching gifs ${res}`);
       }
     }).catch(err => console.log(`Problem fetching newest gifs: ${err}`));
+
+    let tags = [];
+    getPopularTags().then(res => {
+      if(res.ok) {
+        res.json().then(resJson => {
+          console.log(resJson);
+          resJson.map(elem => {
+            tags.push(elem.tag);
+            this.setState({popularTags: tags});
+          });
+        });
+      }
+      else{
+        console.log("Problem fetching popular tags.");
+        console.log(res);
+      }
+    }).catch(err => console.log(`Problem fetching popular tags: ${err}`));
   }
 
   search = (query) => {
@@ -65,6 +83,7 @@ class Explore extends Component {
         <Box>
           <SearchBar
             search={this.search}
+            popularTags={this.state.popularTags}
           />
           <Grid
             container

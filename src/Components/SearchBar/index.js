@@ -4,15 +4,17 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/styles';
-import { Box, Grid, FormControl, InputLabel, Select } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 
 
 
 const styles = (theme) => ({
   root: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
+    backgroundColor: theme.palette.primary.dark,
+    borderRadius: theme.spacing(1)
   },
   searchContainer: {
     display: 'flex',
@@ -30,17 +32,27 @@ const styles = (theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  active: {
+    fontWeight: "bold"
+  },
+  tag: {
+    fontWeight: "bold"
+  }
 });
 
 class SearchBar extends Component {
   constructor(props) {
     super(props);
 
+    
     this.state = {
       input: ""
     };
+
+    this.arrLength = this.props.popularTags.length;
   }
 
+  
   setInput = (event) => {
     console.log(event.target.value);
     this.setState({
@@ -61,13 +73,13 @@ class SearchBar extends Component {
 
   render() {
     const { classes } = this.props;
-
     return (
       <Box>
         <Grid container item
           direction="row"
           justify="center"
-          alignItems="center" >
+          alignItems="center" 
+          >
           <Grid item sm={2}></Grid>
           <Grid item xs={12} sm={8}>
             <Grid container item className={classes.root}>
@@ -82,8 +94,24 @@ class SearchBar extends Component {
                 <IconButton onClick={this.search} className={classes.iconButton} aria-label="search">
                   <SearchIcon />
                 </IconButton>
-                
               </Paper>
+              <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+                spacing={2}
+              >
+                <p>Try a popular tag like {
+                    this.props.popularTags.map((tag, index, arr) => 
+                    <span key={index}>
+                        <span className={classes.tag}>{tag}</span>
+                        <span>{index < arr.length-2 ? ", " : ""}</span>
+                        <span>{index === arr.length-2 ? " or " : ""}</span>
+                    </span>  
+                    )
+                  }!</p>
+              </Grid>
             </Grid>
           </Grid>
           <Grid item sm={2}></Grid>

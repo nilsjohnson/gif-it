@@ -22,4 +22,8 @@ function getGifById(gifId) {
   return fetch(endpoint);
 }
 
-export { getGifById, getNew, uploadFile, search }
+function getPopularTags(limit = 10) {
+  return fetch(`/api/popularTags/${limit}`);
+}
+
+export { getPopularTags, getGifById, getNew, uploadFile, search }

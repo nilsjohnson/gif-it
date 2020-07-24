@@ -16,12 +16,17 @@ function getDateTime() {
     return d;
 }
 
-function getAllGifs(callback) {
+function getMostRecent(qty, callback) {
     pool.getConnection((err, connection) => {
         if (err) {
             throw err;
         }
-        connection.query('SELECT * FROM gif', (error, results, fields) => {
+        let sql = `SELECT gif.id, gif.descript, gif.fileName, gif.thumbName FROM gif
+        JOIN upload ON gif.id = upload.id
+        ORDER BY upload.date DESC 
+        limit ${qty};`;
+
+        connection.query(sql, (error, results, fields) => {
             callback(results);
             connection.release();
             if (error) {
@@ -225,7 +230,7 @@ function getGifsByTag(tags, callback) {
     return [];
 }
 
-module.exports.getAllGifs = getAllGifs;
+module.exports.getAllGifs = getMostRecent;
 module.exports.addGif = addGif;
 module.exports.getGifsByTag = getGifsByTag;
 module.exports.getGifById = getGifById;

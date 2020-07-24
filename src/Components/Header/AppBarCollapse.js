@@ -19,6 +19,10 @@ const styles = theme => ({
         position: "relative",
         width: "100%",
         background: "transparent"
+    },
+    btn: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1)
     }
 });
 
@@ -33,8 +37,8 @@ const AppBarCollapse = props => (
             </Link>
         </ButtonAppBarCollapse>
         <div className={props.classes.buttonBar} id="appbar-collapse">
-            <Button variant="outlined" color="secondary" href="./">Convert to .gif</Button>
-            <Button variant="outlined" color="secondary" href='./explore'>Explore</Button>
+            <Button className={props.classes.btn} variant="outlined" color="secondary" href="./">Convert to .gif</Button>
+            <Button className={props.classes.btn} variant="outlined" color="secondary" href='./explore'>Explore</Button>
         </div>
     </div>
 );

@@ -82,6 +82,7 @@ class SearchBar extends Component {
                 <IconButton onClick={this.search} className={classes.iconButton} aria-label="search">
                   <SearchIcon />
                 </IconButton>
+                
               </Paper>
             </Grid>
           </Grid>

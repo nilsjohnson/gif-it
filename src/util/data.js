@@ -1,5 +1,5 @@
 function getNew() {
-    return fetch("/api/explore");
+    return fetch("http://localhost:3001/api/explore");
 }
 
 function uploadFile(url = '', data = {}) {

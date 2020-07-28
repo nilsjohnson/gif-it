@@ -1,6 +1,9 @@
 const { app } = require("./server");
 const { getAllGifs: getMostRecent, getGifsByTag, getGifById, getMostPopularTags } = require('./dataAccess');
 
+const cors = require('cors');
+app.use(cors());
+
 
 app.get('/api/explore', function (req, res) {
     getMostRecent(15, result => res.send(result));

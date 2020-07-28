@@ -1,3 +1,5 @@
+# Note: https://gif-it.io is currently offline while I migrate to CloudFront
+
 # [gif-it.io](https://gif-it.io "Free + Easy Gif Conversion")
 
 ### gif-it.io is a website where users can create and share gifs.

@@ -37,13 +37,8 @@ CREATE TABLE gif_tag (
 	UNIQUE KEY gif_id (gif_id, tag_id)
 );
 
--- create user 'bryn'@'localhost' IDENTIFIED BY 'doggie';
--- GRANT ALL PRIVILEGES ON * TO 'bryn'@'localhost';
+create user 'bryn'@'localhost' IDENTIFIED BY 'doggie';
+GRANT ALL PRIVILEGES ON * TO 'bryn'@'localhost';
 
-
--- INSERT INTO tag (tag) VALUES ("cat");
--- INSERT INTO tag (tag) VALUES ("dog");
-
--- INSERT INTO gif values ("rbOPz0U9", "rbOPz0U9.gif");
--- INSERT INTO gif values ("djeA6HXu", "djeA6HXu.gif");
-
+--updated to allow for maximum length filenames under the linux OS
+ALTER TABLE upload MODIFY originalFilename VARCHAR(255);

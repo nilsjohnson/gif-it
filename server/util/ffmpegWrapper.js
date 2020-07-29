@@ -1,5 +1,6 @@
 const { spawn } = require('child_process');
 
+
 const QUALITY = {
   THUMB: 1,
   SM: 2,
@@ -39,7 +40,7 @@ function getOptions(src, dst, quality) {
   }
 }
 
-function convertToGif(src, dst, socketId, uploadId, quality, onStdout, onStderr, onClose) {
+function convertToGif(src, dst, socketId, uploadId, quality, onStdout, onStderr, onGifMade, onThumbMade) {
   // make the gif
   let totalDuration = null;
   let curSpeed = null;
@@ -99,7 +100,7 @@ function convertToGif(src, dst, socketId, uploadId, quality, onStdout, onStderr,
     if (code === 0) {
       // as far as user knows, we are done, however, we silently make a 
       // thumbnail now in the background
-      onClose(socketId, uploadId, `${uploadId}.gif`, `${uploadId}.thumb.gif`);
+      onGifMade(socketId, uploadId, `${uploadId}.gif`, `${uploadId}.thumb.gif`);
 
       let thumbDst = dst.replace('.gif', '.thumb.gif');
       const ffmpegProcess = spawn(
@@ -114,11 +115,12 @@ function convertToGif(src, dst, socketId, uploadId, quality, onStdout, onStderr,
 
       ffmpegProcess.on('close', (code) => {
         console.log(`child process exited with code ${code}`);
+        onThumbMade(`${uploadId}.thumb.gif`);
         
       });
     }
     else {
-      onClose(socketId, uploadId, null, null);
+      onGifMade(socketId, uploadId, null, null);
     }
   });
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Box } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +23,6 @@ export function DropBox(props) {
         direction="column"
         justify="center"
         alignItems="center"
-        className={classes.chooseFiles}
         onDrop={props.onDrop}
         onDragOver={props.onDragOver}
         onDragLeave={props.onDragLeave}

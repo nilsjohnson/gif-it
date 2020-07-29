@@ -9,8 +9,8 @@ if (!fs.existsSync(FilePaths.UPLOAD_DIR)) {
     fs.mkdirSync(FilePaths.UPLOAD_DIR);
 }
 
-if (!fs.existsSync(FilePaths.GIF_SERVE_DIR)) {
-    fs.mkdirSync(FilePaths.GIF_SERVE_DIR);
+if (!fs.existsSync(FilePaths.GIF_SAVE_DIR)) {
+    fs.mkdirSync(FilePaths.GIF_SAVE_DIR);
 }
 
 function getExtension(fileName) {

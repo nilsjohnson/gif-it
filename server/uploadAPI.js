@@ -1,114 +1,148 @@
+/*
+This API works as follows.
+
+(1) the client opens a socket.
+(2) the server accepts and adds that socket to 'connections' object.
+(3) the client then proceeds to upload files. 
+      - When client hits '/api/videoUpload/:socketId/:tempUploadId' to start the upload,
+        we respond using their socket to give them their offical upload id.
+      - Then, as the upload procedes, we use that that id to return the upload progress.
+(4) When the upload is done, we emit 'uploadComplete'
+(5) We then wait for 'ConvertRequested'. Once recieved, we covnert.
+(6) We then wait for 'ShareRequest'. Once recieved, we put the infromation in the DB.
+
+*/
+
 const fs = require('fs');
 const path = require('path');
 const Busboy = require('busboy');
-const { app, http, https, serveMode } = require('./server');
+const { app, http, https } = require('./server');
 const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
-const bodyParser = require('body-parser');
 const { addGif } = require('./dataAccess');
 const { getUniqueID, checkUnique } = require("./fileUtil");
 const { convertToGif } = require('./util/ffmpegWrapper');
-const { splitTags } = require('./util/util');
-const AWS = require('aws-sdk');
-AWS.config.update({ region: 'us-east-1' })
+const { splitTags, trasnferToS3 } = require('./util/util');
 
-
-app.use(bodyParser.json());
-let io = (serveMode === ServeModes.DEV ? require('socket.io')(http) : require('socket.io').listen(https));
-io.set('origins', '*:*');
-
-
-function trasnferToS3(curPath, onUploaded) {
-  console.log(curPath);
-  let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
-  let uploadParams = { Bucket: "gif-it.io", Key: '', Body: '' };
-  let file = curPath;
-
-  var fileStream = fs.createReadStream(file);
-  fileStream.on('error', function (err) {
-    console.log('File Error', err);
-  });
-  uploadParams.Body = fileStream;
-  uploadParams.Key = path.basename(file);
-
-  // call S3 to retrieve upload file to specified bucket
-  s3.upload(uploadParams, function (err, data) {
-    if (err) {
-      console.log("Error", err);
-    } if (data) {
-      console.log("Upload Success", data.Location);
-    }
-    onUploaded();
-  });
-}
-
+// for dev us http, prod use https
+let io = (SERVE_MODE === ServeModes.DEV ? require('socket.io')(http) : require('socket.io').listen(https));
+// since our api is on a subdomain, we need to allow CORS
+io.set('origins', '*:*'); // TODO research the best way to do this to make sure only api.gif-it uses this.
 
 
 /**
- * Maps an uploadId to an object holding the originalFileName, uploadDst, and ipAddr
+ * Holds open connections - { socketId_1 : { socket: socket, uploads: {} }, socketId_2 : .... }
  */
-let uploadMap = {};
-/**
- * Holds open sockets - { socketId : socket}
- */
-let sockets = {};
+let connections = {};
 
 /**
  * deletes a socket by its id;
  */
 function deleteSocket(socketId) {
-  if (delete sockets[socketId]) {
-    console.log(`Socket ${socketId} has been deleted`);
+  if (delete connections[socketId]) {
+    if (DEBUG) { console.log(`Socket ${socketId} has been deleted`); }
   } else {
     console.log(`Problem deleting ${socketId}.`);
   }
+
+  if(DEBUG) {
+    console.log(`Here are the current connections.`);
+    console.log(connections);
+  }
+
 }
 
-
+/**
+ * Sends progress reports to the client of how their conversion is going. i.e - speed, progress, etc.
+ * @param {*} socketId 
+ * @param {*} data 
+ */
 function sendConversionProgress(socketId, data) {
-  sockets[socketId].emit("ConversionProgress", data);
+  if (DEBUG) { console.log('sendConversionProgress: '); console.log(data); }
+  connections[socketId].socket.emit("ConversionProgress", data);
 }
 
-//onClose(socketId, uploadId, `${uploadId}.gif`, `${uploadId}.thumb.gif`);
+/**
+ * Callback for successfully making a gif
+ * @param {*} socketId  The socketId of the man or woman who made this gif
+ * @param {*} uploadId  The uploadId
+ * @param {*} fileName  The fileName of the gif
+ * @param {*} thumbFileName   The (tentative) thumbnail file's name
+ */
 function onGifMade(socketId, uploadId, fileName, thumbFileName) {
-  uploadMap[uploadId].fileName = fileName;
-  uploadMap[uploadId].thumbFileName = thumbFileName
-  // write these to S3
-  
-  trasnferToS3(path.join(FilePaths.GIF_SERVE_DIR, fileName), () => {
-    sockets[socketId].emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
-  });
+  connections[socketId].uploads[uploadId].fileName = fileName;
+  connections[socketId].uploads[uploadId].thumbFileName = thumbFileName
+
+  if(DEBUG) { 
+    console.log(`onGifMade called - 
+    socketId: ${socketId}, 
+    uploadId:${uploadId}, 
+    fileName:${fileName}, 
+    thumbFileName: ${thumbFileName}`); 
+  }
+
+  // if this is production, we transfer to s3
+  if (SERVE_MODE === ServeModes.PRODUCTION) {
+    trasnferToS3(path.join(FilePaths.GIF_SAVE_DIR, fileName),
+      (data) => { // on success
+        connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
+        if (DEBUG) { console.log(`s3 transfer sucess! - ${data}`); }
+      },
+      (err) => { // on failure
+        connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, error: "Something Went Wrong. Sorry! :(" });
+        console.log(`Problem Uploading to s3. ${err}`);
+      });
+  }
+  // otherwise we are in DEV mode so we just serve it from where we saved it.
+  else {
+    connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
+  }
 }
 
+/**
+ * Transfers thumbnail to s3
+ * 
+ * @param {*} thumbName 
+ */
 function onThumbMade(thumbName) {
-  trasnferToS3(path.join(FilePaths.GIF_SERVE_DIR, thumbName), () => {
-    console.log("thumbnail made.");
-  });
+  if(DEBUG) {console.log(`onThumbMade called - thumbName: ${thumbName}`); }
+
+  if (SERVE_MODE === ServeModes.PRODUCTION) {
+    trasnferToS3(path.join(FilePaths.GIF_SAVE_DIR, thumbName),
+      (data) => { // if success
+        if (DEBUG) { console.log(`Thumbnail s3 transfer success: ${data}`); }
+      }),
+      (err) => { // if failure
+        console.log(`Thumbnail s3 transfer failed: ${err}`);
+      };
+  }
+  else {
+    // Do nothing. The thumbnail should be sitting in the serve directory 
+    // ready to go. See see 'const.js' for that location. 
+  }
 }
-
-
 
 /**
  * adds a socket to sockets and defines its listeners
  */
 function addSocket(newSocket) {
   let socketId = newSocket.id;
-  sockets[socketId] = newSocket;
+  connections[socketId] = { socket: newSocket, uploads: {} };
 
   if (DEBUG) {
-    let numSockets = Object.keys(sockets).length;
+    let numSockets = Object.keys(connections).length;
     console.log(`There ${numSockets > 1 ? "are" : "is"} ${numSockets} socket${numSockets > 1 ? "s" : ""} open right now.`);
   }
 
-  sockets[socketId].on("disconnect", () => {
+  connections[socketId].socket.on("disconnect", () => {
     console.log(`Socket ${socketId} disconnected`);
     deleteSocket(socketId);
   });
 
-  sockets[socketId].on("ConvertRequested", (data) => {
+  connections[socketId].socket.on("ConvertRequested", (data) => {
     const { uploadId, quality } = data;
     console.log(`Client using socket ${socketId} requesting uploadId ${uploadId} to be converted.`);
-    convertToGif(uploadMap[uploadId].uploadDst,
-      path.join(FilePaths.GIF_SERVE_DIR, uploadId + ".gif"),
+    convertToGif(connections[socketId].uploads[uploadId].uploadDst,
+      path.join(FilePaths.GIF_SAVE_DIR, uploadId + ".gif"),
       socketId,
       uploadId,
       quality,
@@ -118,21 +152,20 @@ function addSocket(newSocket) {
       onThumbMade);
   });
 
-  sockets[socketId].on("ShareRequest", (data) => {
-    console.log("data:");
-    console.log(data);
-    console.log(uploadMap);
+  connections[socketId].socket.on("ShareRequest", (data) => {
+    if(DEBUG) { console.log(`ShareRequest - `); console.log(data); }
+    
     const { uploadId, tags, description } = data;
-
+    
     if (!tags) {
-      sockets[socketId].emit("ShareResult", { uploadId: uploadId, message: "Please Provide a Tag." })
+      connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, message: "Please Provide a Tag." })
       return;
     }
 
-    let ipAddr = uploadMap[uploadId].ipAddr;
-    let originalFileName = uploadMap[uploadId].originalFileName;
-    let fileName = uploadMap[uploadId].fileName;
-    let thumbFileName = uploadMap[uploadId].thumbFileName;
+    let ipAddr = connections[socketId].uploads[uploadId].ipAddr;
+    let originalFileName = connections[socketId].uploads[uploadId].originalFileName;
+    let fileName = connections[socketId].uploads[uploadId].fileName;
+    let thumbFileName = connections[socketId].uploads[uploadId].thumbFileName;
     let tagArr = splitTags(tags);
 
     addGif(uploadId,
@@ -144,9 +177,9 @@ function addSocket(newSocket) {
       originalFileName
     ).then((result) => {
       console.log(result);
-      sockets[socketId].emit("ShareResult", { uploadId: uploadId, message: "Thank You!" })
+      connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, message: "Thank You!" })
     }).catch(err => {
-      sockets[socketId].emit("ShareResult", { uploadId: uploadId, message: err.toString() })
+      connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, message: err.toString() })
     });
   });
 }
@@ -155,7 +188,7 @@ function addSocket(newSocket) {
  * on connection handler. Defines actions for each socket as it connects.
  */
 io.on("connection", (newSocket) => {
-  console.log("new socket connected");
+  if(DEBUG) {console.log(`New socket connected, id: ${newSocket.id}`)}
   addSocket(newSocket);
 });
 
@@ -184,7 +217,7 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
 
     busboy.on('file', function (fieldName, file, givenFileName, encoding, mimetype) {
       if (!mimetype.startsWith('video')) {
-        console.log(givenFileName + " is invalid");
+        if(DEBUG) { console.log(`${givenFileName} has invalid mimetype. ${mimetype} privided, but 'video/*' is required.`); }
         res.status(400);
         res.json({ error: `${givenFileName}: Unsupported Format` });
         return;
@@ -194,21 +227,21 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
       // set the upload dst
       uploadDst = path.join(FilePaths.UPLOAD_DIR + "/" + fileName);
       // map this uploadId to this file and fileName
-      uploadMap[uploadId] = {};
-      uploadMap[uploadId].uploadDst = uploadDst;
-      uploadMap[uploadId].originalFileName = givenFileName;
-      uploadMap[uploadId].ipAddr = ipAddr;
+      connections[socketId].uploads[uploadId] = {};
+      connections[socketId].uploads[uploadId].uploadDst = uploadDst;
+      connections[socketId].uploads[uploadId].originalFileName = givenFileName;
+      connections[socketId].uploads[uploadId].ipAddr = ipAddr;
+      connections[socketId].uploads[uploadId].socketId = socketId;
       // signal to client that we are starting the upload shortly
-      sockets[socketId].emit("UploadStart", {
+      connections[socketId].socket.emit("UploadStart", {
         uploadId: uploadId,
         tempUploadId: tempUploadId
       });
 
       file.on('data', function (data) {
         bytesRecieved = bytesRecieved + data.length;
-        // sockets[socketId].emit("FromAPI", Math.round(bytesRecieved * 100 / fileSize) + '% Uploaded');
         let percentUploaded = Math.round(bytesRecieved * 100 / fileSize);
-        sockets[socketId].emit("UploadProgress", {
+        connections[socketId].socket.emit("UploadProgress", {
           uploadId: uploadId,
           percentUploaded: percentUploaded,
         });
@@ -218,7 +251,7 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
     });
 
     busboy.on('finish', function () {
-      sockets[socketId].emit("uploadComplete", {
+      connections[socketId].socket.emit("uploadComplete", {
         videoLength: null,
         uploadFinishTime: new Date(),
         uploadId: uploadId

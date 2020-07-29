@@ -185,7 +185,7 @@ class UploadWell extends Component {
           alignItems="center"
         >
           <Grid item>
-            <img className={classes.image} src={servePath} />
+            <img className={classes.image} src={servePath} alt={fileName} />
           </Grid>
           <Grid item xs={12}>
             <TagBox
@@ -207,7 +207,7 @@ class UploadWell extends Component {
     const { classes, error } = this.props;
 
     return (
-      <Box className={`${classes.root} ${this.props.error ? classes.error : ""}`}>
+      <Box className={`${classes.root} ${error ? classes.error : ""}`}>
         {this.getElement()}
       </Box>
 

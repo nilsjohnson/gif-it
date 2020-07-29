@@ -1,4 +1,5 @@
 const { spawn } = require('child_process');
+const fs = require('fs');
 
 
 const QUALITY = {
@@ -40,7 +41,22 @@ function getOptions(src, dst, quality) {
   }
 }
 
-function convertToGif(src, dst, socketId, uploadId, quality, onStdout, onStderr, onGifMade, onThumbMade) {
+/**
+ * This behemoth of a function converts a video to a gif.
+ * 
+ * @param {*} src             The input 
+ * @param {*} dst             The output
+ * @param {*} socketId        The socketId associated with this upload
+ * @param {*} uploadId        The uploadId associated with this upload
+ * @param {*} quality         accepts 'sm', 'md' or large
+ * @param {*} onStdout        The output stream. Not implemented. Dont use.
+ * @param {*} onProgress      Callback for progress
+ * @param {*} onGifMade       Callback for when gif is made. 
+ *                                success: onGifMade(sockeId, uploadId, gifPath, thumbPath)
+ *                                failure: onGifMade(sockeId, uploadId, gifPath, thumbPath)
+ * @param {*} onThumbMade     Callback for when thumbnail is made. Thumbnail will always be made. 
+ */
+function convertToGif(src, dst, socketId, uploadId, quality, onStdout, onProgress, onGifMade, onThumbMade) {
   // make the gif
   let totalDuration = null;
   let curSpeed = null;
@@ -57,9 +73,10 @@ function convertToGif(src, dst, socketId, uploadId, quality, onStdout, onStderr,
       quality = QUALITY.MD;
   }
 
-  const ffmpegProcess = spawn('ffmpeg', getOptions(src, dst, quality));
-  ffmpegProcess.stdout.on('data', (data) => { });
-  ffmpegProcess.stderr.on('data', (output) => {
+  const makeGifProcess = spawn('ffmpeg', getOptions(src, dst, quality));
+  makeGifProcess.stdout.on('data', (data) => { });
+  // this callback, calls back the onProgress callback to notify user conversion status 
+  makeGifProcess.stderr.on('data', (output) => {
     let temp, data;
     let output_str = output.toString();
     console.log(output_str);
@@ -94,31 +111,44 @@ function convertToGif(src, dst, socketId, uploadId, quality, onStdout, onStderr,
 
     data.curOutput = output_str;
     data.uploadId = uploadId;
-    onStderr(socketId, data );
+    onProgress(socketId, data );
   });
-  ffmpegProcess.on('close', (code) => {
+  makeGifProcess.on('close', (code) => {
+    // if the gif was made successfully
     if (code === 0) {
-      // as far as user knows, we are done, however, we silently make a 
-      // thumbnail now in the background
-      onGifMade(socketId, uploadId, `${uploadId}.gif`, `${uploadId}.thumb.gif`);
-
+      // as far as user knows, we are done, however, we 
+      // silently make a thumbnail now in the background
+      let gifFileName = `${uploadId}.gif`;
+      let thumbFileName = `${uploadId}.thumb.gif`;
       let thumbDst = dst.replace('.gif', '.thumb.gif');
-      const ffmpegProcess = spawn(
+      // notify gif was successfully made
+      onGifMade(socketId, uploadId, gifFileName, thumbFileName);
+
+      // make thumbnail
+      const makeThumbProcess = spawn(
         'ffmpeg',
         getOptions(src, thumbDst, QUALITY.THUMB));
 
-      ffmpegProcess.stdout.on('data', (data) => { });
+        makeThumbProcess.stdout.on('data', (data) => { });
 
-      ffmpegProcess.stderr.on('data', (data) => {
+        makeThumbProcess.stderr.on('data', (data) => {
         console.log(data.toString());
       });
 
-      ffmpegProcess.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-        onThumbMade(`${uploadId}.thumb.gif`);
-        
+      makeThumbProcess.on('close', (code) => {
+        if(code === 0) { 
+          // success
+          onThumbMade(`${uploadId}.thumb.gif`);
+        }
+        else { // TODO if fails, its probably beacuse the video was < 3 seconds...We should be able to check that before hand and reduce if necessary.
+          // make copy the gif to the thumbnail. AKA the gif and thumbnail are the same.
+          // this will happen as a last resort but ensures there is always a thumbnail.
+          fs.createReadStream('test.log').pipe(fs.createWriteStream('newLog.log'));
+          onThumbMade(`${uploadId}.thumb.gif`);
+        }
       });
     }
+    // gif was not made successfully
     else {
       onGifMade(socketId, uploadId, null, null);
     }
@@ -139,9 +169,9 @@ function extractSpeed(str) {
 }
 
 /**
- * 
- * @param {*} str The stderr output from ffmpeg
- * @return The duration of the video, if found, otherwise null.
+ * Parses a string to find a string representing the duration.
+ * @param {*} str   The stderr output from ffmpeg
+ * @return          The duration of the video, if found, otherwise null.
  */
 function extractDuration(str) {
   console.log("duration str: " + str);
@@ -157,6 +187,12 @@ function extractDuration(str) {
   return null;
 }
 
+/**
+ * Looks for a timestamp on the current output to see if we can get a progress update.
+ * 
+ * @param {*} str 
+ * @param {*} totalDuration 
+ */
 function caclulateProgress(str, totalDuration) {
   if (!totalDuration) {
     return null;
@@ -175,8 +211,9 @@ function caclulateProgress(str, totalDuration) {
 }
 
 /**
+ * Parses a regex group to get the time in seconds
  * 
- * @param {*} group A regex group that contains hours, min, sec, cenitiSec
+ * @param {*} group   A regex group that contains hours, min, sec, cenitiSec
  */
 function groupToSeconds(group) {
   if (!group) {
@@ -190,12 +227,15 @@ function groupToSeconds(group) {
 
   let totalSeconds = secInHour + secInMin + sec + centiSec;
 
-  console.log(secInHour);
-  console.log(secInMin);
-  console.log(sec);
-  console.log(centiSec);
-  console.log("Total Seconds: " + totalSeconds);
-
+  if(DEBUG) {
+    console.log("Getting the total seconds from regex group.");
+    console.log("\t" + secInHour);
+    console.log("\t" + secInMin);
+    console.log("\t" + sec);
+    console.log("\t" + centiSec);
+    console.log("    + " + "_______");
+    console.log("\t" + totalSeconds + " Total Seconds");
+  }
   return totalSeconds;
 }
 

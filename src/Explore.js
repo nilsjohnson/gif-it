@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Header from "./Components/Header";
-import { getNew, search, getGifById, getPopularTags } from "./util/data";
-import { Container, Box, Grid, Button, InputBase, Card } from '@material-ui/core';
+import { getNew, search, getPopularTags } from "./util/data";
+import { Container, Box, Grid } from '@material-ui/core';
 import GifCard from "./Components/GifCard";
 import SearchBar from "./Components/SearchBar";
 import GifBox from "./Components/GifBox";
@@ -42,7 +42,7 @@ class Explore extends Component {
       if(res.ok) {
         res.json().then(resJson => {
           console.log(resJson);
-          resJson.map(elem => {
+          resJson.forEach(elem => {
             tags.push(elem.tag);
             this.setState({popularTags: tags});
           });

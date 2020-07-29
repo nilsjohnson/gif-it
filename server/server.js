@@ -1,31 +1,45 @@
 /*
-If running in production on server, pass 'prudction' as an argument:
-	$ node server.js -p
-This will allow listening for https requests, otherwise it will just do http.	
-*/
+This is the entry point to the application's api.
+
+To run in production mode and serve https with requests going to 'api.gif-it.io'
+	$ node ./server/server.js -p 
+
+To run in dev mode and server http with requests going to 'localhost'		
+	$ node ./server/server.js
+	
+Additionally, you may also pass in the -d flag if you wish to print debug statements.	
+ */
+
 const express = require('express');
 const app = express();
-const path = require('path');
 const http = require('http').createServer(app);
 const https = require('https');
 const fs = require('fs');
-
+const bodyParser = require('body-parser');
 const cors = require('cors');
-app.use(cors());
+let { Ports, ServeModes, FilePaths, DEV_SERVER, PROD_SERVER } = require('./const');
+
+// const corsOptions = {
+// 	origin: DEV_SERVER,
+//     credentials: true,
+// };
 
 app.options('/api/videoUpload/:socketId/:tempUploadId', cors());
+app.use(cors()); // TODO I think we can pass in arguments to only allow cross origin reqests from the api subdomain
+// since our server is on the 'api.gif-it' subdomain, we need cors
 
 
-const { Ports, ServeModes, FilePaths} = require('./const');
+// to read bodys as JSON
+app.use(bodyParser.json());
 
-// default serv mode and debug
-let serveMode = ServeModes.DEV;
+// default serve mode and debug
+global.SERVE_MODE = ServeModes.DEV;
 global.DEBUG = false;
 
 for(let i = 0; i < process.argv.length; i++) {
 	switch(process.argv[i]) {
 		case '-p':
-			serveMode = ServeModes.PRODUCTION;
+			SERVE_MODE = ServeModes.PRODUCTION;
 			break; 
 		case '-d':
 			DEBUG = true;
@@ -34,16 +48,13 @@ for(let i = 0; i < process.argv.length; i++) {
 }
 
 if(DEBUG) {
-	console.log("App in debug mode.");
-}
-
-if(serveMode === ServeModes.DEV) {
-	console.log("App in development mode.")
+	console.log("App set to print DEBUG statements.");
 }
 
 let httpsServer;
 
-if(serveMode == ServeModes.PRODUCTION) {
+// if production get the ssl cert and create https server
+if(SERVE_MODE === ServeModes.PRODUCTION) {
 	const FULL_CHAIN = '/etc/letsencrypt/live/api.gif-it.io/cert.pem';
 	const PRIVATE_KEY = '/etc/letsencrypt/live/api.gif-it.io/privkey.pem';
 	const OPTIONS = {
@@ -55,47 +66,30 @@ if(serveMode == ServeModes.PRODUCTION) {
 	console.log("creating https server..");
 	httpsServer = https.createServer(OPTIONS, app);
 }
+// otherwise we skip that step and serve a gif directory (since we dont have a dev s3 bucket set up)
+else if(SERVE_MODE === ServeModes.DEV) {
+	console.log(`App in development mode.`);
+	console.log(`Serving gifs from ${FilePaths.GIF_SAVE_DIR}`);
+	app.use(express.static(FilePaths.GIF_SAVE_DIR, { index: false }));
+}
 
 
 // exports
 exports.app = app;
 exports.http = http;
 exports.https = httpsServer;
-exports.serveMode = serveMode;
 
-// APIs
+// define APIs
 require('./uploadAPI');
 require('./dataAccess')
 require('./exploreAPI');
 
-// { index : false } is to allow request for the webroot to get caught by app.get('/*'...)
-// since we need to handle redirects to https
-//app.use(express.static(path.join(__dirname, '../build'), { index: false }));
-app.use(express.static(FilePaths.GIF_SERVE_DIR, { index: false }));
-
-// app.get('/*', function (req, res) {
-// 	if (serveMode === ServeModes.PRODUCTION) {
-// 		let usingHttps = req.secure;
-// 		let hasSubDomain = req.headers.host.startsWith("www");
-
-// 		// good, this is how we serve this site.
-// 		if(usingHttps && !hasSubDomain) {
-// 			res.sendFile(path.join(__dirname, '../build', 'index.html'));
-// 		}
-// 		else {
-// 			res.redirect("https://gif-it.io");
-// 		}
-// 	}
-// 	else if(serveMode === ServeModes.DEV) {
-// 		res.sendFile(path.join(__dirname, '../build', 'index.html'));
-// 	}
-// });
-
+// listen for API requests
 http.listen(Ports.HTTP_PORT_NUM, () => {
     console.log(`App listening on port ${Ports.HTTP_PORT_NUM}`);
 });
-
-if (serveMode === ServeModes.PRODUCTION) {
+// listen for https
+if (SERVE_MODE === ServeModes.PRODUCTION) {
 	console.log("Serving over https.")
 	httpsServer.listen(Ports.HTTPS_PORT_NUM);
 }

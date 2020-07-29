@@ -11,14 +11,21 @@ const ServeModes = {
 }
 
 const FilePaths = {
+    // Where uploads go from the users
     UPLOAD_DIR: os.tmpdir + '/' + 'gif-it',
-    GIF_SERVE_DIR: os.homedir + '/gifs'
+    // Where we put the gifs before copying to s3
+    // or where we serve them from if we are in DEV mode.
+    GIF_SAVE_DIR: os.homedir + '/gifs'
 }
 
-MAX_UPLOAD_SIZE = 70; // in MB
+const MAX_UPLOAD_SIZE = 70; // in MB
+
+const PROD_SERVER = `https://api.gif-it.io`;
+const DEV_SERVER = `http://localhost:3000`;
 
 
-
+exports.PROD_SERVER = PROD_SERVER;
+exports.DEV_SERVER = DEV_SERVER;
 exports.Ports = Ports;
 exports.ServeModes = ServeModes;
 exports.FilePaths = FilePaths;

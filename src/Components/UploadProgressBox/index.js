@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Grid, Button, Typography } from '@material-ui/core';
+import { Grid, Button, Typography } from '@material-ui/core';
 import ProgressBar from '../ProgressBar';
 import { makeStyles } from '@material-ui/core/styles';
 

@@ -54,7 +54,6 @@ function trasnferToS3(objectPath, onSucess = null, onFail = null) {
                 onSucess(data);
             }
         }
-        onComplete();
     });
 }
 

@@ -17,16 +17,12 @@ const https = require('https');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-let { Ports, ServeModes, FilePaths, DEV_SERVER, PROD_SERVER } = require('./const');
-
-// const corsOptions = {
-// 	origin: DEV_SERVER,
-//     credentials: true,
-// };
+let { Ports, ServeModes, FilePaths } = require('./const');
 
 app.options('/api/videoUpload/:socketId/:tempUploadId', cors());
-app.use(cors()); // TODO I think we can pass in arguments to only allow cross origin reqests from the api subdomain
 // since our server is on the 'api.gif-it' subdomain, we need cors
+app.use(cors()); // TODO I think we can pass in arguments to only allow cross origin reqests from the api subdomain
+
 
 
 // to read bodys as JSON

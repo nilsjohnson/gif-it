@@ -125,7 +125,7 @@ function addGif(uploadId, fileName, thumbFileName, tags, description, ipAddr, or
                     connection.query(upload_sql, [uploadId, getDateTime(), ipAddr, originalFileName], (error, results, fields) => {
                         console.log(results);
                         if (error) {
-                            reject(err);;
+                            reject(error);;
                             return;
                         }
 

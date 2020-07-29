@@ -228,7 +228,7 @@ function getGifsByTag(tags, callback) {
         }
 
         let getGif_sql =
-            "SELECT gif.fileName, gif.descript, gif.thumbName, gif.id from gif \
+            "SELECT distinct gif.fileName, gif.descript, gif.thumbName, gif.id from gif \
                 JOIN gif_tag ON gif.id = gif_tag.gif_id \
                 JOIN tag ON gif_tag.tag_id = tag.id \
             WHERE ";

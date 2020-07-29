@@ -41,7 +41,6 @@ class Explore extends Component {
     getPopularTags().then(res => {
       if(res.ok) {
         res.json().then(resJson => {
-          console.log(resJson);
           resJson.forEach(elem => {
             tags.push(elem.tag);
             this.setState({popularTags: tags});

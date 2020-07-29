@@ -51,12 +51,9 @@ class Uploader extends Component {
     this.socket.on("UploadProgress", data => {
       const { uploadId, percentUploaded } = data;
 
-      // console.log("upload prog: ");
-      // console.log(data);
       for (let i = 0; i < this.uploads.length; i++) {
         if (this.uploads[i].uploadId === uploadId) {
           this.uploads[i].percentUploaded = percentUploaded;
-          console.log("percent set..");
           break;
         }
       }
@@ -122,6 +119,7 @@ class Uploader extends Component {
      * Marks the conversion as complete so we can serve the .gif
      */
     this.socket.on("ConversionComplete", (data) => {
+      console.log("ConversionComplete");
       console.log(data);
       let { servePath } = data;
 
@@ -183,9 +181,7 @@ class Uploader extends Component {
    */
   upload = () => {
     console.log(`Starting upload at index ${this.curFileNum}`);
-    console.log(this.uploads);
     if (this.curFileNum >= this.uploads.length) {
-      console.log("not uploading..");
       return;
     }
 

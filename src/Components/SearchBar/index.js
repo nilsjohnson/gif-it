@@ -5,6 +5,8 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/styles';
 import { Box, Grid } from '@material-ui/core';
+import AddTag from '../AddTag';
+
 
 
 
@@ -34,16 +36,12 @@ const styles = (theme) => ({
   },
   active: {
     fontWeight: "bold"
-  },
-  tag: {
-    fontWeight: "bold"
   }
 });
 
 class SearchBar extends Component {
   constructor(props) {
     super(props);
-
 
     this.state = {
       input: ""
@@ -54,9 +52,8 @@ class SearchBar extends Component {
 
 
   setInput = (event) => {
-    console.log(event.target.value);
     this.setState({
-      input: event.target.value.trim()
+      input: event.target.value
     })
   }
 
@@ -67,8 +64,17 @@ class SearchBar extends Component {
   }
 
   search = () => {
-    console.log("searching for " + this.state.input);
     this.props.search(this.state.input);
+  }
+
+  addTagToSearch = (tag) => {
+    let tmp = this.state.input;
+
+    this.setState({
+      input: tmp.trim() + " " + tag
+    }, () => {
+      this.search();
+    });
   }
 
   render() {
@@ -90,6 +96,7 @@ class SearchBar extends Component {
                   className={classes.input}
                   placeholder="Search For Gifs"
                   inputProps={{ 'aria-label': 'Search For Gifs' }}
+                  value={this.state.input}
                 />
                 <IconButton onClick={this.search} className={classes.iconButton} aria-label="search">
                   <SearchIcon />
@@ -106,7 +113,7 @@ class SearchBar extends Component {
                   <p>Try a popular tag like {
                     this.props.popularTags.map((tag, index, arr) =>
                       <span key={index}>
-                        <span className={classes.tag}>{tag}</span>
+                        <AddTag tag={tag} addTagToSearch={this.addTagToSearch}/>
                         <span>{index < arr.length - 2 ? ", " : ""}</span>
                         <span>{index === arr.length - 2 ? " or " : ""}</span>
                       </span>

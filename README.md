@@ -1,5 +1,3 @@
-# Note: https://gif-it.io is currently offline while I migrate to CloudFront
-
 # [gif-it.io](https://gif-it.io "Free + Easy Gif Conversion")
 
 ### gif-it.io is a website where users can create and share gifs.
@@ -47,8 +45,8 @@ On a production server, to server over https, pass in the '-p' flag
 - ~~Turn off "Convert To Gif" Button after it's been pressed.~~
 - ~~Notify user when they successfully share gif. // (currently always alerts success..)~~
 - ~~Users can give gifs descriptions~~
-- Save gifs in an S3 bucket instead of on the server
-- Serve the website from S3 to reduce load on the EC2 instance
+- ~~Save gifs in an S3 bucket instead of on the server~~
+- ~~Serve the website from S3 to reduce load on the EC2 instance~~
 - Properly escape all SQL
 - Users can search by description
 - Users can categorize gifs (educational, funny, pets, etc.)

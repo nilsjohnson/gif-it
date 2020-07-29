@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import socketIOClient from "socket.io-client";
 import './style.css';
 import UploadWell from "./UploadWell";
-import { uploadFile } from "../../util/data"
+import { uploadFile, getServer } from "../../util/data"
 import { DropBox } from "../DropBox";
 import { Grid, Box } from "@material-ui/core";
 import { formatBytes } from '../../util/util';
@@ -43,7 +43,7 @@ class Uploader extends Component {
   */
   createSocket = () => {
     console.log("creating socket");
-    this.socket = socketIOClient();
+    this.socket = socketIOClient(getServer());
 
     /*
       to handle upload progress updates
@@ -205,7 +205,7 @@ class Uploader extends Component {
     let formData = new FormData();
     formData.append("files", curFile);
 
-    return uploadFile(`/api/videoUpload/${this.socket.id}/${tempUploadId}`, formData)
+    return uploadFile(this.socket.id, tempUploadId, formData)
       .then(response => {
         if (response.ok) {
           console.log(`Upload #${this.curFileNum + 1} successfully uploaded.`)

@@ -1,9 +1,14 @@
+let production = true;
+let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
+
 function getNew() {
-    return fetch("/api/explore");
+    return fetch(`${server}/api/explore`);
 }
 
-function uploadFile(url = '', data = {}) {
-    return fetch(url, {
+// `/api/videoUpload/${this.socket.id}/${tempUploadId}`
+function uploadFile(socketId, tempUploadId, data = {}) {
+    console.log(socketId);
+    return fetch(`${server}/api/videoUpload/${socketId}/${tempUploadId}`, {
       method: 'POST',
       body: data
     });
@@ -13,17 +18,17 @@ function search(searchInput) {
   console.log("data.search: " + searchInput);
   const params = { input: searchInput };
   const paramString = new URLSearchParams(params);
-  return fetch(`/api/search?${paramString.toString()}`);
+  return fetch(`${server}/api/search?${paramString.toString()}`);
 }
 
 function getGifById(gifId) {
-  let endpoint = `/api/${gifId}`;
-  console.log(endpoint);
-  return fetch(endpoint);
+  return fetch(`${server}/api/${gifId}`);
 }
 
 function getPopularTags(limit = 10) {
-  return fetch(`/api/popularTags/${limit}`);
+  return fetch(`${server}/api/popularTags/${limit}`);
 }
 
-export { getPopularTags, getGifById, getNew, uploadFile, search }
+function getServer() { return server};
+
+export { getServer, getPopularTags, getGifById, getNew, uploadFile, search }

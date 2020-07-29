@@ -1,7 +1,6 @@
 const { app } = require("./server");
 const { getAllGifs: getMostRecent, getGifsByTag, getGifById, getMostPopularTags } = require('./dataAccess');
 
-
 app.get('/api/explore', function (req, res) {
     getMostRecent(15, result => res.send(result));
 });

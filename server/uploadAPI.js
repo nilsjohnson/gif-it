@@ -8,9 +8,39 @@ const { addGif } = require('./dataAccess');
 const { getUniqueID, checkUnique } = require("./fileUtil");
 const { convertToGif } = require('./util/ffmpegWrapper');
 const { splitTags } = require('./util/util');
+const AWS = require('aws-sdk');
+AWS.config.update({ region: 'us-east-1' })
+
 
 app.use(bodyParser.json());
-const io = (serveMode === ServeModes.DEV ? require('socket.io')(http) : require('socket.io').listen(https));
+let io = (serveMode === ServeModes.DEV ? require('socket.io')(http) : require('socket.io').listen(https));
+io.set('origins', '*:*');
+
+
+function trasnferToS3(curPath, onUploaded) {
+  console.log(curPath);
+  let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
+  let uploadParams = { Bucket: "gif-it.io", Key: '', Body: '' };
+  let file = curPath;
+
+  var fileStream = fs.createReadStream(file);
+  fileStream.on('error', function (err) {
+    console.log('File Error', err);
+  });
+  uploadParams.Body = fileStream;
+  uploadParams.Key = path.basename(file);
+
+  // call S3 to retrieve upload file to specified bucket
+  s3.upload(uploadParams, function (err, data) {
+    if (err) {
+      console.log("Error", err);
+    } if (data) {
+      console.log("Upload Success", data.Location);
+    }
+    onUploaded();
+  });
+}
+
 
 
 /**
@@ -39,10 +69,20 @@ function sendConversionProgress(socketId, data) {
 }
 
 //onClose(socketId, uploadId, `${uploadId}.gif`, `${uploadId}.thumb.gif`);
-function finishConversion(socketId, uploadId, fileName, thumbFileName) {
+function onGifMade(socketId, uploadId, fileName, thumbFileName) {
   uploadMap[uploadId].fileName = fileName;
   uploadMap[uploadId].thumbFileName = thumbFileName
-  sockets[socketId].emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
+  // write these to S3
+  
+  trasnferToS3(path.join(FilePaths.GIF_SERVE_DIR, fileName), () => {
+    sockets[socketId].emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
+  });
+}
+
+function onThumbMade(thumbName) {
+  trasnferToS3(path.join(FilePaths.GIF_SERVE_DIR, thumbName), () => {
+    console.log("thumbnail made.");
+  });
 }
 
 
@@ -74,7 +114,8 @@ function addSocket(newSocket) {
       quality,
       null,
       sendConversionProgress,
-      finishConversion);
+      onGifMade,
+      onThumbMade);
   });
 
   sockets[socketId].on("ShareRequest", (data) => {
@@ -114,6 +155,7 @@ function addSocket(newSocket) {
  * on connection handler. Defines actions for each socket as it connects.
  */
 io.on("connection", (newSocket) => {
+  console.log("new socket connected");
   addSocket(newSocket);
 });
 
@@ -133,7 +175,7 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
   let ipAddr = req.ip;
 
   // validaion size
-  if (fileSize / (1000 * 1000).toFixed(2) > MAX_UPLOAD_SIZE ) {
+  if (fileSize / (1000 * 1000).toFixed(2) > MAX_UPLOAD_SIZE) {
     if (DEBUG) { console.log(`Chosen file is ${fileSize / (1000 * 1000).toFixed(2)} MB, while ${MAX_UPLOAD_SIZE} MB is the maximum. Returning 400..`) };
     res.status(400).send({ error: `File Too Large. Max Size: ${MAX_UPLOAD_SIZE} Mb.` });
   }
@@ -190,4 +232,3 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
     return req.pipe(busboy);
   }
 });
-

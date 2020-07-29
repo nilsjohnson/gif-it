@@ -10,6 +10,12 @@ const http = require('http').createServer(app);
 const https = require('https');
 const fs = require('fs');
 
+const cors = require('cors');
+app.use(cors());
+
+app.options('/api/videoUpload/:socketId/:tempUploadId', cors());
+
+
 const { Ports, ServeModes, FilePaths} = require('./const');
 
 // default serv mode and debug
@@ -38,8 +44,8 @@ if(serveMode === ServeModes.DEV) {
 let httpsServer;
 
 if(serveMode == ServeModes.PRODUCTION) {
-	const FULL_CHAIN = '/etc/letsencrypt/live/gif-it.io/cert.pem';
-	const PRIVATE_KEY = '/etc/letsencrypt/live/gif-it.io/privkey.pem';
+	const FULL_CHAIN = '/etc/letsencrypt/live/api.gif-it.io/cert.pem';
+	const PRIVATE_KEY = '/etc/letsencrypt/live/api.gif-it.io/privkey.pem';
 	const OPTIONS = {
 		cert: fs.readFileSync(FULL_CHAIN),
 		key: fs.readFileSync(PRIVATE_KEY),
@@ -64,26 +70,26 @@ require('./exploreAPI');
 
 // { index : false } is to allow request for the webroot to get caught by app.get('/*'...)
 // since we need to handle redirects to https
-app.use(express.static(path.join(__dirname, '../build'), { index: false }));
+//app.use(express.static(path.join(__dirname, '../build'), { index: false }));
 app.use(express.static(FilePaths.GIF_SERVE_DIR, { index: false }));
 
-app.get('/*', function (req, res) {
-	if (serveMode === ServeModes.PRODUCTION) {
-		let usingHttps = req.secure;
-		let hasSubDomain = req.headers.host.startsWith("www");
+// app.get('/*', function (req, res) {
+// 	if (serveMode === ServeModes.PRODUCTION) {
+// 		let usingHttps = req.secure;
+// 		let hasSubDomain = req.headers.host.startsWith("www");
 
-		// good, this is how we serve this site.
-		if(usingHttps && !hasSubDomain) {
-			res.sendFile(path.join(__dirname, '../build', 'index.html'));
-		}
-		else {
-			res.redirect("https://gif-it.io");
-		}
-	}
-	else if(serveMode === ServeModes.DEV) {
-		res.sendFile(path.join(__dirname, '../build', 'index.html'));
-	}
-});
+// 		// good, this is how we serve this site.
+// 		if(usingHttps && !hasSubDomain) {
+// 			res.sendFile(path.join(__dirname, '../build', 'index.html'));
+// 		}
+// 		else {
+// 			res.redirect("https://gif-it.io");
+// 		}
+// 	}
+// 	else if(serveMode === ServeModes.DEV) {
+// 		res.sendFile(path.join(__dirname, '../build', 'index.html'));
+// 	}
+// });
 
 http.listen(Ports.HTTP_PORT_NUM, () => {
     console.log(`App listening on port ${Ports.HTTP_PORT_NUM}`);

@@ -31,6 +31,14 @@ class Uploader extends Component {
     this.unprocessedFiles = [];
   }
 
+  componentDidUpdate = () => {
+    if(this.uploads.length === 0 && this.socket) {
+      this.socket.close();
+      this.socket = null;
+      console.log("Socket closed.");
+    }
+  }
+
   // to flag or unflag if a user is dragging files over the drop-zone
   setFilesHovering = (val) => {
     this.setState({

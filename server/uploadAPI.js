@@ -22,7 +22,7 @@ const { app, http, https } = require('./server');
 const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
 const { addGif } = require('./dataAccess');
 const { getUniqueID, checkUnique, writeObj, readObj } = require("./fileUtil");
-const { convertToGif } = require('./util/ffmpegWrapper');
+const { addJob } = require('./util/ffmpegWrapper');
 const { splitTags, trasnferToS3 } = require('./util/util');
 
 // for dev us http, prod use https
@@ -59,7 +59,7 @@ function deleteSocket(socketId) {
  * @param {*} data 
  */
 function sendConversionProgress(socketId, data) {
-  if (DEBUG) { console.log('sendConversionProgress: '); console.log(data); }
+  //if (DEBUG) { console.log('sendConversionProgress: '); console.log(data); }
   connections[socketId].socket.emit("ConversionProgress", data);
 }
 
@@ -146,7 +146,7 @@ function addSocket(newSocket) {
 
     // if there is a destination for this, and an upload id
     if (connections[socketId].uploads[uploadId] && uploadId) {
-      convertToGif(connections[socketId].uploads[uploadId].uploadDst,
+      addJob(connections[socketId].uploads[uploadId].uploadDst,
         path.join(FilePaths.GIF_SAVE_DIR, uploadId + ".gif"),
         socketId,
         uploadId,

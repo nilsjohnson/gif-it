@@ -162,10 +162,44 @@ class Uploader extends Component {
     this.socket.on("ShareResult", (data) => {
       console.log("ShareResult hit");
       console.log(data);
-      const { message } = data;
-      if (message) {
-        alert(message);
+      const { status, uploadId, error } = data;
+
+      if(error) {
+        alert(error);
+        return;
       }
+
+      for(let i = 0; i < this.uploads.length; i++) {
+        if(this.uploads[i].uploadId === uploadId) {
+          this.uploads[i].status = status;
+          break;
+        }
+      }
+
+      this.setState({
+        uploads: this.uploads
+      });
+    });
+
+    this.socket.on("retry", (data) => {
+      console.log("Server requesting retry;");
+      console.log(data);
+      const { uploadId } = data;
+      
+      for(let i = 0; i < this.uploads.length; i++) {
+        if(this.uploads[i].uploadId === uploadId) {
+          this.unprocessedFiles.push(this.uploads[i].file);
+          this.uploads.splice(i, 1);
+          this.curFileNum--;
+          break;
+        }
+      }
+
+      this.setState({
+        uploads: this.uploads
+      });
+
+      this.initUpload();
     });
   }
 
@@ -180,10 +214,11 @@ class Uploader extends Component {
    * Takes files from unprocessedFiles and recursively uploads them.
    */
   upload = () => {
-    console.log(`Starting upload at index ${this.curFileNum}`);
     if (this.curFileNum >= this.uploads.length) {
       return;
     }
+
+    console.log(`Starting upload at index ${this.curFileNum}`);
 
     let curFile = this.uploads[this.curFileNum].file;
     let tempUploadId = this.uploads[this.curFileNum].uploadId;

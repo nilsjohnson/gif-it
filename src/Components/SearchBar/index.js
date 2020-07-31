@@ -7,9 +7,6 @@ import { withStyles } from '@material-ui/styles';
 import { Box, Grid } from '@material-ui/core';
 import AddTag from '../AddTag';
 
-
-
-
 const styles = (theme) => ({
   root: {
     marginTop: theme.spacing(1),

@@ -8,6 +8,7 @@ import { Box, Grid, Typography, Button, FormControl, FormLabel, FormControlLabel
 import { formatBytes } from '../../util/util';
 
 import { withStyles } from '@material-ui/core/styles';
+import GifBox from '../GifBox';
 
 const useStyles = theme => ({
   root: {
@@ -51,14 +52,12 @@ class UploadWell extends Component {
   }
 
   setTags = (event) => {
-    console.log(`tags: ${event.target.value.trim()}`);
     this.setState({
       tags: event.target.value.trim()
     });
   }
 
   setDescription = (event) => {
-    console.log(`description: ${event.target.value.trim()}`);
     this.setState({
       description: event.target.value.trim()
     });
@@ -94,7 +93,8 @@ class UploadWell extends Component {
       servePath,
       status,
       classes,
-      error
+      error,
+      uploadId
     } = this.props;
 
     const { curSpeed, progress } = conversionData;
@@ -204,14 +204,21 @@ class UploadWell extends Component {
   }
 
   render() {
-    const { classes, error } = this.props;
+    const { status, classes, error, uploadId } = this.props;
 
-    return (
-      <Box className={`${classes.root} ${error ? classes.error : ""}`}>
-        {this.getElement()}
-      </Box>
-
-    );
+    if(status !== 'shared') {
+      return (
+        <Box className={`${classes.root} ${error ? classes.error : ""}`}>
+          {this.getElement()}
+        </Box>
+      );
+    }
+    else {
+      return (
+        <GifBox gifId={uploadId}/>
+      );
+    }
+   
   }
 }
 

@@ -248,8 +248,8 @@ function getGifsByTag(tags, callback) {
             }
         });
     });
-    return [];
 }
+
 
 module.exports.getAllGifs = getMostRecent;
 module.exports.addGif = addGif;

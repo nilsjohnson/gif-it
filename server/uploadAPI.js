@@ -23,7 +23,7 @@ const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
 const { addGif } = require('./dataAccess');
 const { getUniqueID, checkUnique, writeObj, readObj } = require("./fileUtil");
 const { addJob } = require('./util/ffmpegWrapper');
-const { splitTags, trasnferToS3 } = require('./util/util');
+const { splitTags, transferGifToS3, deleteFromS3 } = require('./util/util');
 
 // for dev us http, prod use https
 let io = (SERVE_MODE === ServeModes.DEV ? require('socket.io')(http) : require('socket.io').listen(https));
@@ -40,6 +40,7 @@ let connections = {};
  * deletes a socket by its id;
  */
 function deleteSocket(socketId) {
+  deleteUnsharedGifs(socketId);
   if (delete connections[socketId]) {
     if (DEBUG) { console.log(`Socket ${socketId} has been deleted`); }
   } else {
@@ -51,6 +52,22 @@ function deleteSocket(socketId) {
     console.log(connections);
   }
 
+}
+
+/**
+ * Deletes an uploaded object if the users opted to not share it.
+ * @param {*} socketId 
+ */
+function deleteUnsharedGifs(socketId) {
+  if(connections[socketId] && connections[socketId].uploads) {
+    let uploadIds = Object.keys(connections[socketId].uploads);
+
+    for(let i = 0; i < uploadIds.length; i++) {
+      if(!connections[socketId].uploads[uploadIds[i]].shared) {
+        deleteFromS3(`${uploadIds[i]}.gif`);
+      }
+    }
+  }
 }
 
 /**
@@ -84,7 +101,7 @@ function onGifMade(socketId, uploadId, fileName, thumbFileName) {
 
   // if this is production, we transfer to s3
   if (SERVE_MODE === ServeModes.PRODUCTION) {
-    trasnferToS3(path.join(FilePaths.GIF_SAVE_DIR, fileName),
+    transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, fileName),
       (data) => { // on success
         connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
         if (DEBUG) { console.log(`s3 transfer sucess! - ${data}`); }
@@ -109,7 +126,7 @@ function onThumbMade(thumbName) {
   if (DEBUG) { console.log(`onThumbMade called - thumbName: ${thumbName}`); }
 
   if (SERVE_MODE === ServeModes.PRODUCTION) {
-    trasnferToS3(path.join(FilePaths.GIF_SAVE_DIR, thumbName),
+    transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, thumbName),
       (data) => { // if success
         if (DEBUG) { console.log(`Thumbnail s3 transfer success: ${data}`); }
       }),
@@ -193,7 +210,8 @@ function addSocket(newSocket) {
       originalFileName
     ).then((result) => {
       console.log(result);
-      connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, status: "shared" })
+      connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, status: "shared" });
+      connections[socketId].uploads[uploadId].shared = true;
     }).catch(err => {
       connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, error: err.toString() })
     });

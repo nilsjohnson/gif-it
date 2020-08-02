@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Card, Box, Grid, CardMedia } from '@material-ui/core/';
 import { getGifById } from '../../util/data';
+import { ShareBox } from '../ShareBox';
 
 const useStyles = theme => ({
     tag: {
@@ -24,21 +25,21 @@ class GifBox extends Component {
 
     componentDidMount = () => {
         getGifById(this.props.gifId)
-        .then(res => {
-            if(res.ok) {
-                res.json().then(resJson => {
-                    console.log(resJson);
-                    this.setState({
-                        tags: JSON.parse(resJson.tags),
-                        description: resJson.descript
-                    });
-                })
-            }
-            else {
-                console.log(res);
-            }
-        })
-        .catch(err => console.log(err));
+            .then(res => {
+                if (res.ok) {
+                    res.json().then(resJson => {
+                        console.log(resJson);
+                        this.setState({
+                            tags: JSON.parse(resJson.tags),
+                            description: resJson.descript
+                        });
+                    })
+                }
+                else {
+                    console.log(res);
+                }
+            })
+            .catch(err => console.log(err));
     }
 
     render() {
@@ -58,11 +59,11 @@ class GifBox extends Component {
                                     component="img"
                                     alt="Cool Gif"
                                     height="auto"
-                                    image={this.props.gifId+".gif"}
+                                    image={this.props.gifId + ".gif"}
                                     title={"Cool Gif"}
                                 />
                             </Box>
-    
+
                         </Grid>
                         <Box p={1}>
                             <Grid item>
@@ -76,6 +77,17 @@ class GifBox extends Component {
                                     {this.state.tags.map(tag =>
                                         <h4 key={tag} className={classes.tag}>{tag}</h4>
                                     )}
+                                </Grid>
+                                <Grid
+                                    container
+                                    direction="column"
+                                    justify="center"
+                                    alignItems="center"
+                                >
+                                    <ShareBox 
+                                        src={this.props.gifId + ".gif"}
+                                        id={this.props.gifId}
+                                        />                                    
                                 </Grid>
                             </Grid>
                         </Box>

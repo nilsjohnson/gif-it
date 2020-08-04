@@ -25,8 +25,8 @@ const styles = {
 function Header(props) {
   const { classes } = props;
   return (
-    <AppBar position="static" className={classes.navigation}>
-      <Toolbar>
+    <AppBar color={"secondary"} position="static" className={classes.navigation}>
+      <Toolbar >
         <Typography
           variant="h4"
           color="inherit"

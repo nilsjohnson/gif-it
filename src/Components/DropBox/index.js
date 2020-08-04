@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     borderTadius: '5px',
     width: '100%',
     height: '300px',
-    backgroundColor: theme.palette.secondary.light
+    backgroundColor: theme.palette.primary.light
   },
   chooseFiles: {
     opacity: .5,

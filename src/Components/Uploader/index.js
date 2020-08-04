@@ -144,7 +144,7 @@ class Uploader extends Component {
         }
       }
       this.setState({
-        uploads: this.state.uploads
+        uploads: this.uploads
       });
 
     });

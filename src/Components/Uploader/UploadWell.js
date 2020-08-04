@@ -3,8 +3,8 @@ import './style.css';
 import PropTypes from 'prop-types';
 import UploadProgressBox from '../UploadProgressBox';
 import ConversionProgressBox from '../ConversionProgressBox';
-import { TagBox } from '../TagBox';
-import { Box, Grid, Typography, Button, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
+import TagBox  from '../TagBox';
+import { Grid, Typography, Button, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup, Card } from '@material-ui/core';
 import { formatBytes } from '../../util/util';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -14,8 +14,6 @@ const useStyles = theme => ({
   root: {
     margin: theme.spacing(2),
     padding: theme.spacing(2),
-    backgroundColor: theme.palette.primary.dark,
-    borderRadius: theme.spacing(2)
   },
   title: {
     fontSize: 14,
@@ -40,7 +38,7 @@ class UploadWell extends Component {
     super(props)
 
     this.state = ({
-      tags: "",
+      tags: [],
       description: "",
       quality: 'sm'
     });
@@ -51,11 +49,19 @@ class UploadWell extends Component {
     this.setState({ quality: event.target.value });
   }
 
-  setTags = (event) => {
+  addTag = (tag) => {
     this.setState({
-      tags: event.target.value.trim()
+      tags: [...this.state.tags, tag]
     });
   }
+
+  removeTag = (tag) => {
+    let tmp = this.state.tags;
+    console.log(tmp);
+    let index = tmp.findIndex(elem => elem === tag);
+    tmp.splice(index, 1);
+    this.setState({ tags: tmp});
+}
 
   setDescription = (event) => {
     this.setState({
@@ -158,8 +164,8 @@ class UploadWell extends Component {
             justify="center"
             alignItems="center"
           >
-            <Button className={classes.btn} onClick={this.cancel} variant="contained" color="primary">Cancel</Button>
-            <Button className={classes.btn} onClick={this.convert} variant="contained" color="secondary">Convert</Button>
+            <Button className={classes.btn} onClick={this.cancel} variant="contained" color="secondary">Cancel</Button>
+            <Button className={classes.btn} onClick={this.convert} variant="contained" color="primary">Convert</Button>
           </Grid>
         </Grid>
       );
@@ -192,7 +198,9 @@ class UploadWell extends Component {
               convert={this.convert}
               share={this.share}
               cancel={this.cancel}
-              setTags={this.setTags}
+              tags={this.state.tags}
+              addTag={this.addTag}
+              removeTag={this.removeTag}
               setDescription={this.setDescription}
               download={this.triggerDownload}
               servePath={servePath}
@@ -208,9 +216,9 @@ class UploadWell extends Component {
 
     if(status !== 'shared') {
       return (
-        <Box className={`${classes.root} ${error ? classes.error : ""}`}>
+        <Card raised className={`${classes.root} ${error ? classes.error : ""}` }>
           {this.getElement()}
-        </Box>
+        </Card>
       );
     }
     else {

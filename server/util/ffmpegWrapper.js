@@ -148,6 +148,7 @@ function convertToGif(job) {
     }
     // gif was not made successfully
     else {
+      console.log(`Problem converting ${src} to .gif.`);
       onGifMade(socketId, uploadId, null, null);
     }
     if (jobs.length > 0) {

@@ -5,7 +5,7 @@ const styles = (theme) => ({
     tag: {
         cursor: "pointer",
         fontWeight: "bold",
-        color: theme.palette.secondary.dark
+        color: theme.palette.primary.dark
     }
 });
 

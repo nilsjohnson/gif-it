@@ -5,21 +5,32 @@ const { BUCKET_NAME } = require('../const');
 AWS.config.update({ region: 'us-east-1' })
 let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
 
+const { MAX_TAG_LENGTH } = require('../const');
+
 /**
- * @param {*} tags_str A string of tags from the user
- * @return an array of from the input, split by words. 
- * Each Element will be alphanumeric and lowercase.
+ * @param {*} Array of tags
+ * @return Array of tags that have been sanitized
+ * @throws any errors
  */
-function splitTags(tags_str) {
-    let regex = /\w+/g;
-    let arr = tags_str.match(regex);
-    if (arr) {
-        for (let i = 0; i < arr.length; i++) {
-            arr[i] = arr[i].toLowerCase();
+function processTags(tags) {
+    let letters = /^[0-9a-zA-Z ]+$/;
+    let processedTags = [];
+    for(let i = 0; i < tags.length; i++) {
+        let tmp = tags[i].trim();
+        if(tmp.length > 10) {
+            throw(`Max Tag Length Is ${MAX_TAG_LENGTH}`);
         }
-        return arr;
+        if(!tmp.match(letters)) {
+            throw(`Tag must match ${letters}`)
+        }
+        processedTags.push(tmp);
     }
-    return null;
+
+    if(processedTags.length === 0) {
+        throw("Please Add Tags.");
+    }
+
+    return processedTags;
 }
 
 
@@ -83,7 +94,7 @@ function deleteFromS3(key = "", onSucess = null, onFail = null) {
     })
 }
 
-
+exports.processTags = processTags;
 exports.deleteFromS3 = deleteFromS3;
-exports.splitTags = splitTags;
+exports.splitTags = processTags;
 exports.transferGifToS3 = transferGifToS3;

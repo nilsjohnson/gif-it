@@ -19,6 +19,7 @@ const FilePaths = {
 }
 
 const MAX_UPLOAD_SIZE = 70; // in MB
+const MAX_TAG_LENGTH = 32;
 
 const PROD_SERVER = `https://api.gif-it.io`;
 const DEV_SERVER = `http://localhost:3000`;
@@ -26,6 +27,7 @@ const DEV_SERVER = `http://localhost:3000`;
 const BUCKET_NAME = 'gif-it.io';
 
 
+exports.MAX_TAG_LENGTH = MAX_TAG_LENGTH;
 exports.BUCKET_NAME = BUCKET_NAME;
 exports.PROD_SERVER = PROD_SERVER;
 exports.DEV_SERVER = DEV_SERVER;

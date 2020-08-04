@@ -23,7 +23,7 @@ const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
 const { addGif } = require('./dataAccess');
 const { getUniqueID, checkUnique, writeObj, readObj } = require("./fileUtil");
 const { addJob } = require('./util/ffmpegWrapper');
-const { splitTags, transferGifToS3, deleteFromS3 } = require('./util/util');
+const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
 
 // for dev us http, prod use https
 let io = (SERVE_MODE === ServeModes.DEV ? require('socket.io')(http) : require('socket.io').listen(https));
@@ -40,7 +40,10 @@ let connections = {};
  * deletes a socket by its id;
  */
 function deleteSocket(socketId) {
-  deleteUnsharedGifs(socketId);
+  if(SERVE_MODE === ServeModes.PRODUCTION) {
+    // if we actually sent objects to s3 we want to delete them if not shared.
+    deleteUnsharedGifs(socketId);
+  } 
   if (delete connections[socketId]) {
     if (DEBUG) { console.log(`Socket ${socketId} has been deleted`); }
   } else {
@@ -183,10 +186,19 @@ function addSocket(newSocket) {
     if (DEBUG) { console.log(`ShareRequest - `); console.log(data); }
 
     const { uploadId, tags, description } = data;
+    let processedTags;
 
-    if (!tags) {
-      connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, message: "Please Provide a Tag." })
+    try {
+      processedTags = processTags(tags);
+    }
+    catch(err) {
+      connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, message: err })
       return;
+    }
+    
+    if(DEBUG) {
+      console.log("processed tags:");
+      console.log(processedTags);
     }
 
     if(!connections[socketId].uploads[uploadId]) {
@@ -199,12 +211,11 @@ function addSocket(newSocket) {
     let originalFileName = connections[socketId].uploads[uploadId].originalFileName;
     let fileName = connections[socketId].uploads[uploadId].fileName;
     let thumbFileName = connections[socketId].uploads[uploadId].thumbFileName;
-    let tagArr = splitTags(tags);
 
     addGif(uploadId,
       fileName,
       thumbFileName,
-      tagArr,
+      processedTags,
       description,
       ipAddr,
       originalFileName

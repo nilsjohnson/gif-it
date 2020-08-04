@@ -5,14 +5,14 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/styles';
 import { Box, Grid } from '@material-ui/core';
-import AddTag from '../AddTag';
+import AddTag from './AddTag';
 
 const styles = (theme) => ({
   root: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.secondary.dark,
     borderRadius: theme.spacing(1)
   },
   searchContainer: {

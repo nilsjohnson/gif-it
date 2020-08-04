@@ -37,8 +37,8 @@ const AppBarCollapse = props => (
             </Link>
         </ButtonAppBarCollapse>
         <div className={props.classes.buttonBar} id="appbar-collapse">
-            <Button className={props.classes.btn} variant="outlined" color="secondary" href="./">Convert to .gif</Button>
-            <Button className={props.classes.btn} variant="outlined" color="secondary" href='./explore'>Explore</Button>
+            <Button className={props.classes.btn} variant="outlined" color="primary" href="./">Convert to .gif</Button>
+            <Button className={props.classes.btn} variant="outlined" color="primary" href='./explore'>Explore</Button>
         </div>
     </div>
 );

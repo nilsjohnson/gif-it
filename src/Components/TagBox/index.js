@@ -40,7 +40,7 @@ class TagBox extends Component {
             inputError: false
         });
 
-        this.visibleSuggestion;
+        this.visibleSuggestion = [];
     }
 
     isValid = (tag) => {

@@ -39,6 +39,8 @@ class Uploader extends Component {
     }
   }
 
+  
+
   // to flag or unflag if a user is dragging files over the drop-zone
   setFilesHovering = (val) => {
     this.setState({

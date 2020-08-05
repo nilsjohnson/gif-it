@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Button, TextField } from '@material-ui/core';
+import { Grid, Button, TextField, MenuItem, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import Tag from './Tag'
 
 const useStyles = theme => ({
@@ -38,12 +39,14 @@ class TagBox extends Component {
             curInput: "",
             inputError: false
         });
+
+        this.visibleSuggestion;
     }
 
     isValid = (tag) => {
         console.log(`testing tag '${tag}'`);
         let letters = /^[0-9a-zA-Z ]+$/;
-        if(tag.match(letters)) {
+        if (tag.match(letters)) {
             return true;
         }
 
@@ -51,7 +54,7 @@ class TagBox extends Component {
     }
 
     onEnterPressed = (event) => {
-        if(event.keyCode === 13) {
+        if (event.keyCode === 13) {
             console.log("enter pressed");
             this.addTag();
         }
@@ -66,14 +69,14 @@ class TagBox extends Component {
         let tag = this.state.curInput.replace(/#/g, '').trim();
         tag = tag.replace(/\s+/g, ' ');
 
-        if(!this.isValid(tag)) {
+        if (!this.isValid(tag)) {
             this.setState({
                 inputError: true
             });
             return;
         }
 
-        if(this.props.tags.includes(tag)) {
+        if (this.props.tags.includes(tag)) {
             console.log("This tag is already added.");
             this.setState({
                 curInput: ""
@@ -87,6 +90,7 @@ class TagBox extends Component {
         });
 
         this.props.addTag(tag);
+        this.visibleSuggestion = [];
     }
 
     removeTag = (tag) => {
@@ -94,19 +98,47 @@ class TagBox extends Component {
     }
 
     setCurInput = (event) => {
-        if(this.state.inputError) {
+        // clear error if applicable
+        if (this.state.inputError) {
             this.setState({
                 inputError: false
             });
         }
-        console.log(event.target.value);
+        // set the input
         this.setState({
             curInput: event.target.value
         });
+
+        console.log("here is the new value!");
+        console.log(event.target.value);
+
+        this.props.getSuggestedTags(event.target.value);
+    }
+
+    getNumUses = (tag) => {
+        for(let i = 0; i < this.visibleSuggestion.length; i++) {
+            if(this.visibleSuggestion[i].tag === tag) {
+                return this.visibleSuggestion[i].numUses;
+            }
+        }
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, suggestion, error } = this.props;
+        console.log("suggestion");
+        console.log(suggestion);
+        
+        this.visibleSuggestion = [];
+
+        // if there is an active suggestion
+        if (suggestion && this.state.curInput != "") {
+            // only show them if they match the current input
+            for(let i = 0; i < suggestion.length; i++) {
+                if(suggestion[i].tag.startsWith(this.state.curInput)) {
+                    this.visibleSuggestion.push(suggestion[i]);
+                }
+            }
+        }
 
         return (
             <Grid
@@ -126,30 +158,61 @@ class TagBox extends Component {
                     spacing={1}
                 >
                     <Grid item xs={12} sm={12}>
-                        {/* <Box className={`${this.state.inputError ? classes.error : ""} ${classes.tagContainer}`}>
-                            <InputBase
-                                onKeyDown={this.onEnterPressed}
-                                onChange={this.setCurInput}
-                                className={classes.tagInput}
-                                placeholder="Enter Tags"
-                                inputProps={{ 'aria-label': 'Enter Tags' }}
-                                value={this.state.curInput}
-                            />
-                            <IconButton onClick={this.addTag} aria-label="Enter Tags">
-                                <AddIcon />
-                            </IconButton>
-                        </Box> */}
-                        <TextField fullWidth label={"Please Enter Tags"} variant="outlined" 
-                        onChange={this.setCurInput}
-                        onKeyDown={this.onEnterPressed}
-                        value={this.state.curInput}
-                        InputProps={{
-                            endAdornment: (
-                                <IconButton onClick={this.addTag} aria-label="Enter Tags">
-                                <AddIcon />
-                            </IconButton>
-                            ),
-                           }}
+                        <Autocomplete
+                            onChange={(event, newValue) => {
+                                if (typeof newValue === 'string') {
+                                    console.log("String found")
+                                    this.setState({
+                                        curInput: newValue
+                                    }, this.addTag)
+                                } 
+                                else if (newValue && newValue.inputValue) {
+                                    console.log("wrapped")
+                                    this.setState({
+                                        curInput: newValue.inputValue
+                                    }, this.addTag)
+                                }
+                                else {
+                                    console.log("????");
+                                }
+                                this.visibleSuggestion = [];
+                            }}
+                            value={this.state.curInput}
+                            id="free-solo-demo"
+                            freeSolo
+                            options={this.visibleSuggestion.map((suggestion) => suggestion.tag)}
+                            renderOption = {suggestion => {
+                                return(<span>
+                                        <Typography component="span">
+                                            {suggestion}
+                                        </Typography>
+                                        <Typography component="span" variant="subtitle2">
+                                            {` (${this.getNumUses(suggestion)})`}
+                                        </Typography>
+                                    </span>)
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Please Enter Tags"
+                                    margin="normal"
+                                    variant="outlined"
+                                    onChange={this.setCurInput}
+                                    onKeyDown={this.onEnterPressed}
+                                    value={this.state.curInput}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        endAdornment: (
+                                            <IconButton onClick={this.addTag} aria-label="Enter Tags">
+                                            <AddIcon />
+                                        </IconButton>
+                                        ),
+                                       }}
+                                />
+                            )}
+                            disableClearable
+                            forcePopupIcon={false}
+                            
                         />
                     </Grid>
                     <Grid item>
@@ -159,10 +222,12 @@ class TagBox extends Component {
                             justify="flex-start"
                             alignItems="flex-start"
                         >
-                           {this.props.tags.map(elem => (
-                                <Tag key={elem} tag={elem} removeTag={this.removeTag}/>
-                           ))}
-
+                            {this.props.tags.map(elem => (
+                                <Tag key={elem} tag={elem} removeTag={this.removeTag} />
+                            ))}
+                        </Grid>
+                        <Grid item>
+                                {(error ? error : "")}
                         </Grid>
 
                     </Grid>
@@ -183,7 +248,7 @@ class TagBox extends Component {
 
 TagBox.propTypes = {
     tags: PropTypes.array
-  };
-  
+};
+
 
 export default withStyles(useStyles)(TagBox);

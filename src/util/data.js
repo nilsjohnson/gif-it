@@ -1,5 +1,5 @@
 // note: this bool must be set propery prior to building for production
-let production = true;
+let production = false;
 let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
 
 /**
@@ -52,6 +52,7 @@ function getPopularTags(limit = 10) {
   return fetch(`${server}/api/popularTags/${limit}`);
 }
 
+// this is used to set the CORS policy. See UploadAPI
 function getServer() { return server};
 
 export { getServer, getPopularTags, getGifById, getNew, uploadFile, search }

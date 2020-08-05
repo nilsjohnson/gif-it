@@ -85,10 +85,15 @@ class UploadWell extends Component {
     this.props.share(uploadId, tags, description);
   }
 
+  // TODO delete this..
   triggerDownload = () => {
     alert("download not yet implemented");
   }
 
+  getSuggestedTags = (curInput) => {
+    const { getSuggestedTags, uploadId } = this.props;
+    getSuggestedTags(uploadId, curInput);
+  }
   getElement = () => {
 
     const {
@@ -100,7 +105,7 @@ class UploadWell extends Component {
       status,
       classes,
       error,
-      uploadId
+      suggestion
     } = this.props;
 
     const { curSpeed, progress } = conversionData;
@@ -204,6 +209,9 @@ class UploadWell extends Component {
               setDescription={this.setDescription}
               download={this.triggerDownload}
               servePath={servePath}
+              getSuggestedTags={this.getSuggestedTags}
+              suggestion={suggestion}
+              error={error}
             />
           </Grid>
         </Grid>

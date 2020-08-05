@@ -79,6 +79,29 @@ function getGifById(gifId, callback) {
     });
 }
 
+function getSuggestedTags(input, callback, limit = 3) {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            throw err;
+        }
+        let sql = `SELECT tag.tag, COUNT(gif_tag.tag_id) as numUses
+        FROM tag
+            JOIN gif_tag ON tag.id = gif_tag.tag_id
+        WHERE tag.tag LIKE '${input}%' 
+        GROUP BY tag.tag
+        ORDER BY numUses desc
+        limit ${limit}`;
+
+        connection.query(sql, (error, results, fields) => {
+            callback(results);
+            connection.release();
+            if (error) {
+                throw error;
+            }
+        });
+    });
+}
+
 
 /**
  * This function performs a database transaction to insert a gif into the database. The following 
@@ -251,6 +274,7 @@ function getGifsByTag(tags, callback) {
 }
 
 
+module.exports.getSuggestedTags = getSuggestedTags;
 module.exports.getAllGifs = getMostRecent;
 module.exports.addGif = addGif;
 module.exports.getGifsByTag = getGifsByTag;

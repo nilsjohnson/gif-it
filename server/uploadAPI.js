@@ -20,7 +20,7 @@ const path = require('path');
 const Busboy = require('busboy');
 const { app, http, https } = require('./server');
 const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
-const { addGif } = require('./dataAccess');
+const { addGif, getSuggestedTags } = require('./dataAccess');
 const { getUniqueID, checkUnique, writeObj, readObj } = require("./fileUtil");
 const { addJob } = require('./util/ffmpegWrapper');
 const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
@@ -40,10 +40,10 @@ let connections = {};
  * deletes a socket by its id;
  */
 function deleteSocket(socketId) {
-  if(SERVE_MODE === ServeModes.PRODUCTION) {
+  if (SERVE_MODE === ServeModes.PRODUCTION) {
     // if we actually sent objects to s3 we want to delete them if not shared.
     deleteUnsharedGifs(socketId);
-  } 
+  }
   if (delete connections[socketId]) {
     if (DEBUG) { console.log(`Socket ${socketId} has been deleted`); }
   } else {
@@ -62,11 +62,11 @@ function deleteSocket(socketId) {
  * @param {*} socketId 
  */
 function deleteUnsharedGifs(socketId) {
-  if(connections[socketId] && connections[socketId].uploads) {
+  if (connections[socketId] && connections[socketId].uploads) {
     let uploadIds = Object.keys(connections[socketId].uploads);
 
-    for(let i = 0; i < uploadIds.length; i++) {
-      if(!connections[socketId].uploads[uploadIds[i]].shared) {
+    for (let i = 0; i < uploadIds.length; i++) {
+      if (!connections[socketId].uploads[uploadIds[i]].shared) {
         deleteFromS3(`${uploadIds[i]}.gif`);
       }
     }
@@ -175,7 +175,7 @@ function addSocket(newSocket) {
         sendConversionProgress,
         onGifMade,
         onThumbMade);
-    } 
+    }
     else {
       console.log(`Couldnt convert upload ${uploadId} on socket ${socketId} to .gif`);
       sendRetryRequest(socketId, uploadId);
@@ -188,23 +188,23 @@ function addSocket(newSocket) {
     const { uploadId, tags, description } = data;
     let processedTags;
 
-    try {
-      processedTags = processTags(tags);
-    }
-    catch(err) {
-      connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, message: err })
-      return;
-    }
-    
-    if(DEBUG) {
-      console.log("processed tags:");
-      console.log(processedTags);
-    }
-
-    if(!connections[socketId].uploads[uploadId]) {
+    if (!connections[socketId].uploads[uploadId]) {
       console.log(`Upload ${uploadId} not found. Sending retry request.`);
       sendRetryRequest(socketId, uploadId);
       return;
+    }
+
+    try {
+      processedTags = processTags(tags);
+    }
+    catch (err) {
+      connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, error: err })
+      return;
+    }
+
+    if (DEBUG) {
+      console.log("processed tags:");
+      console.log(processedTags);
     }
 
     let ipAddr = connections[socketId].uploads[uploadId].ipAddr;
@@ -227,10 +227,27 @@ function addSocket(newSocket) {
       connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, error: err.toString() })
     });
   });
+
+  connections[socketId].socket.on("SuggestTags", (data) => {
+    if (DEBUG) { console.log(`SuggestTags: `); console.log(data); }
+
+    const { uploadId, input } = data;
+
+    getSuggestedTags(input, (results) => {
+      if (results) {
+        connections[socketId].socket.emit("SuggestionsFound", {
+          uploadId: uploadId,
+          tags: results
+        });
+      }
+    });
+  });
 }
 
+
+
 function sendRetryRequest(socketId, uploadId) {
-  connections[socketId].socket.emit("retry", {uploadId: uploadId});
+  connections[socketId].socket.emit("retry", { uploadId: uploadId });
 }
 
 /**

@@ -173,7 +173,16 @@ class Uploader extends Component {
       const { status, uploadId, error } = data;
 
       if(error) {
-        alert(error);
+        for(let i = 0; i < this.uploads.length; i++) {
+          if(this.uploads[i].uploadId === uploadId) {
+            this.uploads[i].error = error;
+            break;
+          }
+        }
+
+        this.setState({
+          uploads: this.uploads
+        });
         return;
       }
 
@@ -209,6 +218,25 @@ class Uploader extends Component {
 
       this.initUpload();
     });
+
+    this.socket.on("SuggestionsFound", (data) => {
+      console.log("suggestions found");
+      console.log(data);
+      const { uploadId, tags } = data;
+
+      for(let i = 0; i < this.uploads.length; i++) {
+        if(this.uploads[i].uploadId === uploadId) {
+          this.uploads[i].suggestion = tags;
+          console.log("suggestion set");
+          break;
+        }
+      }
+
+      this.setState({
+        uploads: this.uploads
+      });
+
+    })
   }
 
   setError = (index, error) => {
@@ -404,6 +432,21 @@ class Uploader extends Component {
     });
   }
 
+  getSuggestedTags = (uploadId, input) => {
+    console.log("fetching suggested tags");
+    
+    console.log("input.trim:");
+    console.log(input);
+
+    if(input.trim().length <= 2) {
+      return;
+    }
+
+    this.socket.emit("SuggestTags", { 
+      uploadId: uploadId,
+      input: input });
+  }
+
   render() {
     return (
       <Box>
@@ -447,6 +490,8 @@ class Uploader extends Component {
                   conversionData={upload.conversionData}
                   status={upload.status}
                   conversionComplete={upload.conversionComplete}
+                  getSuggestedTags={this.getSuggestedTags}
+                  suggestion={upload.suggestion}
                   share={this.share}
                   convert={this.convert}
                   removeUpload={this.removeUpload}

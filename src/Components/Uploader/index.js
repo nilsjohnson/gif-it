@@ -21,62 +21,78 @@ class Uploader extends Component {
       filesHovering: false
     });
 
-    this.numFilesChosen = 0;
-    this.curFileNum = 0;
-    this.uploads = [];
-
-    // the socket for this upload session
-    this.socket = null;
-    // holding bin for files after the user has dragged/dropped or selected them.
+    // Holding bin for files after the user has dragged/dropped or selected them.
+    // Given that there are 3 ways for users to select files, we funnel all files
+    // to this array to process them with less repeated code.
     this.unprocessedFiles = [];
+    // To mark the file we are uploading.
+    this.curFileNum = 0
+    // To give each file a unique temp_id
+    this.numFilesChosen = 0;
+    // To hold the uploads. We prevent concurrency issues by having this as the single
+    // source of truth. Makes it easier to treat this.state.uploads as an immutable object.
+    this.uploads = [];
+    // The socket for this upload session
+    this.socket = null;
   }
 
   componentDidUpdate = () => {
-    if(this.uploads.length === 0 && this.socket) {
+    if (this.uploads.length === 0 && this.socket) {
       this.socket.close();
       this.socket = null;
       console.log("Socket closed.");
     }
   }
 
-  
+  /**
+   * updates the the upload object and sets the state.
+   * @param {*} uploadId     The upload to update
+   * @param {*} obj          The values to update. If field doesnt exist, it will be added.
+   */
+  updateUploads = (uploadId, obj) => {
+    let keys = Object.keys(obj);
 
-  // to flag or unflag if a user is dragging files over the drop-zone
+    for (let i = 0; i < this.uploads.length; i++) {
+      if (this.uploads[i].uploadId === uploadId) {
+        for (let j = 0; j < keys.length; j++) {
+          this.uploads[i][keys[j]] = obj[keys[j]];
+        }
+      }
+    }
+
+    this.setState({ uploads: this.uploads })
+  }
+
+
+  /**
+   *  To flag or unflag if a user is dragging files over the drop-zone
+   * @param {*} val true or false
+   */
   setFilesHovering = (val) => {
     this.setState({
       filesHovering: val
     });
   }
 
-  /*
-    opens the socket and defines the communication actions.
-  */
+
+  /**
+   * Opens the socket and defines the communication actions.
+   */
   createSocket = () => {
     console.log("creating socket");
     this.socket = socketIOClient(getServer());
 
     /*
-      to handle upload progress updates
+      Upon connect, we start uploading.
     */
-    this.socket.on("UploadProgress", data => {
-      const { uploadId, percentUploaded } = data;
-
-      for (let i = 0; i < this.uploads.length; i++) {
-        if (this.uploads[i].uploadId === uploadId) {
-          this.uploads[i].percentUploaded = percentUploaded;
-          break;
-        }
-      }
-
-      this.setState({
-        uploads: this.uploads
-      });
-
+    this.socket.on("connect", () => {
+      console.log(`Socket ${this.socket.id} connected`);
+      this.upload();
     });
 
     /*
-      Updates the placeholder upload data with 'real' data
-      about the upload from the server.
+      Updates the placeholder uploader with its 'real' id
+      and sets its status to uploading.
     */
     this.socket.on("UploadStart", data => {
       console.log('Upload Started, upload object returned: ');
@@ -84,129 +100,118 @@ class Uploader extends Component {
 
       const { uploadId, tempUploadId } = data;
 
-      //let tmp = this.state.uploads;
-      for (let i = 0; i < this.uploads.length; i++) {
-        if (this.uploads[i].uploadId === tempUploadId) {
-          this.uploads[i].status = "uploading";
-          this.uploads[i].uploadId = uploadId;
-        }
-      }
-
-      this.setState({
-        uploads: this.uploads
+      this.updateUploads(tempUploadId, {
+        status: "uploading",
+        uploadId: uploadId
       });
-
     });
 
     /*
-      Provides the upload with metadata about the video to 
-      determine conversion options and marks the upload as complete.
-      Note: the next upload gets triggered by a 200 from the POST and not here.
+      To handle upload progress updates
+    */
+    this.socket.on("UploadProgress", data => {
+      const { uploadId, percentUploaded } = data;
+
+      this.updateUploads(uploadId, {
+        percentUploaded: percentUploaded
+      });
+    });
+
+    /*
+      Sets the uploads status to the next step, 'settingOptions'.
     */
     this.socket.on("uploadComplete", (data) => {
+      console.log("uploadComplete");
+      console.log(data);
       const { uploadId } = data;
 
-      for (let i = 0; i < this.uploads.length; i++) {
-        if (this.uploads[i].uploadId === uploadId) {
-          this.uploads[i].status = "settingOptions";
-          console.log(`Marked ${uploadId} as 'settingOptions'`);
-          break;
-        }
-      }
-
-      this.setState({ uploads: this.uploads });
-    });
-
-    /**
-     * Upon connect, we start uploading.
-     */
-    this.socket.on("connect", () => {
-      console.log(`Socket ${this.socket.id} connected`);
-      this.upload();
-    });
-
-    /**
-     * Marks the conversion as complete so we can serve the .gif
-     */
-    this.socket.on("ConversionComplete", (data) => {
-      console.log("ConversionComplete");
-      console.log(data);
-      let { servePath } = data;
-
-      for (let i = 0; i < this.uploads.length; i++) {
-        if (this.uploads[i].uploadId === data.uploadId) {
-          if (servePath) {
-            this.uploads[i].servePath = servePath;
-            this.uploads[i].status = "complete";
-            break;
-          }
-          else {
-            this.uploads[i].error = "File could not be converted. The video is most likely not a supported format."
-          }
-        }
-      }
-      this.setState({
-        uploads: this.uploads
+      this.updateUploads(uploadId, {
+        status: "settingOptions"
       });
-
     });
 
-    /**
-     * To handle conversion progress updates
+    /*
+      To handle conversion progress updates
      */
     this.socket.on("ConversionProgress", (data) => {
       // console.log("Conversion Data:");
       // console.log(data);
-      for (let i = 0; i < this.uploads.length; i++) {
-        if (this.uploads[i].uploadId === data.uploadId) {
-          this.uploads[i].conversionData = data;
-          break;
-        }
-      }
 
-      this.setState({
-        uploads: this.uploads
+      const { uploadId } = data;
+
+      this.updateUploads(uploadId, {
+        conversionData: data
       });
     });
 
+    /*
+      Marks the conversion as complete so we can serve the .gif
+     */
+    this.socket.on("ConversionComplete", (data) => {
+      console.log("ConversionComplete");
+      console.log(data);
+      let { servePath, uploadId } = data;
+
+      if (servePath) {
+        this.updateUploads(uploadId, {
+          servePath: servePath,
+          status: "complete"
+        });
+      }
+      else {
+        this.updateUploads(uploadId, {
+          error: "File could not be converted. The video is most likely not a supported format."
+        });
+      }
+    });
+
+    /*
+      As user enters tags, we try to suggest what they might be looking for.
+    */
+    this.socket.on("SuggestionsFound", (data) => {
+      console.log("suggestions found");
+      console.log(data);
+      const { uploadId, tags } = data;
+
+      this.updateUploads(uploadId, {
+        suggestions: tags
+      });
+    });
+
+    /*
+      If the user shares, we update the status to 'shared'
+    */
     this.socket.on("ShareResult", (data) => {
       console.log("ShareResult hit");
       console.log(data);
       const { status, uploadId, error } = data;
 
-      if(error) {
-        for(let i = 0; i < this.uploads.length; i++) {
-          if(this.uploads[i].uploadId === uploadId) {
-            this.uploads[i].error = error;
-            break;
-          }
-        }
-
-        this.setState({
-          uploads: this.uploads
+      if (error) {
+        this.updateUploads(uploadId, {
+          error: error
         });
+
         return;
       }
 
-      for(let i = 0; i < this.uploads.length; i++) {
-        if(this.uploads[i].uploadId === uploadId) {
-          this.uploads[i].status = status;
-          break;
-        }
-      }
-
-      this.setState({
-        uploads: this.uploads
+      this.updateUploads(uploadId, {
+        status: status
       });
     });
 
+    /*
+      If a socket is disconnected it will reconnect but reassign its ID. This means that the
+      server can possibly lose track of information. So if the server receives a request that it
+      doesnt have information about, it tells the client to start over again.
+    */
     this.socket.on("retry", (data) => {
       console.log("Server requesting retry;");
       console.log(data);
       const { uploadId } = data;
-      
-      for(let i = 0; i < this.uploads.length; i++) {
-        if(this.uploads[i].uploadId === uploadId) {
+
+      // moves the file back to the unprocessed array then retrys
+      for (let i = 0; i < this.uploads.length; i++) {
+        if (this.uploads[i].uploadId === uploadId) {
           this.unprocessedFiles.push(this.uploads[i].file);
           this.uploads.splice(i, 1);
           this.curFileNum--;
@@ -214,39 +219,11 @@ class Uploader extends Component {
         }
       }
 
-      this.setState({
-        uploads: this.uploads
-      });
-
+      this.setState({ uploads: this.uploads });
       this.initUpload();
     });
+  } // end def socket event handlers.
 
-    this.socket.on("SuggestionsFound", (data) => {
-      console.log("suggestions found");
-      console.log(data);
-      const { uploadId, tags } = data;
-
-      for(let i = 0; i < this.uploads.length; i++) {
-        if(this.uploads[i].uploadId === uploadId) {
-          this.uploads[i].suggestion = tags;
-          console.log("suggestion set");
-          break;
-        }
-      }
-
-      this.setState({
-        uploads: this.uploads
-      });
-
-    })
-  }
-
-  setError = (index, error) => {
-    this.uploads[index].error = error;
-    this.setState({
-      uploads: this.uploads
-    });
-  }
 
   /**
    * Takes files from unprocessedFiles and recursively uploads them.
@@ -328,9 +305,22 @@ class Uploader extends Component {
       // this will trigger an upload.
       this.createSocket();
     }
+    // otherwise we're set to upload!
     else {
       this.upload();
     }
+  }
+
+  /**
+   * Sets an upload error by its index. Used for catching gross errors
+   * before even attempting upload. - i.e user selects a file that is too big,
+   * incorrect extension, etc.
+   */
+  setError = (index, error) => {
+    this.uploads[index].error = error;
+    this.setState({
+      uploads: this.uploads
+    });
   }
 
   /**
@@ -371,6 +361,10 @@ class Uploader extends Component {
     this.initUpload();
   }
 
+  /**
+   * 'Activates' drop-zone
+   * @param {*} ev 
+   */
   dragOverHandler = (ev) => {
     ev.preventDefault();
     ev.dataTransfer.dropEffect = "move";
@@ -378,7 +372,7 @@ class Uploader extends Component {
   }
 
   /**
-   * Deactivates drop-zone if user hovers but doesn't drop files.
+   * 'Deactivates' drop-zone if user hovers but doesn't drop files.
    */
   dragEndHandler = (ev) => {
     this.setFilesHovering(false);
@@ -403,6 +397,10 @@ class Uploader extends Component {
     });
   }
 
+  /**
+   * Removes an upload by its id.
+   * @param {*} uploadId 
+   */
   removeUpload = (uploadId) => {
     console.log(`removing upload ${uploadId}`);
     let i = 0;
@@ -420,7 +418,7 @@ class Uploader extends Component {
   }
 
   /**
-   * Tells the server to add file to database with given tags.
+   * Tells the server to add gif to database with given tags.
    */
   share = (uploadId, tags, description) => {
     console.log(uploadId);
@@ -434,19 +432,25 @@ class Uploader extends Component {
     });
   }
 
-  getSuggestedTags = (uploadId, input) => {
+  /**
+   * Fetches suggested tags based on partial input.
+   * @param {*} uploadId 
+   * @param {*} input 
+   */
+  requestTagSuggestions = (uploadId, input) => {
     console.log("fetching suggested tags");
-    
+
     console.log("input.trim:");
     console.log(input);
 
-    if(input.trim().length <= 2) {
+    if (input.trim().length <= 2) {
       return;
     }
 
-    this.socket.emit("SuggestTags", { 
+    this.socket.emit("SuggestTags", {
       uploadId: uploadId,
-      input: input });
+      input: input
+    });
   }
 
   render() {
@@ -492,8 +496,8 @@ class Uploader extends Component {
                   conversionData={upload.conversionData}
                   status={upload.status}
                   conversionComplete={upload.conversionComplete}
-                  getSuggestedTags={this.getSuggestedTags}
-                  suggestion={upload.suggestion}
+                  requestTagSuggestions={this.requestTagSuggestions}
+                  suggestions={upload.suggestions}
                   share={this.share}
                   convert={this.convert}
                   removeUpload={this.removeUpload}

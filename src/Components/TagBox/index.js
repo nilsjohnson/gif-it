@@ -112,7 +112,7 @@ class TagBox extends Component {
         console.log("here is the new value!");
         console.log(event.target.value);
 
-        this.props.getSuggestedTags(event.target.value);
+        this.props.requestTagSuggestions(event.target.value);
     }
 
     getNumUses = (tag) => {
@@ -124,18 +124,18 @@ class TagBox extends Component {
     }
 
     render() {
-        const { classes, suggestion, error } = this.props;
+        const { classes, suggestions, error } = this.props;
         console.log("suggestion");
-        console.log(suggestion);
+        console.log(suggestions);
         
         this.visibleSuggestion = [];
 
         // if there is an active suggestion
-        if (suggestion && this.state.curInput != "") {
+        if (suggestions && this.state.curInput != "") {
             // only show them if they match the current input
-            for(let i = 0; i < suggestion.length; i++) {
-                if(suggestion[i].tag.startsWith(this.state.curInput)) {
-                    this.visibleSuggestion.push(suggestion[i]);
+            for(let i = 0; i < suggestions.length; i++) {
+                if(suggestions[i].tag.startsWith(this.state.curInput)) {
+                    this.visibleSuggestion.push(suggestions[i]);
                 }
             }
         }

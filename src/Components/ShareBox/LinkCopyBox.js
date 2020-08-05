@@ -9,10 +9,6 @@ const useStyles = makeStyles((theme) => ({
     // }
 }));
 
-function click(event) {
-
-}
-
 export function LinkCopyBox(props) {
     const classes = useStyles();
 

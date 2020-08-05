@@ -90,9 +90,9 @@ class UploadWell extends Component {
     alert("download not yet implemented");
   }
 
-  getSuggestedTags = (curInput) => {
-    const { getSuggestedTags, uploadId } = this.props;
-    getSuggestedTags(uploadId, curInput);
+  requestTagSuggestions = (curInput) => {
+    const { requestTagSuggestions, uploadId } = this.props;
+    requestTagSuggestions(uploadId, curInput);
   }
   getElement = () => {
 
@@ -105,7 +105,7 @@ class UploadWell extends Component {
       status,
       classes,
       error,
-      suggestion
+      suggestions
     } = this.props;
 
     const { curSpeed, progress } = conversionData;
@@ -209,8 +209,8 @@ class UploadWell extends Component {
               setDescription={this.setDescription}
               download={this.triggerDownload}
               servePath={servePath}
-              getSuggestedTags={this.getSuggestedTags}
-              suggestion={suggestion}
+              requestTagSuggestions={this.requestTagSuggestions}
+              suggestions={suggestions}
               error={error}
             />
           </Grid>

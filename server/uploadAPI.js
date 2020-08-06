@@ -21,7 +21,7 @@ const Busboy = require('busboy');
 const { app, http, https } = require('./server');
 const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
 const { addGif, getSuggestedTags } = require('./dataAccess');
-const { getUniqueID, checkUnique, writeObj, readObj } = require("./fileUtil");
+const { getUniqueID, checkUnique } = require("./util/fileUtil");
 const { addJob } = require('./util/ffmpegWrapper');
 const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
 

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require("crypto");
-const { FilePaths } = require('./const');
+const { FilePaths } = require('../const');
 
 
 
@@ -22,8 +22,12 @@ function getFileName_noExtension(fileName) {
 }
 
 function getUniqueID() {
-    let id = crypto.randomBytes(8).toString("hex");
-    return id;
+    let id = crypto.randomBytes(6).toString("base64");
+    while (id.includes('/') || id.includes('+')) {
+        id = crypto.randomBytes(6).toString("base64");
+    }
+
+   return id;
 }
 
 // TODO, if fileName already exists, 
@@ -36,14 +40,14 @@ function checkUnique(fileName) {
 Writes object to file as JSON. Async.
 */
 function writeObj(obj, name) {
-	fs.writeFile(name, JSON.stringify(obj, null, 2), function (err) {
-		if (err) {
-			console.log(error)
+    fs.writeFile(name, JSON.stringify(obj, null, 2), function (err) {
+        if (err) {
+            console.log(error)
         }
         else {
             console.log("file saved!");
         }
-	});
+    });
 }
 
 /*
@@ -54,10 +58,10 @@ function readObj(name) {
     try {
         obj = JSON.parse(fs.readFileSync(name));
     }
-	catch(err) {
+    catch (err) {
         //console.log(err);
     }
-	return obj;
+    return obj;
 }
 
 

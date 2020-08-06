@@ -18,15 +18,15 @@ If at any point we cannot find an upload or socket in the 'connections' object, 
 const fs = require('fs');
 const path = require('path');
 const Busboy = require('busboy');
-const { app, http, https } = require('./server');
+const { app, httpServer, https } = require('./server');
 const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
-const { addGif, getSuggestedTags } = require('./dataAccess');
+const { addGif, getSuggestedTags } = require('./util/dataAccess');
 const { getUniqueID, checkUnique } = require("./util/fileUtil");
 const { addJob } = require('./util/ffmpegWrapper');
 const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
 
 // for dev us http, prod use https
-let io = (SERVE_MODE === ServeModes.DEV ? require('socket.io')(http) : require('socket.io').listen(https));
+let io = (SERVE_MODE === ServeModes.DEV ? require('socket.io')(httpServer) : require('socket.io').listen(https));
 // since our api is on a subdomain, we need to allow CORS
 io.set('origins', '*:*'); // TODO research the best way to do this to make sure only api.gif-it uses this.
 
@@ -54,7 +54,6 @@ function deleteSocket(socketId) {
     console.log(`Here are the current connections.`);
     console.log(connections);
   }
-
 }
 
 /**

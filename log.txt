@@ -1,0 +1,24 @@
+2020-08-06 11:06:51 -  Cannot read property 'uploadDst' of undefined 
+TypeError: Cannot read property 'uploadDst' of undefined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:169:54)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-08-06 11:07:47 Cannot read property 'uploadDst' of undefined 
+TypeError: Cannot read property 'uploadDst' of undefined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:169:54)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-08-06 11:08:24 Cannot read property 'uploadDst' of undefined 
+TypeError: Cannot read property 'uploadDst' of undefined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:169:54)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+

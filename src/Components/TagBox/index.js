@@ -131,7 +131,7 @@ class TagBox extends Component {
         this.visibleSuggestion = [];
 
         // if there is an active suggestion
-        if (suggestions && this.state.curInput != "") {
+        if (suggestions && this.state.curInput !== "") {
             // only show them if they match the current input
             for(let i = 0; i < suggestions.length; i++) {
                 if(suggestions[i].tag.startsWith(this.state.curInput)) {

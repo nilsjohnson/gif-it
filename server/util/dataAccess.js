@@ -10,10 +10,7 @@ var pool = mysql.createPool({
 });
 
 function getDateTime() {
-    let d = moment().format('YYYY-MM-DD HH:mm:ss');
-    console.log("right now: ");
-    console.log(d);
-    return d;
+    return moment().format('YYYY-MM-DD HH:mm:ss');
 }
 
 function getMostPopularTags(qty, callback) {

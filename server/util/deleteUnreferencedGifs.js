@@ -1,7 +1,7 @@
 // This script compare all s3 objects to whats in the gif table and delete the *.gif files that are not referenced.
 
 const AWS = require('aws-sdk');
-const { BUCKET_NAME } = require('./const');
+const { BUCKET_NAME } = require('../const');
 AWS.config.update({ region: 'us-east-1' })
 let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
 var path = require('path');
@@ -10,7 +10,7 @@ const DRY = true;
 global.DEBUG = true;
 
 var mysql = require('mysql');
-const { deleteFromS3 } = require('./util/util');
+const { deleteFromS3 } = require('./util');
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'bryn',

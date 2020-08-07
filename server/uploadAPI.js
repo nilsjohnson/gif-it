@@ -18,17 +18,21 @@ If at any point we cannot find an upload or socket in the 'connections' object, 
 const fs = require('fs');
 const path = require('path');
 const Busboy = require('busboy');
-const { app, httpServer, https } = require('./server');
-const { ServeModes, FilePaths, MAX_UPLOAD_SIZE } = require('./const');
+const { app, http } = require('./server');
+const { FilePaths, MAX_UPLOAD_SIZE } = require('./const');
 const { addGif, getSuggestedTags } = require('./util/dataAccess');
 const { getUniqueID, checkUnique } = require("./util/fileUtil");
 const { addJob } = require('./util/ffmpegWrapper');
 const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
 
-// for dev us http, prod use https
-let io = (SERVE_MODE === ServeModes.DEV ? require('socket.io')(httpServer) : require('socket.io').listen(https));
-// since our api is on a subdomain, we need to allow CORS
-io.set('origins', '*:*'); // TODO research the best way to do this to make sure only api.gif-it uses this.
+let io = require('socket.io')(http) 
+
+if(DEV) {
+  io.set('origins', 'http://localhost:3000'); 
+}
+else {
+  io.set('origins', 'https://gif-it.io:*')
+}
 
 
 /**
@@ -40,10 +44,8 @@ let connections = {};
  * deletes a socket by its id;
  */
 function deleteSocket(socketId) {
-  if (SERVE_MODE === ServeModes.PRODUCTION) {
-    // if we actually sent objects to s3 we want to delete them if not shared.
-    deleteUnsharedGifs(socketId);
-  }
+  deleteUnsharedGifs(socketId);
+
   if (delete connections[socketId]) {
     if (DEBUG) { console.log(`Socket ${socketId} has been deleted`); }
   } else {
@@ -101,8 +103,8 @@ function onGifMade(socketId, uploadId, fileName, thumbFileName) {
     thumbFileName: ${thumbFileName}`);
   }
 
-  // if this is production, we transfer to s3
-  if (SERVE_MODE === ServeModes.PRODUCTION) {
+  // if running production, send to s3
+  if (!DEV) {
     transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, fileName),
       (data) => { // on success
         connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
@@ -127,7 +129,7 @@ function onGifMade(socketId, uploadId, fileName, thumbFileName) {
 function onThumbMade(thumbName) {
   if (DEBUG) { console.log(`onThumbMade called - thumbName: ${thumbName}`); }
 
-  if (SERVE_MODE === ServeModes.PRODUCTION) {
+  if (!DEV) {
     transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, thumbName),
       (data) => { // if success
         if (DEBUG) { console.log(`Thumbnail s3 transfer success: ${data}`); }

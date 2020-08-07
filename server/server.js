@@ -1,94 +1,68 @@
 /*
-This is the entry point to the application's api.
-
-To run in production mode and serve https with requests going to 'api.gif-it.io'
-	$ node ./server/server.js -p 
-
-To run in dev mode and server http with requests going to 'localhost'		
-	$ node ./server/server.js
-	
-Additionally, you may also pass in the -d flag if you wish to print debug statements.	
+Usage:
+--debug		App will print debug statements
+--dev 		App in "dev" mode and wont transfer objects to s3
  */
 
 const express = require('express');
 const app = express();
-const httpServer = require('http').createServer(app);
-const https = require('https');
-const fs = require('fs');
+const http = require('http').createServer(app);
 const bodyParser = require('body-parser');
 const cors = require('cors');
-let { Ports, ServeModes, FilePaths } = require('./const');
 const terminate = require('./terminate');
+const { FilePaths, PORT_NUM } = require('./const')
 
-app.options('/api/videoUpload/:socketId/:tempUploadId', cors());
-// since our server is on the 'api.gif-it' subdomain, we need cors
-app.use(cors()); // TODO I think we can pass in arguments to only allow cross origin reqests from the api subdomain
+let corsOptions = {
+	origin: 'https://gif-it.io',
+	optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
 
-// to read bodys as JSON
-app.use(bodyParser.json());
 
 // default serve mode and debug
-global.SERVE_MODE = ServeModes.DEV;
 global.DEBUG = false;
+global.DEV = false;
 
-for (let i = 0; i < process.argv.length; i++) {
-	switch (process.argv[i]) {
-		case '-p':
-			SERVE_MODE = ServeModes.PRODUCTION;
-			break;
-		case '-d':
+for(let i = 2; i < process.argv.length; i++) {
+	switch(process.argv[i]) { 
+		case '--debug':
 			DEBUG = true;
+			console.log("App set to print DEBUG statements.");
+			break;	
+		case '--dev':
+			DEV = true;
+			console.log("DEV set to true. Gifs will be served from this server and objects will not be written to s3.");
+			corsOptions = {
+				origin: 'http://localhost:3000',
+				optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+			  }
+			app.use(express.static(FilePaths.GIF_SAVE_DIR, { index: false }));
 			break;
-	}
+		default:
+			console.log(`${process.argv[i]} is not a command.`);
+			console.log(`usage: [--dubug] [--dev]`);
+			console.log(`Use --debug to print debug statements. Use --dev to not do s3 transfers and serve the gifs using this app.`);	  
+			process. exit();  
+		}
 }
 
-if (DEBUG) {
-	console.log("App set to print DEBUG statements.");
-}
-
-let httpsServer;
-
-// if production get the ssl cert and create https server
-if (SERVE_MODE === ServeModes.PRODUCTION) {
-	const FULL_CHAIN = '/etc/letsencrypt/live/api.gif-it.io/cert.pem';
-	const PRIVATE_KEY = '/etc/letsencrypt/live/api.gif-it.io/privkey.pem';
-	const OPTIONS = {
-		cert: fs.readFileSync(FULL_CHAIN),
-		key: fs.readFileSync(PRIVATE_KEY),
-		requestCert: false,
-		rejectUnauthorized: false,
-	};
-	console.log("creating https server..");
-	httpsServer = https.createServer(OPTIONS, app);
-}
-// otherwise we skip that step and serve a gif directory (since we dont have a dev s3 bucket set up)
-else if (SERVE_MODE === ServeModes.DEV) {
-	console.log(`App in development mode.`);
-	console.log(`Serving gifs from ${FilePaths.GIF_SAVE_DIR}`);
-	app.use(express.static(FilePaths.GIF_SAVE_DIR, { index: false }));
-}
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
 
 // exports
 exports.app = app;
-exports.http = httpServer;
-exports.https = httpsServer;
+exports.http = http;
 
 // define APIs
-require('./uploadAPI');
 require('./util/dataAccess')
 require('./exploreAPI');
+require('./uploadAPI');
 
 // listen for API requests
-httpServer.listen(Ports.HTTP_PORT_NUM, () => {
-	console.log(`App listening on port ${Ports.HTTP_PORT_NUM}`);
+http.listen(PORT_NUM, () => {
+	console.log(`App listening on port ${PORT_NUM}`);
 });
-// listen for https
-if (SERVE_MODE === ServeModes.PRODUCTION) {
-	console.log("Serving over https.")
-	httpsServer.listen(Ports.HTTPS_PORT_NUM);
-}
 
-const exitHandler = terminate(httpServer, {
+const exitHandler = terminate(http, {
 	coredump: false,
 	timeout: 500
 });

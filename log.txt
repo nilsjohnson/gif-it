@@ -22,3 +22,16 @@ TypeError: Cannot read property 'uploadDst' of undefined
     at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
     at processTicksAndRejections (internal/process/task_queues.js:79:11))
 
+2020-08-06 15:45:33 SERVE_MODE is not defined 
+ReferenceError: SERVE_MODE is not defined
+    at deleteSocket (/home/nils/gif-it/server/uploadAPI.js:42:3)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:158:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at Socket.emit (/home/nils/gif-it/node_modules/socket.io/lib/socket.js:142:10)
+    at Socket.onclose (/home/nils/gif-it/node_modules/socket.io/lib/socket.js:454:8)
+    at Client.onclose (/home/nils/gif-it/node_modules/socket.io/lib/client.js:254:24)
+    at Socket.emit (events.js:322:22)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at Socket.onClose (/home/nils/gif-it/node_modules/engine.io/lib/socket.js:318:10))
+

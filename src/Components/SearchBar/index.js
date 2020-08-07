@@ -12,8 +12,9 @@ const styles = (theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     padding: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.dark,
-    borderRadius: theme.spacing(1)
+    backgroundColor: theme.palette.primary.light,
+    //backgroundColor: "white",
+    borderRadius: theme.spacing(1),
   },
   searchContainer: {
     display: 'flex',

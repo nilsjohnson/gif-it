@@ -110,6 +110,7 @@ class Uploader extends Component {
       To handle upload progress updates
     */
     this.socket.on("UploadProgress", data => {
+      console.log(data);
       const { uploadId, percentUploaded } = data;
 
       this.updateUploads(uploadId, {

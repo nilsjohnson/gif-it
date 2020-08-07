@@ -319,7 +319,7 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
       file.on('data', function (data) {
         bytesRecieved = bytesRecieved + data.length;
         let percentUploaded = Math.round(bytesRecieved * 100 / fileSize);
-        if(DEBUG) { console.log(`upload progress: ${percentUploaded}% for uploadId ${uploadId}`); }
+        //if(DEBUG) { console.log(`upload progress: ${percentUploaded}% for uploadId ${uploadId}`); }
         connections[socketId].socket.emit("UploadProgress", {
           uploadId: uploadId,
           percentUploaded: percentUploaded,

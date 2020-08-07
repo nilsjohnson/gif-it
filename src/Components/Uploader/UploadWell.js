@@ -40,7 +40,7 @@ class UploadWell extends Component {
     this.state = ({
       tags: [],
       description: "",
-      quality: 'sm'
+      quality: 'md'
     });
 
   }
@@ -150,9 +150,9 @@ class UploadWell extends Component {
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Output Size:</FormLabel>
                   <RadioGroup aria-label="Size" name="size" onChange={this.setConversionQuality}>
-                    <FormControlLabel checked={this.state.quality === 'sm' ? true : false} value="sm" control={<Radio />} label="Small (256 pixels wide)" />
-                    <FormControlLabel checked={this.state.quality === 'md' ? true : false} value="md" control={<Radio />} label="Medium (512 pixels wide)" />
-                    <FormControlLabel checked={this.state.quality === 'lg' ? true : false} value="lg" control={<Radio />} label="Large (640 pixels wide)" />
+                    <FormControlLabel checked={this.state.quality === 'sm' ? true : false} value="sm" control={<Radio />} label="Small (500 pixels wide)" />
+                    <FormControlLabel checked={this.state.quality === 'md' ? true : false} value="md" control={<Radio />} label="Medium (750 pixels wide)" />
+                    <FormControlLabel checked={this.state.quality === 'lg' ? true : false} value="lg" control={<Radio />} label="Large (1000 pixels wide)" />
                   </RadioGroup>
                 </FormControl>
               </Grid>

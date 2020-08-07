@@ -19,29 +19,29 @@ const DEBUG_CONVERT = false;
 function getOptions(src, dst, quality) {
   if (quality === QUALITY.THUMB) {
     return ['-i', src,
-      '-ss', '0', '-t', '3', // start at 0 and make a 3 second gif
-      '-vf', 'fps=6,scale=150:-1',
+      '-ss', '0', '-t', '7', // start at 0 and make a 3 second gif
+      '-vf', 'fps=6,scale=300:-1',
       '-loop', '0', // infinate loop
       '-nostdin', // disable interaction
       dst]
   }
   if (quality === QUALITY.SM) {
     return ['-i', src,
-      '-vf', 'fps=10,scale=256:-1',
+      '-vf', 'fps=12,scale=500:-1',
       '-loop', '0', // infinate loop
       '-nostdin', // disable interaction
       dst];
   }
   if (quality === QUALITY.MD) {
     return ['-i', src,
-      '-vf', 'fps=10,scale=512:-1',
+      '-vf', 'fps=12,scale=750:-1',
       '-loop', '0', // infinate loop
       '-nostdin', // disable interaction
       dst];
   }
   if (quality === QUALITY.LG) {
     return ['-i', src,
-      '-vf', 'fps=10,scale=640:-1',
+      '-vf', 'fps=12,scale=1000:-1',
       '-loop', '0', // infinate loop
       '-nostdin', // disable interaction
       dst];

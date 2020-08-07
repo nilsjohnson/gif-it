@@ -3,7 +3,7 @@ import './style.css';
 import PropTypes from 'prop-types';
 import UploadProgressBox from '../UploadProgressBox';
 import ConversionProgressBox from '../ConversionProgressBox';
-import TagBox  from '../TagBox';
+import TagBox  from './TagBox';
 import { Grid, Typography, Button, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup, Card } from '@material-ui/core';
 import { formatBytes } from '../../util/util';
 

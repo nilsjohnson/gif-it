@@ -34,6 +34,9 @@ const useStyles = makeStyles({
   },
 });
 
+/**
+ * A simple progress bar. 
+ */
 export default function ProgressBar(props) {
   const classes = useStyles();
 

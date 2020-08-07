@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { Grid } from '@material-ui/core';
 import { LinkCopyBox } from "./LinkCopyBox";
 
+
+/**
+ * This component is used to show links for the various ways to share a gif.
+ */
 export function ShareBox(props) {
     return (
             <Grid

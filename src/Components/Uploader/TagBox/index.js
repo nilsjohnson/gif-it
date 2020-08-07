@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Button, TextField, MenuItem, Typography } from '@material-ui/core';
+import { Grid, Button, TextField, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Tag from './Tag'
+
+const MAX_TAG_LENGTH = 32;
 
 const useStyles = theme => ({
     tagContainer: {
@@ -24,18 +26,18 @@ const useStyles = theme => ({
         backgroundColor: theme.palette.primary.light,
         margin: theme.spacing(1),
         borderRadius: theme.spacing(1)
-    },
-    error: {
-        backgroundColor: theme.palette.error.main
     }
 });
 
+/**
+ * This compoment allows users to enter tags
+ * TODO move the description input into its own component.
+ */
 class TagBox extends Component {
     constructor(props) {
         super(props)
 
         this.state = ({
-            //tags: [],
             curInput: "",
             inputError: false
         });
@@ -43,10 +45,10 @@ class TagBox extends Component {
         this.visibleSuggestion = [];
     }
 
-    isValid = (tag) => {
+    isValidTag = (tag) => {
         console.log(`testing tag '${tag}'`);
         let letters = /^[0-9a-zA-Z ]+$/;
-        if (tag.match(letters)) {
+        if (tag.match(letters) && tag.length <= MAX_TAG_LENGTH) {
             return true;
         }
 
@@ -66,10 +68,9 @@ class TagBox extends Component {
     addTag = () => {
         // remove any 'hash tags' and make any spacing single
         // to avoid tags like 'cute   cat'
-        let tag = this.state.curInput.replace(/#/g, '').trim();
-        tag = tag.replace(/\s+/g, ' ');
+        let tag = this.makeTag(this.state.curInput);
 
-        if (!this.isValid(tag)) {
+        if (!this.isValidTag(tag)) {
             this.setState({
                 inputError: true
             });
@@ -85,8 +86,10 @@ class TagBox extends Component {
         }
 
         console.log("adding " + tag);
+
         this.setState({
-            curInput: ""
+            curInput: "",
+            inputError: false
         });
 
         this.props.addTag(tag);
@@ -97,22 +100,56 @@ class TagBox extends Component {
         this.props.removeTag(tag);
     }
 
-    setCurInput = (event) => {
-        // clear error if applicable
-        if (this.state.inputError) {
-            this.setState({
-                inputError: false
-            });
+    makeTag = (input) => {
+        // trim it
+        let tag = input.trim();
+        // remove a leading #
+        if(tag.startsWith('#')) {
+            tag = tag.substring(1)
         }
-        // set the input
+        // enforce single spacing for multi-word tags
+        tag = tag.replace(/\s+/g, ' ');
+        return tag;
+    }
+
+    setCurInput = (event) => {
+        let input = event.target.value;
+        let tag = this.makeTag(input);
+        let inputError = false;
+
+        console.log(`input: '${input}', tag: '${tag}'`);
+
+        // if the input is empty or just a hashtag, we dont show an error
+        if(input.trim() === '' || input.trim() === '#') {
+            this.setState({
+                curInput: input,
+                inputError: inputError
+            });
+            return;
+        }
+
+        // if this isn't a valid tag
+        if(!this.isValidTag(tag)) {
+            // mark input error
+            inputError = true;
+            console.log('Tag invalid. Not requesting suggestions. Marking error.');
+        }
+        else {
+            // otherwise look for suggestions to complete this tag
+            console.log('Tag was valid. Requesting suggestions.');
+            this.props.requestTagSuggestions(tag);
+        }
+
         this.setState({
-            curInput: event.target.value
+            curInput: input,
+            inputError: inputError
         });
+    }
 
-        console.log("here is the new value!");
-        console.log(event.target.value);
-
-        this.props.requestTagSuggestions(event.target.value);
+    handleBlur = () => {
+        console.log("handlin' the blur.");
+        console.log(this.state.curInput);
+        this.addTag();
     }
 
     getNumUses = (tag) => {
@@ -157,7 +194,7 @@ class TagBox extends Component {
                     alignItems="stretch"
                     spacing={1}
                 >
-                    <Grid item xs={12} sm={12}>
+                    <Grid item >
                         <Autocomplete
                             onChange={(event, newValue) => {
                                 if (typeof newValue === 'string') {
@@ -199,7 +236,9 @@ class TagBox extends Component {
                                     variant="outlined"
                                     onChange={this.setCurInput}
                                     onKeyDown={this.onEnterPressed}
+                                    onBlur={this.handleBlur}
                                     value={this.state.curInput}
+                                    error={this.state.inputError ? true : false}
                                     InputProps={{
                                         ...params.InputProps,
                                         endAdornment: (
@@ -211,8 +250,7 @@ class TagBox extends Component {
                                 />
                             )}
                             disableClearable
-                            forcePopupIcon={false}
-                            
+                            forcePopupIcon={false}  
                         />
                     </Grid>
                     <Grid item>
@@ -229,7 +267,6 @@ class TagBox extends Component {
                         <Grid item>
                                 {(error ? error : "")}
                         </Grid>
-
                     </Grid>
                 </Grid>
 

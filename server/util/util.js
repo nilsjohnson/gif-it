@@ -7,23 +7,46 @@ let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
 
 const { MAX_TAG_LENGTH } = require('../const');
 
+
+function isValidTag(tag) {
+    console.log(`testing tag '${tag}'`);
+    let letters = /^[0-9a-zA-Z ]+$/;
+    if (tag.match(letters) && tag.length <= MAX_TAG_LENGTH) {
+        return true;
+    }
+
+    return false;
+}
+
+function makeTag(input) {
+    // trim it
+    let tag = input.trim();
+    // remove a leading #
+    if(tag.startsWith('#')) {
+        tag = tag.substring(1)
+    }
+    // enforce single spacing for multi-word tags
+    tag = tag.replace(/\s+/g, ' ');
+    return tag;
+}
+
 /**
  * @param {*} Array of tags
  * @return Array of tags that have been sanitized
  * @throws any errors
  */
 function processTags(tags) {
-    let letters = /^[0-9a-zA-Z ]+$/;
     let processedTags = [];
+
     for(let i = 0; i < tags.length; i++) {
-        let tmp = tags[i].trim();
-        if(tmp.length > 10) {
-            throw(`Max Tag Length Is ${MAX_TAG_LENGTH}`);
+        let tag = makeTag(tags[i]);
+        if(isValidTag(tag)) {
+            processedTags.push(tag);
         }
-        if(!tmp.match(letters)) {
-            throw(`Tag must match ${letters}`)
+        else {
+            // Note this should never happen, since we validae client-side.
+            throw(`${tags[i]} is not a valid tag.`);
         }
-        processedTags.push(tmp);
     }
 
     if(processedTags.length === 0) {

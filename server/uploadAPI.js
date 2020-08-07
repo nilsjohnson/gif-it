@@ -24,7 +24,6 @@ const { addGif, getSuggestedTags } = require('./util/dataAccess');
 const { getUniqueID, checkUnique } = require("./util/fileUtil");
 const { addJob } = require('./util/ffmpegWrapper');
 const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
-const { connect } = require('http2');
 
 let io = require('socket.io')(http) 
 
@@ -320,12 +319,15 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
       file.on('data', function (data) {
         bytesRecieved = bytesRecieved + data.length;
         let percentUploaded = Math.round(bytesRecieved * 100 / fileSize);
-        //if(DEBUG) { console.log(`upload progress: ${percentUploaded}% for uploadId ${uploadId}`); }
-        if(connections[socket]) {
+        if(DEBUG) { console.log(`upload progress: ${percentUploaded}% for uploadId ${uploadId}`); }
+        if(connections[socketId]) {
           connections[socketId].socket.emit("UploadProgress", {
             uploadId: uploadId,
             percentUploaded: percentUploaded,
           });
+        }
+        else {
+          console.log(`No socket to send upload progress to for socket ${socketId}`);
         }
       });
 

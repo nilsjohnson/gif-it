@@ -24,6 +24,7 @@ const { addGif, getSuggestedTags } = require('./util/dataAccess');
 const { getUniqueID, checkUnique } = require("./util/fileUtil");
 const { addJob } = require('./util/ffmpegWrapper');
 const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
+const { connect } = require('http2');
 
 let io = require('socket.io')(http) 
 
@@ -320,10 +321,12 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
         bytesRecieved = bytesRecieved + data.length;
         let percentUploaded = Math.round(bytesRecieved * 100 / fileSize);
         //if(DEBUG) { console.log(`upload progress: ${percentUploaded}% for uploadId ${uploadId}`); }
-        connections[socketId].socket.emit("UploadProgress", {
-          uploadId: uploadId,
-          percentUploaded: percentUploaded,
-        });
+        if(connect[socket]) {
+          connections[socketId].socket.emit("UploadProgress", {
+            uploadId: uploadId,
+            percentUploaded: percentUploaded,
+          });
+        }
       });
 
       file.pipe(fs.createWriteStream(uploadDst));

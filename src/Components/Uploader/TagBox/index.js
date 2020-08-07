@@ -194,7 +194,7 @@ class TagBox extends Component {
                     alignItems="stretch"
                     spacing={1}
                 >
-                    <Grid item >
+                    <Grid item xs={12}>
                         <Autocomplete
                             onChange={(event, newValue) => {
                                 if (typeof newValue === 'string') {

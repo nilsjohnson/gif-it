@@ -66,10 +66,8 @@ class SearchBar extends Component {
   }
 
   addTagToSearch = (tag) => {
-    let tmp = this.state.input;
-
     this.setState({
-      input: tmp.trim() + " " + tag
+      input: tag
     }, () => {
       this.search();
     });

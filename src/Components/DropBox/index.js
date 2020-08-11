@@ -4,9 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   dropBox: {
-    marginTop: '1em',
-    border: '4px dashed #19D192',
-    borderTadius: '5px',
+    margin: theme.spacing(1),
+    border: `4px dashed ${theme.palette.secondary.light}`,
     width: '100%',
     height: '300px',
     backgroundColor: theme.palette.primary.light

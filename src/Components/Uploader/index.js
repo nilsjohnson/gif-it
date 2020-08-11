@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import socketIOClient from "socket.io-client";
-import './style.css';
-import UploadWell from "./UploadWell";
+import Upload from "./Upload";
 import { uploadFile, getServer } from "../../util/data"
 import { DropBox } from "../DropBox";
 import { Grid, Box } from "@material-ui/core";
@@ -486,7 +485,7 @@ class Uploader extends Component {
           <Grid item container xs={12} sm={8}>
             {this.state.uploads.map(upload =>
               <Grid item xs={12} key={upload.uploadId + "_grid"}>
-                <UploadWell
+                <Upload
                   key={upload.uploadId}
                   uploadId={upload.uploadId}
                   fileName={upload.file.name}

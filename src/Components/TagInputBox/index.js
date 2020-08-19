@@ -1,21 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Button, TextField, Typography } from '@material-ui/core';
+import { Grid, TextField, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import Tag from './Tag'
+import Tag from '../Tag/Tag'
 
 const MAX_TAG_LENGTH = 32;
 
 const useStyles = theme => ({
-    tagContainer: {
-        display: "flex",
-        border: "2px solid " + theme.palette.primary.main,
-        borderRadius: theme.spacing(1),
-        padding: theme.spacing(1)
-    },
     tagInput: {
         flexGrow: 1
     },
@@ -81,7 +75,6 @@ class TagBox extends Component {
         }
 
         console.log("Adding " + tag);
-
 
         this.props.addTag(tag);
         this.resetState();
@@ -254,8 +247,8 @@ class TagBox extends Component {
                         justify="flex-start"
                         alignItems="flex-start"
                     >
-                        {this.props.tags.map(elem => (
-                            <Tag key={elem} tag={elem} removeTag={this.removeTag} />
+                        {this.props.tags.map((tag, index) => (
+                            <Tag key={index} tag={tag} removeTag={this.removeTag} />
                         ))}
                     </Grid>
                     <Grid item>

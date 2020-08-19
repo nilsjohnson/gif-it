@@ -115,7 +115,9 @@ class Explore extends Component {
       <div>
         <Header />
         <Container>
+          <Box m={2}>
           {this.getView(gifId)}
+          </Box>
         </Container>
       </div>
     );

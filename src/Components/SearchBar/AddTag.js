@@ -10,10 +10,6 @@ const styles = (theme) => ({
 });
 
 class AddTag extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     addTag = () => {
         this.props.addTagToSearch(this.props.tag);
     }

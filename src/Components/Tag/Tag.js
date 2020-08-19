@@ -1,14 +1,21 @@
 import React from 'react'
+import PropTypes from "prop-types";
 import { makeStyles } from '@material-ui/core/styles';
 import CancelIcon from '@material-ui/icons/Cancel';
 import IconButton from '@material-ui/core/IconButton';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     tagContainer: {
         backgroundColor: theme.palette.primary.light,
         margin: theme.spacing(1),
-        paddingLeft: theme.spacing(2),
-        borderRadius: theme.spacing(1),
+        borderRadius: theme.spacing(1)
+    },
+    withButton: {
+        paddingLeft: theme.spacing(1),
+    },
+    withoutButton: {
+        padding: theme.spacing(1)
     },
     iconContainer: {
         verticalAlign: 'middle',
@@ -28,17 +35,22 @@ export default function Tag(props) {
     };
 
     return (
-        <span className={classes.tagContainer}>
-            <span>
+        <span className={`${classes.tagContainer} ${props.removeTag ? classes.withButton : classes.withoutButton}`}>
+            <Typography component='span' variant='body1'>
                 {"#" + props.tag}
-            </span>
-            <span className={classes.iconContainer}>
+            </Typography>
+            {props.removeTag &&  <span className={classes.iconContainer}>
                 <IconButton onClick={removeTag} aria-label="search">
                     <CancelIcon />
                 </IconButton>
-
-            </span>
+            </span>  }
+            
         </span>
     );
 }
 
+Tag.propTypes = {
+    tag: PropTypes.string,
+    removeTag: PropTypes.func
+  }
+  

@@ -1,17 +1,8 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { TextField, Grid, Tooltip } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-    // input: {
-    //     width: "100%"
-    // }
-}));
 
 export function LinkCopyBox(props) {
-    const classes = useStyles();
-
     const [open, setOpen] = React.useState(false);
 
     const handleTooltipClose = () => {

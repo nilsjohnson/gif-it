@@ -1,5 +1,5 @@
 // note: this bool must be set propery prior to building for production
-let production = true;
+let production = false;
 let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
 
 /**

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import TagInputBox from './TagInputBox';
+import TagInputBox from '../TagInputBox';
 import { Grid, Button } from '@material-ui/core';
 import EnterDescription from './EnterDescription';
 

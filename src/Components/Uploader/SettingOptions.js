@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Grid, Typography, Button, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup, Card } from '@material-ui/core';
+import { Grid, Typography, Button, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 class SettingOptions extends Component {
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
 
 
-  }
+  // }
 
   render() {
     const { cancel, convert, fileName, classes, setSize, size } = this.props;

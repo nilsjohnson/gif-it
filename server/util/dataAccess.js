@@ -139,6 +139,9 @@ function addGif(uploadId, fileName, thumbFileName, tags, description, ipAddr, or
                         return;
                     }
 
+                    console.log("Heres the desc:");
+                    console.log(description);
+
                     // 2.) insert the upload
                     let upload_sql = `INSERT INTO upload SET id = ?, date = ?, ipAddr = ?, originalFileName = ?`;
                     console.log("upload_sql: " + upload_sql);

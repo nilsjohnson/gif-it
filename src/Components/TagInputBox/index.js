@@ -25,7 +25,6 @@ const useStyles = theme => ({
 
 /**
  * This compoment allows users to enter tags
- * TODO move the description input into its own component.
  */
 class TagBox extends Component {
     constructor(props) {
@@ -36,10 +35,12 @@ class TagBox extends Component {
             inputError: false,
             errorMessage: ''
         });
+
+        this.inputFromSuggestion = false;
     }
 
     onEnterPressed = (event) => {
-        if (event.keyCode === 13) {
+        if (event.keyCode === 13 && !this.inputFromSuggestion) {
             this.addTag();
         }
     }
@@ -56,7 +57,7 @@ class TagBox extends Component {
     validates and adds a tag to the state
     */
     addTag = () => {
-        if(this.state.inputError) {
+        if (this.state.inputError) {
             console.log(`'${this.state.curInput}' is not a valid tag. Cannot add it.`);
             return;
         }
@@ -68,7 +69,7 @@ class TagBox extends Component {
             this.resetState();
             return;
         }
-        if(tag === '') {
+        if (tag === '') {
             return;
         }
 
@@ -83,7 +84,6 @@ class TagBox extends Component {
     }
 
     /**
-     * 
      * @param {string} tag A santitized Tag
      * @return empty string if its a valid tag, otherwise an error message.
      */
@@ -97,6 +97,10 @@ class TagBox extends Component {
         return `Must be alphanumeric and less that ${MAX_TAG_LENGTH} characters.`;
     }
 
+    /**
+     * Sanitizes a tag by getting rid of leading whitespace and '#' if present
+     * @param {*} input 
+     */
     makeTag = (input) => {
         // trim it
         let tag = input.trim();
@@ -109,8 +113,12 @@ class TagBox extends Component {
         return tag;
     }
 
-    setCurInput = (event) => {
-        let input = event.target.value;
+    /**
+     * Takes an input string, validates it an adds it to state
+     * @param {*} input 
+     * @param {*} onComplete 
+     */
+    setCurInput_fromString = (input, onComplete = null) => {
         let tag = this.makeTag(input);
         let inputError = false;
 
@@ -128,20 +136,29 @@ class TagBox extends Component {
         let errorMessage = this.validateTag(tag);
 
         // if the tag is syntactically correct, request suggestions
-        if(!errorMessage) {
+        if (!errorMessage) {
             this.props.requestTagSuggestions(tag);
         }
-        
+
         this.setState({
             curInput: input,
             inputError: errorMessage ? true : false,
             errorMessage: errorMessage
-        });
+        }, onComplete);
+    }
+
+    /**
+     * gets the the value from an event and adds it to the state
+     * @param {} event 
+     */
+    setCurInput = (event) => {
+        console.log("no suggestion up");
+        let input = event.target.value;
+        this.setCurInput_fromString(input);
     }
 
     handleBlur = () => {
-        console.log("handlin' the blur.");
-        this.addTag();
+        console.log("on blur called");
     }
 
     // this is a little weird. I would prefer to get the number in the pervious
@@ -157,7 +174,10 @@ class TagBox extends Component {
 
     render() {
         const { suggestions, error } = this.props;
-    
+
+        // given that we dont know how quickly the user
+        // will recieve the suggestions, we decide what to show
+        // during render. 
         let visibleSuggestions = [];
 
         // if there is an active suggestion
@@ -180,26 +200,32 @@ class TagBox extends Component {
             >
                 <Grid item xs={12}>
                     <Autocomplete
-                        onChange={(event, newValue) => {
-                            if (typeof newValue === 'string') {
-                                console.log("String found")
-                                this.setState({
-                                    curInput: newValue
-                                }, this.addTag)
+                        onChange={(event, newVal) => {
+                            console.log("autocomplete onChange called");
+                            if(newVal) {
+                                this.setCurInput_fromString(newVal, this.addTag);
                             }
-                            else if (newValue && newValue.inputValue) {
-                                console.log("wrapped")
-                                this.setState({
-                                    curInput: newValue.inputValue
-                                }, this.addTag)
-                            }
-                            else {
-                                console.log("????");
-                            }
-                            this.visibleSuggestion = [];
                         }}
+
+                        onHighlightChange={(event, newVal, reason) => {
+                            console.log("onHighlightChange called");
+                            console.log(reason);
+                            if(reason !== 'auto') {
+                                this.inputFromSuggestion = true;
+                            }
+                            else{
+                                this.inputFromSuggestion = false;
+                            }
+                        }}
+
+                        onOpen={event => {
+                            console.log("on open called");
+                        }}
+                        onClose={event => {
+                            console.log("onClose called");
+                        }}
+
                         value={this.state.curInput}
-                        id="free-solo-demo"
                         freeSolo
                         options={visibleSuggestions.map((suggestion) => suggestion.tag)}
                         renderOption={suggestion => {
@@ -260,7 +286,10 @@ class TagBox extends Component {
 
 TagBox.propTypes = {
     tags: PropTypes.array,
-    suggestions: PropTypes.array
+    suggestions: PropTypes.array,
+    addTag: PropTypes.func,
+    removeTag: PropTypes.func,
+    requestTagSuggestions: PropTypes.func
 };
 
 

@@ -50,3 +50,16 @@ Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the cli
     at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24))
 
 2020-08-25 22:48:12 Someone entered search text more than 75 from ::1
+2020-08-26 12:02:57 2020-08-26 12:02:57 Unexpected token o in JSON at position 1 
+SyntaxError: Unexpected token o in JSON at position 1
+    at JSON.parse (<anonymous>)
+    at /home/nils/gif-it/server/exploreAPI.js:33:19
+    at Query.<anonymous> (/home/nils/gif-it/server/util/dataAccess.js:83:13)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10))
+

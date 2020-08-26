@@ -6,7 +6,7 @@ let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
  * Makes an API call to get the newest gifs
  */
 function getNew() {
-    return fetch(`${server}/api/explore`);
+    return fetch(`${server}/explore`);
 }
 
 /**
@@ -32,7 +32,7 @@ function uploadFile(socketId, tempUploadId, data = {}) {
 function search(searchInput) { 
   const params = { input: searchInput };
   const paramString = new URLSearchParams(params);
-  return fetch(`${server}/api/search?${paramString.toString()}`);
+  return fetch(`${server}/search?${paramString.toString()}`);
 }
 
 /**
@@ -41,7 +41,7 @@ function search(searchInput) {
  * @param {*} gifId 
  */
 function getGifById(gifId) {
-  return fetch(`${server}/api/${gifId}`);
+  return fetch(`${server}/${gifId}`);
 }
 
 /**
@@ -49,7 +49,7 @@ function getGifById(gifId) {
  * @param {*} limit 
  */
 function getPopularTags(limit = 10) {
-  return fetch(`${server}/api/popularTags/${limit}`);
+  return fetch(`${server}/popularTags/${limit}`);
 }
 
 // this is used to set the CORS policy. See UploadAPI

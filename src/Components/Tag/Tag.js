@@ -38,31 +38,33 @@ export default function Tag(props) {
         props.removeTag(props.tag)
     };
 
+    const { tag, count, explorable } = props;
+
     return (
         <span className={`${classes.tagContainer} ${props.removeTag ? classes.withButton : classes.withoutButton}`}>
 
-            {props.explorable ?
+            {explorable ?
                 <Link className={classes.linkStyle}
                     to={{
                         pathname: "/explore",
-                        search: `?search=${props.tag}`
+                        search: `?search=${tag}`
                     }}
                 >
                     <Typography component='span' variant='subtitle1'>
-                        {"#" + props.tag}
+                        {"#" + tag}
                     </Typography>
                 </Link>
                 :
                 <Typography component='span' variant='subtitle1'>
-                    {"#" + props.tag}
+                    {"#" + tag}
                 </Typography>
             }
 
-                {props.removeTag && <span className={classes.iconContainer}>
+                {props.removeTag ? <span className={classes.iconContainer}>
                 <IconButton onClick={removeTag} aria-label="search">
                     <CancelIcon />
                 </IconButton>
-        </span> }
+        </span> : <span>{count && ` (${count})`}</span>}
 
         </span>
     );
@@ -71,5 +73,6 @@ export default function Tag(props) {
 Tag.propTypes = {
     tag: PropTypes.string,
     explorable: PropTypes.bool,
-    removeTag: PropTypes.func
+    removeTag: PropTypes.func,
+    count: PropTypes.number
 }

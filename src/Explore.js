@@ -134,7 +134,7 @@ class Explore extends Component {
       <div>
         <Header />
         <Container>
-          <Box m={2}>
+          <Box m={1}>
             {this.getView()}
           </Box>
         </Container>

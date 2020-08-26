@@ -4,11 +4,11 @@ const { makeAllPossibleTags } = require("./util/util");
 const { MAX_SEARCH_INPUT_LENGTH } = require('./const');
 const log = require("./util/logger");
 
-app.get('/api/explore', function (req, res) {
+app.get('/explore', function (req, res) {
     getMostRecent(15, result => res.send(result));
 });
 
-app.get('/api/search', function(req, res) {
+app.get('/search', function(req, res) {
   let input = req.query.input;
   if(DEBUG) { console.log(`/api/search hit: ${input}`)};
   
@@ -24,18 +24,19 @@ app.get('/api/search', function(req, res) {
   getGifsByTag(tags, (result => res.send(result)))
 });
 
-app.get('/api/:gifId', function(req, res) {
+app.get('/:gifId', function(req, res) {
   let gifId = req.params.gifId;
   console.log("fetching gif: " + gifId);
 
   getGifById(gifId, (results) => {
+    console.log(results);
     res.json(results[0]);
   });
 
 });
 
 // TODO validate limit is actually a number
-app.get(`/api/popularTags/:limit`, function(req, res) {
+app.get(`/popularTags/:limit`, function(req, res) {
   let limit = req.params.limit;
   limit = limit ? limit : 10;
   if(limit > 50) {

@@ -22,7 +22,7 @@ class GifBox extends Component {
         super(props);
 
         this.state = {
-            tags: [],
+            tags: {},
             descriptionLines: [],
             fileName: ""
         };
@@ -42,7 +42,7 @@ class GifBox extends Component {
                     })
                 }
                 else {
-                    console.log(res);
+                    console.log(`Problem fetching gif by id: ${res}`);
                 }
             })
             .catch(err => console.log(err));
@@ -74,8 +74,8 @@ class GifBox extends Component {
                                 justify="flex-start"
                                 alignItems="flex-start"
                             >
-                                {this.state.tags.map((tag, index) =>
-                                    <Tag key={index} tag={tag} explorable={true} />
+                                {Object.keys(this.state.tags).map((key, index) =>
+                                    <Tag key={index} tag={key} count={this.state.tags[key]} explorable={true} />
                                 )}
                             </Grid>
                         </Grid>

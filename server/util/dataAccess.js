@@ -60,11 +60,24 @@ function getGifById(gifId, callback) {
         if (err) {
             throw err;
         }
-        let sql = `SELECT gif.descript, gif.fileName, JSON_ARRAYAGG(tag.tag) as tags 
+        // let sql = `SELECT gif.descript, gif.fileName, JSON_ARRAYAGG(tag.tag) as tags 
+        // FROM gif
+        //     JOIN gif_tag ON gif.id = gif_tag.gif_id
+        //     JOIN tag ON gif_tag.tag_id = tag.id
+        // WHERE gif.id = ?`
+
+        let sql = `SELECT 
+        gif.descript, 
+        gif.fileName, 
+        JSON_OBJECTAGG(tag.tag, 
+            (SELECT COUNT(gif_tag.tag_id)
+                FROM gif_tag
+                WHERE gif_tag.tag_id = tag.id)) as tags 
         FROM gif
             JOIN gif_tag ON gif.id = gif_tag.gif_id
             JOIN tag ON gif_tag.tag_id = tag.id
-        WHERE gif.id = ?`
+        WHERE gif.id = ?`;
+
 
         connection.query(sql, gifId, (error, results, fields) => {
             callback(results);

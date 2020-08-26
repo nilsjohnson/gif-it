@@ -18,6 +18,12 @@ class Explore extends Component {
     });
   }
 
+  componentDidMount = () => {
+    if(!this.getGifParam() && !this.getSearchParam()) {
+      this.getNew();
+    }
+  }
+
   /**
    * Checks the window for a 'gid' (gif id) param 
    * @return the gif id if present otherwise null
@@ -98,7 +104,6 @@ class Explore extends Component {
         <div>
           <SearchBar
             search={this.search}
-            popularTags={[]}
             initialInput={searchInput}
           />
           <Grid

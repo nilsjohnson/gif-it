@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CancelIcon from '@material-ui/icons/Cancel';
 import IconButton from '@material-ui/core/IconButton';
 import { Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     tagContainer: {
@@ -21,14 +22,17 @@ const useStyles = makeStyles(theme => ({
         verticalAlign: 'middle',
         display: 'inline-flex',
         marginLeft: theme.spacing(1)
+    },
+    linkStyle: {
+        textDecoration: 'none',
+        color: 'rgba(0, 0, 0, 0.87)'
     }
 }));
 
 
 export default function Tag(props) {
-
     const classes = useStyles();
-    
+
     const removeTag = () => {
         console.log("removing " + props.tag);
         props.removeTag(props.tag)
@@ -36,21 +40,36 @@ export default function Tag(props) {
 
     return (
         <span className={`${classes.tagContainer} ${props.removeTag ? classes.withButton : classes.withoutButton}`}>
-            <Typography component='span' variant='body1'>
-                {"#" + props.tag}
-            </Typography>
-            {props.removeTag &&  <span className={classes.iconContainer}>
+
+            {props.explorable ?
+                <Link className={classes.linkStyle}
+                    to={{
+                        pathname: "/explore",
+                        search: `?search=${props.tag}`
+                    }}
+                >
+                    <Typography component='span' variant='subtitle1'>
+                        {"#" + props.tag}
+                    </Typography>
+                </Link>
+                :
+                <Typography component='span' variant='subtitle1'>
+                    {"#" + props.tag}
+                </Typography>
+            }
+
+                {props.removeTag && <span className={classes.iconContainer}>
                 <IconButton onClick={removeTag} aria-label="search">
                     <CancelIcon />
                 </IconButton>
-            </span>  }
-            
+        </span> }
+
         </span>
     );
 }
 
 Tag.propTypes = {
     tag: PropTypes.string,
+    explorable: PropTypes.bool,
     removeTag: PropTypes.func
-  }
-  
+}

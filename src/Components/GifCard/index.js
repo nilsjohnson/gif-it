@@ -30,10 +30,7 @@ export default function GifCard(props) {
     <Card className={classes.root}>
       <CardContent>
         <Link
-          to={{
-            pathname: '/explore',
-            search: '?gid=' + props.id
-          }}
+          to={`/explore?gid=${props.id}`}
         >
           <CardMedia
             component="img"

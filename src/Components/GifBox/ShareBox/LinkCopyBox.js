@@ -43,7 +43,7 @@ export function LinkCopyBox(props) {
                         fullWidth={true}
                         onClick={handleTooltipOpen}
                         label={props.type}
-                        defaultValue={props.text}
+                        value={props.text}
                         InputProps={{
                             readOnly: true,
                         }}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles';
 import { Card, Box, Grid, CardMedia, Typography } from '@material-ui/core/';
 import { getGifById } from '../../util/data';
@@ -22,9 +23,9 @@ class GifBox extends Component {
 
         this.state = {
             tags: [],
-            descriptionLines: [""]
+            descriptionLines: [],
+            fileName: ""
         };
-
     }
 
     componentDidMount = () => {
@@ -35,6 +36,7 @@ class GifBox extends Component {
                         console.log(resJson);
                         this.setState({
                             tags: JSON.parse(resJson.tags),
+                            fileName: resJson.fileName,
                             descriptionLines: resJson.descript.split('\n')
                         });
                     })
@@ -48,6 +50,7 @@ class GifBox extends Component {
 
     render() {
         const { classes } = this.props;
+
         return (
             <Card>
                 <Box m={2}>
@@ -57,11 +60,11 @@ class GifBox extends Component {
                         justify="flex-start"
                         alignItems="flex-start"
                         spacing={2}>
-                    <CardMedia
+                        <CardMedia
                             component="img"
                             alt="Cool Gif"
                             height="auto"
-                            image={this.props.gifId + ".gif"}
+                            image={this.state.fileName}
                             title={"Cool Gif"}
                         />
                         <Grid item>
@@ -72,12 +75,12 @@ class GifBox extends Component {
                                 alignItems="flex-start"
                             >
                                 {this.state.tags.map((tag, index) =>
-                                    <Tag key={index} tag={tag} />
+                                    <Tag key={index} tag={tag} explorable={true} />
                                 )}
                             </Grid>
                         </Grid>
 
-                        <FullWidthDivider />
+                        {this.state.descriptionLines.length > 1 ? <FullWidthDivider /> : ""}
                         <Grid item>
                             {this.state.descriptionLines.map((line, index) =>
                                 <Typography key={index}>
@@ -86,9 +89,10 @@ class GifBox extends Component {
                             )}
                         </Grid>
                         <FullWidthDivider />
+
                         <Box m={2} className={classes.shareContainer}>
                             <ShareBox
-                                src={this.props.gifId + ".gif"}
+                                fileName={this.state.fileName}
                                 id={this.props.gifId}
                             />
                         </Box>
@@ -98,6 +102,12 @@ class GifBox extends Component {
             </Card >
         );
     }
+}
+
+GifBox.propTypes = {
+    gifId: PropTypes.string,
+    gifSrc: PropTypes.string
+
 }
 
 export default withStyles(useStyles)(GifBox);

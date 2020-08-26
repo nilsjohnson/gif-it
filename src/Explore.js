@@ -1,32 +1,45 @@
 import React, { Component } from "react";
 import Header from "./Components/Header";
-import { getNew, search, getPopularTags } from "./util/data";
+import { getNew, search } from "./util/data";
 import { Container, Box, Grid } from '@material-ui/core';
 import GifCard from "./Components/GifCard";
 import SearchBar from "./Components/SearchBar";
 import GifBox from "./Components/GifBox";
 
+/**
+ * Component handles searching and fetching gifs
+ */
 class Explore extends Component {
   constructor(props) {
     super(props);
-
+    
     this.state = ({
-      gifs: [],
-      curGif: "",
-      popularTags: []
+      gifs: []
     });
   }
 
-  setGifs = (gifs) => {
-    this.setState({
-      gifs: gifs
-    })
+  /**
+   * Checks the window for a 'gid' (gif id) param 
+   * @return the gif id if present otherwise null
+   */
+  getGifParam = () => {
+    let url = new URL(window.location.href);
+    return url.searchParams.get("gid");
+  }
+
+   /**
+   * Checks the window for a 'search' param 
+   * @return the search query if present, otherwise null
+   */
+  getSearchParam = () => {
+    let url = new URL(window.location.href);
+    return url.searchParams.get("search");
   }
 
   /**
-   * Performs a default search
+   * searches for new gifs and adds them to state
    */
-  componentDidMount() {
+  getNew = () => {
     getNew().then(res => {
       if (res.ok) {
         res.json().then(resJson => {
@@ -36,24 +49,12 @@ class Explore extends Component {
         console.log(`Server had a problem fetching gifs ${res}`);
       }
     }).catch(err => console.log(`Problem fetching newest gifs: ${err}`));
-
-    let tags = [];
-    getPopularTags().then(res => {
-      if(res.ok) {
-        res.json().then(resJson => {
-          resJson.forEach(elem => {
-            tags.push(elem.tag);
-            this.setState({popularTags: tags});
-          });
-        });
-      }
-      else{
-        console.log("Problem fetching popular tags.");
-        console.log(res);
-      }
-    }).catch(err => console.log(`Problem fetching popular tags: ${err}`));
   }
 
+  /**
+   * Searches for a query
+   * @param {*} query The search input
+   */
   search = (query) => {
     search(query).then(res => {
       if (res.ok) {
@@ -64,25 +65,39 @@ class Explore extends Component {
         console.log(`Server had a problem fetching gifs ${res}`);
       }
     }).catch(err => console.log(`Problem fetching gifs: ${err}`));
-
   }
 
-  getView = (gifId) => {
+  /**
+   * helper function set the state after a search
+   */ 
+  setGifs = (gifs) => {
+    this.setState({
+      gifs: gifs
+    })
+  }
 
-    if (gifId) {
+  /**
+   * helper function for render
+   */
+  getView = () => {
+    let curGif = this.getGifParam();
+    let searchInput = this.getSearchParam();
+    searchInput = (searchInput ? searchInput : "");
+
+    if (curGif) {
       return (
-        <GifBox 
-          gifId={gifId}
+        <GifBox
+          gifId={curGif}
         />
-
       );
     }
     else {
       return (
-        <Box>
+        <div>
           <SearchBar
             search={this.search}
-            popularTags={this.state.popularTags}
+            popularTags={[]}
+            initialInput={searchInput}
           />
           <Grid
             container
@@ -102,21 +117,18 @@ class Explore extends Component {
               </Grid>
             ))}
           </Grid>
-        </Box>
+        </div>
       );
     }
   }
 
   render() {
-    let url = new URL(window.location.href);
-    let gifId = url.searchParams.get("gid");
-
     return (
       <div>
         <Header />
         <Container>
           <Box m={2}>
-          {this.getView(gifId)}
+            {this.getView()}
           </Box>
         </Container>
       </div>

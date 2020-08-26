@@ -36,8 +36,6 @@ class TagBox extends Component {
             inputError: false,
             errorMessage: ''
         });
-
-        this.visibleSuggestion = [];
     }
 
     onEnterPressed = (event) => {
@@ -78,7 +76,6 @@ class TagBox extends Component {
 
         this.props.addTag(tag);
         this.resetState();
-        this.visibleSuggestion = [];
     }
 
     removeTag = (tag) => {
@@ -147,27 +144,28 @@ class TagBox extends Component {
         this.addTag();
     }
 
-    getNumUses = (tag) => {
-        for (let i = 0; i < this.visibleSuggestion.length; i++) {
-            if (this.visibleSuggestion[i].tag === tag) {
-                return this.visibleSuggestion[i].numUses;
+    // this is a little weird. I would prefer to get the number in the pervious
+    // step, but I cant see a way to map that at the moment. See how render gets the 
+    // suggestion too understand this hack..
+    getNumUses = (tag, suggestions) => {
+        for (let i = 0; i < suggestions.length; i++) {
+            if (suggestions[i].tag === tag) {
+                return suggestions[i].numUses;
             }
         }
     }
 
     render() {
         const { suggestions, error } = this.props;
-        console.log("suggestion");
-        console.log(suggestions);
-
-        this.visibleSuggestion = [];
+    
+        let visibleSuggestions = [];
 
         // if there is an active suggestion
         if (suggestions && this.state.curInput !== "") {
             // only show them if they match the current input
             for (let i = 0; i < suggestions.length; i++) {
                 if (suggestions[i].tag.startsWith(this.state.curInput)) {
-                    this.visibleSuggestion.push(suggestions[i]);
+                    visibleSuggestions.push(suggestions[i]);
                 }
             }
         }
@@ -203,14 +201,14 @@ class TagBox extends Component {
                         value={this.state.curInput}
                         id="free-solo-demo"
                         freeSolo
-                        options={this.visibleSuggestion.map((suggestion) => suggestion.tag)}
+                        options={visibleSuggestions.map((suggestion) => suggestion.tag)}
                         renderOption={suggestion => {
                             return (<span>
                                 <Typography component="span">
                                     {suggestion}
                                 </Typography>
                                 <Typography component="span" variant="subtitle2">
-                                    {` (${this.getNumUses(suggestion)})`}
+                                    {` (${this.getNumUses(suggestion, visibleSuggestions)})`}
                                 </Typography>
                             </span>)
                         }}
@@ -261,7 +259,8 @@ class TagBox extends Component {
 }
 
 TagBox.propTypes = {
-    tags: PropTypes.array
+    tags: PropTypes.array,
+    suggestions: PropTypes.array
 };
 
 

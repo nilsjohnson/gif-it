@@ -244,7 +244,6 @@ function addGif(uploadId, fileName, thumbFileName, tags, description, ipAddr, or
 
 
 function getGifsByTag(tags, callback) {
-    console.log(tags);
     pool.getConnection((err, connection) => {
         if (err) {
             throw err;

@@ -40,5 +40,9 @@ CREATE TABLE gif_tag (
 create user 'bryn'@'localhost' IDENTIFIED BY 'doggie';
 GRANT ALL PRIVILEGES ON * TO 'bryn'@'localhost';
 
---updated to allow for maximum length filenames under the linux OS
+-- updated to allow for maximum length filenames under the linux OS
 ALTER TABLE upload MODIFY originalFilename VARCHAR(255);
+
+-- added an index on tags to allow for faster suggestions
+ALTER TABLE tag ADD INDEX tag_index (tag);
+

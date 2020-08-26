@@ -62,7 +62,9 @@ class Explore extends Component {
           this.setGifs(resJson)
         }).catch(err => console.log(`Problem parsing JSON from request: ${err}`))
       } else {
-        console.log(`Server had a problem fetching gifs ${res}`);
+        res.json().then(resJson => {
+          console.log(resJson);
+        }).catch(err => console.log(`Problem parsing JSON from request: ${err}`))
       }
     }).catch(err => console.log(`Problem fetching gifs: ${err}`));
   }

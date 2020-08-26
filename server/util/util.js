@@ -22,7 +22,7 @@ function makeTag(input) {
     // trim it
     let tag = input.trim();
     // remove a leading #
-    if(tag.startsWith('#')) {
+    if (tag.startsWith('#')) {
         tag = tag.substring(1)
     }
     // enforce single spacing for multi-word tags
@@ -38,19 +38,19 @@ function makeTag(input) {
 function processTags(tags) {
     let processedTags = [];
 
-    for(let i = 0; i < tags.length; i++) {
+    for (let i = 0; i < tags.length; i++) {
         let tag = makeTag(tags[i]);
-        if(isValidTag(tag)) {
+        if (isValidTag(tag)) {
             processedTags.push(tag);
         }
         else {
             // Note this should never happen, since we validae client-side.
-            throw(`${tags[i]} is not a valid tag.`);
+            throw (`${tags[i]} is not a valid tag.`);
         }
     }
 
-    if(processedTags.length === 0) {
-        throw("Please Add Tags.");
+    if (processedTags.length === 0) {
+        throw ("Please Add Tags.");
     }
 
     return processedTags;
@@ -104,19 +104,44 @@ function deleteFromS3(key = "", onSucess = null, onFail = null) {
     s3.deleteObject(params, (err, data) => {
         if (err) {
             console.log(err, err.stack);  // error
-            if(onFail) {
+            if (onFail) {
                 onFail(err);
             }
         }
         else {
-            if(DEBUG) { console.log(`${key} deleted from s3 successfully.`); }
-            if(onSucess) {
+            if (DEBUG) { console.log(`${key} deleted from s3 successfully.`); }
+            if (onSucess) {
                 onSucess(data);
             }
-        }         
+        }
     })
 }
 
+function makeAllPossibleTags(str) {
+    let words = str.trim().split(/\s+/);
+
+    let allTags = [];
+
+    // get any possible multi-word tags
+    for (let i = 0; i < words.length - 1; i++) {
+        let nextTag = words[i];
+        for (j = i + 1; j < words.length; j++) {
+            nextTag += " " + words[j];
+            allTags.push(nextTag);
+        }
+    }
+
+    // then afterwards do the single word tags
+    for(let i = 0; i < words.length; i++) {
+        allTags.push(words[i]);
+    }
+
+    console.log(allTags);
+
+    return allTags;
+}
+
+exports.makeAllPossibleTags = makeAllPossibleTags;
 exports.processTags = processTags;
 exports.deleteFromS3 = deleteFromS3;
 exports.splitTags = processTags;

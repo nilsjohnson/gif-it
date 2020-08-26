@@ -35,3 +35,18 @@ ReferenceError: SERVE_MODE is not defined
     at Socket.EventEmitter.emit (domain.js:482:12)
     at Socket.onClose (/home/nils/gif-it/node_modules/engine.io/lib/socket.js:318:10))
 
+2020-08-25 22:46:02 Someone entered search text more than 75 from ::1
+2020-08-25 22:46:02 2020-08-25 22:46:02 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at ServerResponse.json (/home/nils/gif-it/node_modules/express/lib/response.js:267:15)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:158:21)
+    at /home/nils/gif-it/server/exploreAPI.js:23:37
+    at Query.<anonymous> (/home/nils/gif-it/server/util/dataAccess.js:266:13)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24))
+
+2020-08-25 22:48:12 Someone entered search text more than 75 from ::1

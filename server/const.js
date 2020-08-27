@@ -10,7 +10,7 @@ const FilePaths = {
 
 const MAX_UPLOAD_SIZE = 70; // in MB
 const MAX_TAG_LENGTH = 32; // characters
-const MAX_SEARCH_INPUT_LENGTH = 75 // characters
+const MAX_SEARCH_INPUT_LENGTH = 150; // characters
 const PORT_NUM = 3001;
 
 const BUCKET_NAME = 'gif-it.io';

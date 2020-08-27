@@ -5,9 +5,10 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/styles';
-import { Box, Grid } from '@material-ui/core';
+import { Box, Grid, TextField } from '@material-ui/core';
 import AddTag from './AddTag';
 import { getPopularTags } from '../../util/data';
+import { MAX_SEARCH_INPUT_LENGTH } from '../../util/const';
 
 const styles = (theme) => ({
   root: {
@@ -25,6 +26,9 @@ const styles = (theme) => ({
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
+  },
+  inputError: {
+    border: `2px solid ${theme.palette.error.light}`
   },
   formControl: {
     margin: theme.spacing(1),
@@ -44,6 +48,7 @@ class SearchBar extends Component {
 
     this.state = {
       input: props.initialInput,
+      inputError: false,
       popularTags: []
     };
   }
@@ -73,7 +78,16 @@ class SearchBar extends Component {
   }
 
   setInput = (event) => {
+    let input = event.target.value;
+    let err = false;
+    
+    if(input.length > MAX_SEARCH_INPUT_LENGTH) {
+      err = true;
+      console.log(`Input to search bar must not exceed ${MAX_SEARCH_INPUT_LENGTH} characters.`);
+    }
+
     this.setState({
+      inputError: err,
       input: event.target.value
     });
   }
@@ -108,7 +122,8 @@ class SearchBar extends Component {
           <Grid item sm={2}></Grid>
           <Grid item xs={12} sm={8}>
             <Grid container item className={classes.root}>
-              <Paper className={classes.searchContainer} >
+              {/* classes.searchContainer + " " + classes.inputError */}
+              <Paper className={`${classes.searchContainer} ${this.state.inputError ? classes.inputError : ""}`} >
                 <InputBase
                   onKeyDown={this.handleEnter}
                   onChange={this.setInput}
@@ -116,11 +131,13 @@ class SearchBar extends Component {
                   placeholder="Search For Gifs"
                   inputProps={{ 'aria-label': 'Search For Gifs' }}
                   value={this.state.input}
+                  label={"hello"}
                 />
                 <IconButton onClick={this.search} className={classes.iconButton} aria-label="search">
                   <SearchIcon />
                 </IconButton>
               </Paper>
+                {this.state.inputError ? <Box m={1}>{`Input cannot exceed ${MAX_SEARCH_INPUT_LENGTH} characters.`}</Box>: ""}
               <Grid
                 container
                 direction="row"

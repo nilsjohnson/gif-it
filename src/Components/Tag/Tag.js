@@ -32,13 +32,21 @@ const useStyles = makeStyles(theme => ({
 
 export default function Tag(props) {
     const classes = useStyles();
+    const { tag, count, explorable } = props;
 
     const removeTag = () => {
         console.log("removing " + props.tag);
         props.removeTag(props.tag)
     };
 
-    const { tag, count, explorable } = props;
+    const makeTag = () => {
+        if(tag.includes(" ")) {
+            return `"${tag}"`;
+        }
+        return tag;
+    }
+
+   
 
     return (
         <span className={`${classes.tagContainer} ${props.removeTag ? classes.withButton : classes.withoutButton}`}>
@@ -47,7 +55,7 @@ export default function Tag(props) {
                 <Link className={classes.linkStyle}
                     to={{
                         pathname: "/explore",
-                        search: `?search=${tag}`
+                        search: "?search=" + makeTag()
                     }}
                 >
                     <Typography component='span' variant='subtitle1'>

@@ -118,9 +118,19 @@ function deleteFromS3(key = "", onSucess = null, onFail = null) {
 }
 
 function makeAllPossibleTags(str) {
-    let words = str.trim().split(/\s+/);
-
+    let quoteRegex = /(["'])(?:(?=(\\?))\2.)*?\1/g;
+    let inQuotes = str.match(quoteRegex);
     let allTags = [];
+
+    if(inQuotes) {
+        for(let i = 0; i < inQuotes.length; i++) {
+            str = str.replace(inQuotes[i], "");
+            inQuotes[i] = inQuotes[i].substring(1, inQuotes[i].length-1);
+            allTags.push(inQuotes[i]);
+        }
+    }
+
+    let words = str.trim().split(/\s+/);
 
     // get any possible multi-word tags
     for (let i = 0; i < words.length - 1; i++) {

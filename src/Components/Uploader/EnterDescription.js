@@ -24,7 +24,6 @@ export default class EnterDescription extends Component {
      * @return the input without leading or trailing whitespace.
      */
     makeDescription = (input) => {
-        console.log(input.trim());
         return input.trim();
     }
 

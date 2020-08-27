@@ -1,5 +1,5 @@
 const { app } = require("./server");
-const { getAllGifs: getMostRecent, getGifsByTag, getGifById, getMostPopularTags } = require('./util/dataAccess');
+const { getAllGifs, getMostRecent, getGifsByTag, getGifById, getMostPopularTags } = require('./util/gifDataAccess');
 const { makeAllPossibleTags } = require("./util/util");
 const { MAX_SEARCH_INPUT_LENGTH } = require('./const');
 const log = require("./util/logger");
@@ -24,7 +24,7 @@ app.get('/search', function(req, res) {
   getGifsByTag(tags, (result => res.send(result)))
 });
 
-app.get('/:gifId', function(req, res) {
+app.get('/gif/:gifId', function(req, res) {
   let gifId = req.params.gifId;
   console.log("fetching gif: " + gifId);
 

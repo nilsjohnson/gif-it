@@ -1,7 +1,8 @@
 import React from 'react';
 import Home from './Home';
-import { BrowserRouter, Route } from 'react-router-dom';
 import Explore from './Explore';
+import SignUp from './SignUp';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import { hot } from 'react-hot-loader';
@@ -13,6 +14,7 @@ function App() {
             <ThemeProvider theme={theme}>
                 <Route path="/" component={Home} exact />
                 <Route path="/explore" component={Explore} exact />
+                <Route path="/signup" component={SignUp} exact />
             </ThemeProvider>
         </BrowserRouter>
     );

@@ -21,7 +21,12 @@ app.post('/auth/newUser', function (req, res) {
     }).catch(err => console.log(err));
 });
 
-app.post('auth/login', function(req, res) {
-    let 
+app.post('/auth/login', function(req, res) {
+    console.log(req.body);
+    let password = req.body.password;
+    let usernameOrEmail = req.body.usernameOrEmail;
+    authDAO.authenticate(usernameOrEmail, password).then(val => {
+        console.log(val);
+    });
 
 });

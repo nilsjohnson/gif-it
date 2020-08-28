@@ -3,7 +3,8 @@ import Uploader from "./Components/Uploader";
 import Header from "./Components/Header";
 import Box from "@material-ui/core/Box"
 import { Container, Paper } from "@material-ui/core";
-import NewUser from "./Components/Login/NewUser";
+import Login from "./Components/Login"
+
 
 class SignUp extends Component {
     render() {
@@ -11,7 +12,7 @@ class SignUp extends Component {
             <Box>
                 <Header />
                 <Container>
-                    <NewUser />
+                   <Login/>
                 </Container>
             </Box>
         );

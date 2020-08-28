@@ -73,14 +73,84 @@ function AddUser(user, credentials) {
     });
 }
 
+function getAuthToken(nameOrEmail, password) {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                reject(err);
+            }
+            connection.beginTransaction(function (err) {
+                if (err) {
+                    reject(err)
+                    return;
+                }
+
+                // 1.) insert the user
+
+                let params = [];
+                params.push(nameOrEmail);
+                params.push(nameOrEmail);
+
+                let getUserSql = `SELECT user_credential.hashed, user_credential.salt, user.id 
+                FROM user_credential 
+                    JOIN user ON user_credential.id = user.id 
+                WHERE user.email = ? OR user.username = ?`;
+                connection.query(getUserSql, params, (error, results, fields) => {
+                    console.log(error);
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    
+                    console.log(results);
+
+                    let hash = results[0].hashed;
+                    let salt = results[0].salt;
+                    let userId = results[0].id;
+
+                    console.log(hash);
+                    console.log(salt);
+                    console.log(userId);
+
+                    if(hash === getHash(password, salt)) {
+                        console.log("this is a good user.");
+                    }
+                    else 
+                    {
+                        console.log("no good yo");
+                    }
+
+
+                    connection.commit(err => {
+                        if (err) {
+                            connection.rollback();
+                            reject(err);
+                            return;
+                        }
+                        else {
+                            resolve("auth token TODO");
+                        }
+                    });
+
+                });
+            });
+        });
+    });
+}
+
+function getHash(password, salt) {
+    return crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
+}
+
+
 module.exports = class AuthDAO {
     constructor() {
 
     }
 
-    createNewUser(firstName, lastName, email, password, desiredUsername) {
+    createNewUser(firstName, lastName, email, desiredUsername, password) {
         const salt = createSalt();
-        const hash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
+        const hash = getHash(password, salt);
 
         let newUser = {
             firstName: firstName,
@@ -97,6 +167,10 @@ module.exports = class AuthDAO {
         };
 
         return AddUser(newUser, credential);
+    }
+
+    authenticate(name, password) {
+        return getAuthToken(name, password);
     }
 
 

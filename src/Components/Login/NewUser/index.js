@@ -93,6 +93,16 @@ export default function NewUser() {
                                     variant="outlined"
                                     required
                                     fullWidth
+                                    id="username"
+                                    label="Desired Username"
+                                    name="desiredUsername"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
                                     id="email"
                                     label="Email Address"
                                     name="email"
@@ -118,7 +128,6 @@ export default function NewUser() {
                                 />
                             </Grid>
                         </Grid>
-                        <input type="email" name="myemail" class="form-control" id="exampleInputEmail2" placeholder="Email address" required></input>
                         <Button
                             type="submit"
                             fullWidth

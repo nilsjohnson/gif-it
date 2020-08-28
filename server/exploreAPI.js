@@ -1,5 +1,5 @@
 const { app } = require("./server");
-const { getAllGifs, getMostRecent, getGifsByTag, getGifById, getMostPopularTags } = require('./util/gifDataAccess');
+const { getMostRecent, getGifsByTag, getGifById, getMostPopularTags } = require('./util/gifDataAccess');
 const { makeAllPossibleTags } = require("./util/util");
 const { MAX_SEARCH_INPUT_LENGTH } = require('./const');
 const log = require("./util/logger");

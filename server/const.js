@@ -5,7 +5,8 @@ const FilePaths = {
     UPLOAD_DIR: os.tmpdir + '/' + 'gif-it',
     // Where we put the gifs before copying to s3
     // or where we serve them from if we are in DEV mode.
-    GIF_SAVE_DIR: os.homedir + '/gifs'
+    GIF_SAVE_DIR: os.homedir + '/gifs',
+    AUTH_TOKEN_FILE: os.homedir + '/auth_tokens.json'
 }
 
 const MAX_UPLOAD_SIZE = 70; // in MB

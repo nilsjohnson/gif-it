@@ -23,10 +23,26 @@ app.post('/auth/newUser', function (req, res) {
 
 app.post('/auth/login', function(req, res) {
     console.log(req.body);
+    let ipAdder = req.ip;
     let password = req.body.password;
     let usernameOrEmail = req.body.usernameOrEmail;
-    authDAO.authenticate(usernameOrEmail, password).then(val => {
-        console.log(val);
+    authDAO.getAuthToken(usernameOrEmail, password, ipAdder).then(authToken => {
+        res.json(authToken);
+        res.status(200);
+    }).catch(err => {
+        res.status(401).send("Bad Login.");
     });
-
 });
+
+/**
+ * Authenticates any request.
+ * @param {*} userId 
+ * @param {*} authToken 
+ * @param {*} ipAddr 
+ * @throws exception if error
+ */
+function authenticate(userId, authToken, ipAddr) {
+    authDAO.authenticate(userId, authToken, ipAddr)
+}
+
+exports.authenticate = authenticate;

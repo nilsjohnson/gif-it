@@ -3,6 +3,9 @@ const crypto = require("crypto");
 const { getDateTime } = require("../util/util");
 
 var mysql = require('mysql');
+const { readObj, writeObj } = require("../util/fileUtil");
+const { FilePaths } = require("../const");
+const log = require("../util/logger");
 let pool = mysql.createPool({
     connectionLimit: 10,
     host: 'localhost',
@@ -11,8 +14,27 @@ let pool = mysql.createPool({
     database: 'gif_it'
 });
 
+let tokens = readObj(FilePaths.AUTH_TOKEN_FILE);
+
+
 function createSalt() {
     return crypto.randomBytes(32).toString("hex");
+}
+
+function createNewAuthToken(userId, ipAddr) {
+    let token = crypto.randomBytes(32).toString("hex");
+    tokens[userId] = { ipAddr: ipAddr, token: token, lastUsed: getDateTime() };
+    saveTokens();
+    return token;
+}
+
+function updateTokenLastUse(userId) {
+    tokens[userId].lastUsed = getDateTime();
+    saveTokens();
+}
+
+function saveTokens() {
+    writeObj(tokens, FilePaths.AUTH_TOKEN_FILE);
 }
 
 function AddUser(user, credentials) {
@@ -73,7 +95,7 @@ function AddUser(user, credentials) {
     });
 }
 
-function getAuthToken(nameOrEmail, password) {
+function getAuthToken(nameOrEmail, password, ipAddr) {
     return new Promise((resolve, reject) => {
         pool.getConnection((err, connection) => {
             if (err) {
@@ -101,25 +123,36 @@ function getAuthToken(nameOrEmail, password) {
                         reject(error);
                         return;
                     }
-                    
-                    console.log(results);
 
-                    let hash = results[0].hashed;
-                    let salt = results[0].salt;
-                    let userId = results[0].id;
+                    let token = null;
+                    let userId = null;
+                    if (results) {
+                        let hash = results[0].hashed;
+                        let salt = results[0].salt;
+                        userId = results[0].id;
+                        if(userId === null) {
+                            console.log("UserId is null. This should never happen.");
+                        }
 
-                    console.log(hash);
-                    console.log(salt);
-                    console.log(userId);
+                        console.log(hash);
+                        console.log(salt);
+                        console.log(userId);
 
-                    if(hash === getHash(password, salt)) {
-                        console.log("this is a good user.");
+                        if (hash === getHash(password, salt)) {
+                            // this is a good login attempt
+                            token = createNewAuthToken(userId, ipAddr);
+
+                        }
+                        else {
+                            // this is a bad login attempt
+                            log(`Bad login attempt from ${ipAddr}. Invalid Password.`);
+                            reject = true;
+                        }
                     }
-                    else 
-                    {
-                        console.log("no good yo");
+                    else {
+                        log(`Bad login attempt from ${ipAddr}. ${nameOrEmail} not found.`);
+                        reject = true;
                     }
-
 
                     connection.commit(err => {
                         if (err) {
@@ -128,10 +161,15 @@ function getAuthToken(nameOrEmail, password) {
                             return;
                         }
                         else {
-                            resolve("auth token TODO");
+                            if (token !== null && userId !== null) {
+                                resolve({ token: token, userId: userId });
+                            }
+                            else {
+                                reject("Bad Login Attempt.");
+                            }
+
                         }
                     });
-
                 });
             });
         });
@@ -169,8 +207,20 @@ module.exports = class AuthDAO {
         return AddUser(newUser, credential);
     }
 
-    authenticate(name, password) {
-        return getAuthToken(name, password);
+    getAuthToken(nameOrEmail, password, ipAddr) {
+        return getAuthToken(nameOrEmail, password, ipAddr);
+    }
+
+    authenticate(userId, token, ipAddr) {
+        // TODO do we care about the ipAddr actually?
+        if (tokens[userId].token !== token) { // && tokens[userId].ipAddr === ipAddr) {
+            let str = `Token '${token}' not found.`;
+            log(str)
+            throw (str)
+        }
+        else {
+            updateTokenLastUse(userId);
+        }
     }
 
 

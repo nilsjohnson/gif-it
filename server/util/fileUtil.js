@@ -50,9 +50,10 @@ function writeObj(obj, name) {
     });
 }
 
-/*
-Reads JSON object from file and returns it. Sync.
-*/
+/**
+ * Reads JSON object from file and returns it. Sync.
+ * @ return     the object, or an empty object if file doenst exist.
+ */ 
 function readObj(name) {
     let obj = {};
     try {

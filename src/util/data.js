@@ -55,4 +55,8 @@ function getPopularTags(limit = 10) {
 // This is used for opening sockets. See Uploader/index.js
 function getServer() { return server};
 
+function login() {
+  return
+}
+
 export { getServer, getPopularTags, getGifById, getNew, uploadFile, search }

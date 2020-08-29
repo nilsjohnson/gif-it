@@ -276,3 +276,29 @@ Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual th
     at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
     at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10))
 
+2020-08-28 21:29:56 2020-08-28 21:29:56 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:120:43)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-28 21:39:06 2020-08-28 21:39:06 userId is not defined 
+ReferenceError: userId is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:161:65)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+

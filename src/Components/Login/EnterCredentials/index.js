@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -39,56 +39,61 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function EnterCredentials() {
-    const classes = useStyles();
+export default class EnterCredentials extends Component {
+    constructor(props) {
+        super(props);
+    }
 
-    return (
+    render() {
+        const classes = useStyles();
 
-        <Container component="main" maxWidth="xs" >
-            <Paper className={classes.container}>
-                <CssBaseline />
-                <div className={classes.paper}>
-                    <Typography component="h1" variant="h5">
-                        Log In
-                    </Typography>
-                    <form className={classes.form} noValidate action="/auth/login" method="POST">
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    id="username"
-                                    label="Username or Email"
-                                    name="usernameOrEmail"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >
+        return (
+            <Container component="main" maxWidth="xs" >
+                <Paper className={classes.container}>
+                    <CssBaseline />
+                    <div className={classes.paper}>
+                        <Typography component="h1" variant="h5">
                             Log In
-                        </Button>
-
-                        <Grid container justify="flex-end">
-                        </Grid>
-                    </form>
-                </div>
-            </Paper>
-        </Container>
-    );
+                        </Typography>
+                        <form className={classes.form} noValidate action="/auth/login" method="POST">
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth
+                                        id="username"
+                                        label="Username or Email"
+                                        name="usernameOrEmail"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth
+                                        name="password"
+                                        label="Password"
+                                        type="password"
+                                        id="password"
+                                        autoComplete="current-password"
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                Log In
+                            </Button>
+    
+                            <Grid container justify="flex-end">
+                            </Grid>
+                        </form>
+                    </div>
+                </Paper>
+            </Container>
+        ); 
+    }
 }

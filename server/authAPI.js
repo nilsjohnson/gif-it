@@ -8,30 +8,34 @@ let authDAO = new AuthDAO();
 app.post('/auth/newUser', function (req, res) {
     console.log("auth hit");
     console.log(req.body);
-    
-    let firstName = req.body.firstName;
-    let lastName = req.body.lastName;
-    let email = req.body.email;
-    let password = req.body.password;
-    let username = req.body.desiredUsername;
 
-    authDAO.createNewUser(firstName, lastName, email, username, password).then(userId => {
+    let desiredUsername = req.body.desiredUsername;
+    let email = req.body.email;
+    let pw = req.body.pw;
+
+    authDAO.createNewUser(desiredUsername, email, pw).then(userId => {
         console.log(`New User Created. Id: ${userId}`);
         res.redirect('/dashboard?userId=' + userId);
     }).catch(err => console.log(err));
 });
 
-app.post('/auth/login', function(req, res) {
+app.post('/auth/login', function (req, res) {
     console.log(req.body);
     let ipAdder = req.ip;
-    let password = req.body.password;
+    let password = req.body.pw;
     let usernameOrEmail = req.body.usernameOrEmail;
-    authDAO.getAuthToken(usernameOrEmail, password, ipAdder).then(authToken => {
-        res.json(authToken);
-        res.status(200);
-    }).catch(err => {
-        res.status(401).send("Bad Login.");
-    });
+
+    authDAO.getAuthToken(usernameOrEmail, password, ipAdder)
+        .then(token => {
+            console.log("Result");
+            console.log(token);
+            res.json(token);
+        })
+        .catch(err => {
+            console.log("error getting auth token");
+            console.log(err);
+            res.status(500).send("server error");
+        });
 });
 
 /**

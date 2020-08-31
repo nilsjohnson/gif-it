@@ -2,6 +2,7 @@ import React from 'react';
 import Home from './Home';
 import Explore from './Explore';
 import SignUp from './SignUp';
+import Login from './Login';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/" component={Home} exact />
                 <Route path="/explore" component={Explore} exact />
                 <Route path="/signup" component={SignUp} exact />
+                <Route path="/login" component={Login} exact />
             </ThemeProvider>
         </BrowserRouter>
     );

@@ -14,6 +14,7 @@ const MAX_TAG_LENGTH = 32; // characters
 const MAX_SEARCH_INPUT_LENGTH = 150; // characters
 const PORT_NUM = 3001;
 
+
 const BUCKET_NAME = 'gif-it.io';
 
 exports.MAX_SEARCH_INPUT_LENGTH = MAX_SEARCH_INPUT_LENGTH;

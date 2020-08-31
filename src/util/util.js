@@ -8,14 +8,17 @@ function formatBytes(bytes, decimals = 2) {
 }
 
 function saveAuthToken(token) {
-    setCookie("authToken", JSON.stringify(token), 60*60*24*30);
+    writeCookie("auth_token", JSON.stringify(token), 60*60*24*30);
 }
 
-function getAuthToken() {
-    return getCookie("authToken");
+function readAuthToken() {
+	console.log("arrrr");
+	let token = JSON.parse(readCookie("auth_token"));
+	console.log("here is the auth token: " + token);
+	return token;
 }
 
-function getCookie(cname) {
+function readCookie(cname) {
 	var name = cname + "=";
 	var ca = document.cookie.split(';');
 	for(var i = 0; i < ca.length; i++) {
@@ -31,7 +34,7 @@ function getCookie(cname) {
   }
   
   
-function setCookie(variable, value, expires_seconds) {
+function writeCookie(variable, value, expires_seconds) {
 	var d = new Date();
 	d = new Date(d.getTime() + 1000 * expires_seconds);
 	document.cookie = variable + '=' + value + '; expires=' + d.toGMTString() + ';';
@@ -41,4 +44,4 @@ function deleteCookie(variable) {
 	document.cookie = variable + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
-export { formatBytes, getCookie, setCookie, deleteCookie, saveAuthToken, getAuthToken }
+export { formatBytes, readCookie, writeCookie, deleteCookie, saveAuthToken, readAuthToken }

@@ -23,13 +23,13 @@ function createSalt() {
 
 function createNewAuthToken(userId, ipAddr) {
     let token = crypto.randomBytes(32).toString("hex");
-    tokens[userId] = { ipAddr: ipAddr, token: token, lastUsed: getDateTime() };
+    tokens[token] = { ipAddr: ipAddr, userId: userId, lastUsed: getDateTime() };
     saveTokens();
     return token;
 }
 
-function updateTokenLastUse(userId) {
-    tokens[userId].lastUsed = getDateTime();
+function updateTokenLastUse(token) {
+    tokens[token].lastUsed = getDateTime();
     saveTokens();
 }
 
@@ -39,14 +39,15 @@ function saveTokens() {
 
 function AddUser(user, credentials) {
     return new Promise((resolve, reject) => {
-        pool.getConnection((err, connection) => {
-            if (err) {
-                reject(err);
+        pool.getConnection((error, connection) => {
+            if (error) {
+                reject(error);
             }
-            connection.beginTransaction(function (err) {
-                if (err) {
-                    reject(err)
-                    return;
+            connection.beginTransaction(function (error) {
+                if (error) {
+                    return connection.rollback(function () {
+                        reject(error);
+                    });
                 }
 
                 // 1.) insert the user
@@ -54,15 +55,18 @@ function AddUser(user, credentials) {
                 connection.query(userSql, user, (error, results, fields) => {
                     console.log(results);
                     if (error) {
-                        reject(error);
-                        return;
+                        return connection.rollback(function () {
+                            reject(error);
+                        });
                     }
 
                     // 2.) get id
                     let getIdSql = 'SELECT LAST_INSERT_ID() as id';
-                    connection.query(getIdSql, (err, results, fields) => {
-                        if (err) {
-                            reject(err);
+                    connection.query(getIdSql, (error, results, fields) => {
+                        if (error) {
+                            return connection.rollback(function () {
+                                reject(error);
+                            });
                         }
 
                         let userId = results[0].id;
@@ -73,15 +77,16 @@ function AddUser(user, credentials) {
                         connection.query(credSql, credentials, (error, results, fields) => {
                             console.log(results);
                             if (error) {
-                                reject(error);
-                                return;
+                                return connection.rollback(function () {
+                                    reject(error);
+                                });
                             }
 
-                            connection.commit(err => {
-                                if (err) {
-                                    connection.rollback();
-                                    reject(err);
-                                    return;
+                            connection.commit(error => {
+                                if (error) {
+                                    return connection.rollback(function () {
+                                        reject(error);
+                                    });
                                 }
                                 else {
                                     resolve(userId);
@@ -97,6 +102,8 @@ function AddUser(user, credentials) {
 
 function getAuthToken(nameOrEmail, password, ipAddr) {
     return new Promise((resolve, reject) => {
+        let loginError = null;
+
         pool.getConnection((err, connection) => {
             if (err) {
                 reject(err);
@@ -104,7 +111,6 @@ function getAuthToken(nameOrEmail, password, ipAddr) {
             connection.beginTransaction(function (err) {
                 if (err) {
                     reject(err)
-                    return;
                 }
 
                 // 1.) insert the user
@@ -118,57 +124,51 @@ function getAuthToken(nameOrEmail, password, ipAddr) {
                     JOIN user ON user_credential.id = user.id 
                 WHERE user.email = ? OR user.username = ?`;
                 connection.query(getUserSql, params, (error, results, fields) => {
-                    console.log(error);
                     if (error) {
-                        reject(error);
-                        return;
+                        return connection.rollback(function () {
+                            reject(error);
+                        });
                     }
 
                     let token = null;
                     let userId = null;
-                    if (results) {
+                    if (results[0]) {
+                        console.log(results);
                         let hash = results[0].hashed;
                         let salt = results[0].salt;
                         userId = results[0].id;
-                        if(userId === null) {
+                        if (userId === null) {
                             console.log("UserId is null. This should never happen.");
                         }
 
-                        console.log(hash);
-                        console.log(salt);
-                        console.log(userId);
-
-                        if (hash === getHash(password, salt)) {
-                            // this is a good login attempt
+                        // this is a good login attempt
+                        if (hash === getHash(password, salt) && userId) {
                             token = createNewAuthToken(userId, ipAddr);
-
                         }
+                        // this is a bad login attempt
                         else {
-                            // this is a bad login attempt
                             log(`Bad login attempt from ${ipAddr}. Invalid Password.`);
-                            reject = true;
+                            loginError = "Invalid Username/Password";
                         }
                     }
                     else {
                         log(`Bad login attempt from ${ipAddr}. ${nameOrEmail} not found.`);
-                        reject = true;
+                        loginError = "Invalid Username/Password";
                     }
 
-                    connection.commit(err => {
+                    connection.commit(function (err) {
                         if (err) {
-                            connection.rollback();
-                            reject(err);
-                            return;
+                            return connection.rollback(function () {
+                                reject(err);
+                            });
+                        }
+                        if (token) {
+                            resolve(token);
                         }
                         else {
-                            if (token !== null && userId !== null) {
-                                resolve({ token: token, userId: userId });
-                            }
-                            else {
-                                reject("Bad Login Attempt.");
-                            }
-
+                            resolve(null);
                         }
+
                     });
                 });
             });
@@ -181,22 +181,21 @@ function getHash(password, salt) {
 }
 
 
+
 module.exports = class AuthDAO {
     constructor() {
 
     }
 
-    createNewUser(firstName, lastName, email, desiredUsername, password) {
+    createNewUser(desiredUsername, email, pw) {
         const salt = createSalt();
-        const hash = getHash(password, salt);
+        const hash = getHash(pw, salt);
 
         let newUser = {
-            firstName: firstName,
-            lastName: lastName,
+            username: desiredUsername,
             email: email,
             active: 1,
             signupDate: getDateTime(),
-            username: desiredUsername
         };
 
         let credential = {
@@ -207,22 +206,29 @@ module.exports = class AuthDAO {
         return AddUser(newUser, credential);
     }
 
-    getAuthToken(nameOrEmail, password, ipAddr) {
-        return getAuthToken(nameOrEmail, password, ipAddr);
+    getAuthToken(nameOrEmail, password, ipAddr, onSuccess) {
+        return getAuthToken(nameOrEmail, password, ipAddr, onSuccess);
     }
 
-    authenticate(userId, token, ipAddr) {
-        // TODO do we care about the ipAddr actually?
-        if (tokens[userId].token !== token) { // && tokens[userId].ipAddr === ipAddr) {
-            let str = `Token '${token}' not found.`;
-            log(str)
-            throw (str)
+    /**
+     * Parses auth token from headers and returns the auth token.
+     * @param {*} headers 
+     * @returns the id of the user, or null if the auth token isn't valid.
+     */
+    authenticate(headers) {
+        const token = headers.authorization;
+        let userId = tokens[token];
+
+        if (DEBUG) {
+            console.log(`UserId: ${userId}`);
+            console.log(`Auth Token: ${token}`);
         }
-        else {
-            updateTokenLastUse(userId);
+
+        if (userId) {
+            updateTokenLastUse(token);
+            return userId;
         }
+        return null;
     }
-
-
 
 }

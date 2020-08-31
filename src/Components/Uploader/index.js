@@ -18,6 +18,7 @@ class Uploader extends Component {
     this.state = ({
       uploads: [],
       filesHovering: false
+      
     });
 
     // Holding bin for files after the user has dragged/dropped or selected them.

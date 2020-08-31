@@ -3,6 +3,9 @@ const { getMostRecent, getGifsByTag, getGifById, getMostPopularTags } = require(
 const { makeAllPossibleTags } = require("./util/util");
 const { MAX_SEARCH_INPUT_LENGTH } = require('./const');
 const log = require("./util/logger");
+const AuthDAO = require("./data/AuthDAO");
+
+let authDAO = new AuthDAO();
 
 app.get('/explore', function (req, res) {
     getMostRecent(15, result => res.send(result));

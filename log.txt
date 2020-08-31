@@ -302,3 +302,488 @@ ReferenceError: userId is not defined
     at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
     at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
 
+2020-08-31 11:17:42 2020-08-31 11:17:42 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:130:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 11:18:26 2020-08-31 11:18:26 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:130:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 11:19:01 2020-08-31 11:19:01 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:130:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 11:25:58 2020-08-31 11:25:58 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:130:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 11:28:34 2020-08-31 11:28:34 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:130:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 11:30:16 2020-08-31 11:30:16 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:130:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 11:31:28 Bad login attempt from ::1. Invalid Password.
+2020-08-31 11:31:28 2020-08-31 11:31:28 reject is not a function 
+TypeError: reject is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:168:33)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 11:36:01 Bad login attempt from ::1. Invalid Password.
+2020-08-31 13:15:20 Bad login attempt from ::1. Invalid Password.
+2020-08-31 13:15:50 2020-08-31 13:15:50 onSuccess is not a function 
+TypeError: onSuccess is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:165:25)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 13:19:45 Bad login attempt from ::1. Invalid Password.
+2020-08-31 13:19:59 2020-08-31 13:19:59 onSuccess is not a function 
+TypeError: onSuccess is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:165:25)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 13:22:08 2020-08-31 13:22:08 onSuccess is not a function 
+TypeError: onSuccess is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:162:25)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 13:24:48 2020-08-31 13:24:48 onSuccess is not a function 
+TypeError: onSuccess is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:162:25)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 13:26:37 2020-08-31 13:26:37 onSuccess is not a function 
+TypeError: onSuccess is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:163:25)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 13:27:50 2020-08-31 13:27:50 ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client 
+Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+    at Handshake.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Handshake.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Handshake.js:123:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at Protocol.handshake (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:51:23)
+    at PoolConnection.connect (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:116:18)
+    at Pool.getConnection (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:48:16)
+    at getAuthToken (/home/nils/gif-it/server/data/AuthDAO.js:102:10)
+    at AuthDAO.getAuthToken (/home/nils/gif-it/server/data/AuthDAO.js:208:16)
+    at /home/nils/gif-it/server/authAPI.js:31:17
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/nils/gif-it/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/nils/gif-it/node_modules/express/lib/router/route.js:112:3))
+
+2020-08-31 13:29:33 Bad login attempt from ::1. Invalid Password.
+2020-08-31 13:32:13 Bad login attempt from ::1. Invalid Password.
+2020-08-31 13:37:06 Bad login attempt from ::1. Invalid Password.
+2020-08-31 13:38:07 Bad login attempt from ::1. Invalid Password.
+2020-08-31 13:39:36 Bad login attempt from ::1. Invalid Password.
+2020-08-31 14:05:36 Bad login attempt from ::1. Invalid Password.
+2020-08-31 14:07:35 Bad login attempt from ::1. Invalid Password.
+2020-08-31 14:11:06 2020-08-31 14:11:06 Cannot read property 'beginTransaction' of undefined 
+TypeError: Cannot read property 'beginTransaction' of undefined
+    at /home/nils/gif-it/server/data/AuthDAO.js:106:24
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:58:9)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Handshake.js:125:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 14:11:51 2020-08-31 14:11:51 Cannot read property 'beginTransaction' of undefined 
+TypeError: Cannot read property 'beginTransaction' of undefined
+    at /home/nils/gif-it/server/data/AuthDAO.js:107:24
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:58:9)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Handshake.js:125:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 14:42:29 2020-08-31 14:42:29 Cannot read property 'beginTransaction' of undefined 
+TypeError: Cannot read property 'beginTransaction' of undefined
+    at /home/nils/gif-it/server/data/AuthDAO.js:46:24
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:58:9)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Handshake.js:125:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 14:43:33 2020-08-31 14:43:33 Cannot read property 'beginTransaction' of undefined 
+TypeError: Cannot read property 'beginTransaction' of undefined
+    at /home/nils/gif-it/server/data/AuthDAO.js:46:24
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:58:9)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Handshake.js:125:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 15:12:30 2020-08-31 15:12:30 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 15:13:18 2020-08-31 15:13:18 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 15:13:27 2020-08-31 15:13:27 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 15:14:29 2020-08-31 15:14:29 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 15:16:30 2020-08-31 15:16:30 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 15:17:28 2020-08-31 15:17:28 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 15:17:52 2020-08-31 15:17:52 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 15:18:39 2020-08-31 15:18:39 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 15:18:47 2020-08-31 15:18:47 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 15:19:42 2020-08-31 15:19:42 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 15:37:56 2020-08-31 15:37:56 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.writeHead (_http_server.js:273:21)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:352:11)
+    at Busboy.emit (events.js:322:22)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at /home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:52:13
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-08-31 15:40:30 2020-08-31 15:40:30 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.writeHead (_http_server.js:273:21)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:352:11)
+    at Busboy.emit (events.js:322:22)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at /home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:52:13
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-08-31 16:50:51 2020-08-31 16:50:51 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.writeHead (_http_server.js:273:21)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:352:11)
+    at Busboy.emit (events.js:322:22)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at /home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:52:13
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-08-31 17:00:30 2020-08-31 17:00:30 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 17:02:27 2020-08-31 17:02:27 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:131:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 17:02:48 2020-08-31 17:02:48 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:132:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 17:04:17 2020-08-31 17:04:17 Cannot read property 'hashed' of undefined 
+TypeError: Cannot read property 'hashed' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:132:47)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 17:05:59 Bad login attempt from ::1. vmont not found.
+2020-08-31 18:38:26 2020-08-31 18:38:26 error is not defined 
+ReferenceError: error is not defined
+    at /home/nils/gif-it/server/data/AuthDAO.js:43:13
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:64:7)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.Sequence.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-08-31 18:40:30 2020-08-31 18:40:30 error is not defined 
+ReferenceError: error is not defined
+    at /home/nils/gif-it/server/data/AuthDAO.js:43:13
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:64:7)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.Sequence.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+

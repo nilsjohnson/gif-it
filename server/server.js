@@ -1,7 +1,7 @@
 /*
 Usage:
 --debug		App will print debug statements
---dev 		App in "dev" mode and wont transfer objects to s3
+--dev 		App in "dev" mode and wont transfer objects to s3. Will also serve gifs from a local directory
  */
 
 const express = require('express');
@@ -46,6 +46,7 @@ for(let i = 2; i < process.argv.length; i++) {
 }
 
 app.use(cors(corsOptions));
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
 // exports
@@ -53,9 +54,10 @@ exports.app = app;
 exports.http = http;
 
 // define APIs
-require('./util/dataAccess')
+require('./util/gifDataAccess')
 require('./exploreAPI');
 require('./uploadAPI');
+require('./authAPI');
 
 // listen for API requests
 http.listen(PORT_NUM, () => {

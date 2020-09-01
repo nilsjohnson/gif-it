@@ -46,3 +46,26 @@ ALTER TABLE upload MODIFY originalFilename VARCHAR(255);
 -- added an index on tags to allow for faster suggestions
 ALTER TABLE tag ADD INDEX tag_index (tag);
 
+-- added user accounts
+
+CREATE TABLE user (
+	id INT NOT NULL AUTO_INCREMENT,
+	username VARCHAR(20) NOT NULL UNIQUE,
+	email VARCHAR(128) NOT NULL UNIQUE,
+	signupDate DATETIME NOT NULL,
+	active TINYINT NOT NULL,
+	verified TINYINT DEFAULT 0,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE user_credential (
+	id INT NOT NULL,
+	hashed CHAR(128) NOT NULL,
+	salt CHAR(64) NOT NULL,
+	FOREIGN KEY (id) REFERENCES user(id)
+);
+
+CREATE USER 'gracie'@'localhost' IDENTIFIED BY 'pass123$';
+
+GRANT ALL PRIVILEGES ON user to 'gracie'@'localhost';
+GRANT ALL PRIVILEGES ON user_credential to 'gracie'@'localhost';

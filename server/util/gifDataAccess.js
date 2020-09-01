@@ -287,7 +287,7 @@ function getGifsByTag(tags, callback) {
 
 
 module.exports.getSuggestedTags = getSuggestedTags;
-module.exports.getAllGifs = getMostRecent;
+module.exports.getMostRecent = getMostRecent;
 module.exports.addGif = addGif;
 module.exports.getGifsByTag = getGifsByTag;
 module.exports.getGifById = getGifById;

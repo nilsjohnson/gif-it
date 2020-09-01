@@ -1,3 +1,5 @@
+import { readAuthToken } from './util';
+
 // note: this bool must be set propery prior to building for production
 let production = true;
 let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
@@ -6,7 +8,7 @@ let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
  * Makes an API call to get the newest gifs
  */
 function getNew() {
-    return fetch(`${server}/explore`);
+  return fetch(`${server}/explore`);
 }
 
 /**
@@ -17,11 +19,14 @@ function getNew() {
  * @param {*} data            The file
  */
 function uploadFile(socketId, tempUploadId, data = {}) {
-    console.log(socketId);
-    return fetch(`${server}/api/videoUpload/${socketId}/${tempUploadId}`, {
-      method: 'POST',
-      body: data
-    });
+  console.log(socketId);
+  return fetch(`${server}/api/videoUpload/${socketId}/${tempUploadId}`, {
+    method: 'POST',
+    body: data,
+    headers: {
+      'authorization' : readAuthToken()
+    }
+  });
 }
 
 /**
@@ -29,7 +34,7 @@ function uploadFile(socketId, tempUploadId, data = {}) {
  * 
  * @param {*} searchInput   The text the user entered as a search query
  */
-function search(searchInput) { 
+function search(searchInput) {
   const params = { input: searchInput };
   const paramString = new URLSearchParams(params);
   return fetch(`${server}/search?${paramString.toString()}`);
@@ -41,7 +46,7 @@ function search(searchInput) {
  * @param {*} gifId 
  */
 function getGifById(gifId) {
-  return fetch(`${server}/${gifId}`);
+  return fetch(`${server}/gif/${gifId}`);
 }
 
 /**
@@ -52,7 +57,32 @@ function getPopularTags(limit = 10) {
   return fetch(`${server}/popularTags/${limit}`);
 }
 
-// This is used for opening sockets. See Uploader/index.js
-function getServer() { return server};
+// This is used for opening sockets. See Uploader/index.js for example
+function getServer() { return server };
 
-export { getServer, getPopularTags, getGifById, getNew, uploadFile, search }
+/**
+ * This is used to log a user in.
+ * @param {*} loginCredentials  username and password
+ * @ return   A promise, where resolve contains the token as the first argument
+ */
+function getAuthToken(loginCredentials = {}) {
+  return fetch(`${server}/auth/login/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(loginCredentials)
+  });
+}
+
+function signUp(newUser = {}) {
+  return fetch(`${server}/auth/newUser`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newUser)
+  });
+}
+
+export { signUp, getAuthToken, getServer, getPopularTags, getGifById, getNew, uploadFile, search }

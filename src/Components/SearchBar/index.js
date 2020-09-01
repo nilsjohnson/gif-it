@@ -5,7 +5,7 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/styles';
-import { Box, Grid, TextField } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import AddTag from './AddTag';
 import { getPopularTags } from '../../util/data';
 import { MAX_SEARCH_INPUT_LENGTH } from '../../util/const';

@@ -20,11 +20,11 @@ const path = require('path');
 const Busboy = require('busboy');
 const { app, http } = require('./server');
 const { FilePaths, MAX_UPLOAD_SIZE } = require('./const');
-const { addGif, getSuggestedTags } = require('./util/dataAccess');
+const { addGif, getSuggestedTags } = require('./util/gifDataAccess');
 const { getUniqueID, checkUnique } = require("./util/fileUtil");
 const { addJob } = require('./util/ffmpegWrapper');
 const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
-
+const AuthDAO = require('./data/AuthDAO');
 let io = require('socket.io')(http) 
 
 if(DEV) {
@@ -33,6 +33,8 @@ if(DEV) {
 else {
   io.set('origins', 'https://gif-it.io:*')
 }
+
+let authDAO = new AuthDAO();
 
 
 /**
@@ -264,6 +266,11 @@ io.on("connection", (newSocket) => {
  */
 app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
   if (DEBUG) { console.log(`video upload hit by socket ${req.params.socketId}.`); }
+  
+  let userId = authDAO.authenticate(req.headers);
+  if(!userId) {
+    console.log("this user is not authenticated.");
+  }
 
   let socketId = req.params.socketId;
   let tempUploadId = req.params.tempUploadId;
@@ -278,10 +285,12 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
   if (fileSize / (1000 * 1000).toFixed(2) > MAX_UPLOAD_SIZE) {
     if (DEBUG) { console.log(`Chosen file is ${fileSize / (1000 * 1000).toFixed(2)} MB, while ${MAX_UPLOAD_SIZE} MB is the maximum. Returning 400..`) };
     res.status(400).send({ error: `File Too Large. Max Size: ${MAX_UPLOAD_SIZE} Mb.` });
+    return;
   }
   else if (!connections[socketId]) {
     if (DEBUG) { console.log(`${socketId} not found.`) };
     res.status(400).send({ error: `Socket ${socketId} not found.` });
+    return;
   }
   else {
     let busboy = new Busboy({ headers: req.headers });
@@ -308,7 +317,6 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
         res.status(400).send({ error: err });
         return;
       }
-
 
       // signal to client that we are starting the upload shortly
       connections[socketId].socket.emit("UploadStart", {

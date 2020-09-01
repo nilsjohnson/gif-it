@@ -4,9 +4,14 @@ const AWS = require('aws-sdk');
 const { BUCKET_NAME } = require('../const');
 AWS.config.update({ region: 'us-east-1' })
 let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
+const moment = require("moment");
 
 const { MAX_TAG_LENGTH } = require('../const');
 
+
+function getDateTime() {
+    return moment().format('YYYY-MM-DD HH:mm:ss');
+}
 
 function isValidTag(tag) {
     console.log(`testing tag '${tag}'`);
@@ -151,6 +156,7 @@ function makeAllPossibleTags(str) {
     return allTags;
 }
 
+exports.getDateTime = getDateTime;
 exports.makeAllPossibleTags = makeAllPossibleTags;
 exports.processTags = processTags;
 exports.deleteFromS3 = deleteFromS3;

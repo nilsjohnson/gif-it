@@ -1,4 +1,3 @@
-const moment = require("moment");
 const crypto = require("crypto");
 const { getDateTime } = require("../util/util");
 
@@ -14,13 +13,23 @@ let pool = mysql.createPool({
     database: 'gif_it'
 });
 
+/**
+ * An object that maps auth tokens to userIds, dates last used, and last used ipAddr
+ */
 let tokens = readObj(FilePaths.AUTH_TOKEN_FILE);
 
-
+/**
+ * @returns a 32 byte random string of hex digits
+ */
 function createSalt() {
     return crypto.randomBytes(32).toString("hex");
 }
 
+/**
+ * Makes a new auth token and addes it to the token object.
+ * @param {*} userId The user's id
+ * @param {*} ipAddr The users ip address
+ */
 function createNewAuthToken(userId, ipAddr) {
     let token = crypto.randomBytes(32).toString("hex");
     tokens[token] = { ipAddr: ipAddr, userId: userId, lastUsed: getDateTime() };
@@ -28,35 +37,65 @@ function createNewAuthToken(userId, ipAddr) {
     return token;
 }
 
+/**
+ * Updates the time a token was last used to 'right now'
+ * @param {*} token The token to upldate 
+ */
 function updateTokenLastUse(token) {
     tokens[token].lastUsed = getDateTime();
     saveTokens();
 }
 
+/**
+ * saves tokens to file
+ */
 function saveTokens() {
     writeObj(tokens, FilePaths.AUTH_TOKEN_FILE);
 }
 
+/**
+ * Inserts a new user into the database
+ * @param {*} user 
+ * @param {*} credentials 
+ * @returns a Promise. Rejects with an error message, or resolves with no arguments
+ */
 function AddUser(user, credentials) {
     return new Promise((resolve, reject) => {
         pool.getConnection((error, connection) => {
             if (error) {
-                reject(error);
+                log(error);
+                reject({ error: error, message: "Database Error. Please Try Later." });
             }
             connection.beginTransaction(function (error) {
                 if (error) {
                     return connection.rollback(function () {
-                        reject(error);
+                        reject({ error: error, message: "Database Error. Please Try Later." });
                     });
                 }
 
                 // 1.) insert the user
                 let userSql = `INSERT INTO user SET ?`;
                 connection.query(userSql, user, (error, results, fields) => {
-                    console.log(results);
                     if (error) {
+                        let responseMessage = "There was an unknown error. Please try again.";
+                        // if ER_DUP_ENTRY
+                        if (error.errno === 1062) {
+                            if(error.message.includes("user.email")) {
+                                responseMessage = "It looks like this email is already in use.";
+                            }   
+                            else if(error.message.includes("user.username")) {
+                                responseMessage = "This username is already taken.";
+                            }
+                            else {
+                                // this should never be hit.
+                                log("Inserting new user into database failed for a duplicate entry, however, we were unable to parse the error to find out why.");
+                                log(error.message);
+                                responseMessage = error.message;
+                            }
+                        }
+
                         return connection.rollback(function () {
-                            reject(error);
+                            reject({ error: error, message: responseMessage });
                         });
                     }
 
@@ -65,7 +104,8 @@ function AddUser(user, credentials) {
                     connection.query(getIdSql, (error, results, fields) => {
                         if (error) {
                             return connection.rollback(function () {
-                                reject(error);
+                                log(error.message);
+                                reject({ error: error, message: "Database issue. Please Try Later." });
                             });
                         }
 
@@ -78,18 +118,20 @@ function AddUser(user, credentials) {
                             console.log(results);
                             if (error) {
                                 return connection.rollback(function () {
-                                    reject(error);
+                                    log(error.message);
+                                    reject({ error: error, message: "Database issue. Please Try Later." });
                                 });
                             }
 
                             connection.commit(error => {
                                 if (error) {
                                     return connection.rollback(function () {
-                                        reject(error);
+                                        log(error.message);
+                                        reject({ error: error, message: "Database issue. Please Try Later." });
                                     });
                                 }
                                 else {
-                                    resolve(userId);
+                                    resolve();
                                 }
                             });
                         });
@@ -100,6 +142,13 @@ function AddUser(user, credentials) {
     });
 }
 
+/**
+ * Used to log users in.
+ * @param {*} nameOrEmail 
+ * @param {*} password 
+ * @param {*} ipAddr 
+ * @returns a new auth token
+ */
 function getAuthToken(nameOrEmail, password, ipAddr) {
     return new Promise((resolve, reject) => {
         let loginError = null;
@@ -176,17 +225,30 @@ function getAuthToken(nameOrEmail, password, ipAddr) {
     });
 }
 
+/**
+ * @returns A hashed password.
+ * @param {*} password 
+ * @param {*} salt 
+ */
 function getHash(password, salt) {
     return crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
 }
 
 
-
+/**
+ * DAO for creating and authenticating users.
+ */
 module.exports = class AuthDAO {
     constructor() {
 
     }
 
+    /**
+     * Adds a new user to the database
+     * @param {*} desiredUsername 
+     * @param {*} email 
+     * @param {*} pw 
+     */
     createNewUser(desiredUsername, email, pw) {
         const salt = createSalt();
         const hash = getHash(pw, salt);
@@ -206,12 +268,19 @@ module.exports = class AuthDAO {
         return AddUser(newUser, credential);
     }
 
+    /**
+     * Fetches a new auth token for a user
+     * @param {*} nameOrEmail 
+     * @param {*} password 
+     * @param {*} ipAddr 
+     * @param {*} onSuccess callback function
+     */
     getAuthToken(nameOrEmail, password, ipAddr, onSuccess) {
         return getAuthToken(nameOrEmail, password, ipAddr, onSuccess);
     }
 
     /**
-     * Parses auth token from headers and returns the auth token.
+     * Parses auth token from headers
      * @param {*} headers 
      * @returns the id of the user, or null if the auth token isn't valid.
      */
@@ -230,5 +299,4 @@ module.exports = class AuthDAO {
         }
         return null;
     }
-
 }

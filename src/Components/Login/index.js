@@ -11,6 +11,8 @@ import { Paper } from '@material-ui/core';
 import { getAuthToken } from '../../util/data';
 import { saveAuthToken } from '../../util/util';
 
+import { Redirect } from "react-router-dom";
+
 
 const useStyles = (theme => ({
     paper: {
@@ -45,20 +47,23 @@ class Login extends Component {
         super(props);
 
         this.state = {
-            username: "",
-            pw: "",
+            username: props.username,
+            pw: props.pw,
             usernameError: false,
-            pwError: false
+            pwError: false,
+            message: "",
+            redirect: null
         }
     }
 
     setUsername = (event) => {
         let val = event.target.value;
         // only sets the value if its not unreasonably long
-        if(val.length < MAX_INPUT_LENGTH) {
+        if (val.length < MAX_INPUT_LENGTH) {
             this.setState({
                 username: val,
-                usernameError: false
+                usernameError: false,
+                message: ""
             });
         }
     }
@@ -66,44 +71,47 @@ class Login extends Component {
     setPassword = (event) => {
         let val = event.target.value;
         // only sets the value if its not unreasonably long
-        if(val.length < MAX_INPUT_LENGTH) {
+        if (val.length < MAX_INPUT_LENGTH) {
             this.setState({
                 pw: val,
-                pwError: false
+                pwError: false,
+                message: ""
             });
         }
     }
 
     login = () => {
-        if(!this.isValidInput()) {
+        if (!this.isValidInput()) {
             return;
-        }   
+        }
 
-        getAuthToken({usernameOrEmail: this.state.username, pw: this.state.pw})
-        .then(res => {
-            if(res.ok) {
-                res.json().then(resJson => {
-                    console.log(resJson);
-                    saveAuthToken(resJson);
-                }).catch(jsonErr => console.log(jsonErr))
-            }
-            else {
-                console.log("response not ok");
-                console.log(res);
-            }
-        })
-        .catch(err => console.log(err));
+        getAuthToken({ usernameOrEmail: this.state.username, pw: this.state.pw })
+            .then(res => {
+                if (res.ok) {
+                    res.json().then(token => {
+                        saveAuthToken(token);
+                        console.log("redirecting home");
+                        this.setState({ redirect: "/" });
+                    }).catch(jsonErr => console.log(jsonErr));
+                }
+                else if (res.status === 409) {
+                    this.setState({
+                        message: "Invalid username/password"
+                    });
+                }
+            })
+            .catch(err => console.log(err));
     }
 
     isValidInput = () => {
         let usernameError = false;
         let pwError = false;
 
-        if(!this.state.username) {
-            usernameError = true;    
+        if (!this.state.username) {
+            usernameError = true;
             console.log("username error found");
         }
-        if(!this.state.pw) {
+        if (!this.state.pw) {
             pwError = true;
             console.log("pw error found");
         }
@@ -113,7 +121,7 @@ class Login extends Component {
             pwError: pwError
         });
 
-        if(usernameError || pwError) {
+        if (usernameError || pwError) {
             return false;
         }
         return true;
@@ -121,6 +129,10 @@ class Login extends Component {
 
     render() {
         const { classes } = this.props;
+
+        if(this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+        }
 
         return (
             <Container component="main" maxWidth="xs" >
@@ -130,44 +142,48 @@ class Login extends Component {
                         <Typography component="h1" variant="h5">
                             Log In
                         </Typography>
-                        <form>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        error={this.state.usernameError}
-                                        variant="outlined"
-                                        fullWidth
-                                        id="username"
-                                        label="Username or Email"
-                                        name="usernameOrEmail"
-                                        onChange={this.setUsername}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        error={this.state.pwError}
-                                        variant="outlined"
-                                        fullWidth
-                                        name="password"
-                                        label="Password"
-                                        type="password"
-                                        id="password"
-                                        autoComplete="current-password"
-                                        onChange={this.setPassword}
-                                    />
-                                </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    error={this.state.usernameError}
+                                    variant="outlined"
+                                    fullWidth
+                                    defaultValue={this.props.username}
+                                    id="username"
+                                    label="Username or Email"
+                                    name="usernameOrEmail"
+                                    autoComplete="username"
+                                    onChange={this.setUsername}
+                                />
                             </Grid>
-                            <Button
-                                onClick={this.login}
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                Log In
+                            <Grid item xs={12}>
+                                <TextField
+                                    error={this.state.pwError}
+                                    variant="outlined"
+                                    fullWidth
+                                    defaultValue={this.state.pw}
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    onChange={this.setPassword}
+                                />
+                            </Grid>
+                            {this.state.message &&
+                                <Typography component="h5" variant="h5">
+                                    {this.state.message}
+                                </Typography>}
+                        </Grid>
+                        <Button
+                            onClick={this.login}
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Log In
                             </Button>
-
-                        </form>
                         <Grid container justify="flex-end">
                         </Grid>
                     </div>

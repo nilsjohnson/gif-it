@@ -13,10 +13,11 @@ app.post('/auth/newUser', function (req, res) {
     let email = req.body.email;
     let pw = req.body.pw;
 
-    authDAO.createNewUser(desiredUsername, email, pw).then(userId => {
-        console.log(`New User Created. Id: ${userId}`);
-        res.redirect('/dashboard?userId=' + userId);
-    }).catch(err => console.log(err));
+    authDAO.createNewUser(desiredUsername, email, pw).then(() => {
+        res.status(201).send("New Account Created");
+    }).catch(err => {
+        res.status(400).send(err.message);
+    });
 });
 
 app.post('/auth/login', function (req, res) {
@@ -27,14 +28,18 @@ app.post('/auth/login', function (req, res) {
 
     authDAO.getAuthToken(usernameOrEmail, password, ipAdder)
         .then(token => {
-            console.log("Result");
-            console.log(token);
-            res.json(token);
+            if (DEBUG) { console.log(`Auth Token Returned From DAO: ${token}`); }
+
+            if(token) {
+                res.json(token);
+            }
+            else {
+                res.status(409).send({ error: "Invalid Username/Password" });
+            }
+            
         })
         .catch(err => {
-            console.log("error getting auth token");
-            console.log(err);
-            res.status(500).send("server error");
+            res.status(500).send(err);
         });
 });
 

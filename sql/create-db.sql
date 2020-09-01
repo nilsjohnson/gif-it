@@ -54,6 +54,7 @@ CREATE TABLE user (
 	email VARCHAR(128) NOT NULL UNIQUE,
 	signupDate DATETIME NOT NULL,
 	active TINYINT NOT NULL,
+	verified TINYINT DEFAULT 0,
 	PRIMARY KEY (id)
 );
 

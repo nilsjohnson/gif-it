@@ -11,6 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Paper } from '@material-ui/core';
 import { signUp } from '../../util/data';
+import Login from '../Login';
 
 const useStyles = (theme => ({
     paper: {
@@ -50,8 +51,12 @@ class MakeAccount extends Component {
             pw: "",
             pwErr: false,
             agree: false,
-            errMsg: ""
+            errMsg: "",
+            success: false
         };
+
+        this.acceptedUsername = null;
+        this.acceptedPw = null;
     }
 
     setDesiredUsername = (event) => {
@@ -87,28 +92,40 @@ class MakeAccount extends Component {
     }
 
     signUp = () => {
-        console.log("signup clicked");
-        if (this.checkInput()) {
-            if (this.state.agree) {
-                let newUserObj = {
-                    desiredUsername: this.state.desiredUsername.trim(),
-                    email: this.state.email.trim(),
-                    pw: this.state.pw,
-                };
+        if (!this.checkInput()) {
+            return;
+        }
 
-                signUp(newUserObj)
-                    .then(res => {
-                        console.log(res);
-                    })
-                    .catch(err => this.setState({errMsg: "err!"}));
+        if (!this.state.agree) {
+            alert("You must be at least 13 years of age and promise to be behave in a wholesome manner on gif-it.io");
+            return;
+        }
+
+        let newUserObj = {
+            desiredUsername: this.state.desiredUsername.trim(),
+            email: this.state.email.trim(),
+            pw: this.state.pw,
+        };
+
+        signUp(newUserObj).then(res => {
+            if (res.status === 201) {
+                console.log("Account Created.");
+                this.acceptedPw = this.state.pw;
+                this.acceptedUsername = this.state.desiredUsername;
+                this.setState({success: true});
             }
             else {
-                alert("You must be at least 13 years of age and promise to be behave in a wholesome manner on gif-it.io");
+                return res.text();
             }
-        }
+        }).then(text => {
+            this.setState({
+                errMsg: text
+            });
+        }).catch(err => console.log(err));
     }
 
     isValidEmailAddr = (email) => {
+                                                                                                                                                                                                                      
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
@@ -142,8 +159,12 @@ class MakeAccount extends Component {
 
     render() {
         const { classes } = this.props;
-        return (
 
+        if(this.state.success) {
+            return <Login username={this.acceptedUsername} pw={this.acceptedPw}/>
+        }
+
+        return (
             <Container component="main" maxWidth="xs" >
                 <Paper className={classes.container}>
                     <CssBaseline />
@@ -191,7 +212,7 @@ class MakeAccount extends Component {
                             {this.state.errMsg &&
                                 <Grid item xs={12}>
                                     <Typography component="h5" variant="h5">
-                                        {this.state.errMsg}
+                                        {this.state.errMsg.toString()}
                                     </Typography>
                                 </Grid>
                             }

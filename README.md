@@ -26,13 +26,17 @@ And the app should now be running running on port 3001 with http requests forwar
 
 ## sever.js flags
 
-You can pass '-d' to server.js flag to print debug statements.
+You can pass '--debug' to server.js flag to print debug statements.
 
-```$ node ./server/server.js -d```
+```$ node ./server/server.js --debug```
 
-On a production server, to server over https, pass in the '-p' flag
+If you are working on the app, you should pass in the '--dev' flag. This makes it so the app doesnt make S3 requests and also serves gifs from a local directory.
 
-```$ node ./server/server.js -p```
+```$ node ./server/server.js --dev```
+
+If you are developing the app, typically you might want to pass both.
+```$ node ./server/server.js --dev --debug```
+
 
 ## TODO List in order of importance
 - ~~Users have a cool, soothing and linear gradient to look at.~~

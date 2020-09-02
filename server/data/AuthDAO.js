@@ -26,6 +26,13 @@ function createSalt() {
 }
 
 /**
+ * @returns a 4 byte random string of hex digits
+ */
+function createVerificationCode() {
+    return crypto.randomBytes(4).toString("hex");
+}
+
+/**
  * Makes a new auth token and addes it to the token object.
  * @param {*} userId The user's id
  * @param {*} ipAddr The users ip address
@@ -57,6 +64,37 @@ function saveTokens() {
     writeObj(tokens, FilePaths.AUTH_TOKEN_FILE);
 }
 
+// TODO naming..
+function _verifyUser(userId, code) {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((error, connection) => {
+            if (error) {
+                log(error);
+                reject({ error: error, message: "Database Error. Please Try Later." });
+            }
+    
+            let sql = `UPDATE user_verification SET ? WHERE code = ${connection.escape(code)} AND id = ${connection.escape(userId)}`;
+            connection.query(sql, { verified: 1 }, (error, results, fields) => {
+                console.log(results);
+                if (error) {
+                    log(error);
+                    reject(error);
+                }
+
+                if(results.changedRows === 1) {
+                    resolve("Verification success!");
+                }
+                else {
+                    reject("Hmm...something went wrong. Shoot me an email: nilsjohnson328@gmail.com. Thanks!");
+                }
+                
+                
+            });
+        });
+    });
+    
+}
+
 /**
  * Inserts a new user into the database
  * @param {*} user 
@@ -64,87 +102,99 @@ function saveTokens() {
  * @returns a Promise. Rejects with an error message, or resolves with no arguments
  */
 function AddUser(user, credentials) {
-    return new Promise((resolve, reject) => {
-        pool.getConnection((error, connection) => {
-            if (error) {
-                log(error);
-                reject({ error: error, message: "Database Error. Please Try Later." });
-            }
-            connection.beginTransaction(function (error) {
-                if (error) {
-                    return connection.rollback(function () {
-                        reject({ error: error, message: "Database Error. Please Try Later." });
-                    });
-                }
-
-                // 1.) insert the user
-                let userSql = `INSERT INTO user SET ?`;
-                connection.query(userSql, user, (error, results, fields) => {
+            return new Promise((resolve, reject) => {
+                pool.getConnection((error, connection) => {
                     if (error) {
-                        let responseMessage = "There was an unknown error. Please try again.";
-                        // if ER_DUP_ENTRY
-                        if (error.errno === 1062) {
-                            if(error.message.includes("user.email")) {
-                                responseMessage = "It looks like this email is already in use.";
-                            }   
-                            else if(error.message.includes("user.username")) {
-                                responseMessage = "This username is already taken.";
-                            }
-                            else {
-                                // this should never be hit.
-                                log("Inserting new user into database failed for a duplicate entry, however, we were unable to parse the error to find out why.");
-                                log(error.message);
-                                responseMessage = error.message;
-                            }
-                        }
-
-                        return connection.rollback(function () {
-                            reject({ error: error, message: responseMessage });
-                        });
+                        log(error);
+                        reject({ error: error, message: "Database Error. Please Try Later." });
                     }
-
-                    // 2.) get id
-                    let getIdSql = 'SELECT LAST_INSERT_ID() as id';
-                    connection.query(getIdSql, (error, results, fields) => {
+                    connection.beginTransaction(function (error) {
                         if (error) {
                             return connection.rollback(function () {
-                                log(error.message);
-                                reject({ error: error, message: "Database issue. Please Try Later." });
+                                reject({ error: error, message: "Database Error. Please Try Later." });
                             });
                         }
 
-                        let userId = results[0].id;
-                        credentials.id = userId;
-
-                        // 2.) insert the credentials
-                        let credSql = `INSERT INTO user_credential SET ?`
-                        connection.query(credSql, credentials, (error, results, fields) => {
-                            console.log(results);
+                        // 1.) insert the user
+                        let userSql = `INSERT INTO user SET ?`;
+                        connection.query(userSql, user, (error, results, fields) => {
                             if (error) {
+                                let responseMessage = "There was an unknown error. Please try again.";
+                                // if ER_DUP_ENTRY
+                                if (error.errno === 1062) {
+                                    if (error.message.includes("user.email")) {
+                                        responseMessage = "It looks like this email is already in use.";
+                                    }
+                                    else if (error.message.includes("user.username")) {
+                                        responseMessage = "This username is already taken.";
+                                    }
+                                    else {
+                                        // this should never be hit.
+                                        log("Inserting new user into database failed for a duplicate entry, however, we were unable to parse the error to find out why.");
+                                        log(error.message);
+                                        responseMessage = error.message;
+                                    }
+                                }
+
                                 return connection.rollback(function () {
-                                    log(error.message);
-                                    reject({ error: error, message: "Database issue. Please Try Later." });
+                                    reject({ error: error, message: responseMessage });
                                 });
                             }
 
-                            connection.commit(error => {
+                            // 2.) get id
+                            let getIdSql = 'SELECT LAST_INSERT_ID() as id';
+                            connection.query(getIdSql, (error, results, fields) => {
                                 if (error) {
                                     return connection.rollback(function () {
                                         log(error.message);
                                         reject({ error: error, message: "Database issue. Please Try Later." });
                                     });
                                 }
-                                else {
-                                    resolve();
-                                }
+
+                                let userId = results[0].id;
+                                credentials.id = userId;
+
+                                // 2.) insert the credentials
+                                let credSql = `INSERT INTO user_credential SET ?`
+                                connection.query(credSql, credentials, (error, results, fields) => {
+                                    console.log(results);
+                                    if (error) {
+                                        return connection.rollback(function () {
+                                            log(error.message);
+                                            reject({ error: error, message: "Database issue. Please Try Later." });
+                                        });
+                                    }
+
+                                    // 3 insert the verification code
+                                    let verSql = `INSERT INTO user_verification SET ?`;
+                                    let verificationCode = createVerificationCode();
+                                    connection.query(verSql, { id: userId, code: verificationCode }, (error, results, fields) => {
+                                        if (error) {
+                                            return connection.rollback(function () {
+                                                log(error.message);
+                                                reject({ error: error, message: "Database issue. Please Try Later." });
+                                            });
+                                        }
+
+                                        connection.commit(error => {
+                                            if (error) {
+                                                return connection.rollback(function () {
+                                                    log(error.message);
+                                                    reject({ error: error, message: "Database issue. Please Try Later." });
+                                                });
+                                            }
+                                            else {
+                                                resolve({userId: userId, verificationCode: verificationCode});
+                                            }
+                                        });
+                                    });
+                                });
                             });
                         });
                     });
                 });
             });
-        });
-    });
-}
+        }
 
 /**
  * Used to log users in.
@@ -154,80 +204,80 @@ function AddUser(user, credentials) {
  * @returns a new auth token
  */
 function getAuthToken(nameOrEmail, password, ipAddr) {
-    return new Promise((resolve, reject) => {
-        let loginError = null;
+            return new Promise((resolve, reject) => {
+                let loginError = null;
 
-        pool.getConnection((err, connection) => {
-            if (err) {
-                reject(err);
-            }
-            connection.beginTransaction(function (err) {
-                if (err) {
-                    reject(err)
-                }
+                pool.getConnection((err, connection) => {
+                    if (err) {
+                        reject(err);
+                    }
+                    connection.beginTransaction(function (err) {
+                        if (err) {
+                            reject(err)
+                        }
 
-                // 1.) insert the user
+                        // 1.) insert the user
 
-                let params = [];
-                params.push(nameOrEmail);
-                params.push(nameOrEmail);
+                        let params = [];
+                        params.push(nameOrEmail);
+                        params.push(nameOrEmail);
 
-                let getUserSql = `SELECT user_credential.hashed, user_credential.salt, user.id 
+                        let getUserSql = `SELECT user_credential.hashed, user_credential.salt, user.id 
                 FROM user_credential 
                     JOIN user ON user_credential.id = user.id 
                 WHERE user.email = ? OR user.username = ?`;
-                connection.query(getUserSql, params, (error, results, fields) => {
-                    if (error) {
-                        return connection.rollback(function () {
-                            reject(error);
-                        });
-                    }
+                        connection.query(getUserSql, params, (error, results, fields) => {
+                            if (error) {
+                                return connection.rollback(function () {
+                                    reject(error);
+                                });
+                            }
 
-                    let token = null;
-                    let userId = null;
-                    if (results[0]) {
-                        console.log(results);
-                        let hash = results[0].hashed;
-                        let salt = results[0].salt;
-                        userId = results[0].id;
-                        if (userId === null) {
-                            console.log("UserId is null. This should never happen.");
-                        }
+                            let token = null;
+                            let userId = null;
+                            if (results[0]) {
+                                console.log(results);
+                                let hash = results[0].hashed;
+                                let salt = results[0].salt;
+                                userId = results[0].id;
+                                if (userId === null) {
+                                    console.log("UserId is null. This should never happen.");
+                                }
 
-                        // this is a good login attempt
-                        if (hash === getHash(password, salt) && userId) {
-                            token = createNewAuthToken(userId, ipAddr);
-                        }
-                        // this is a bad login attempt
-                        else {
-                            log(`Bad login attempt from ${ipAddr}. Invalid Password.`);
-                            loginError = "Invalid Username/Password";
-                        }
-                    }
-                    else {
-                        log(`Bad login attempt from ${ipAddr}. ${nameOrEmail} not found.`);
-                        loginError = "Invalid Username/Password";
-                    }
+                                // this is a good login attempt
+                                if (hash === getHash(password, salt) && userId) {
+                                    token = createNewAuthToken(userId, ipAddr);
+                                }
+                                // this is a bad login attempt
+                                else {
+                                    log(`Bad login attempt from ${ipAddr}. Invalid Password.`);
+                                    loginError = "Invalid Username/Password";
+                                }
+                            }
+                            else {
+                                log(`Bad login attempt from ${ipAddr}. ${nameOrEmail} not found.`);
+                                loginError = "Invalid Username/Password";
+                            }
 
-                    connection.commit(function (err) {
-                        if (err) {
-                            return connection.rollback(function () {
-                                reject(err);
+                            connection.commit(function (err) {
+                                if (err) {
+                                    return connection.rollback(function () {
+                                        reject(err);
+                                    });
+                                }
+                                if (token) {
+                                    resolve(token);
+                                }
+                                else {
+                                    resolve(null);
+                                }
+
                             });
-                        }
-                        if (token) {
-                            resolve(token);
-                        }
-                        else {
-                            resolve(null);
-                        }
-
+                        });
                     });
                 });
             });
-        });
-    });
-}
+        }
 
 /**
  * @returns A hashed password.
@@ -235,77 +285,82 @@ function getAuthToken(nameOrEmail, password, ipAddr) {
  * @param {*} salt 
  */
 function getHash(password, salt) {
-    return crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
-}
+            return crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
+        }
 
 
 /**
  * DAO for creating and authenticating users.
  */
 module.exports = class AuthDAO {
-    constructor() {
+            constructor() {
 
-    }
+            }
 
-    /**
-     * Adds a new user to the database
-     * @param {*} desiredUsername 
-     * @param {*} email 
-     * @param {*} pw 
-     */
-    createNewUser(desiredUsername, email, pw) {
-        const salt = createSalt();
-        const hash = getHash(pw, salt);
+            /**
+             * Adds a new user to the database
+             * @param {*} desiredUsername 
+             * @param {*} email 
+             * @param {*} pw 
+             */
+            createNewUser(desiredUsername, email, pw) {
+                const salt = createSalt();
+                const hash = getHash(pw, salt);
 
-        let newUser = {
-            username: desiredUsername,
-            email: email,
-            active: 1,
-            signupDate: getDateTime(),
-        };
+                let newUser = {
+                    username: desiredUsername,
+                    email: email,
+                    active: 1,
+                    signupDate: getDateTime(),
+                };
 
-        let credential = {
-            hashed: hash,
-            salt: salt
-        };
+                let credential = {
+                    hashed: hash,
+                    salt: salt
+                };
 
-        return AddUser(newUser, credential);
-    }
+                return AddUser(newUser, credential);
+            }
 
-    /**
-     * Fetches a new auth token for a user
-     * @param {*} nameOrEmail 
-     * @param {*} password 
-     * @param {*} ipAddr 
-     * @param {*} onSuccess callback function
-     */
-    getAuthToken(nameOrEmail, password, ipAddr, onSuccess) {
-        return getAuthToken(nameOrEmail, password, ipAddr, onSuccess);
-    }
+            /**
+             * Fetches a new auth token for a user
+             * @param {*} nameOrEmail 
+             * @param {*} password 
+             * @param {*} ipAddr 
+             * @param {*} onSuccess callback function
+             */
+            getAuthToken(nameOrEmail, password, ipAddr, onSuccess) {
+                return getAuthToken(nameOrEmail, password, ipAddr, onSuccess);
+            }
 
-    /**
-     * Parses auth token from headers
-     * @param {*} headers 
-     * @returns the id of the user, or null if the auth token isn't valid.
-     */
-    authenticate(headers) {
-        const token = headers.authorization;
-        let userId = tokens[token];
+            /**
+             * Parses auth token from headers
+             * @param {*} headers 
+             * @returns the id of the user, or null if the auth token isn't valid.
+             */
+            authenticate(headers) {
+                const token = headers.authorization;
+                let userId = tokens[token];
 
-        if (DEBUG) {
-            console.log(`UserId: ${userId}`);
-            console.log(`Auth Token: ${token}`);
+                if (DEBUG) {
+                    console.log(`UserId: ${userId}`);
+                    console.log(`Auth Token: ${token}`);
+                }
+
+                if (userId) {
+                    updateTokenLastUse(token);
+                    return userId;
+                }
+                return null;
+            }
+
+            signUserOut(headers) {
+                const token = headers.authorization;
+                deleteToken(token);
+            }
+
+            verifyUser(userId, code) {
+                return _verifyUser(userId, code);
+            }
+
         }
-
-        if (userId) {
-            updateTokenLastUse(token);
-            return userId;
-        }
-        return null;
-    }
-
-    signUserOut(headers) {
-        const token = headers.authorization;
-        deleteToken(token);
-    }
-}

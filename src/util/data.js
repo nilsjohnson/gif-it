@@ -103,7 +103,14 @@ function signOut() {
   });
 }
 
+function verifyAccount(userId, code) {
+  const params = { userId:userId, code: code };
+  const paramString = new URLSearchParams(params);
+  return fetch(`${server}/verify/${userId}/${code}`);
+}
+
 export { 
+  verifyAccount,
   signOut,
   checkToken, 
   signUp, 

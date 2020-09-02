@@ -888,3 +888,56 @@ TypeError: Cannot read property 'errno' of null
 2020-09-01 15:15:31 Bad login attempt from ::1. kilsyf not found.
 2020-09-01 15:15:45 Bad login attempt from ::1. Invalid Password.
 2020-09-01 21:51:23 Bad login attempt from ::1. Invalid Password.
+2020-09-02 17:50:29 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE user_verification.code = ''userId'' AND id = 'code'' at line 1
+2020-09-02 17:52:38 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE user_verification.code = ''userId'' AND id = 'code'' at line 1
+2020-09-02 17:53:43 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE user_verification.code = ''userId'' AND id = 'code'' at line 1
+2020-09-02 17:55:11 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE user_verification.code = ''12'' AND id = 'jasd'' at line 1
+2020-09-02 18:08:23 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE code = ''12'' AND id = 'jasd'' at line 1
+2020-09-02 18:09:32 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE code = '12' AND id = 'jasd'' at line 1
+2020-09-02 18:10:28 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE code = 12 AND id = 'jasd'' at line 1
+2020-09-02 18:11:25 2020-09-02 18:11:25 verificationCode is not defined 
+ReferenceError: verificationCode is not defined
+    at /home/nils/gif-it/server/data/AuthDAO.js:76:104
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:64:7)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.Sequence.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-02 18:13:07 2020-09-02 18:13:07 verificationCode is not defined 
+ReferenceError: verificationCode is not defined
+    at /home/nils/gif-it/server/data/AuthDAO.js:76:104
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:64:7)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.Sequence.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-02 18:14:13 2020-09-02 18:14:13 verificationCode is not defined 
+ReferenceError: verificationCode is not defined
+    at /home/nils/gif-it/server/data/AuthDAO.js:77:43
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:64:7)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.Sequence.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-02 18:14:35 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE code = '123code123' AND id = 12' at line 1
+2020-09-02 18:16:13 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE code = '123code123' AND id = 12' at line 1
+2020-09-02 18:25:36 2020-09-02 18:25:36 result is not defined 
+ReferenceError: result is not defined
+    at /home/nils/gif-it/server/authAPI.js:77:40
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+

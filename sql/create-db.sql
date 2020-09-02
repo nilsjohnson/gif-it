@@ -54,7 +54,6 @@ CREATE TABLE user (
 	email VARCHAR(128) NOT NULL UNIQUE,
 	signupDate DATETIME NOT NULL,
 	active TINYINT NOT NULL,
-	verified TINYINT DEFAULT 0,
 	PRIMARY KEY (id)
 );
 
@@ -64,8 +63,16 @@ CREATE TABLE user_credential (
 	salt CHAR(64) NOT NULL,
 	FOREIGN KEY (id) REFERENCES user(id)
 );
+                  
+CREATE TABLE user_verification (
+	id INT NOT NULL,
+	code CHAR(8) NOT NULL,
+	verified TINYINT DEFAULT 0,
+	FOREIGN KEY (id) REFERENCES user(id)
+);
 
 CREATE USER 'gracie'@'localhost' IDENTIFIED BY 'pass123$';
 
 GRANT ALL PRIVILEGES ON user to 'gracie'@'localhost';
 GRANT ALL PRIVILEGES ON user_credential to 'gracie'@'localhost';
+GRANT ALL PRIVILEGES ON user_verification to 'gracie'@'localhost';

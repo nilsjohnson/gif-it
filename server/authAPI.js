@@ -1,6 +1,9 @@
 const { app } = require("./server");
 const log = require("./util/logger");
 const AuthDAO = require("./data/AuthDAO");
+const MailSender = require("./util/sendMail");
+
+const mailSender = new MailSender
 
 
 let authDAO = new AuthDAO();
@@ -13,8 +16,15 @@ app.post('/auth/newUser', function (req, res) {
     let email = req.body.email;
     let pw = req.body.pw;
 
-    authDAO.createNewUser(desiredUsername, email, pw).then(() => {
-        res.status(201).send("New Account Created");
+    authDAO.createNewUser(desiredUsername, email, pw).then(result => {
+        const { userId, verificationCode } = result;
+        mailSender.sendVerificationEmail(email, desiredUsername, userId, verificationCode, () => {
+            res.status(201).send("New Account Created");
+        }, () => {
+            // failure :(
+            // we still send 201 because it was an email issue, not an account creation issue.
+            res.status(201).send("New Account Created");
+        } );
     }).catch(err => {
         res.status(400).send(err.message);
     });
@@ -52,6 +62,21 @@ app.get('/auth/checkToken/', function(req, res) {
     else {
         res.status(400).send();
     }
+});
+
+app.get('/verify/:userId/:code', function(req, res) {
+    console.log("verify hit");
+    let userId = req.params.userId;
+    let code = req.params.code;
+    console.log("code: " + code);
+    console.log("userId " + userId);
+    authDAO.verifyUser(parseInt(userId), code).then(result => {
+        console.log(result);
+        res.status(200).send({message: result});
+    }).catch(err => {
+        console.log(err);
+        res.status(400).send({message: err});
+    });
 });
 
 app.get('/auth/signOut', function(req, res) {

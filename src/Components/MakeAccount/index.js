@@ -167,9 +167,8 @@ class MakeAccount extends Component {
         return (
             <Container component="main" maxWidth="xs" >
                 <Paper className={classes.container}>
-                    <CssBaseline />
                     <div className={classes.paper}>
-                        <Typography component="h1" variant="h5">
+                        <Typography component="h1" variant="h5" gutterBottom={true}>
                             Sign up
                         </Typography>
                         <Grid container spacing={2}>

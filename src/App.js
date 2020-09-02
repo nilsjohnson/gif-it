@@ -1,5 +1,5 @@
 import React from 'react';
-import Home from './Home';
+import Create from './Create';
 import Explore from './Explore';
 import SignUp from './SignUp';
 import Login from './Login';
@@ -13,8 +13,9 @@ function App() {
     return (
         <BrowserRouter>
             <ThemeProvider theme={theme}>
-                <Route path="/" component={Home} exact />
+                <Route path="/" component={Explore} exact />
                 <Route path="/explore" component={Explore} exact />
+                <Route path="/create" component={Create} exact />
                 <Route path="/signup" component={SignUp} exact />
                 <Route path="/login" component={Login} exact />
             </ThemeProvider>

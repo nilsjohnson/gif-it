@@ -12,10 +12,13 @@ function saveAuthToken(token) {
 }
 
 function readAuthToken() {
-	console.log("arrrr");
 	let token = JSON.parse(readCookie("auth_token"));
 	console.log("here is the auth token: " + token);
 	return token;
+}
+
+function deleteAuthToken() {
+	writeCookie("auth_token", "", 0);
 }
 
 function readCookie(cname) {
@@ -44,4 +47,4 @@ function deleteCookie(variable) {
 	document.cookie = variable + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
-export { formatBytes, readCookie, writeCookie, deleteCookie, saveAuthToken, readAuthToken }
+export { deleteAuthToken, formatBytes, readCookie, writeCookie, deleteCookie, saveAuthToken, readAuthToken }

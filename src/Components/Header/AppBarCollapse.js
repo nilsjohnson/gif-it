@@ -1,8 +1,10 @@
-import React from "react";
-import { Button, MenuItem } from "@material-ui/core";
+import React, { Component } from "react";
+import { Button, MenuItem, TextField } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import ButtonAppBarCollapse from "./ButtonBarCollapse";
 import { Link } from "react-router-dom";
+import { checkToken, signOut } from '../../util/data'
+import { deleteAuthToken } from "../../util/util";
 
 const styles = theme => ({
     root: {
@@ -23,24 +25,93 @@ const styles = theme => ({
     btn: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1)
+    },
+    btnPrimaryLight: {
+        backgroundColor: theme.palette.primary.light,
     }
 });
 
-const AppBarCollapse = props => (
-    <div className={props.classes.root}>
-        <ButtonAppBarCollapse>
-            <Link to="./">
-                <MenuItem href="./">Convert To Gif</MenuItem>
-            </Link>
-            <Link to="./explore">
-                <MenuItem href='./explore'>Explore</MenuItem>
-            </Link>
-        </ButtonAppBarCollapse>
-        <div className={props.classes.buttonBar} id="appbar-collapse">
-            <Button className={props.classes.btn} variant="outlined" color="primary" href="./">Convert to .gif</Button>
-            <Button className={props.classes.btn} variant="outlined" color="primary" href='./explore'>Explore</Button>
-        </div>
-    </div>
-);
+class AppBarCollapse extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            authenticated: false
+        };
+    }
+
+    componentDidMount = () => {
+        console.log("mounted");
+        checkToken().then(res => {
+            console.log(res);
+            if(res.ok) {
+                this.setState({authenticated: true});
+            }
+        }).catch(err => console.log(err));
+    }
+
+    doSignOut = () => {
+        signOut().then(res => {
+            if(res.ok) {
+                console.log("sign out success.");
+            }
+            else {
+                console.log("sign out returned " + res.status);
+            }
+            // regardless, we delete the auth token
+            deleteAuthToken();
+        }).catch(err => {
+            console.log(err);
+            // if request didnt go through, we still delete token.
+            deleteAuthToken();
+        });
+
+        this.setState({ authenticated: false });
+    }
+
+    getButtons = () => {
+        const { classes } = this.props;
+        return (
+            <div>
+                <Button className={classes.btn} variant="contained" color="primary" href='./'>Explore</Button>
+                <Button className={classes.btn} variant="contained" color="primary" href="./create">Convert to .gif</Button>
+                {this.state.authenticated 
+                ? 
+                <span>
+                <Button className={classes.btn} variant="outlined" color="primary" href='#'>Profile</Button>
+                <Button className={classes.btn} variant="contained" color="secondary" onClick={this.doSignOut}>Sign Out</Button>
+                </span>
+                : 
+                <span>
+                <Button className={classes.btn} variant="outlined" color="primary" href='./login'>Log In</Button>
+                <Button className={classes.btn} variant="contained" color="secondary" href='./signup'>Sign Up</Button> 
+                </span>
+                }
+            </div>
+        );
+
+    }
+
+    render() {
+        const { classes } = this.props;
+        return (
+            <div className={classes.root}>
+                <ButtonAppBarCollapse>
+                    {/* <Link to="./">
+                        <MenuItem href="./">Convert To Gif</MenuItem>
+                    </Link>
+                    <Link to="./explore">
+                        <MenuItem href='./explore'>Explore</MenuItem>
+                    </Link> */}
+                    {this.getButtons()}
+                </ButtonAppBarCollapse>
+                <div className={classes.buttonBar} id="appbar-collapse">
+                    {this.getButtons()}
+                </div>
+            </div>
+
+        );
+    }
+}
 
 export default withStyles(styles)(AppBarCollapse);

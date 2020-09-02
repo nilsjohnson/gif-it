@@ -65,13 +65,22 @@ function getServer() { return server };
  * @param {*} loginCredentials  username and password
  * @ return   A promise, where resolve contains the token as the first argument
  */
-function getAuthToken(loginCredentials = {}) {
+function login(loginCredentials = {}) {
   return fetch(`${server}/auth/login/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(loginCredentials)
+  });
+}
+
+function checkToken() {
+  console.log("checking token");
+  return fetch(`${server}/auth/checkToken/`, {
+    headers: {
+      'authorization' : readAuthToken()
+    }
   });
 }
 
@@ -85,4 +94,24 @@ function signUp(newUser = {}) {
   });
 }
 
-export { signUp, getAuthToken, getServer, getPopularTags, getGifById, getNew, uploadFile, search }
+function signOut() {
+  console.log("sign out");
+  return fetch(`${server}/auth/signOut/`, {
+    headers: {
+      'authorization' : readAuthToken()
+    }
+  });
+}
+
+export { 
+  signOut,
+  checkToken, 
+  signUp, 
+  login, 
+  getServer, 
+  getPopularTags, 
+  getGifById, 
+  getNew, 
+  uploadFile, 
+  search 
+}

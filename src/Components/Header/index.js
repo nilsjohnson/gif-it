@@ -5,6 +5,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import AppBarCollapse from "./AppBarCollapse";
+import Alert from '@material-ui/lab/Alert';
 
 const styles = {
   root: {
@@ -25,7 +26,7 @@ const styles = {
 function Header(props) {
   const { classes } = props;
   return (
-    <AppBar color={"secondary"} position="static" className={classes.navigation}>
+    <AppBar color={"default"} position="static" className={classes.navigation}>
       <Toolbar >
         <Typography
           variant="h4"

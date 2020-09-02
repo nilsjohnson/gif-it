@@ -46,6 +46,10 @@ function updateTokenLastUse(token) {
     saveTokens();
 }
 
+function deleteToken(token) {
+    delete tokens[token];
+}
+
 /**
  * saves tokens to file
  */
@@ -298,5 +302,10 @@ module.exports = class AuthDAO {
             return userId;
         }
         return null;
+    }
+
+    signUserOut(headers) {
+        const token = headers.authorization;
+        deleteToken(token);
     }
 }

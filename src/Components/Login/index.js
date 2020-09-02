@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Paper } from '@material-ui/core';
-import { getAuthToken } from '../../util/data';
+import { login as getAuthToken } from '../../util/data';
 import { saveAuthToken } from '../../util/util';
 
 import { Redirect } from "react-router-dom";
 
-
 const useStyles = (theme => ({
     paper: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(4),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2)
     },
     avatar: {
         margin: theme.spacing(1),
@@ -27,14 +26,12 @@ const useStyles = (theme => ({
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(3),
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
     container: {
-        paddingTop: theme.spacing(2),
-        marginTop: theme.spacing(2),
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2)
     }
@@ -137,9 +134,8 @@ class Login extends Component {
         return (
             <Container component="main" maxWidth="xs" >
                 <Paper className={classes.container}>
-                    <CssBaseline />
                     <div className={classes.paper}>
-                        <Typography component="h1" variant="h5">
+                        <Typography component="h1" variant="h5" gutterBottom={true}>
                             Log In
                         </Typography>
                         <Grid container spacing={2}>

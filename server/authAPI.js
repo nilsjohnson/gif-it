@@ -43,6 +43,22 @@ app.post('/auth/login', function (req, res) {
         });
 });
 
+
+app.get('/auth/checkToken/', function(req, res) {
+    console.log("check token hit");
+    if(authDAO.authenticate(req.headers)) {
+        res.status(200).send();
+    }
+    else {
+        res.status(400).send();
+    }
+});
+
+app.get('/auth/signOut', function(req, res) {
+    authDAO.signUserOut(req.headers);
+    res.status(200).send();
+});
+
 /**
  * Authenticates any request.
  * @param {*} userId 

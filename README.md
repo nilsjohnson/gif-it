@@ -35,6 +35,7 @@ If you are working on the app, you should pass in the '--dev' flag. This makes i
 ```$ node ./server/server.js --dev```
 
 If you are developing the app, typically you might want to pass both.
+
 ```$ node ./server/server.js --dev --debug```
 
 
@@ -51,7 +52,12 @@ If you are developing the app, typically you might want to pass both.
 - ~~Users can give gifs descriptions~~
 - ~~Save gifs in an S3 bucket instead of on the server~~
 - ~~Serve the website from S3 to reduce load on the EC2 instance~~
-- Properly escape all SQL
+- ~~Properly escape all SQL
+- Create a dashboard for logged in users where they can:
+  - view, edit and delete their uploads
+  - see things they've liked
+  - Have a profile
+- Allow authenticated users to leave comments and like gifs
 - Users can search by description
 - Users can categorize gifs (educational, funny, pets, etc.)
 - allow users to flag inappropriate gifs

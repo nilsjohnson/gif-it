@@ -77,6 +77,12 @@ class Login extends Component {
         }
     }
 
+    onEnterPressed = (event) => {
+        if(event.keyCode === 13) {
+            this.login();
+        }
+    }
+
     login = () => {
         if (!this.isValidInput()) {
             return;
@@ -127,7 +133,7 @@ class Login extends Component {
     render() {
         const { classes } = this.props;
 
-        if(this.state.redirect) {
+        if (this.state.redirect) {
             return <Redirect to={this.state.redirect} />
         }
 
@@ -138,48 +144,51 @@ class Login extends Component {
                         <Typography component="h1" variant="h5" gutterBottom={true}>
                             Log In
                         </Typography>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    error={this.state.usernameError}
-                                    variant="outlined"
-                                    fullWidth
-                                    defaultValue={this.props.username}
-                                    id="username"
-                                    label="Username or Email"
-                                    name="usernameOrEmail"
-                                    autoComplete="username"
-                                    onChange={this.setUsername}
-                                />
+                        <form onSubmit={this.login}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        error={this.state.usernameError}
+                                        variant="outlined"
+                                        fullWidth
+                                        defaultValue={this.props.username}
+                                        id="username"
+                                        label="Username or Email"
+                                        name="usernameOrEmail"
+                                        autoComplete="username"
+                                        onChange={this.setUsername}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        error={this.state.pwError}
+                                        variant="outlined"
+                                        fullWidth
+                                        defaultValue={this.state.pw}
+                                        name="password"
+                                        label="Password"
+                                        type="password"
+                                        id="password"
+                                        autoComplete="current-password"
+                                        onChange={this.setPassword}
+                                        onKeyDown={this.onEnterPressed}
+                                    />
+                                </Grid>
+                                {this.state.message &&
+                                    <Typography  variant="subtitle1">
+                                        {this.state.message}
+                                    </Typography>}
                             </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    error={this.state.pwError}
-                                    variant="outlined"
-                                    fullWidth
-                                    defaultValue={this.state.pw}
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                    onChange={this.setPassword}
-                                />
-                            </Grid>
-                            {this.state.message &&
-                                <Typography component="h5" variant="h5">
-                                    {this.state.message}
-                                </Typography>}
-                        </Grid>
-                        <Button
-                            onClick={this.login}
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >
-                            Log In
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+
+                                Log In
                             </Button>
+                        </form>
                         <Grid container justify="flex-end">
                         </Grid>
                     </div>

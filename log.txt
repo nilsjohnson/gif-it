@@ -1322,3 +1322,88 @@ Error: listen EADDRINUSE: address already in use :::3001
     at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
     at internal/main/run_main_module.js:18:47)
 
+2020-09-03 14:31:35 2020-09-03 14:31:35 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-03 14:37:36 2020-09-03 14:37:36 err is not defined 
+ReferenceError: err is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/util/sendMail.js:26:52)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-09-03 14:37:36 Confirmation Email Not Sent. Code: 1
+2020-09-03 14:38:24 2020-09-03 14:38:24 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-03 14:39:00 2020-09-03 14:39:00 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-03 14:39:13 2020-09-03 14:39:13 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-03 14:39:33 sendmail: Cannot open mail:25
+
+2020-09-03 14:39:33 Confirmation Email Not Sent. Code: 1
+2020-09-03 14:40:56 sendmail: Cannot open mail:25
+
+2020-09-03 14:40:56 Confirmation Email Not Sent. Code: 1
+2020-09-03 14:46:40 sendmail: Cannot open mail:25
+
+2020-09-03 14:46:40 Confirmation Email Not Sent. Code: 1
+2020-09-03 14:48:50 sendmail: Cannot open mail:25
+
+2020-09-03 14:48:50 Confirmation Email Not Sent. Code: 1
+2020-09-03 14:52:18 Bad login attempt from ::1. asdfasdf not found.
+2020-09-03 14:52:47 sendmail: Cannot open mail:25
+
+2020-09-03 14:52:47 Confirmation Email Not Sent. Code: 1
+2020-09-03 15:37:39 sendmail: Cannot open mail:25
+
+2020-09-03 15:37:39 Confirmation Email Not Sent. Code: 1
+2020-09-03 15:38:48 sendmail: Cannot open mail:25
+
+2020-09-03 15:38:48 Confirmation Email Not Sent. Code: 1

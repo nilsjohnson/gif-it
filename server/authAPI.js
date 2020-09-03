@@ -21,8 +21,15 @@ app.post('/auth/newUser', function (req, res) {
         mailSender.sendVerificationEmail(email, desiredUsername, userId, verificationCode, () => {
             res.status(201).send("New Account Created");
         }, () => {
-            // failure :(
-            // we still send 201 because it was an email issue, not an account creation issue.
+            if(DEV) {
+                console.log("emailing auth failed, probably cause we're in DEV mode. So, we will go ahead and just verify this account.");
+                authDAO.verifyUser(userId, verificationCode).then(result => {
+                    console.log(result);
+                }).catch(err => console.log(err));
+            }
+            else {
+                log(`${desiredUsername} did not get sent an email. Their Code is ${verificationCode}`);
+            }
             res.status(201).send("New Account Created");
         } );
     }).catch(err => {

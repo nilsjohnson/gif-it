@@ -59,6 +59,12 @@ class MakeAccount extends Component {
         this.acceptedPw = null;
     }
 
+    handleEnter = (event) => {
+        if(event.keyCode === 13) {
+            this.signUp();
+        }
+    }
+
     setDesiredUsername = (event) => {
         let val = event.target.value;
         this.setState({
@@ -198,6 +204,7 @@ class MakeAccount extends Component {
                             <Grid item xs={12}>
                                 <TextField
                                     onChange={this.setPw}
+                                    onKeyDown={this.handleEnter}
                                     variant="outlined"
                                     required
                                     fullWidth
@@ -210,7 +217,7 @@ class MakeAccount extends Component {
                             </Grid>
                             {this.state.errMsg &&
                                 <Grid item xs={12}>
-                                    <Typography component="h5" variant="h5">
+                                    <Typography variant="subtitle1">
                                         {this.state.errMsg.toString()}
                                     </Typography>
                                 </Grid>

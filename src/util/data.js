@@ -85,6 +85,7 @@ function checkToken() {
 }
 
 function signUp(newUser = {}) {
+  console.log("fetchin");
   return fetch(`${server}/auth/newUser`, {
     method: 'POST',
     headers: {

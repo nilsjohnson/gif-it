@@ -84,6 +84,7 @@ class Login extends Component {
     }
 
     login = () => {
+        console.log("login");
         if (!this.isValidInput()) {
             return;
         }
@@ -101,6 +102,9 @@ class Login extends Component {
                     this.setState({
                         message: "Invalid username/password"
                     });
+                }
+                else {
+                    console.log(res);
                 }
             })
             .catch(err => console.log(err));
@@ -180,6 +184,7 @@ class Login extends Component {
                                     </Typography>}
                             </Grid>
                             <Button
+                                onClick={this.login}
                                 fullWidth
                                 variant="contained"
                                 color="primary"

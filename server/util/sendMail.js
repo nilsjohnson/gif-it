@@ -23,7 +23,7 @@ class MailSender {
         sendMail.stdin.end();
 
         sendMail.stdout.on('data', (data) => {});
-        sendMail.stderr.on('data', (data) => { log(err.toString()); });
+        sendMail.stderr.on('data', (data) => { log(data.toString()); });
 
         sendMail.on('close', (code) => {
             if(DEBUG) {

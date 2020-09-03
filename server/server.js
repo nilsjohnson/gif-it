@@ -54,7 +54,7 @@ exports.app = app;
 exports.http = http;
 
 // define APIs
-require('./util/gifDataAccess')
+require('./data/gifDataAccess')
 require('./exploreAPI');
 require('./uploadAPI');
 require('./authAPI');

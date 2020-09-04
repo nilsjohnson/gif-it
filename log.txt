@@ -2082,3 +2082,8 @@ ReferenceError: log is not defined
 2020-09-04 15:05:25 Confirmation Email Not Sent. Code: 1
 2020-09-04 15:06:05 Bad login attempt from ::1. The loloercow not found.
 2020-09-04 15:06:09 Bad login attempt from ::1. The loloercow not found.
+2020-09-04 15:17:26 Error: ER_DUP_ENTRY: Duplicate entry 'Tina2' for key 'user.username'
+2020-09-04 15:17:35 Error: ER_DUP_ENTRY: Duplicate entry 'Tina3' for key 'user.username'
+2020-09-04 15:18:10 sendmail: Cannot open mail:25
+
+2020-09-04 15:18:10 Confirmation Email Not Sent. Code: 1

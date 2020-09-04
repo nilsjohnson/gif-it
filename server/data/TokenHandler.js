@@ -42,6 +42,7 @@ class TokenHandler {
 
     deleteToken(token) {
         delete this.tokens[token];
+        this.saveTokens();
     }
 
     /**

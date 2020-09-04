@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Uploader from "./Components/Uploader";
 import Header from "./Components/Header";
 import Box from "@material-ui/core/Box"
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Container, Typography } from "@material-ui/core";
 
 class Create extends Component {
   render() {

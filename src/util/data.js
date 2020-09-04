@@ -1,7 +1,7 @@
 import { readAuthToken } from './util';
 
 // note: this bool must be set propery prior to building for production
-let production = false;
+let production = true;
 let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
 
 /**
@@ -105,8 +105,6 @@ function signOut() {
 }
 
 function verifyAccount(userId, code) {
-  const params = { userId:userId, code: code };
-  const paramString = new URLSearchParams(params);
   return fetch(`${server}/verify/${userId}/${code}`);
 }
 

@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Button, MenuItem, TextField } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import ButtonAppBarCollapse from "./ButtonBarCollapse";
-import { Link } from "react-router-dom";
 import { checkToken, signOut } from '../../util/data'
 import { deleteAuthToken } from "../../util/util";
 

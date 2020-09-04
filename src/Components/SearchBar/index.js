@@ -65,11 +65,11 @@ class SearchBar extends Component {
           resJson.forEach(elem => {
             tags.push(elem.tag);
           });
-          this.setState({ popularTags: tags }); 
+          this.setState({ popularTags: tags });
         });
       }
       else {
-        console.log("Problem fetching popular tags.");
+        console.log("Server couldnt fetch poplular tags.");
         console.log(res);
       }
     }).catch(err => console.log(`Problem fetching popular tags: ${err}`));
@@ -80,8 +80,8 @@ class SearchBar extends Component {
   setInput = (event) => {
     let input = event.target.value;
     let err = false;
-    
-    if(input.length > MAX_SEARCH_INPUT_LENGTH) {
+
+    if (input.length > MAX_SEARCH_INPUT_LENGTH) {
       err = true;
       console.log(`Input to search bar must not exceed ${MAX_SEARCH_INPUT_LENGTH} characters.`);
     }
@@ -137,7 +137,7 @@ class SearchBar extends Component {
                   <SearchIcon />
                 </IconButton>
               </Paper>
-                {this.state.inputError ? <Box m={1}>{`Input cannot exceed ${MAX_SEARCH_INPUT_LENGTH} characters.`}</Box>: ""}
+              {this.state.inputError ? <Box m={1}>{`Input cannot exceed ${MAX_SEARCH_INPUT_LENGTH} characters.`}</Box> : ""}
               <Grid
                 container
                 direction="row"
@@ -146,7 +146,7 @@ class SearchBar extends Component {
                 spacing={2}
               >
                 <Box p={1}>
-                  <p>Try a popular tag like {
+                  <p> {this.state.popularTags.length > 0 && "Try a popular tag like"} {
                     this.state.popularTags.map((tag, index, arr) =>
                       <span key={index}>
                         <AddTag tag={tag} addTagToSearch={this.addTagToSearch} />
@@ -154,7 +154,7 @@ class SearchBar extends Component {
                         <span>{index === arr.length - 2 ? " or " : ""}</span>
                       </span>
                     )
-                  }!</p>
+                  }</p>
                 </Box>
 
               </Grid>

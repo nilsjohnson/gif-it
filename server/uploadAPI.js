@@ -20,11 +20,12 @@ const path = require('path');
 const Busboy = require('busboy');
 const { app, http } = require('./server');
 const { FilePaths, MAX_UPLOAD_SIZE } = require('./const');
-const { addGif, getSuggestedTags } = require('./data/gifDataAccess');
+//const { addGif, getSuggestedTags } = require('./data/gifDataAccess');
 const { getUniqueID, checkUnique } = require("./util/fileUtil");
 const { addJob } = require('./util/ffmpegWrapper');
 const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
 const AuthDAO = require('./data/AuthDAO');
+const MediaDAO = require('./data/MediaDAO');
 let io = require('socket.io')(http) 
 
 if(DEV) {
@@ -35,6 +36,7 @@ else {
 }
 
 let authDAO = new AuthDAO();
+let mediaDAO = new MediaDAO();
 
 
 /**
@@ -215,7 +217,7 @@ function addSocket(newSocket) {
     let fileName = connections[socketId].uploads[uploadId].fileName;
     let thumbFileName = connections[socketId].uploads[uploadId].thumbFileName;
 
-    addGif(uploadId,
+    mediaDAO.addGif(uploadId,
       fileName,
       thumbFileName,
       processedTags,
@@ -236,7 +238,7 @@ function addSocket(newSocket) {
 
     const { uploadId, input } = data;
 
-    getSuggestedTags(input, (results) => {
+    mediaDAO.getSuggestedTags(input, (results) => {
       if (results) {
         connections[socketId].socket.emit("SuggestionsFound", {
           uploadId: uploadId,
@@ -274,6 +276,7 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
 
   let socketId = req.params.socketId;
   let tempUploadId = req.params.tempUploadId;
+  let percentUploaded = 0;
   let bytesRecieved = 0;
   let fileSize = req.headers["content-length"];
   let uploadDst;
@@ -326,13 +329,17 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
 
       file.on('data', function (data) {
         bytesRecieved = bytesRecieved + data.length;
-        let percentUploaded = Math.round(bytesRecieved * 100 / fileSize);
+        let newPercentUploaded = Math.round(bytesRecieved * 100 / fileSize);
         if(DEBUG) { console.log(`upload progress: ${percentUploaded}% for uploadId ${uploadId}`); }
         if(connections[socketId] && connections[socketId].socket) {
-          connections[socketId].socket.emit("UploadProgress", {
-            uploadId: uploadId,
-            percentUploaded: percentUploaded,
-          });
+          // only send new value if its greater than before to avoid sending like '2%...2%...3%...'
+          if(newPercentUploaded > percentUploaded) {
+            connections[socketId].socket.emit("UploadProgress", {
+              uploadId: uploadId,
+              percentUploaded: newPercentUploaded,
+            });
+          }
+          percentUploaded = newPercentUploaded;
         }
         else {
           console.log(`No socket to send upload progress to for socket ${socketId}`);

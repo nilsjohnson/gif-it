@@ -45,7 +45,7 @@ function writeObj(obj, name) {
             console.log(error)
         }
         else {
-            console.log("file saved!");
+           // console.log("file saved!");
         }
     });
 }

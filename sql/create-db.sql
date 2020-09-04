@@ -76,3 +76,6 @@ CREATE USER 'gracie'@'localhost' IDENTIFIED BY 'pass123$';
 GRANT ALL PRIVILEGES ON user to 'gracie'@'localhost';
 GRANT ALL PRIVILEGES ON user_credential to 'gracie'@'localhost';
 GRANT ALL PRIVILEGES ON user_verification to 'gracie'@'localhost';
+-- not really sure but we seem to need to do this.
+ALTER USER 'gracie'@'localhost' IDENTIFIED BY 'pass123$'; 
+ALTER USER 'gracie'@'localhost' IDENTIFIED WITH mysql_native_password BY 'pass123$';

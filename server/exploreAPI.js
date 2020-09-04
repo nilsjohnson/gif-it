@@ -1,21 +1,26 @@
 const { app } = require("./server");
-const { getMostRecent, getGifsByTag, getGifById, getMostPopularTags } = require('./data/gifDataAccess');
 const { makeAllPossibleTags } = require("./util/util");
 const { MAX_SEARCH_INPUT_LENGTH } = require('./const');
 const log = require("./util/logger");
-const AuthDAO = require("./data/AuthDAO");
+const MediaDAO = require('./data/MediaDAO');
 
-let authDAO = new AuthDAO();
+let mediaDAO = new MediaDAO();
 
 app.get('/explore', function (req, res) {
-    getMostRecent(15, result => res.send(result));
+    mediaDAO.getMostRecent(15, result =>  {
+      if(result) {
+        res.send(result);
+      }
+      else {
+        res.status(500).send("Problem fetching new media. Sorry!");
+      }
+    });
 });
 
 app.get('/search', function(req, res) {
   let input = req.query.input;
   if(DEBUG) { console.log(`/api/search hit: ${input}`)};
-  
-  console.log(MAX_SEARCH_INPUT_LENGTH);
+
   if(input.length > MAX_SEARCH_INPUT_LENGTH ) {
     log(`Someone entered search text more than ${MAX_SEARCH_INPUT_LENGTH} from ${req.ip}`);
     res.status(400);
@@ -24,33 +29,38 @@ app.get('/search', function(req, res) {
   }
 
   let tags = makeAllPossibleTags(req.query.input);
-  getGifsByTag(tags, (result => res.send(result)))
+  mediaDAO.getGifsByTag(tags, (result => res.send(result)))
 });
 
+// TOOD return a specific error, if the gif wasn't found versus a server error
 app.get('/gif/:gifId', function(req, res) {
   let gifId = req.params.gifId;
   console.log("fetching gif: " + gifId);
 
-  getGifById(gifId, (results) => {
-    console.log(results);
-    res.json(results[0]);
+  mediaDAO.getGifById(gifId, (results) => {
+    if(results) {
+      res.json(results[0]);
+    }
+    else {
+      res.status(500).send("Problem Fetching that gif. Sorry!");
+    }
   });
 
 });
 
-// TODO validate limit is actually a number
 app.get(`/popularTags/:limit`, function(req, res) {
   let limit = req.params.limit;
   limit = limit ? limit : 10;
-  if(limit > 50) {
+  if(isNaN(limit) || limit > 50) {
     limit = 50;
   }
 
-  console.log("limit: " + limit);
-
-  getMostPopularTags(limit, (results) => {
-    console.log(results);
-    res.json(results);
+  mediaDAO.getMostPopularTags(limit, (results) => {
+    if(results) {
+      res.json(results);
+    }
+    else {
+      res.status(500).send("Problem Fetching Popular Tags. Sorry!");
+    }
   });
-
 });

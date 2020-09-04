@@ -8,11 +8,6 @@ const moment = require("moment");
 
 const { MAX_TAG_LENGTH } = require('../const');
 
-
-function getDateTime() {
-    return moment().format('YYYY-MM-DD HH:mm:ss');
-}
-
 function isValidTag(tag) {
     console.log(`testing tag '${tag}'`);
     let letters = /^[0-9a-zA-Z ]+$/;
@@ -156,7 +151,11 @@ function makeAllPossibleTags(str) {
     return allTags;
 }
 
-exports.getDateTime = getDateTime;
+function getTimeStamp() {
+    return moment().format('YYYY-MM-DD HH:mm:ss');
+}
+
+exports.getTimeStamp = getTimeStamp;
 exports.makeAllPossibleTags = makeAllPossibleTags;
 exports.processTags = processTags;
 exports.deleteFromS3 = deleteFromS3;

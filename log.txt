@@ -1407,3 +1407,678 @@ Error: listen EADDRINUSE: address already in use :::3001
 2020-09-03 15:38:48 sendmail: Cannot open mail:25
 
 2020-09-03 15:38:48 Confirmation Email Not Sent. Code: 1
+2020-09-04 09:34:49 2020-09-04 09:34:49 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 09:38:04 2020-09-04 09:38:04 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 09:38:26 2020-09-04 09:38:26 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 09:39:24 2020-09-04 09:39:24 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 09:47:23 2020-09-04 09:47:23 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 09:54:04 2020-09-04 09:54:04 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 09:58:21 2020-09-04 09:58:21 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 09:59:30 2020-09-04 09:59:30 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:04:06 2020-09-04 10:04:06 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:07:02 2020-09-04 10:07:02 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:10:38 2020-09-04 10:10:38 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:11:26 2020-09-04 10:11:26 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:11:34 2020-09-04 10:11:34 getaddrinfo EAI_AGAIN locaalhost 
+Error: getaddrinfo EAI_AGAIN locaalhost
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:64:26)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at Protocol.handshake (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:51:23)
+    at PoolConnection.connect (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:116:18)
+    at Pool.getConnection (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:48:16)
+    at MediaDAO.getGifsByTag (/home/nils/gif-it/server/data/MediaDAO.js:261:19)
+    at /home/nils/gif-it/server/exploreAPI.js:26:12
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/nils/gif-it/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/nils/gif-it/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5))
+
+2020-09-04 10:11:34 Error: getaddrinfo EAI_AGAIN locaalhost
+2020-09-04 10:17:20 2020-09-04 10:17:20 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:17:31 2020-09-04 10:17:31 getaddrinfo EAI_AGAIN locaalhost 
+Error: getaddrinfo EAI_AGAIN locaalhost
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:64:26)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at Protocol.handshake (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:51:23)
+    at PoolConnection.connect (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:116:18)
+    at Pool.getConnection (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:48:16)
+    at MediaDAO.getGifsByTag (/home/nils/gif-it/server/data/MediaDAO.js:268:19)
+    at /home/nils/gif-it/server/exploreAPI.js:26:12
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/nils/gif-it/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/nils/gif-it/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5))
+
+2020-09-04 10:23:53 2020-09-04 10:23:53 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:24:12 2020-09-04 10:24:12 getaddrinfo EAI_AGAIN locaalhost 
+Error: getaddrinfo EAI_AGAIN locaalhost
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:64:26)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at Protocol.handshake (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:51:23)
+    at PoolConnection.connect (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:116:18)
+    at Pool.getConnection (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:48:16)
+    at MediaDAO.getGifsByTag (/home/nils/gif-it/server/data/MediaDAO.js:268:19)
+    at /home/nils/gif-it/server/exploreAPI.js:26:12
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/nils/gif-it/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/nils/gif-it/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5))
+
+2020-09-04 10:24:44 2020-09-04 10:24:44 getaddrinfo EAI_AGAIN locaalhost 
+Error: getaddrinfo EAI_AGAIN locaalhost
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:64:26)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at Protocol.handshake (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:51:23)
+    at PoolConnection.connect (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:116:18)
+    at Pool.getConnection (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:48:16)
+    at MediaDAO.getGifsByTag (/home/nils/gif-it/server/data/MediaDAO.js:268:19)
+    at /home/nils/gif-it/server/exploreAPI.js:26:12
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/nils/gif-it/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/nils/gif-it/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5))
+
+2020-09-04 10:34:17 2020-09-04 10:34:17 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:34:33 2020-09-04 10:34:33 getaddrinfo EAI_AGAIN locaalhost 
+Error: getaddrinfo EAI_AGAIN locaalhost
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:64:26)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at Protocol.handshake (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:51:23)
+    at PoolConnection.connect (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:116:18)
+    at Pool.getConnection (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:48:16)
+    at MediaDAO.getGifsByTag (/home/nils/gif-it/server/data/MediaDAO.js:268:19)
+    at /home/nils/gif-it/server/exploreAPI.js:26:12
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/nils/gif-it/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/nils/gif-it/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5))
+
+2020-09-04 10:36:53 2020-09-04 10:36:53 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:37:06 2020-09-04 10:37:06 getaddrinfo EAI_AGAIN locaalhost 
+Error: getaddrinfo EAI_AGAIN locaalhost
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:64:26)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at Protocol.handshake (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:51:23)
+    at PoolConnection.connect (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:116:18)
+    at Pool.getConnection (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:48:16)
+    at MediaDAO.getGifsByTag (/home/nils/gif-it/server/data/MediaDAO.js:268:19)
+    at /home/nils/gif-it/server/exploreAPI.js:26:12
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/nils/gif-it/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/nils/gif-it/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5))
+
+2020-09-04 10:37:49 2020-09-04 10:37:49 getaddrinfo EAI_AGAIN locaalhost 
+Error: getaddrinfo EAI_AGAIN locaalhost
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:64:26)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at Protocol.handshake (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:51:23)
+    at PoolConnection.connect (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:116:18)
+    at Pool.getConnection (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:48:16)
+    at MediaDAO.getGifsByTag (/home/nils/gif-it/server/data/MediaDAO.js:268:19)
+    at /home/nils/gif-it/server/exploreAPI.js:26:12
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/nils/gif-it/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/nils/gif-it/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/nils/gif-it/node_modules/express/lib/router/layer.js:95:5))
+
+2020-09-04 10:38:44 2020-09-04 10:38:44 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:42:19 2020-09-04 10:42:19 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:43:57 2020-09-04 10:43:57 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:45:12 2020-09-04 10:45:12 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:46:52 2020-09-04 10:46:52 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 10:47:18 2020-09-04 10:47:18 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:63:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-04 11:50:08 2020-09-04 11:50:08 getDateTime is not defined 
+ReferenceError: getDateTime is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:191:55)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 11:51:11 2020-09-04 11:51:11 this.getDateTime is not a function 
+TypeError: this.getDateTime is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:191:70)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 11:52:59 2020-09-04 11:52:59 this.getTimeStamp is not a function 
+TypeError: this.getTimeStamp is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:191:70)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 14:09:58 Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+2020-09-04 14:09:58 Problem getting DB connection when attempting to add user.
+2020-09-04 14:09:58 2020-09-04 14:09:58 Cannot read property 'beginTransaction' of null 
+TypeError: Cannot read property 'beginTransaction' of null
+    at /home/nils/gif-it/server/data/AuthDAO.js:69:28
+    at /home/nils/gif-it/server/data/DAO.js:32:20
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:58:9)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Handshake.js:125:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-04 14:12:01 Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+2020-09-04 14:12:01 Problem getting DB connection when attempting to add user.
+2020-09-04 14:13:54 2020-09-04 14:13:54 log is not defined 
+ReferenceError: log is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:122:41)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 14:14:16 2020-09-04 14:14:16 log is not defined 
+ReferenceError: log is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:122:41)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 14:15:12 2020-09-04 14:15:12 this.logFailure is not a function 
+TypeError: this.logFailure is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:121:46)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 14:16:07 Error: ER_BAD_FIELD_ERROR: Unknown column 'userId' in 'field list'
+2020-09-04 14:17:26 sendmail: Cannot open mail:25
+
+2020-09-04 14:17:26 Confirmation Email Not Sent. Code: 1
+2020-09-04 14:17:26 2020-09-04 14:17:26 authDAO.verifyUser is not a function 
+TypeError: authDAO.verifyUser is not a function
+    at /home/nils/gif-it/server/authAPI.js:23:25
+    at ChildProcess.<anonymous> (/home/nils/gif-it/server/util/sendMail.js:37:17)
+    at ChildProcess.emit (events.js:310:20)
+    at ChildProcess.EventEmitter.emit (domain.js:482:12)
+    at maybeClose (internal/child_process.js:1021:16)
+    at Socket.<anonymous> (internal/child_process.js:443:11)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at Pipe.<anonymous> (net.js:672:12))
+
+2020-09-04 14:18:34 sendmail: Cannot open mail:25
+
+2020-09-04 14:18:34 Confirmation Email Not Sent. Code: 1
+2020-09-04 14:27:08 sendmail: Cannot open mail:25
+
+2020-09-04 14:27:08 Confirmation Email Not Sent. Code: 1
+2020-09-04 14:32:04 2020-09-04 14:32:04 createNewAuthToken is not defined 
+ReferenceError: createNewAuthToken is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:222:33)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 14:32:55 2020-09-04 14:32:55 tokens is not defined 
+ReferenceError: tokens is not defined
+    at TokenHandler.createNewAuthToken (/home/nils/gif-it/server/data/TokenHandler.js:20:9)
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:222:54)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-04 14:33:49 2020-09-04 14:33:49 getDateTime is not defined 
+ReferenceError: getDateTime is not defined
+    at TokenHandler.createNewAuthToken (/home/nils/gif-it/server/data/TokenHandler.js:20:74)
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:222:54)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-04 14:38:39 2020-09-04 14:38:39 getDateTime is not defined 
+ReferenceError: getDateTime is not defined
+    at TokenHandler.createNewAuthToken (/home/nils/gif-it/server/data/TokenHandler.js:20:74)
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:222:54)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-04 14:39:02 2020-09-04 14:39:02 saveTokens is not defined 
+ReferenceError: saveTokens is not defined
+    at TokenHandler.createNewAuthToken (/home/nils/gif-it/server/data/TokenHandler.js:22:9)
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:222:54)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-04 14:39:32 2020-09-04 14:39:32 writeObj is not defined 
+ReferenceError: writeObj is not defined
+    at TokenHandler.saveTokens (/home/nils/gif-it/server/data/TokenHandler.js:51:9)
+    at TokenHandler.createNewAuthToken (/home/nils/gif-it/server/data/TokenHandler.js:22:14)
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:222:54)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10))
+
+2020-09-04 14:56:08 2020-09-04 14:56:08 log is not defined 
+ReferenceError: log is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:225:33)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 14:59:04 2020-09-04 14:59:04 log is not defined 
+ReferenceError: log is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:225:33)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 14:59:15 2020-09-04 14:59:15 log is not defined 
+ReferenceError: log is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:225:33)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 14:59:35 2020-09-04 14:59:35 logFailure is not defined 
+ReferenceError: logFailure is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:225:33)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 15:00:05 2020-09-04 15:00:05 this.logFailure is not a function 
+TypeError: this.logFailure is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:225:38)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 15:00:42 Bad login attempt from ::1. Invalid Password.
+2020-09-04 15:01:04 2020-09-04 15:01:04 log is not defined 
+ReferenceError: log is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/AuthDAO.js:231:29)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.EofPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:133:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-04 15:01:39 Bad login attempt from ::1. Tinaal not found.
+2020-09-04 15:01:54 Bad login attempt from ::1. Invalid Password.
+2020-09-04 15:02:05 Bad login attempt from ::1. Invalid Password.
+2020-09-04 15:04:19 Error: ER_BAD_NULL_ERROR: Column 'signupDate' cannot be null
+2020-09-04 15:05:25 sendmail: Cannot open mail:25
+
+2020-09-04 15:05:25 Confirmation Email Not Sent. Code: 1
+2020-09-04 15:06:05 Bad login attempt from ::1. The loloercow not found.
+2020-09-04 15:06:09 Bad login attempt from ::1. The loloercow not found.

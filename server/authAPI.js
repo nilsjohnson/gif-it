@@ -3,15 +3,12 @@ const log = require("./util/logger");
 const AuthDAO = require("./data/AuthDAO");
 const MailSender = require("./util/sendMail");
 
-const mailSender = new MailSender
-
-
+// for sending verification codes
+const mailSender = new MailSender();
+// for accessing db
 let authDAO = new AuthDAO();
 
 app.post('/auth/newUser', function (req, res) {
-    console.log("auth hit");
-    console.log(req.body);
-
     let desiredUsername = req.body.desiredUsername;
     let email = req.body.email;
     let pw = req.body.pw;
@@ -23,7 +20,7 @@ app.post('/auth/newUser', function (req, res) {
         }, () => {
             if(DEV) {
                 console.log("emailing auth failed, probably cause we're in DEV mode. So, we will go ahead and just verify this account.");
-                authDAO.verifyUser(userId, verificationCode).then(result => {
+                authDAO.verifyUserEmailAddr(userId, verificationCode).then(result => {
                     console.log(result);
                 }).catch(err => console.log(err));
             }
@@ -38,12 +35,11 @@ app.post('/auth/newUser', function (req, res) {
 });
 
 app.post('/auth/login', function (req, res) {
-    console.log(req.body);
     let ipAdder = req.ip;
     let password = req.body.pw;
     let usernameOrEmail = req.body.usernameOrEmail;
 
-    authDAO.getAuthToken(usernameOrEmail, password, ipAdder)
+    authDAO.logIn(usernameOrEmail, password, ipAdder)
         .then(token => {
             if (DEBUG) { console.log(`Auth Token Returned From DAO: ${token}`); }
 
@@ -53,16 +49,13 @@ app.post('/auth/login', function (req, res) {
             else {
                 res.status(409).send({ error: "Invalid Username/Password" });
             }
-            
         })
         .catch(err => {
             res.status(500).send(err);
         });
 });
 
-
 app.get('/auth/checkToken/', function(req, res) {
-    console.log("check token hit");
     if(authDAO.authenticate(req.headers)) {
         res.status(200).send();
     }
@@ -77,7 +70,7 @@ app.get('/verify/:userId/:code', function(req, res) {
     let code = req.params.code;
     console.log("code: " + code);
     console.log("userId " + userId);
-    authDAO.verifyUser(parseInt(userId), code).then(result => {
+    authDAO.verifyUserEmailAddr(parseInt(userId), code).then(result => {
         console.log(result);
         res.status(200).send({message: result});
     }).catch(err => {

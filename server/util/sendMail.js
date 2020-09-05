@@ -17,7 +17,23 @@ class MailSender {
             console.log((`verificationCode: ${verificationCode}`));
         }
 
-        let str = `To: ${recAddr}\nFrom: noreply@gif-it.io\nSubject: Please Confirm Your Account\nMime-Version: 1.0\nContent-Type: text/html\n\n<html><p>Hi ${username}!</p>Click <a href='https://gif-it.io/verify?code=${verificationCode}&userId=${userId}'>here </a> to verify account, or copy and paste https://gif-it.io/verify?code=${verificationCode}&userId=${userId} into your browser\n\nThank You!\ngif-it.io</html>`;
+        // let str = `To: ${recAddr}\nFrom: noreply@gif-it.io\nSubject: Please Confirm Your Account\nMime-Version: 1.0\nContent-Type: text/html\n\n<html><p>Hi ${username}!</p>Click <a href='https://gif-it.io/verify?code=${verificationCode}&userId=${userId}'>here </a> to verify account, or copy and paste https://gif-it.io/verify?code=${verificationCode}&userId=${userId} into your browser\n\nThank You!\ngif-it.io</html>`;
+        let str = 
+        
+        `To: ${recAddr}
+        From: noreply@gif-it.io
+        Subject: Please Confirm Your Account
+        Mime-Version: 1.0\nContent-Type: text/html
+        
+        <html>
+            <p>Hi ${username}!</p>
+            <p>Please verify your account here: <a href='https://gif-it.io/verify?code=${verificationCode}&userId=${userId}'>https://gif-it.io/verify?code=${verificationCode}&userId=${userId}'</a> </p>
+            <p>Thank you!</p>
+        </html>`;    
+
+        str = str.replace(/\n\s+/g, '\n');
+        console.log(str);
+        
         const sendMail = spawn('sendmail', ['-t']);
         sendMail.stdin.write(str);
         sendMail.stdin.end();

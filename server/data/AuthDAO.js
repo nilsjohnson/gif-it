@@ -90,8 +90,8 @@ class AuthDAO extends DAO {
                                 }
                                 else {
                                     // this should never be hit.
-                                    log("Inserting new user into database failed for a duplicate entry, however, we were unable to parse the error to find out why.");
-                                    log(error.message);
+                                    logFailure("Inserting new user into database failed for a duplicate entry, however, we were unable to parse the error to find out why.");
+                                    logFailure(error.message);
                                     responseMessage = error.message;
                                 }
                             }

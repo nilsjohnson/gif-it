@@ -24,9 +24,10 @@ export function LinkCopyBox(props) {
             container item
             direction="row"
             justify="center"
-            alignItems="stretch"
+            alignItems="center"
         >
-            <Grid item xs={10} sm={8} md={6} >
+            <Grid item sm={2} md={3}></Grid>
+            <Grid item xs={12} sm={8} md={6} >
                 <Tooltip
                     PopperProps={{
                         disablePortal: true,
@@ -50,6 +51,7 @@ export function LinkCopyBox(props) {
                     />
                 </Tooltip>
             </Grid>
+            <Grid item sm={2} md={3}></Grid>
         </Grid>
     );
 }

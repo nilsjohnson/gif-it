@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Header from "./Components/Header";
 import { getNew, search } from "./util/data";
-import { Container, Box, Grid } from '@material-ui/core';
+import { Container, Box, Grid, Typography } from '@material-ui/core';
 import GifCard from "./Components/GifCard";
 import SearchBar from "./Components/SearchBar";
 import GifBox from "./Components/GifBox";
@@ -12,14 +12,14 @@ import GifBox from "./Components/GifBox";
 class Explore extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = ({
       gifs: []
     });
   }
 
   componentDidMount = () => {
-    if(!this.getGifParam() && !this.getSearchParam()) {
+    if (!this.getGifParam() && !this.getSearchParam()) {
       this.getNew();
     }
   }
@@ -33,14 +33,23 @@ class Explore extends Component {
     return url.searchParams.get("gid");
   }
 
-   /**
-   * Checks the window for a 'search' param 
-   * @return the search query if present, otherwise null
-   */
+  /**
+  * Checks the window for a 'search' param 
+  * @return the search query if present, otherwise null
+  */
   getSearchParam = () => {
     let url = new URL(window.location.href);
     return url.searchParams.get("search");
   }
+
+  /**
+   * checks the window to see if a user just logged out.
+   */
+  isLogoutRedirect = () => {
+    let url = new URL(window.location.href);
+    return url.searchParams.get("loggedOut") === 'true';
+  }
+
 
   /**
    * searches for new gifs and adds them to state
@@ -77,7 +86,7 @@ class Explore extends Component {
 
   /**
    * helper function set the state after a search
-   */ 
+   */
   setGifs = (gifs) => {
     this.setState({
       gifs: gifs
@@ -102,6 +111,11 @@ class Explore extends Component {
     else {
       return (
         <div>
+          {this.isLogoutRedirect() && 
+          <Typography align='center' variant="h6">
+            You are now logged out.
+          </Typography>
+          }
           <SearchBar
             search={this.search}
             initialInput={searchInput}

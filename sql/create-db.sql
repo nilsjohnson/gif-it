@@ -79,3 +79,11 @@ GRANT ALL PRIVILEGES ON user_verification to 'gracie'@'localhost';
 -- not really sure but we seem to need to do this.
 ALTER USER 'gracie'@'localhost' IDENTIFIED BY 'pass123$'; 
 ALTER USER 'gracie'@'localhost' IDENTIFIED WITH mysql_native_password BY 'pass123$';
+
+-- gifs now belong to a user, or users
+CREATE TABLE gif_owner (
+	gif_id VARCHAR(32) NOT NULL,
+	user_id INT NOT NULL,
+	FOREIGN KEY (gif_id) REFERENCES gif(id),
+	FOREIGN KEY (user_id) REFERENCES user(id)
+);

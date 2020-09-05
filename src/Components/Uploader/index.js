@@ -257,6 +257,10 @@ class Uploader extends Component {
           this.curFileNum++;
           this.upload();
         }
+        else if(response.redirected) {
+          console.log("do redirect?");
+          console.log(response);
+        }
         else {
           console.log("response not ok..");
           response.json().then(resJson => {

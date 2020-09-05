@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { Button } from "@material-ui/core";
+import { Button, MenuItem } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import ButtonAppBarCollapse from "./ButtonBarCollapse";
 import { checkToken, signOut } from '../../util/data'
 import { deleteAuthToken } from "../../util/util";
+import { Redirect } from 'react-router-dom';
 
 const styles = theme => ({
     root: {
@@ -35,7 +37,8 @@ class AppBarCollapse extends Component {
         super(props);
 
         this.state = {
-            authenticated: false
+            authenticated: false,
+            redirect: ""
         };
     }
 
@@ -43,29 +46,34 @@ class AppBarCollapse extends Component {
         console.log("mounted");
         checkToken().then(res => {
             console.log(res);
-            if(res.ok) {
-                this.setState({authenticated: true});
+            if (res.ok) {
+                this.setState({ authenticated: true });
+                return;
             }
         }).catch(err => console.log(err));
     }
 
     doSignOut = () => {
         signOut().then(res => {
-            if(res.ok) {
+            if (res.ok) {
                 console.log("sign out success.");
             }
             else {
                 console.log("sign out returned " + res.status);
             }
-            // regardless, we delete the auth token
+            // regardless, we delete the auth token and redirect
             deleteAuthToken();
+            this.setState({
+                redirect: "/?loggedOut=true"
+            });
+
         }).catch(err => {
             console.log(err);
             // if request didnt go through, we still delete token.
             deleteAuthToken();
         });
 
-        this.setState({ authenticated: false });
+       // this.setState({ authenticated: false });
     }
 
     getButtons = () => {
@@ -73,18 +81,47 @@ class AppBarCollapse extends Component {
         return (
             <div>
                 <Button className={classes.btn} variant="contained" color="primary" href='./'>Explore</Button>
-                <Button className={classes.btn} variant="contained" color="primary" href="./create">Convert to .gif</Button>
-                {this.state.authenticated 
-                ? 
-                <span>
-                <Button className={classes.btn} variant="outlined" color="primary" href='#'>Profile</Button>
-                <Button className={classes.btn} variant="contained" color="secondary" onClick={this.doSignOut}>Sign Out</Button>
-                </span>
-                : 
-                <span>
-                <Button className={classes.btn} variant="outlined" color="primary" href='./login'>Log In</Button>
-                <Button className={classes.btn} variant="contained" color="secondary" href='./signup'>Sign Up</Button> 
-                </span>
+                {this.state.authenticated
+                    ?
+                    <span>
+                        {/* <Button className={classes.btn} variant="outlined" color="primary" href='#'>Profile</Button> */}
+                        <Button className={classes.btn} variant="contained" color="secondary" onClick={this.doSignOut}>Sign Out</Button>
+                    </span>
+                    :
+                    <span>
+                        <Button className={classes.btn} variant="outlined" color="primary" href='./login'>Log In</Button>
+                        <Button className={classes.btn} variant="contained" color="secondary" href='./signup'>Sign Up</Button>
+                    </span>
+                }
+            </div>
+        );
+    }
+
+    getLinks = () => {
+        return (
+            <div>
+                <Link to="./explore">
+                    <MenuItem href='./explore'>Explore</MenuItem>
+                </Link>
+                {this.state.authenticated
+                    ?
+                    <span>
+                        {/* <Link to="./">
+                            <MenuItem href="#">Profile</MenuItem>
+                        </Link> */}
+                        <Link to="#">
+                            <MenuItem onClick={this.doSignOut} href="#">Sign Out</MenuItem>
+                        </Link>
+                    </span>
+                    :
+                    <span>
+                        <Link to="./login">
+                            <MenuItem href="./login">Log In</MenuItem>
+                        </Link>
+                        <Link to="./signup">
+                            <MenuItem href="./signup">Sign Up</MenuItem>
+                        </Link>
+                    </span>
                 }
             </div>
         );
@@ -92,17 +129,15 @@ class AppBarCollapse extends Component {
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+        }
+
         const { classes } = this.props;
         return (
             <div className={classes.root}>
                 <ButtonAppBarCollapse>
-                    {/* <Link to="./">
-                        <MenuItem href="./">Convert To Gif</MenuItem>
-                    </Link>
-                    <Link to="./explore">
-                        <MenuItem href='./explore'>Explore</MenuItem>
-                    </Link> */}
-                    {this.getButtons()}
+                    {this.getLinks()}
                 </ButtonAppBarCollapse>
                 <div className={classes.buttonBar} id="appbar-collapse">
                     {this.getButtons()}

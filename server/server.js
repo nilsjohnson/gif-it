@@ -57,6 +57,7 @@ exports.http = http;
 require('./exploreAPI');
 require('./uploadAPI');
 require('./authAPI');
+require('./userAPI');
 
 // listen for API requests
 http.listen(PORT_NUM, () => {

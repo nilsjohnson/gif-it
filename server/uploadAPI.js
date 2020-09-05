@@ -216,6 +216,7 @@ function addSocket(newSocket) {
     let originalFileName = connections[socketId].uploads[uploadId].originalFileName;
     let fileName = connections[socketId].uploads[uploadId].fileName;
     let thumbFileName = connections[socketId].uploads[uploadId].thumbFileName;
+    let userId = connections[socketId].uploads[uploadId].userId;
 
     mediaDAO.addGif(uploadId,
       fileName,
@@ -223,7 +224,8 @@ function addSocket(newSocket) {
       processedTags,
       description,
       ipAddr,
-      originalFileName
+      originalFileName,
+      userId
     ).then((result) => {
       console.log(result);
       connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, status: "shared" });
@@ -271,7 +273,9 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
   
   let userId = authDAO.authenticate(req.headers);
   if(!userId) {
-    console.log("this user is not authenticated.");
+    console.log("Sending Redirect.");
+    res.redirect('/login');
+    return;
   }
 
   let socketId = req.params.socketId;
@@ -311,8 +315,7 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
       uploadDst = path.join(FilePaths.UPLOAD_DIR + "/" + fileName);
       // map this socket to this upload
       try {
-        console.log(`uploadId: ${uploadId}`);
-        addUpload(uploadId, uploadDst, givenFileName, ipAddr, socketId);
+        addUpload(uploadId, uploadDst, givenFileName, ipAddr, socketId, userId);
       }
       catch (err) {
         console.log("errr");
@@ -365,13 +368,14 @@ app.post('/api/videoUpload/:socketId/:tempUploadId', function (req, res) {
   }
 });
 
-function addUpload(uploadId, uploadDst, givenFileName, ipAddr, socketId) {
+function addUpload(uploadId, uploadDst, givenFileName, ipAddr, socketId, userId) {
   if (connections[socketId]) {
     connections[socketId].uploads[uploadId] = {};
     connections[socketId].uploads[uploadId].uploadDst = uploadDst;
     connections[socketId].uploads[uploadId].originalFileName = givenFileName;
     connections[socketId].uploads[uploadId].ipAddr = ipAddr;
     connections[socketId].uploads[uploadId].socketId = socketId;
+    connections[socketId].uploads[uploadId].userId = userId;
 
   }
   else {

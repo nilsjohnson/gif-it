@@ -24,9 +24,9 @@ class MediaDAO extends DAO {
      */
     getMostPopularTags(qty, callback) {
         this.getConnection(connection => {
-            if(!connection) { 
+            if (!connection) {
                 callback(null);
-                return; 
+                return;
             }
 
             let sql = `SELECT tag.tag, COUNT(gif_tag.tag_id) as numUses
@@ -53,7 +53,7 @@ class MediaDAO extends DAO {
      */
     getMostRecent(qty, callback) {
         this.getConnection(connection => {
-            if(!connection) {
+            if (!connection) {
                 return callback(null);
             }
 
@@ -78,7 +78,7 @@ class MediaDAO extends DAO {
      * @param {*} callback callback function that takes an object
      */
     getGifById(gifId, callback) {
-        this.getConnection( connection => {
+        this.getConnection(connection => {
             if (!connection) {
                 return callback(null);
             }
@@ -154,22 +154,22 @@ class MediaDAO extends DAO {
      * @param {*} description - description of gif
      * @param {*} ipAddr - uploaders ip address
      * @param {*} originalFileName - The orignal fileName on the client machine
+     * @param {*} userId - The owner of the gif
      * @returns A promise
      */
-    addGif(uploadId, fileName, thumbFileName, tags, description, ipAddr, originalFileName) {
+    addGif(uploadId, fileName, thumbFileName, tags, description, ipAddr, originalFileName, userId) {
         let uploadTime = this.getTimeStamp();
-
+        let logFailure = this.logFailure;
         return new Promise((resolve, reject) => {
-            if(!tags) {
+            if (!tags) {
                 reject("At least one tag is required.");
             }
 
             this.getConnection(connection => {
-                if(!connection) {
+                if (!connection) {
                     reject("Database Error");
                     return;
                 }
-
 
                 connection.beginTransaction(function (err) {
                     if (err) {
@@ -183,8 +183,9 @@ class MediaDAO extends DAO {
                     let insertObj = { id: uploadId, descript: description, fileName: fileName, thumbName: thumbFileName };
                     connection.query(gif_sql, insertObj, (error, results, fields) => {
                         if (error) {
+                            logFailure(error);
+                            connection.rollback();
                             reject("Database Error");
-                            this.logFailure(error)
                             return;
                         }
 
@@ -192,7 +193,8 @@ class MediaDAO extends DAO {
                         let upload_sql = `INSERT INTO upload SET id = ?, date = ?, ipAddr = ?, originalFileName = ?`;
                         connection.query(upload_sql, [uploadId, uploadTime, ipAddr, originalFileName], (error, results, fields) => {
                             if (error) {
-                                this.logFailure(error);
+                                logFailure(error);
+                                connection.rollback();
                                 reject("Database Error");;
                                 return;
                             }
@@ -210,6 +212,7 @@ class MediaDAO extends DAO {
                             let tag_sql = `INSERT IGNORE INTO tag (tag) VALUES ${tag_str}`;
                             connection.query(tag_sql, (error, results, fields) => {
                                 if (error) {
+                                    logFailure(error);
                                     connection.rollback();
                                     reject(error);
                                     return;
@@ -226,6 +229,7 @@ class MediaDAO extends DAO {
 
                                 connection.query(tagId_sql, function (error, results, fields) {
                                     if (error) {
+                                        logFailure(error);
                                         connection.rollback();
                                         reject(error);
                                         return;
@@ -248,20 +252,32 @@ class MediaDAO extends DAO {
                                     let gif_tag_sql = `INSERT IGNORE INTO gif_tag (gif_id, tag_id) VALUES ${id_tag_str}`;
                                     connection.query(gif_tag_sql, (error, results, fields) => {
                                         if (error) {
+                                            logFailure(error);
                                             connection.rollback();
                                             reject(error);
                                             return;
                                         }
 
-                                        connection.commit(function (error) {
+                                        // 6) insert into the gif_owner
+                                        let gif_owner_sql = 'INSERT INTO gif_owner SET ?';
+                                        connection.query(gif_owner_sql, { gif_id: uploadId, user_id: userId }, (error, results, fields) => {
                                             if (error) {
+                                                logFailure(error);
                                                 connection.rollback();
-                                                reject(error);
+                                                reject("Database Error");
                                                 return;
                                             }
-                                            else {
-                                                resolve("Insertion Completed.");
-                                            }
+
+                                            connection.commit(function (error) {
+                                                if (error) {
+                                                    connection.rollback();
+                                                    reject(error);
+                                                    return;
+                                                }
+                                                else {
+                                                    resolve("Insertion Completed.");
+                                                }
+                                            });
                                         });
                                     });
                                 });
@@ -273,11 +289,11 @@ class MediaDAO extends DAO {
         });
     }
 
-/**
- * Finds all gifs with the given tags
- * @param {*} tags 
- * @param {*} callback a function that takes an array of gif objects
- */
+    /**
+     * Finds all gifs with the given tags
+     * @param {*} tags 
+     * @param {*} callback a function that takes an array of gif objects
+     */
     getGifsByTag(tags, callback) {
         this.getConnection(connection => {
             if (!connection) {

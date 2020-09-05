@@ -95,7 +95,7 @@ class Login extends Component {
                     res.json().then(token => {
                         saveAuthToken(token);
                         console.log("redirecting home");
-                        this.setState({ redirect: "/" });
+                        this.setState({ redirect: "/dashboard" });
                     }).catch(jsonErr => console.log(jsonErr));
                 }
                 else if (res.status === 409) {

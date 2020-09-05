@@ -3,8 +3,6 @@ import { Container } from "@material-ui/core";
 import { verifyAccount } from "./util/data";
 import { Redirect } from 'react-router-dom'
 
-// https://gif-it.io/verify?code=${code}?userId=${userId}
-
 class Verify extends Component {
     constructor(props) {
         super(props);

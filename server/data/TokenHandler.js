@@ -33,11 +33,22 @@ class TokenHandler {
     }
 
     getUserId(token) {
-        let userId = this.tokens[token];
-        if(userId) {
-            this.updateTokenLastUse(token);
+        if(!token || token === 'null') {
+            // this user probably logged out, or didnt get an auth token to begin with
+            return null;
         }
-        return userId;
+
+        if(this.tokens[token]) {
+            let userId = this.tokens[token].userId;
+            if(userId) {
+                this.updateTokenLastUse(token);
+            }
+            return userId;
+        }
+        else {
+            return null;
+        }
+       
     }
 
     deleteToken(token) {

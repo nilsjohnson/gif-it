@@ -2087,3 +2087,10 @@ ReferenceError: log is not defined
 2020-09-04 15:18:10 sendmail: Cannot open mail:25
 
 2020-09-04 15:18:10 Confirmation Email Not Sent. Code: 1
+2020-09-05 13:57:13 sendmail: Cannot open mail:25
+
+2020-09-05 13:57:13 Confirmation Email Not Sent. Code: 1
+2020-09-05 13:57:35 Error: ER_DATA_TOO_LONG: Data too long for column 'username' at row 1
+2020-09-05 14:14:46 sendmail: Cannot open mail:25
+
+2020-09-05 14:14:46 Confirmation Email Not Sent. Code: 1

@@ -66,9 +66,19 @@ class MakeAccount extends Component {
 
     setDesiredUsername = (event) => {
         let val = event.target.value;
+        let err = false;
+        let errMsg = "";
+
+        // 20 is the max that db will allow
+        if(val.length > 20) {
+            err = true;
+            errMsg = "Username must be less than 20 characters.";
+        }
+
         this.setState({
             desiredUsername: val,
-            desiredUsernameErr: false
+            desiredUsernameErr: err,
+            errMsg: errMsg
         });
     }
 
@@ -82,9 +92,19 @@ class MakeAccount extends Component {
 
     setPw = (event) => {
         let val = event.target.value;
+        let pwErr = false;
+        let errMsg = "";
+
+        // 128 was chosen arbitrarily
+        if(val.length > 128) {
+            pwErr = true;
+            errMsg = "It's really great that you're choosing a nice long password, but please, keep it <= 128 characters.";
+        }
+
         this.setState({
             pw: val,
-            pwErr: false
+            pwErr: pwErr,
+            errMsg: errMsg
         });
     }
 
@@ -98,6 +118,7 @@ class MakeAccount extends Component {
 
     signUp = () => {
         if (!this.checkInput()) {
+            console.log("Invalid input. Please Fix.");
             return;
         }
 
@@ -136,14 +157,22 @@ class MakeAccount extends Component {
     }
 
     checkInput = () => {
+        if(this.state.pwErr || this.state.desiredUsernameErr) {
+            // there is already a visble error. We dont need to check.
+            return false;
+        }
+
         let pwErr = false;
         let emailErr = false;
         let desiredUsernameErr = false;
+        let errMsg = "";
 
         if (this.state.pw.length < 4) {
+            errMsg += "Password must be at least 4 characters.";
             pwErr = true;
         }
         if (!this.isValidEmailAddr(this.state.email)) {
+            errMsg += " Email is not valid.";
             emailErr = true;
         }
         if (this.state.desiredUsername.length === 0) {
@@ -154,6 +183,7 @@ class MakeAccount extends Component {
             desiredUsernameErr: desiredUsernameErr,
             emailErr: emailErr,
             pwErr: pwErr,
+            errMsg: errMsg.trim()
         });
 
         if (pwErr || emailErr || desiredUsernameErr) {

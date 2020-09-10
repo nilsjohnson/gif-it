@@ -111,12 +111,6 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
     let busboy = new Busboy({ headers: req.headers });
 
     busboy.on('file', function (fieldName, file, givenFileName, encoding, mimetype) {
-      if (!mimetype.startsWith('video')) {
-        if (DEBUG) { console.log(`${givenFileName} has invalid mimetype. ${mimetype} privided, but 'video/*' is required.`); }
-        res.status(400);
-        res.json({ error: `${givenFileName}: Unsupported Format` });
-        return;
-      }
       // set the fileName
       fileName = checkUnique(givenFileName, FilePaths.UPLOAD_DIR);
       // set the upload dst
@@ -169,7 +163,6 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
         // socketId, socket, uploadId, upload
         let socket = connections[socketId].socket;
         let upload = connections[socketId].uploads[uploadId];
-        delete connections[socketId];
         addGifMakerUpload(socketId, socket, uploadId, upload);
         
       }

@@ -45,10 +45,15 @@ class AppBarCollapse extends Component {
     componentDidMount = () => {
         console.log("mounted");
         checkToken().then(res => {
-            console.log(res);
             if (res.ok) {
                 this.setState({ authenticated: true });
-                return;
+            }
+            else if(res.status === 409){
+                this.setState({ authenticated: false });
+            }
+            else {
+                console.log("Unexpected response from server: ");
+                console.log(res);
             }
         }).catch(err => console.log(err));
     }

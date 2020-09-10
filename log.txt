@@ -2131,3 +2131,83 @@ TypeError: this.logFailure is not a function
 2020-09-05 15:51:00 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '`gif_id` = 'XkNMn2Tp', `user_id` = NaN' at line 1
 2020-09-05 15:54:18 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '`gif_id` = '1cONStky', `user_id` = '[object Object]'' at line 1
 2020-09-05 15:59:22 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '`gif_id` = 'XCLjRErA', `user_id` = 5' at line 1
+2020-09-06 16:59:55 2020-09-06 16:59:55 ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/dog.mp4' 
+Error: ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/dog.mp4')
+
+2020-09-06 16:59:55 2020-09-06 16:59:55 Cannot read property 'vH4cmeJE' of undefined 
+TypeError: Cannot read property 'vH4cmeJE' of undefined
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:362:41)
+    at Busboy.emit (events.js:322:22)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at /home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:52:13
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-09-06 17:03:08 2020-09-06 17:03:08 ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/dog.mp4' 
+Error: ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/dog.mp4')
+
+2020-09-06 17:03:08 2020-09-06 17:03:08 Cannot set property 'uploads' of undefined 
+TypeError: Cannot set property 'uploads' of undefined
+    at addGifMakerUpload (/home/nils/gif-it/server/makeGifAPI.js:253:39)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:366:9)
+    at Busboy.emit (events.js:322:22)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at /home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:52:13
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-09-06 17:06:11 2020-09-06 17:06:11 ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/dog.mp4' 
+Error: ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/dog.mp4')
+
+2020-09-06 17:06:11 2020-09-06 17:06:11 Cannot set property 'uploads' of undefined 
+TypeError: Cannot set property 'uploads' of undefined
+    at addGifMakerUpload (/home/nils/gif-it/server/makeGifAPI.js:253:39)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:366:9)
+    at Busboy.emit (events.js:322:22)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at /home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:52:13
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-09-06 17:07:09 2020-09-06 17:07:09 ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/drinking dog.mp4' 
+Error: ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/drinking dog.mp4')
+
+2020-09-06 17:07:09 2020-09-06 17:07:09 Cannot set property 'uploads' of undefined 
+TypeError: Cannot set property 'uploads' of undefined
+    at addGifMakerUpload (/home/nils/gif-it/server/makeGifAPI.js:255:39)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:366:9)
+    at Busboy.emit (events.js:322:22)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at /home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:52:13
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-09-06 17:08:04 2020-09-06 17:08:04 ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/dog.mp4' 
+Error: ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/dog.mp4')
+
+2020-09-06 17:08:39 2020-09-06 17:08:39 ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/night sky.mp4' 
+Error: ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/night sky.mp4')
+
+2020-09-06 17:10:18 2020-09-06 17:10:18 ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/city timeplapse.mp4' 
+Error: ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/city timeplapse.mp4')
+
+2020-09-06 17:12:12 2020-09-06 17:12:12 ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/city timeplapse.mp4' 
+Error: ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/city timeplapse.mp4')
+
+2020-09-06 17:12:39 2020-09-06 17:12:39 ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/city timeplapse.mp4' 
+Error: ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/city timeplapse.mp4')
+
+2020-09-06 17:18:57 2020-09-06 17:18:57 ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/dog.mp4' 
+Error: ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/dog.mp4')
+
+2020-09-06 17:19:58 2020-09-06 17:19:58 ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/fishy.mp4' 
+Error: ENOENT: no such file or directory, open '/tmp/gif-it/tmp/gif-it/fishy.mp4')
+
+2020-09-06 17:26:00 2020-09-06 17:26:00 socketId is not defined 
+ReferenceError: socketId is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/makeGifAPI.js:156:40)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+

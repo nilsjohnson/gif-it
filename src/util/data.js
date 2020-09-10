@@ -1,7 +1,7 @@
 import { readAuthToken } from './util';
 
 // note: this bool must be set propery prior to building for production
-let production = true;
+let production = false;
 let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
 
 /**
@@ -17,10 +17,11 @@ function getNew() {
  * @param {*} socketId        The Id of the clients socket
  * @param {*} tempUploadId    A temporary upload Id
  * @param {*} data            The file
+ * @param {*} type            
  */
-function uploadFile(socketId, tempUploadId, data = {}) {
+function uploadFile(socketId, tempUploadId, data = {}, type = "") {
   console.log(socketId);
-  return fetch(`${server}/api/videoUpload/${socketId}/${tempUploadId}`, {
+  return fetch(`${server}/upload/${socketId}/${tempUploadId}/${type}`, {
     method: 'POST',
     body: data,
     headers: {

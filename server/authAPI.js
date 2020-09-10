@@ -60,7 +60,7 @@ app.get('/auth/checkToken/', function(req, res) {
         res.status(200).send();
     }
     else {
-        res.status(400).send();
+        res.status(409).send();
     }
 });
 

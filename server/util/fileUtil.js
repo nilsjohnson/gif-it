@@ -30,9 +30,20 @@ function getUniqueID() {
    return id;
 }
 
-// TODO, if fileName already exists, 
-// increment it.
-function checkUnique(fileName) {
+/**
+ * @param {*} fileName 
+ * @param {*} directory
+ * @returns the orginal file, or a new incrimented filename if already existed 
+ */
+function checkUnique(fileName, directory) {
+    let i = 2;
+    let file = path.join(directory + "/" + fileName);
+    while(fs.existsSync(file)) {
+        fileName = `${fileName} (${i})`;
+        file = path.join(directory + "/" + fileName)
+        i++;
+    }
+
     return fileName;
 }
 

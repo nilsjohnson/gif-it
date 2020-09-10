@@ -250,7 +250,7 @@ class Uploader extends Component {
     let formData = new FormData();
     formData.append("files", curFile);
 
-    return uploadFile(this.socket.id, tempUploadId, formData)
+    return uploadFile(this.socket.id, tempUploadId, formData, 'make_gif')
       .then(response => {
         if (response.ok) {
           console.log(`Upload #${this.curFileNum + 1} successfully uploaded.`)

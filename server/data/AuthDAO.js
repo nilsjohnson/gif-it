@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const DAO = require("./DAO");
-const tokenHandler = require("./TokenHandler");
+const tokenHandler = require('../authUtil/TokenHandler');
 
 /**
  * @returns a 32 byte random string of hex digits

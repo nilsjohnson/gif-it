@@ -5,7 +5,8 @@ import Box from "@material-ui/core/Box"
 import { Container, Typography } from "@material-ui/core";
 import { Redirect } from 'react-router-dom'
 import { checkToken } from './util/data';
-import ImageUploader from "./Components/ImageUploader/Index";
+import ImageUploader from "./Components/ImageUploader";
+import Hot from "./Components/Hot";
 
 class Dashboard extends Component {
     constructor(props){
@@ -37,12 +38,8 @@ class Dashboard extends Component {
             <Box>
                 <Header />
                 <Container>
-                    <p>dboard</p>
                     <Box m={2}>
-                        {/* <Typography align="center" variant="h4" gutterBottom>
-                            Make a Gif!
-                        </Typography>
-                        <GifUploader/> */}
+                        <GifUploader/>
                         <ImageUploader/>
                     </Box>
                 </Container>

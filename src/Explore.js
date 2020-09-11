@@ -146,9 +146,8 @@ class Explore extends Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header /> 
         <Container>
-          <p>its a postasdfer</p>
           <Box m={1}>
             {this.getView()}
           </Box>

@@ -36,11 +36,14 @@ function getUniqueID() {
  * @returns the orginal file, or a new incrimented filename if already existed 
  */
 function checkUnique(fileName, directory) {
+    let name = path.parse(fileName).name;
+    let ext = path.parse(fileName).ext
+    
     let i = 2;
     let file = path.join(directory + "/" + fileName);
     while(fs.existsSync(file)) {
-        fileName = `${fileName} (${i})`;
-        file = path.join(directory + "/" + fileName)
+        fileName = `${name} (${i})${ext}`;
+        file = path.join(directory + "/" + fileName);
         i++;
     }
 

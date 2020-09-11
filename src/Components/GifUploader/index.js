@@ -2,7 +2,7 @@ import React from "react";
 import Upload from "./Upload";
 import { DropBox } from "../DropBox";
 import { Grid, Box } from "@material-ui/core";
-import UploaderBase from "../UploaderBase/Index";
+import UploaderBase from "../UploaderBase";
 
 const INPUT_ID = "gif-input";
 

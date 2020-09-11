@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import App from './App';
 
+
+// Add this import:
 import { AppContainer } from 'react-hot-loader';
 
 // Wrap the rendering in a function:
@@ -16,21 +17,20 @@ const render = () => {
   );
 };
 
-// Do this once
-// registerServiceWorker();
 
 // Render once
 render();
 
-// Webpack Hot Module Replacement API
 if (module.hot) {
+  console.log("hot");
   module.hot.accept('./App', () => {
-    render();
-  });
+    const NextApp = require('./App').default
+    ReactDOM.render(
+      <NextApp />,
+      document.getElementById('root')
+    )
+  })
 }
-
-// let router = (
-//     <App />
-// );
-
-// ReactDOM.render(router, document.getElementById('root'));
+else {
+  console.log("cold");
+}

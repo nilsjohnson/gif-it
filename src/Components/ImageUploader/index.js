@@ -1,9 +1,6 @@
-import React, { Component } from "react";
-import socketIOClient from "socket.io-client";
-import { DropBox } from "../DropBox";
-import { Typography, Paper, Container, Grid } from "@material-ui/core";
-import UploaderBase from "../UploaderBase/Index";
-import Upload from "../GifUploader/Upload";
+import React from "react";
+import { Typography, Container, Grid } from "@material-ui/core";
+import UploaderBase from "../UploaderBase";
 import { withStyles } from '@material-ui/core/styles';
 import EditImage from "./EditImage";
 
@@ -23,7 +20,6 @@ class ImageUploader extends UploaderBase {
         this.setInputElementId(INPUT_ID);
         this.cv = null;
 
-
         const script = document.createElement("script");
         script.src = './opencv4.4.js';
         script.async = true;
@@ -38,22 +34,15 @@ class ImageUploader extends UploaderBase {
 
     }
 
-    componentDidMount = () => {
-
-    }
-
     render() {
-        console.log(this.cv);
         const { classes } = this.props;
-        console.log(classes);
 
         return (
             <Container component="main" maxWidth="md" >
-               <p>hot</p>
                 <Grid
                     container
                     direction="column"
-                    justify="flex-start"
+                    justify="center"
                     alignItems="center"
                 >
                     <Grid item >
@@ -67,15 +56,16 @@ class ImageUploader extends UploaderBase {
                     <Grid
                         container item
                         direction="row"
-                        justify="flex-start"
-                        alignItems="center"
+                        justify="center"
+                        alignItems="flex-start"
+                        spacing={2}
                     >
                         {this.state.uploads.map(upload =>
-                            <Grid item xs={6} key={upload.uploadId + "_grid"}>
-                                <EditImage
-                                    upload={upload}
-                                />
-                            </Grid>
+                                <Grid item xs={12} key={upload.uploadId + "_grid"}>
+                                    <EditImage
+                                        upload={upload}
+                                    />
+                                </Grid>
                         )}
                     </Grid>
 

@@ -10,21 +10,24 @@ import theme from './theme';
 import { hot } from 'react-hot-loader';
 import './css/style.css';
 
-function App() {
+const App = () => {
     return (
         <BrowserRouter>
             <ThemeProvider theme={theme}>
-                <Route path="/" component={Explore} exact />
+                {/* <Route path="/" component={Explore} exact />
                 <Route path="/explore" component={Explore} exact />
                 <Route path="/signup" component={SignUp} exact />
                 <Route path="/login" component={Login} exact />
                 <Route path="/verify" component={Verify} exact />
-                <Route path="/dashboard" component={Dashboard} exact />
+                <Route path="/dashboard" component={Dashboard} exact /> */}
+                 <Route path="/" component={Explore} exact />
+                <Route path="/explore" component={Explore} exact />
             </ThemeProvider>
         </BrowserRouter>
     );
 }
 
-export default hot(module)(App);
+//export default process.env.NODE_ENV === "development" ? hot(module)(App) : App;
+export default App;
 
 

@@ -148,6 +148,7 @@ class Explore extends Component {
       <div>
         <Header />
         <Container>
+          <p>its a postasdfer</p>
           <Box m={1}>
             {this.getView()}
           </Box>

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function DropBox(props) {
   const classes = useStyles();
-  const {onDrop, onDragOver, onDragLeave, hovering, selectFilesUpload, uploadInstructionsText, mimeTypes, error } = props;
+  const {id, onDrop, onDragOver, onDragLeave, hovering, selectFilesUpload, uploadInstructionsText, mimeTypes, error } = props;
 
   return (
       <Grid container item
@@ -31,7 +31,7 @@ export function DropBox(props) {
         className={hovering ? `${classes.chooseFiles} ${classes.dropBox}` : classes.dropBox}
       >
           <p>{uploadInstructionsText}</p>
-          <input className={classes.fileInput} type="file" accept={mimeTypes} multiple onChange={selectFilesUpload} />
+          <input className={classes.fileInput} id={id} type="file" accept={mimeTypes} multiple onChange={selectFilesUpload} />
           <p>{error ? error : ""}</p>
       </Grid>
 
@@ -44,5 +44,6 @@ DropBox.propTypes = {
   onDragLeave: PropTypes.func,
   onHovering: PropTypes.func,
   onDragOver: PropTypes.func,
-  uploadInstructionsText: PropTypes.string
+  uploadInstructionsText: PropTypes.string,
+  id: PropTypes.string
 };

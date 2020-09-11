@@ -37,11 +37,12 @@ class Dashboard extends Component {
             <Box>
                 <Header />
                 <Container>
+                    <p>dboard</p>
                     <Box m={2}>
-                        <Typography align="center" variant="h4" gutterBottom>
+                        {/* <Typography align="center" variant="h4" gutterBottom>
                             Make a Gif!
                         </Typography>
-                        <GifUploader/>
+                        <GifUploader/> */}
                         <ImageUploader/>
                     </Box>
                 </Container>

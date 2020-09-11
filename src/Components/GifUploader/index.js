@@ -4,6 +4,7 @@ import { DropBox } from "../DropBox";
 import { Grid, Box } from "@material-ui/core";
 import UploaderBase from "../UploaderBase/Index";
 
+const INPUT_ID = "gif-input";
 
 /**
  * This Componenent allows users to upload files and convert them to gifs
@@ -14,9 +15,9 @@ class GifUploader extends UploaderBase {
     this.setMakeHandlersCallback(this.defineHandlers);
     this.setMaxUploadSize(70);
     this.setAllowedMimeTypes([ "image/gif", "video/*" ]);
-    this.setMaxNumUploads(2);
+    this.setMaxNumUploads(6);
+    this.setInputElementId(INPUT_ID)
   }
-
 
   defineHandlers = () => {
     /*
@@ -130,6 +131,7 @@ class GifUploader extends UploaderBase {
               uploadInstructionsText={"Please Drag And Drop Video Files, Or"}
               mimeTypes={"video/*, image/gif"}
               error={this.state.tooManyFilesSelected ? `Please select no more than ${this.maxNumUploads} files.` : ''}
+              id={INPUT_ID}
             />
           </Grid>
         </Grid>

@@ -66,7 +66,7 @@ class GifBox extends Component {
                                 alt="Cool Gif"
                                 height="auto"
                                 image={this.state.fileName}
-                                title={"Cool Gif"}
+                                title={this.state.descriptionLines[0]}
                             />
                             <Grid item>
                                 <Grid

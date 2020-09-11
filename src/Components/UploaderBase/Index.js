@@ -38,6 +38,7 @@ class UploaderBase extends Component {
         this.allowedMimeTypes = []; // allows any file
         this.maxUploadSize = 70; // MB
         this.maxNumUploads = 1;
+        this.inputElementId = null; 
     }
 
     /**
@@ -63,6 +64,15 @@ class UploaderBase extends Component {
 
     setMaxNumUploads = (val) => {
         this.maxNumUploads = val;
+    }
+
+    /**
+     * @param {*} id  The DOM id of the input element.
+     * If you do not call this method, this class will query the DOM for an iput selector.
+     * This will cause unpredictable behavior if you have multiple inputs.
+     */
+    setInputElementId = (id) => {
+        this.inputElementId = id;
     }
 
     componentDidUpdate = () => {
@@ -239,10 +249,6 @@ class UploaderBase extends Component {
                     this.curFileNum++;
                     this.upload();
                 }
-                else if (response.redirected) {
-                    console.log("do redirect?");
-                    console.log(response);
-                }
                 else {
                     console.log("response not ok..");
                     response.json().then(resJson => {
@@ -318,7 +324,16 @@ class UploaderBase extends Component {
      * Adds all the files unproccessedFiles via select.
      */
     selectFilesUpload = () => {
-        let videos = document.querySelector('input[type="file"][multiple]');
+        let videos;
+        if(!this.inputElementId) {
+            console.log("querySelector called to get input element.")
+            videos = document.querySelector('input[type="file"][multiple]');
+        }
+        else {
+            console.log("getElementById called to get input element.");
+            videos = document.getElementById(this.inputElementId);
+        }
+        
 
         for (let i = 0; i < videos.files.length; i++) {
             console.log("pushing file: " + videos.files[i].name);

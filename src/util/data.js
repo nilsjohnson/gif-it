@@ -109,7 +109,30 @@ function verifyAccount(userId, code) {
   return fetch(`${server}/verify/${userId}/${code}`);
 }
 
+function getPresignedPost(data = {lol: 'lol'}) {
+  return fetch(`${server}/getPresignedPost`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization' : readAuthToken()
+    }
+  });
+}
+
+function doSignedS3Post(url = '', formData = {}) {
+  return fetch(url, {
+    // headers: {
+    //    'Content-Type': 'multipart/form-data'
+    // },
+    method: 'POST',
+    body: formData
+  });
+}
+
 export { 
+  doSignedS3Post,
+  getPresignedPost,
   verifyAccount,
   signOut,
   checkToken, 

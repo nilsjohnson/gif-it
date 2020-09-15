@@ -152,7 +152,6 @@ class TagBox extends Component {
      * @param {} event 
      */
     setCurInput = (event) => {
-        console.log("no suggestion up");
         let input = event.target.value;
         this.setCurInput_fromString(input);
     }

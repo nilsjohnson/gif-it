@@ -2217,3 +2217,34 @@ Error: ENAMETOOLONG: name too long, open '/tmp/gif-it/1ulqjlxkzv251.jpg (2) (3) 
 2020-09-11 18:11:25 2020-09-11 18:11:25 ENAMETOOLONG: name too long, open '/tmp/gif-it/1ulqjlxkzv251.jpg (2) (3) (4) (5) (6) (7) (8) (9) (10) (11) (12) (13) (14) (15) (16) (17) (18) (19) (20) (21) (22) (23) (24) (25) (26) (27) (28) (29) (30) (31) (32) (33) (34) (35) (36) (37) (38) (39) (40) (41) (42) (43) (44) (45) (46) (47) (48) (49) (50) (51)' 
 Error: ENAMETOOLONG: name too long, open '/tmp/gif-it/1ulqjlxkzv251.jpg (2) (3) (4) (5) (6) (7) (8) (9) (10) (11) (12) (13) (14) (15) (16) (17) (18) (19) (20) (21) (22) (23) (24) (25) (26) (27) (28) (29) (30) (31) (32) (33) (34) (35) (36) (37) (38) (39) (40) (41) (42) (43) (44) (45) (46) (47) (48) (49) (50) (51)')
 
+2020-09-14 17:59:56 2020-09-14 17:59:56 S3_BUCKET is not defined 
+ReferenceError: S3_BUCKET is not defined
+    at /home/nils/gif-it/server/s3TransferController.js:30:29
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/signers/presign.js:105:11)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:23:26
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:38:9)
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:690:12)
+    at Request.callListeners (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:116:18)
+    at callNextListener (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:96:12)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/event_listeners.js:247:9
+    at finish (/home/nils/gif-it/node_modules/aws-sdk/lib/config.js:386:7)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/config.js:404:9)
+
+2020-09-14 22:25:36 2020-09-14 22:25:36 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at ServerResponse.json (/home/nils/gif-it/node_modules/express/lib/response.js:267:15)
+    at /home/nils/gif-it/server/s3TransferController.js:39:13
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/signers/presign.js:103:34)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:17:31
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:38:9)
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:690:12)
+    at Request.callListeners (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:116:18))
+
+2020-09-15 12:42:05 2020-09-15 12:42:05 config is not defined 
+ReferenceError: config is not defined
+    at exports.sign_s3 (/home/nils/gif-it/server/s3TransferController.js:44:29)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+

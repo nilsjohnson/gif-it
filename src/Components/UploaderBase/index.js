@@ -39,6 +39,7 @@ class UploaderBase extends Component {
         this.maxUploadSize = 70; // MB
         this.maxNumUploads = 1;
         this.inputElementId = null; 
+        this.uploadOnFile = true;
     }
 
     /**
@@ -75,6 +76,9 @@ class UploaderBase extends Component {
         this.inputElementId = id;
     }
 
+    setUploadOnFile = (val) => {
+        this.uploadOnFile = val;
+    }
     componentDidUpdate = () => {
         if (this.uploads.length === 0 && this.socket) {
             this.socket.close();
@@ -296,6 +300,11 @@ class UploaderBase extends Component {
         // reset this array so that user can add more files and update the state.
         this.unprocessedFiles = [];
         this.setState({ uploads: this.uploads });
+
+        if(!this.uploadOnFile) {
+            console.log("Upload on file is set to false. Not uploading.");
+            return;
+        }
 
         // open the socket if necessary
         if (this.socket === null) {

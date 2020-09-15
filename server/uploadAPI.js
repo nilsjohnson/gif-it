@@ -19,10 +19,51 @@ const { FilePaths, MAX_UPLOAD_SIZE } = require('./const');
 const { getUniqueID, checkUnique } = require("./util/fileUtil");
 const AuthDAO = require('./data/AuthDAO');
 const { addGifMakerUpload } = require('./makeGifAPI');
-let io = require('socket.io')(http) 
+let io = require('socket.io')(http)
 
 io.set('origins', DEV ? 'http://localhost:3000' : 'https://gif-it.io:*');
 let authDAO = new AuthDAO();
+
+
+
+const AWS = require('aws-sdk');
+const { BUCKET_NAME } = require('./const');
+
+AWS.config.update({
+  region: 'us-east-1',
+  accessKeyId: "AKIA6CQXHZIG3V72VR2I",
+  secretAccessKey: "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"
+});
+
+app.post('/getPresignedPost', (req, res) => {
+  console.log(req.body);
+
+  let userId = authDAO.authenticate(req.headers);
+  userId = "5";
+  let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
+
+  const key = "tempTestKey";
+
+  var params = {
+    Bucket: BUCKET_NAME,
+    Fields: {
+      key: key
+    },
+    Conditions: [
+      ["content-length-range", 	0, 1000000],
+    ]
+  };
+  s3.createPresignedPost(params, function (err, data) {
+    if (err) {
+      console.error('Presigning post data encountered an error', err);
+    } else {
+      console.log('The post data is', data);
+      res.json(data);
+    }
+  });
+});
+
+
 
 /**
  * Holds open connections - { socketId_1 : { socket: socket, uploads: {} }, socketId_2 : .... }
@@ -35,7 +76,7 @@ let connections = {};
 function deleteSocket(socketId) {
   if (delete connections[socketId]) {
     if (DEBUG) { console.log(`Socket ${socketId} has been deleted`); }
-  } 
+  }
   else {
     console.log(`Problem deleting ${socketId}.`);
   }
@@ -77,9 +118,9 @@ io.on("connection", (newSocket) => {
  */
 app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
   if (DEBUG) { console.log(`video upload hit by socket ${req.params.socketId}.`); }
-  
+
   let userId = authDAO.authenticate(req.headers);
-  if(!userId) {
+  if (!userId) {
     console.log("Sending Redirect.");
     res.redirect('/login');
     return;
@@ -135,10 +176,10 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
       file.on('data', function (data) {
         bytesRecieved = bytesRecieved + data.length;
         let newPercentUploaded = Math.round(bytesRecieved * 100 / fileSize);
-        if(DEBUG) { console.log(`upload progress: ${percentUploaded}% for uploadId ${uploadId}`); }
-        if(connections[socketId] && connections[socketId].socket) {
+        if (DEBUG) { console.log(`upload progress: ${percentUploaded}% for uploadId ${uploadId}`); }
+        if (connections[socketId] && connections[socketId].socket) {
           // only send new value if its greater than before to avoid sending like '2%...2%...3%...'
-          if(newPercentUploaded > percentUploaded) {
+          if (newPercentUploaded > percentUploaded) {
             connections[socketId].socket.emit("UploadProgress", {
               uploadId: uploadId,
               percentUploaded: newPercentUploaded,
@@ -159,12 +200,12 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
         uploadId: uploadId
       });
 
-      if(connections[socketId].uploads[uploadId].action === 'make_gif') {
+      if (connections[socketId].uploads[uploadId].action === 'make_gif') {
         // socketId, socket, uploadId, upload
         let socket = connections[socketId].socket;
         let upload = connections[socketId].uploads[uploadId];
         addGifMakerUpload(socketId, socket, uploadId, upload);
-        
+
       }
 
       // finish was called so upload was success.

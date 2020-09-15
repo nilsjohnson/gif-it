@@ -9,15 +9,11 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import './css/style.css';
-import Hot from './Components/Hot';
-
-
 
 function App() {
     return (
         <BrowserRouter>
             <ThemeProvider theme={theme}>
-            <Route path="/hot" component={Hot} exact /> 
                 <Route path="/" component={Explore} exact />
                 <Route path="/explore" component={Explore} exact />
                 <Route path="/signup" component={SignUp} exact />

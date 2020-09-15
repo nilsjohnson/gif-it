@@ -6,7 +6,6 @@ import { Container, Typography } from "@material-ui/core";
 import { Redirect } from 'react-router-dom'
 import { checkToken } from './util/data';
 import ImageUploader from "./Components/ImageUploader";
-import Hot from "./Components/Hot";
 
 class Dashboard extends Component {
     constructor(props){

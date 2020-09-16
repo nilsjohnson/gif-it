@@ -1,5 +1,6 @@
 function scaleMat(srcElem, dstElem, file, maxDim = 500) {
         srcElem.onload = () => {
+            /*global cv*/
             let inputMat = cv.imread(srcElem);
             let scaleFactor = null;
 
@@ -12,8 +13,8 @@ function scaleMat(srcElem, dstElem, file, maxDim = 500) {
 
             let width = Math.round(scaleFactor* inputMat.cols);
             let height = Math.round(scaleFactor * inputMat.rows);
-            console.log("Width: " + width);
-            console.log("Height: " + height)
+          //  console.log("Width: " + width);
+            //console.log("Height: " + height)
 
             let outputMat = new cv.Mat();
             let dSize = new cv.Size(width, height);
@@ -31,10 +32,8 @@ function scaleMat(srcElem, dstElem, file, maxDim = 500) {
  */
 function isLandScape(mat) {
     if(mat.rows <= mat.cols) {
-        console.log("this is landscape.");
         return true;
     }
-    console.log("this is portrait");
     return false
 }
 

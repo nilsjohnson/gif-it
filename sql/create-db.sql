@@ -87,3 +87,33 @@ CREATE TABLE gif_owner (
 	FOREIGN KEY (gif_id) REFERENCES gif(id),
 	FOREIGN KEY (user_id) REFERENCES user(id)
 );
+
+-- users can now have photos
+CREATE TABLE photo (
+	id VARCHAR(32), -- The id
+	descript VARCHAR(1000), -- A description, ie. 'This is how my dog playing fetch'
+	fileName VARCHAR(32), -- The name of the file, ie. '8374jf7.jpg'
+	thumbName VARCHAR(38), -- The name of the gifs thumbnail, ie. '8374jf7.thumb.jpg'
+	dimensions VARCHAR(12),	-- The dimensions, ie. '800x600'
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE photo_tag (
+	photo_id VARCHAR(32),
+	tag_id INT,
+	FOREIGN KEY (photo_id) 
+		REFERENCES photo(id)
+		ON DELETE CASCADE,
+	FOREIGN KEY (tag_id) 
+		REFERENCES tag(id)
+		ON DELETE CASCADE,
+	UNIQUE KEY photo_id (photo_id, tag_id)
+);
+
+-- gifs now belong to a user, or users
+CREATE TABLE photo_owner (
+	photo_id VARCHAR(32) NOT NULL,
+	user_id INT NOT NULL,
+	FOREIGN KEY (photo_id) REFERENCES photo(id),
+	FOREIGN KEY (user_id) REFERENCES user(id)
+);

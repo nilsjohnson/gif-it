@@ -4,11 +4,11 @@ import UploaderBase from "../UploaderBase";
 import { withStyles } from '@material-ui/core/styles';
 import Upload from "./Upload";
 import TagInputBox from '../TagInputBox';
-import Test from "./Test";
+import { getPresignedPost, doSignedS3Post, postPhotoGallery } from '../../util/data';
+import { formatBytes } from '../../util/util';
 
 const INPUT_ID = "img-uploader-input";
-
-
+const PROGRESS_BAR_UPDATE_INTERVAL = 250; // milliseconds
 
 const useStyles = theme => ({
     root: {
@@ -46,15 +46,73 @@ class ImageUploader extends UploaderBase {
         this.setAllowedMimeTypes(['image/*']);
         this.setMaxNumUploads(1000);
         this.setInputElementId(INPUT_ID);
+        this.setMaxUploadSize(70);
         this.cv = null;
+        this.estimatedUploadRate = 500;
     }
 
     cancel = () => {
         console.log("cancel clicked");
     }
 
+    addTag = (upload, tag) => {
+        let tags;
+        if(upload.tags) {
+            tags = upload.tags;
+            tags.push(tag);
+        }
+        else {
+            tags = [tag];
+        }
+
+        this.updateUploads(upload.uploadId, {tags: tags})
+    }
+
+    
+
+    setDescription = (upload, description) => {
+        this.updateUploads(upload.uploadId, {description: description});
+    }
+
+    removeTag = (upload, tag) => {
+        if(upload.tags) {
+            let tmp = upload.tags;
+            let index = tmp.findIndex(elem => elem === tag);
+            tmp.splice(index, 1);
+            this.updateUploads(upload.uploadId, {tags: tmp})
+        }
+        else {
+            console.log(`Tried to remove tag ${tag} but it wasn't found.`);
+        }
+    }
+
     share = () => {
-        console.log("share clicked");
+        console.log(this.state.uploads);
+
+        let obj = {
+            albumTitle: this.state.albumDescription,
+            photos: []
+        };
+
+        for(let i = 0; i < this.state.uploads.length; i++) {
+            let curUpload = this.state.uploads[i];
+            
+            let photo = {
+                tags: curUpload.tags,
+                description: curUpload.description,
+                fileName: curUpload.fileName
+            };
+
+            obj.photos.push(photo);
+        };
+
+        postPhotoGallery(obj).then(res => {
+            if(res.ok) {
+                console.log("ok!");
+            }
+        }).catch(err => console.log(err))
+
+
     }
 
     componentDidMount = () => {
@@ -68,13 +126,186 @@ class ImageUploader extends UploaderBase {
                 cvLoaded: true
             });
         }
+
+        this.setInitalSpeed();
+    }
+
+    createForm = (fields, file) => {
+        const formData = new FormData();
+        Object.entries(fields).forEach(([k, v]) => {
+            //console.log(`${k} : ${v}`);
+            formData.append(k, v);
+        });
+        formData.append("file", file);
+        return formData;
+    }
+
+    /**
+     * Uploads a dummy file to s3 to guess our upload speed.
+     */
+    setInitalSpeed = () => {
+        let hello = [90000];
+        for (let i = 0; i < 90000; i++) {
+            hello[i] = i;
+        }
+        let curFile = new Blob(hello, { type: 'text/plain' });
+
+        let info = {
+            fileName: "testFile",
+            fileType: "txt",
+            action: "speed_test"
+        };
+
+        let startTime = new Date().getTime();
+        getPresignedPost(info).then(res => {
+            res.json().then(data => {
+                if (!res.ok) {
+                    console.log("Problem getting presignedPost fields for initial speed test");
+                    return;
+                }
+                console.log("creating form for speed test");
+                const formData = this.createForm(data.fields, curFile);
+
+                doSignedS3Post(data.url, formData).then(res => {
+                    if (res.ok) {
+                        let endTime = new Date().getTime();
+                        this.setUploadRate(startTime, endTime, curFile.size);
+                        console.log("upload rate is: " + this.estimatedUploadRate + "/" + PROGRESS_BAR_UPDATE_INTERVAL + "ms");
+                        return;
+                    }
+                    console.log("Problem doing presigned post.");
+                    console.log(res);
+                    res.text().then(text => {
+                        console.log(text);
+                    });
+                }).catch(err => console.log(err));
+
+            })
+                .catch(err => console.log(err));
+        }).catch(err => console.log(err));
+    }
+
+    /**
+     * A recursive method to update the progress bar of an upload
+     * @param {*} totalUploaded the amount of data that has been uploaded
+     * @param {*} upload the upload being uploaded
+     * @param {*} fileSize the size of the file being uploaded
+     */
+    doProgressBar = (upload, fileSize, rate, totalUploaded = 0) => {
+        setTimeout(() => {
+            if (totalUploaded >= fileSize) {
+                return;
+            }
+
+            totalUploaded += rate
+            let percent = Math.round(totalUploaded / fileSize * 100);
+            percent = percent < 100 ? percent : 100;
+
+            if (upload.status === 'uploading') {
+                this.updateUploads(upload.uploadId, { percentUploaded: percent });
+                this.doProgressBar(upload, fileSize, rate, totalUploaded);
+            }
+            else {
+                this.updateUploads(upload.uploadId, { percentUploaded: 100 });
+                return;
+            }
+
+
+
+        }, PROGRESS_BAR_UPDATE_INTERVAL);
     }
 
     setAlbumTitle = (event) => {
-        val = event.target.value;
+        let val = event.target.value;
         this.setState({
             albumDescription: val
-        })
+        });
+    }
+
+    setUploadRate = (startTime, endTime, fileSize) => {
+        this.estimatedUploadRate = fileSize * PROGRESS_BAR_UPDATE_INTERVAL / (endTime - startTime);
+    }
+    
+    upload = () => {
+        if (this.curFileNum >= this.uploads.length) {
+            return;
+        }
+        console.log(`Starting upload at index ${this.curFileNum}`);
+
+        let curFile = this.uploads[this.curFileNum].file;
+        let tempUploadId = this.uploads[this.curFileNum].uploadId;
+        let fileSize = curFile.size;
+
+
+        if (curFile.size / (1000 * 1000) > this.maxUploadSize) {
+            this.setError(this.curFileNum, `File Must Not Exceed ${formatBytes(this.maxUploadSize * 1000 * 1000)}`);
+            this.curFileNum++;
+            return this.upload();
+        }
+
+        if (!this.isValidType(curFile.type)) {
+            this.setError(this.curFileNum, `File must be of type {${this.allowedMimeTypes}}. '${curFile.type}' was provided`);
+            this.curFileNum++;
+            return this.upload();
+        }
+
+        let fileParts = curFile.name.split('.');
+
+        let fileInfo = {
+            fileName: fileParts[0],
+            fileType: fileParts[1]
+        };
+
+        let startTime = new Date().getTime();
+        getPresignedPost(fileInfo).then(res => {
+            if (res.ok) {
+                res.json().then(data => {
+                    const { fields = {}, uploadId, url } = data;
+                    const formData = this.createForm(fields, curFile);
+                    this.updateUploads(tempUploadId, { uploadId: uploadId, fileName: fields.key })
+
+                    // starts the progress bar rolling...
+                    this.doProgressBar(this.uploads[this.curFileNum], fileSize, this.state.estimatedUploadRate);
+                    // upload to s3
+                    doSignedS3Post(url, formData).then(res => {
+                        if (res.ok) {
+                            let endTime = new Date().getTime();
+                            this.setUploadRate(endTime, startTime, fileSize);
+                            this.updateUploads(uploadId, { status: 'editing' });
+                            console.log("file uploaded to s3!");
+                        }
+                        else {
+                            console.log("File could not be uploaded to s3.");
+                            this.updateUploads(uploadId, { err: "File couldnt be uploaded." });
+                            res.text().then(text => {
+                                console.log(text);
+                            });
+                        }
+                        this.curFileNum++;
+                        return this.upload();
+
+                    }).catch(err => {
+                        console.log("Problem doing signed s3 post: " + err);
+                        this.curFileNum++;
+                        return this.upload();
+                    });
+                }).catch(err => {
+                    console.log("Problem with the JSON returned from fetching presigned post: " + err);
+                    this.curFileNum++;
+                    return this.upload();
+                });
+            }
+            else {
+                console.log("Problem generating presigned post. Here's the response...");
+                console.log(res);
+                this.curFileNum++;
+                return this.upload();
+            }
+        }).catch(err => {
+            console.log("Problem fetching presigned post: " + err);
+            this.curFileNum++;
+            return this.upload();
+        });
     }
 
     render() {
@@ -90,7 +321,6 @@ class ImageUploader extends UploaderBase {
             );
         }
 
-        console.log(this.state.uploads);
         return (
             <Container component="main" maxWidth="md" className={classes.root} >
                 <Grid
@@ -114,10 +344,10 @@ class ImageUploader extends UploaderBase {
                             {this.state.uploads.length > 0 &&
                                 <Grid item xs={12}>
                                     <Box className={classes.subContainer} p={2}>
-                                        <TextField 
-                                            fullWidth 
-                                            label="Please Enter Album Title" 
-                                            variant="outlined" 
+                                        <TextField
+                                            fullWidth
+                                            label="Please Enter Album Title"
+                                            variant="outlined"
                                             onChange={this.setAlbumTitle}
                                         />
                                     </Box>
@@ -132,6 +362,9 @@ class ImageUploader extends UploaderBase {
                                         upload={upload}
                                         requestTagSuggestions={this.requestTagSuggestions}
                                         suggestions={upload.suggestions}
+                                        addTag={this.addTag}
+                                        removeTag={this.removeTag}
+                                        setDescription={this.setDescription}
                                     />
                                 </Grid>
                             )}
@@ -160,7 +393,6 @@ class ImageUploader extends UploaderBase {
                         </Box>
                     </Grid>
                 </Grid>
-                <Test/>
             </Container>
         );
     }

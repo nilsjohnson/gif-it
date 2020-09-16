@@ -2248,3 +2248,11 @@ ReferenceError: config is not defined
     at exports.sign_s3 (/home/nils/gif-it/server/s3TransferController.js:44:29)
     at processTicksAndRejections (internal/process/task_queues.js:97:5))
 
+2020-09-16 14:47:39 2020-09-16 14:47:39 mediaDAO is not defined 
+ReferenceError: mediaDAO is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:71:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+

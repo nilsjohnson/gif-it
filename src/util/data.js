@@ -25,7 +25,7 @@ function uploadFile(socketId, tempUploadId, data = {}, type = "") {
     method: 'POST',
     body: data,
     headers: {
-      'authorization' : readAuthToken()
+      'authorization': readAuthToken()
     }
   });
 }
@@ -80,7 +80,7 @@ function checkToken() {
   console.log("checking token");
   return fetch(`${server}/auth/checkToken/`, {
     headers: {
-      'authorization' : readAuthToken()
+      'authorization': readAuthToken()
     }
   });
 }
@@ -100,7 +100,7 @@ function signOut() {
   console.log("sign out");
   return fetch(`${server}/auth/signOut/`, {
     headers: {
-      'authorization' : readAuthToken()
+      'authorization': readAuthToken()
     }
   });
 }
@@ -109,13 +109,13 @@ function verifyAccount(userId, code) {
   return fetch(`${server}/verify/${userId}/${code}`);
 }
 
-function getPresignedPost(data = {lol: 'lol'}) {
+function getPresignedPost(data = {}) {
   return fetch(`${server}/getPresignedPost`, {
     method: 'POST',
     body: JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json',
-      'authorization' : readAuthToken()
+      'authorization': readAuthToken()
     }
   });
 }
@@ -130,18 +130,30 @@ function doSignedS3Post(url = '', formData = {}) {
   });
 }
 
-export { 
+function postPhotoGallery(data) {
+  return fetch(`${server}/upload/addPhotoGallery`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': readAuthToken()
+    }
+  });
+}
+
+export {
+  postPhotoGallery,
   doSignedS3Post,
   getPresignedPost,
   verifyAccount,
   signOut,
-  checkToken, 
-  signUp, 
-  login, 
-  getServer, 
-  getPopularTags, 
-  getGifById, 
-  getNew, 
-  uploadFile, 
-  search 
+  checkToken,
+  signUp,
+  login,
+  getServer,
+  getPopularTags,
+  getGifById,
+  getNew,
+  uploadFile,
+  search
 }

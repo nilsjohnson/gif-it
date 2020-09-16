@@ -219,7 +219,6 @@ class UploaderBase extends Component {
 
     } // end def socket event handlers.
 
-
     /**
      * Takes files from unprocessedFiles and recursively uploads them.
      */
@@ -418,11 +417,6 @@ class UploaderBase extends Component {
      * @param {*} input 
      */
     requestTagSuggestions = (uploadId, input) => {
-        console.log("fetching suggested tags");
-
-        console.log("input.trim:");
-        console.log(input);
-
         if (input.trim().length <= 2) {
             return;
         }

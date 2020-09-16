@@ -4,7 +4,7 @@ const { FilePaths } = require('./const');
 const { addJob } = require('./mediaUtil/gifMaker');
 const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
 const MediaDAO = require('./data/MediaDAO');
-let io = require('socket.io')(http) 
+let io = require('socket.io')(http)
 
 io.set('origins', DEV ? 'http://localhost:3000' : 'https://gif-it.io:*');
 
@@ -194,22 +194,7 @@ function addEventHandlers(newSocket, socketId) {
       newSocket.emit("ShareResult", { uploadId: uploadId, status: "shared" });
       connections[socketId].uploads[uploadId].shared = true;
     }).catch(err => {
-        newSocket.emit("ShareResult", { uploadId: uploadId, error: err.toString() })
-    });
-  });
-
-newSocket.on("SuggestTags", (data) => {
-    if (DEBUG) { console.log(`SuggestTags: `); console.log(data); }
-
-    const { uploadId, input } = data;
-
-    mediaDAO.getSuggestedTags(input, (results) => {
-      if (results) {
-        connections[socketId].socket.emit("SuggestionsFound", {
-          uploadId: uploadId,
-          tags: results
-        });
-      }
+      newSocket.emit("ShareResult", { uploadId: uploadId, error: err.toString() })
     });
   });
 }
@@ -230,18 +215,18 @@ function sendRetryRequest(socketId, uploadId) {
  * @param {*} uploadId 
  * @param {*} upload 
  */
-function addGifMakerUpload(socketId, socket, uploadId, upload)  {
-    // if this socket already has uploads associated with it
-    if(connections[socketId]) {
-        connections[socketId].uploads[uploadId] = upload;
-    }
-    else {
-        connections[socketId] = {};
-        connections[socketId].uploads = {};
-        connections[socketId].uploads[uploadId] = upload;
-        connections[socketId].socket = socket;
-        addEventHandlers(socket, socketId);
-    }
+function addGifMakerUpload(socketId, socket, uploadId, upload) {
+  // if this socket already has uploads associated with it
+  if (connections[socketId]) {
+    connections[socketId].uploads[uploadId] = upload;
+  }
+  else {
+    connections[socketId] = {};
+    connections[socketId].uploads = {};
+    connections[socketId].uploads[uploadId] = upload;
+    connections[socketId].socket = socket;
+    addEventHandlers(socket, socketId);
+  }
 }
 
 exports.addGifMakerUpload = addGifMakerUpload;

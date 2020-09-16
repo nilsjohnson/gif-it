@@ -18,52 +18,13 @@ const { app, http } = require('./server');
 const { FilePaths, MAX_UPLOAD_SIZE } = require('./const');
 const { getUniqueID, checkUnique } = require("./util/fileUtil");
 const AuthDAO = require('./data/AuthDAO');
+const MediaDAO = require('./data/MediaDAO');
 const { addGifMakerUpload } = require('./makeGifAPI');
 let io = require('socket.io')(http)
 
 io.set('origins', DEV ? 'http://localhost:3000' : 'https://gif-it.io:*');
 let authDAO = new AuthDAO();
-
-
-
-const AWS = require('aws-sdk');
-const { BUCKET_NAME } = require('./const');
-
-AWS.config.update({
-  region: 'us-east-1',
-  accessKeyId: "AKIA6CQXHZIG3V72VR2I",
-  secretAccessKey: "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"
-});
-
-app.post('/getPresignedPost', (req, res) => {
-  console.log(req.body);
-
-  let userId = authDAO.authenticate(req.headers);
-  userId = "5";
-  let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
-
-  const key = "tempTestKey";
-
-  var params = {
-    Bucket: BUCKET_NAME,
-    Fields: {
-      key: key
-    },
-    Conditions: [
-      ["content-length-range", 	0, 1000000],
-    ]
-  };
-  s3.createPresignedPost(params, function (err, data) {
-    if (err) {
-      console.error('Presigning post data encountered an error', err);
-    } else {
-      console.log('The post data is', data);
-      res.json(data);
-    }
-  });
-});
-
-
+let mediaDAO = new MediaDAO();
 
 /**
  * Holds open connections - { socketId_1 : { socket: socket, uploads: {} }, socketId_2 : .... }
@@ -102,6 +63,21 @@ function addSocket(newSocket) {
   connections[socketId].socket.on("disconnect", () => {
     console.log(`Socket ${socketId} disconnected from uploadAPI`);
     deleteSocket(socketId);
+  });
+
+  connections[socketId].socket.on("SuggestTags", (data) => {
+    if (DEBUG) { console.log(`SuggestTags: `); console.log(data); }
+
+    const { uploadId, input } = data;
+
+    mediaDAO.getSuggestedTags(input, (results) => {
+      if (results) {
+        connections[socketId].socket.emit("SuggestionsFound", {
+          uploadId: uploadId,
+          tags: results
+        });
+      }
+    });
   });
 }
 
@@ -205,7 +181,6 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
         let socket = connections[socketId].socket;
         let upload = connections[socketId].uploads[uploadId];
         addGifMakerUpload(socketId, socket, uploadId, upload);
-
       }
 
       // finish was called so upload was success.
@@ -215,6 +190,22 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
 
     return req.pipe(busboy);
   }
+});
+
+app.post('/upload/addPhotoGallery', function (req, res) {
+  console.log("/upload/addPhotoGallery hit");
+
+  let userId = authDAO.authenticate(req.headers);
+  if (!userId) {
+    console.log("Sending Redirect.");
+    res.redirect('/login');
+    return;
+  }
+
+  console.log(req.body);
+  res.send(200);
+  
+  
 });
 
 function addUpload(uploadId, uploadDst, givenFileName, ipAddr, socketId, userId, action) {

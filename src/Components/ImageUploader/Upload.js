@@ -23,8 +23,8 @@ const useStyles = theme => ({
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2)
     },
-    root: {
-        
+    uploading: {
+        opacity: "50%"
     }
 });
 
@@ -44,35 +44,22 @@ class Upload extends Component {
         let srcElem = document.getElementById("cavas-in-" + upload.uploadId);
         let dstElem = document.getElementById("cavas-out-" + upload.uploadId);
 
-        scaleMat(srcElem, dstElem, upload.file, 500);
+        scaleMat(srcElem, dstElem, upload.file, 800);
     }
 
     setDescription = (input) => {
-        console.log(input);
-        this.setState({ description: input });
-    }
+        // TODO validate
+        const { upload, setDescription } = this.props;
+        setDescription(upload, input);
+    }   
 
 
     addTag = (tag) => {
-        console.log("add tag fired: " + tag);
-        let tags = this.state.tags;
-        tags.push(tag);
-        this.setState({
-            tags: tags
-        });
+        this.props.addTag(this.props.upload, tag);
     }
 
     removeTag = (tag) => {
-        let tags = this.state.tags;
-        for(let i = 0; i < tags.length; i++) {
-            if(tags[i] === tag) {
-                tags.splice(i, 1);
-                break;
-            }
-        }
-
-        this.setState({ tags: tags});
-
+        this.props.removeTag(this.props.upload, tag);
     }
 
     share = () => {
@@ -105,7 +92,7 @@ class Upload extends Component {
                         <ProgressBar value={this.props.upload.percentUploaded}/>
                     </Grid>
                     <Grid item xs={10}>
-                        <canvas className={classes.fullWidth} id={"cavas-out-" + upload.uploadId} ></canvas>
+                        <canvas className={`${classes.fullWidth} ${upload.status === "uploading" ? classes.uploading: ""}`} id={"cavas-out-" + upload.uploadId} ></canvas>
                         <img className={classes.hidden} id={"cavas-in-" + upload.uploadId} ></img>
                     </Grid>
                     <Grid xs={10} item>
@@ -114,7 +101,7 @@ class Upload extends Component {
                     <Grid xs={10} item>
                         <TagInputBox
                             suggestions={this.props.upload.suggestions}
-                            tags={this.state.tags}
+                            tags={upload.tags}
                             addTag={this.addTag}
                             removeTag={this.removeTag}
                             requestTagSuggestions={this.requestTagSuggestions}

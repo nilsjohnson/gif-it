@@ -13,7 +13,7 @@ function saveAuthToken(token) {
 
 function readAuthToken() {
 	let token = JSON.parse(readCookie("auth_token"));
-	console.log("here is the auth token: " + token);
+	//console.log("here is the auth token: " + token);
 	return token;
 }
 

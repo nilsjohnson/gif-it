@@ -1,16 +1,6 @@
 const DAO = require("./DAO");
 const log = require("../util/logger");
 
-// var mysql = require('mysql');
-// var pool = mysql.createPool({
-//     connectionLimit: 10,
-//     host: 'localhost',
-//     user: 'bryn',
-//     password: 'doggie',
-//     database: 'gif_it'
-// });
-
-
 class MediaDAO extends DAO {
     constructor() {
         //maxConnections, host, user, password, database
@@ -29,9 +19,9 @@ class MediaDAO extends DAO {
                 return;
             }
 
-            let sql = `SELECT tag.tag, COUNT(gif_tag.tag_id) as numUses
+            let sql = `SELECT tag.tag, COUNT(media_tag.tag_id) as numUses
                 FROM tag
-                    JOIN gif_tag ON tag.id = gif_tag.tag_id
+                    JOIN media_tag ON tag.id = media_tag.tag_id
                 GROUP BY tag.tag
                 ORDER BY numUses desc
                 limit ${qty};`;
@@ -57,8 +47,8 @@ class MediaDAO extends DAO {
                 return callback(null);
             }
 
-            let sql = `SELECT gif.id, gif.descript, gif.fileName, gif.thumbName FROM gif
-            JOIN upload ON gif.id = upload.id
+            let sql = `SELECT media.id, media.descript, media.fileName, media.thumbName FROM media
+            JOIN upload ON media.id = upload.id
             ORDER BY upload.date DESC 
             limit ${qty};`;
 
@@ -84,16 +74,16 @@ class MediaDAO extends DAO {
             }
 
             let sql = `SELECT 
-            gif.descript, 
-            gif.fileName, 
+            media.descript, 
+            media.fileName, 
             JSON_OBJECTAGG(tag.tag, 
-                (SELECT COUNT(gif_tag.tag_id)
-                    FROM gif_tag
-                    WHERE gif_tag.tag_id = tag.id)) as tags 
-            FROM gif
-                JOIN gif_tag ON gif.id = gif_tag.gif_id
-                JOIN tag ON gif_tag.tag_id = tag.id
-            WHERE gif.id = ?`;
+                (SELECT COUNT(media_tag.tag_id)
+                    FROM media_tag
+                    WHERE media_tag.tag_id = tag.id)) as tags 
+            FROM media
+                JOIN media_tag ON media.id = media_tag.media_id
+                JOIN tag ON media_tag.tag_id = tag.id
+            WHERE media.id = ?`;
 
 
             connection.query(sql, gifId, (error, results, fields) => {
@@ -118,9 +108,9 @@ class MediaDAO extends DAO {
                 return callback(null);
             }
 
-            let sql = `SELECT tag.tag, COUNT(gif_tag.tag_id) as numUses
+            let sql = `SELECT tag.tag, COUNT(media_tag.tag_id) as numUses
             FROM tag
-                JOIN gif_tag ON tag.id = gif_tag.tag_id
+                JOIN media_tag ON tag.id = media_tag.tag_id
             WHERE tag.tag LIKE '${input}%' 
             GROUP BY tag.tag
             ORDER BY numUses desc
@@ -138,154 +128,76 @@ class MediaDAO extends DAO {
     }
 
 
-    /**
-     * This function performs a database transaction to insert a gif into the database. The following 
-     * queries execute:
-     *  1.) Insert the gif into gif
-     *  2.) Insert the upload info into upload
-     *  3.) Upsert the tags into tag
-     *  4.) retreives all the tag ids from tags inserted in step 3.
-     *  5.) Insert new entry into the gif_tag join table
-     * 
-     * @param {*} uploadId - The id of the gif.
-     * @param {*} fileName - The name of the file
-     * @param {*} thumbFileName - The name of the file's thumbnail
-     * @param {*} tags - Array of tags
-     * @param {*} description - description of gif
-     * @param {*} ipAddr - uploaders ip address
-     * @param {*} originalFileName - The orignal fileName on the client machine
-     * @param {*} userId - The owner of the gif
-     * @returns A promise
-     */
-    addGif(uploadId, fileName, thumbFileName, tags, description, ipAddr, originalFileName, userId) {
-        let uploadTime = this.getTimeStamp();
-        let logFailure = this.logFailure;
-        return new Promise((resolve, reject) => {
-            if (!tags) {
-                reject("At least one tag is required.");
+    async addAlbumItems(media_id, album_id, connection) {
+        let sql = "INSERT INTO album_items ?";
+        let row = { media_id: media_id, album_id: album_id };
+        let result = connection.query(sql, row, (error, results, fields) => {
+            if (error) {
+                console.log(error);
+                return false;
+            }
+            return true;
+        });
+
+        return await result;
+    }
+
+    addMedia(media, userId, userIpAddr, onSuccess, onFail) {
+        const {
+            uploadId, 
+            fileName, 
+            thumbFileName, 
+            tags, 
+            description, 
+            originalFileName, 
+            type 
+        } = media;
+
+        let args, results;
+
+        this.getConnection(async (connection) => {
+            if (!connection) {
+                onFail("Couldn't get db connection.");
             }
 
-            this.getConnection(connection => {
-                if (!connection) {
-                    reject("Database Error");
-                    return;
-                }
+            try {
+                await this.startTransaction(connection);
 
-                connection.beginTransaction(function (err) {
-                    if (err) {
-                        this.logFailure(err);
-                        reject("Database Error");
-                        return;
-                    }
+                // insert the media
+                args = { 
+                    id: uploadId, 
+                    descript: description, 
+                    fileName: fileName, 
+                    thumbName: thumbFileName, 
+                    fileType: type 
+                };
+                results = await this.insertMedia(connection, args);
 
-                    // 1.) insert the gif
-                    let gif_sql = `INSERT INTO gif SET ?`;
-                    let insertObj = { id: uploadId, descript: description, fileName: fileName, thumbName: thumbFileName };
-                    connection.query(gif_sql, insertObj, (error, results, fields) => {
-                        if (error) {
-                            logFailure(error);
-                            connection.rollback();
-                            reject("Database Error");
-                            return;
-                        }
+                // insert the upload
+                args = { 
+                    id: uploadId, 
+                    date: this.getTimeStamp(), 
+                    ipAddr: userIpAddr, 
+                    originalFileName: originalFileName 
+                };
+                results = await this.insertUpload(connection, args);
 
-                        // 2.) insert the upload
-                        let upload_sql = `INSERT INTO upload SET id = ?, date = ?, ipAddr = ?, originalFileName = ?`;
-                        connection.query(upload_sql, [uploadId, uploadTime, ipAddr, originalFileName], (error, results, fields) => {
-                            if (error) {
-                                logFailure(error);
-                                connection.rollback();
-                                reject("Database Error");;
-                                return;
-                            }
+                // insert tags
+                this.insertTags(connection, tags);
 
-                            // 3.) insert the tags
-                            let tag_str = "";
-                            for (let i = 0; i < tags.length; i++) {
-                                let tmp = "('" + tags[i] + "')";
-                                tag_str += tmp;
-                                if (i < tags.length - 1) {
-                                    tag_str += ", ";
-                                }
-                            }
+                // insert into the media_owner table
+                args = { media_id: uploadId, user_id: userId };
+                results = await this.insertMediaOwner(connection, args);
 
-                            let tag_sql = `INSERT IGNORE INTO tag (tag) VALUES ${tag_str}`;
-                            connection.query(tag_sql, (error, results, fields) => {
-                                if (error) {
-                                    logFailure(error);
-                                    connection.rollback();
-                                    reject(error);
-                                    return;
-                                }
+                await this.completeTransation(connection);
+                return onSuccess();
 
-                                // 4.) get the tag_ids
-                                let tagId_sql = "SELECT tag.id FROM tag WHERE ";
-                                let tagIds = [];
-
-                                for (let j = 0; j < tags.length; j++) {
-                                    tagId_sql += (j === 0 ? "" : " OR ");
-                                    tagId_sql += `tag.tag = '${tags[j]}'`
-                                }
-
-                                connection.query(tagId_sql, function (error, results, fields) {
-                                    if (error) {
-                                        logFailure(error);
-                                        connection.rollback();
-                                        reject(error);
-                                        return;
-                                    }
-
-                                    for (let i = 0; i < results.length; i++) {
-                                        tagIds.push(results[i].id);
-                                    }
-
-                                    // 5.) insert into the gif_tag table
-                                    let id_tag_str = "";
-                                    for (let i = 0; i < tags.length; i++) {
-                                        let tmp = `('${uploadId}', '${tagIds[i]}')`;
-                                        id_tag_str += tmp;
-                                        if (i < tags.length - 1) {
-                                            id_tag_str += ", ";
-                                        }
-                                    }
-
-                                    let gif_tag_sql = `INSERT IGNORE INTO gif_tag (gif_id, tag_id) VALUES ${id_tag_str}`;
-                                    connection.query(gif_tag_sql, (error, results, fields) => {
-                                        if (error) {
-                                            logFailure(error);
-                                            connection.rollback();
-                                            reject(error);
-                                            return;
-                                        }
-
-                                        // 6) insert into the gif_owner
-                                        let gif_owner_sql = 'INSERT INTO gif_owner SET ?';
-                                        connection.query(gif_owner_sql, { gif_id: uploadId, user_id: userId }, (error, results, fields) => {
-                                            if (error) {
-                                                logFailure(error);
-                                                connection.rollback();
-                                                reject("Database Error");
-                                                return;
-                                            }
-
-                                            connection.commit(function (error) {
-                                                if (error) {
-                                                    connection.rollback();
-                                                    reject(error);
-                                                    return;
-                                                }
-                                                else {
-                                                    resolve("Insertion Completed.");
-                                                }
-                                            });
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
+            }
+            catch (ex) {
+                log(ex);
+                connection.rollback();
+                return onFail("Problem inserting media into database. Please try again later.");
+            }
         });
     }
 
@@ -301,9 +213,9 @@ class MediaDAO extends DAO {
             }
 
             let getGif_sql =
-                "SELECT distinct gif.fileName, gif.descript, gif.thumbName, gif.id from gif \
-                    JOIN gif_tag ON gif.id = gif_tag.gif_id \
-                    JOIN tag ON gif_tag.tag_id = tag.id \
+                "SELECT distinct media.fileName, media.descript, media.thumbName, media.id from media \
+                    JOIN media_tag ON media.id = media_tag.media_id \
+                    JOIN tag ON media_tag.tag_id = tag.id \
                 WHERE ";
 
             for (let i = 0; i < tags.length; i++) {
@@ -321,7 +233,151 @@ class MediaDAO extends DAO {
         });
     }
 
+    createAlbum(album, uploadIp, onSuccess, onFail) {
+        const { albumTitle = "", photos = [], ownerId } = album;
+        let sql, args, results;
+
+        this.getConnection(async (connection) => {
+            if (!connection) {
+                onFail("Couldn't get db connection.");
+            }
+
+            try {
+                await this.startTransaction(connection);
+
+                // 1.) create album
+                sql = `INSERT INTO album SET ?`;
+                args = { title: albumTitle, descript: "TODO", owner_id: ownerId };
+                results = await this.query(connection, sql, args);
+                let albumId = results.insertId;
+
+                // 2.) insert the media and upload info
+                for (let i = 0; i < album.photos.length; i++) {
+                    // destructure the photo
+                    const { uploadId, fileName, thumbFileName, tags, description, originalFileName } = photos[i];
+
+                    // insert the media
+                    sql = `INSERT INTO media SET ?`;
+                    args = { id: uploadId, descript: description, fileName: fileName, thumbName: thumbFileName, fileType: 'image' };
+                    results = await this.query(connection, sql, args);
+
+                    // insert the upload
+                    sql = `INSERT INTO upload SET ?`;
+                    args = { id: uploadId, date: this.getTimeStamp(), ipAddr: uploadIp, originalFileName: originalFileName };
+                    results = await this.query(connection, sql, args);
+
+                    // insert the album item
+                    sql = 'INSERT INTO album_items SET ?';
+                    args = { media_id: uploadId, album_id: albumId, item_index: i };
+                    results = await this.query(connection, sql, args);
+
+                    if (tags) {
+                        // for each tag
+                        for (let i = 0; i < tags.length; i++) {
+                            // insert the tag
+                            sql = `INSERT IGNORE INTO tag SET tag = ?`;
+                            args = tags[i];
+                            results = await this.query(connection, sql, args);
+
+                            // insert tag_id/media_id into the media_tag join table
+                            let tagId;
+                            if (results.insertId > 0) {
+                                // if this was a new tag, we know it's id
+                                tagId = results.insertId;
+                            }
+                            else {
+                                // otherwise we query for it
+                                sql = "SELECT id FROM tag WHERE tag = ?";
+                                args = tags[i];
+                                results = await this.query(connection, sql, args);
+                                console.log("this tag is new.");
+                                console.log(results);
+                                tagId = results[0].id;
+                            }
+
+                            sql = `INSERT INTO media_tag SET ?`
+                            args = { media_id: uploadId, tag_id: tagId }
+                            results = await (query(connection, sql, args));
+                        }
+                    }
+
+                    // insert into the media_owner table
+                    sql = 'INSERT INTO media_owner SET ?';
+                    args = { media_id: uploadId, user_id: ownerId };
+                    results = await this.query(connection, sql, args);
+                }
+
+                await this.completeTransation(connection);
+                return onSuccess("Good work.")
+
+            }
+            catch (ex) {
+                console.log("Exception thrown. Rolling back.");
+                connection.rollback();
+                onFail(ex);
+            }
+        });
+    }
+
+    async insertTags(connection, tags) {
+        // for each tag
+        for (let i = 0; i < tags.length; i++) {
+            // insert tag
+            args = tags[i];
+            results = await this.insertTag(connection, args);
+
+
+            // insert tag_id/media_id into the media_tag join table
+            let tagId;
+            if (results.insertId > 0) {
+                // if this was a new tag, we know it's id
+                tagId = results.insertId;
+            }
+            else {
+                // get tagId by tag
+                args = tags[i];
+                results = await this.getTagId(connection, args);
+                console.log(results);
+                tagId = results[0].id;
+            }
+
+            args = { media_id: uploadId, tag_id: tagId }
+            results = this.insertMediaTag(connection, args);
+        }
+    }
+
+    async insertMediaOwner(connection, args) {
+        let sql = 'INSERT INTO media_owner SET ?';
+        return await this.query(connection, sql, args);
+    }
+
+    async insertMediaTag(connection, args) {
+        let sql = `INSERT INTO media_tag SET ?`
+        return await this.query(connection, sql, args);
+    }
+
+    async insertMedia(connection, args) {
+        let sql = `INSERT INTO media SET ?`;
+        return await this.query(connection, sql, args);
+    }
+
+    async insertUpload(connection, args) {
+        let sql = `INSERT INTO upload SET ?`;
+        return await this.query(connection, sql, args);
+    }
+
+    async insertTag(connection, args) {
+        let sql = `INSERT IGNORE INTO tag SET tag = ?`;
+        return await this.query(connection, sql, args);
+    }
+
+    async getTagId(connection, tag) {
+        let sql = "SELECT id FROM tag WHERE tag = ?";
+        return await this.query(connection, sql, tag);
+    }
 
 }
+
+
 
 module.exports = MediaDAO;

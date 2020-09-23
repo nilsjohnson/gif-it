@@ -175,27 +175,28 @@ function addEventHandlers(newSocket, socketId) {
       console.log(processedTags);
     }
 
-    let ipAddr = connections[socketId].uploads[uploadId].ipAddr;
-    let originalFileName = connections[socketId].uploads[uploadId].originalFileName;
-    let fileName = connections[socketId].uploads[uploadId].fileName;
-    let thumbFileName = connections[socketId].uploads[uploadId].thumbFileName;
-    let userId = connections[socketId].uploads[uploadId].userId;
+    // const { uploadId, fileName, thumbFileName, tags, description, originalFileName } = media;
 
-    mediaDAO.addGif(uploadId,
-      fileName,
-      thumbFileName,
-      processedTags,
-      description,
-      ipAddr,
-      originalFileName,
-      userId
-    ).then((result) => {
-      console.log(result);
+    media = {
+      uploadId: uploadId,
+      fileName: fileName = connections[socketId].uploads[uploadId].fileName,
+      thumbFileName: connections[socketId].uploads[uploadId].thumbFileName,
+      tags: processedTags,
+      description: description,
+      originalFileName: connections[socketId].uploads[uploadId].originalFileName,
+      type: "gif"
+    }
+
+    let userId = connections[socketId].uploads[uploadId].userId;
+    let ipAddr = connections[socketId].uploads[uploadId].ipAddr;
+
+    mediaDAO.addMedia(media, userId, ipAddr, () => {
       newSocket.emit("ShareResult", { uploadId: uploadId, status: "shared" });
-      connections[socketId].uploads[uploadId].shared = true;
-    }).catch(err => {
+    }, err => {
+      console.log(err);
       newSocket.emit("ShareResult", { uploadId: uploadId, error: err.toString() })
     });
+
   });
 }
 

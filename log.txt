@@ -2256,3 +2256,576 @@ ReferenceError: mediaDAO is not defined
     at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
     at processTicksAndRejections (internal/process/task_queues.js:79:11))
 
+2020-09-18 15:54:55 Error: ER_NO_SUCH_TABLE: Table 'gif_it.gif_tag' doesn't exist
+2020-09-18 15:54:55 Error: ER_NO_SUCH_TABLE: Table 'gif_it.gif_tag' doesn't exist
+2020-09-18 15:54:56 Error: ER_NO_SUCH_TABLE: Table 'gif_it.gif_tag' doesn't exist
+2020-09-18 15:54:56 Error: ER_NO_SUCH_TABLE: Table 'gif_it.gif_tag' doesn't exist
+2020-09-18 15:56:33 Error: ER_NO_SUCH_TABLE: Table 'gif_it.gif' doesn't exist
+2020-09-18 15:57:19 Error: ER_NO_SUCH_TABLE: Table 'gif_it.gif' doesn't exist
+2020-09-18 15:57:45 Error: ER_NO_SUCH_TABLE: Table 'gif_it.gif' doesn't exist
+2020-09-18 15:58:46 Error: ER_BAD_FIELD_ERROR: Unknown column 'gif_id' in 'field list'
+2020-09-18 15:59:39 Error: ER_NO_SUCH_TABLE: Table 'gif_it.gif' doesn't exist
+2020-09-18 16:03:58 Error: ER_NO_SUCH_TABLE: Table 'gif_it.gif' doesn't exist
+2020-09-18 16:04:10 Error: ER_NO_SUCH_TABLE: Table 'gif_it.gif' doesn't exist
+2020-09-18 16:05:00 Error: ER_NO_SUCH_TABLE: Table 'gif_it.gif' doesn't exist
+2020-09-18 17:01:05 2020-09-18 17:01:05 logFailure is not defined 
+ReferenceError: logFailure is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:344:25)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28))
+
+2020-09-18 17:01:48 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'media SET `albumTitle` = 'babes of the forest', `descript` = 'TODO', `owner` = N' at line 1
+2020-09-18 17:01:48 2020-09-18 17:01:48 reject is not defined 
+ReferenceError: reject is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:348:25)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28))
+
+2020-09-21 15:04:46 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'media SET `albumTitle` = 'Maine Pictures', `descript` = 'TODO', `owner` = NULL' at line 1
+2020-09-21 15:04:46 2020-09-21 15:04:46 reject is not defined 
+ReferenceError: reject is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:348:25)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28))
+
+2020-09-21 15:13:07 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'media SET `albumTitle` = 'Maine Pictures', `descript` = 'TODO', `owner` = NULL' at line 1
+2020-09-21 15:14:04 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'media SET `albumTitle` = 'Maine Pictures', `descript` = 'TODO', `owner` = NULL' at line 1
+2020-09-21 15:16:44 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'media SET `albumTitle` = 'Maine Pictures', `descript` = 'TODO', `owner` = 5' at line 1
+2020-09-21 15:18:10 Error: ER_BAD_FIELD_ERROR: Unknown column 'albumTitle' in 'field list'
+2020-09-21 15:19:07 Error: ER_BAD_FIELD_ERROR: Unknown column 'owner' in 'field list'
+2020-09-21 15:23:19 2020-09-21 15:23:19 resolve is not defined 
+ReferenceError: resolve is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:362:33)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-22 16:18:48 2020-09-22 16:18:48 Cannot destructure property 'uploadId' of 'media' as it is undefined. 
+TypeError: Cannot destructure property 'uploadId' of 'media' as it is undefined.
+    at insertMedia (/home/nils/gif-it/server/data/MediaDAO.js:368:13)
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:346:33)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-22 16:19:51 2020-09-22 16:19:51 Cannot destructure property 'uploadId' of 'media' as it is undefined. 
+TypeError: Cannot destructure property 'uploadId' of 'media' as it is undefined.
+    at insertMedia (/home/nils/gif-it/server/data/MediaDAO.js:368:13)
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:346:33)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-22 16:59:54 2020-09-22 16:59:54 addGif is not defined 
+ReferenceError: addGif is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:343:21)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-22 17:00:13 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-22 17:00:13 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-22 17:00:13 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-22 17:02:19 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-22 17:02:19 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-22 17:03:07 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-22 17:03:07 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-22 17:05:25 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-22 17:05:25 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-22 17:06:19 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-22 17:06:19 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-22 17:07:23 Error: ER_BAD_NULL_ERROR: Column 'user_id' cannot be null
+2020-09-22 17:07:23 Error: ER_BAD_NULL_ERROR: Column 'user_id' cannot be null
+2020-09-22 17:21:50 Error: ER_DUP_ENTRY: Duplicate entry '6OQP1OsH' for key 'media.PRIMARY'
+2020-09-22 17:21:50 Error: ER_DUP_ENTRY: Duplicate entry 'nPK2LP6Y' for key 'media.PRIMARY'
+2020-09-22 17:22:18 2020-09-22 17:22:18 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:190:54)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-22 17:22:18 2020-09-22 17:22:18 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:190:54)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-22 17:22:18 2020-09-22 17:22:18 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:190:54)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-22 17:27:04 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+2020-09-22 17:27:04 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+2020-09-22 17:27:04 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+2020-09-22 17:28:39 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+2020-09-22 17:28:39 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+2020-09-22 17:28:39 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+2020-09-22 17:39:07 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+2020-09-22 17:39:07 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+2020-09-22 17:40:16 2020-09-22 17:40:16 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:191:54)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-22 17:40:16 2020-09-22 17:40:16 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:191:54)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-22 17:41:29 2020-09-22 17:41:29 Cannot use 'in' operator to search for 'typeCast' in null 
+TypeError: Cannot use 'in' operator to search for 'typeCast' in null
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:184:47)
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:202:40)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-22 17:41:29 2020-09-22 17:41:29 Cannot use 'in' operator to search for 'typeCast' in null 
+TypeError: Cannot use 'in' operator to search for 'typeCast' in null
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:184:47)
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:202:40)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-22 17:42:21 2020-09-22 17:42:21 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:214:58)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28))
+
+2020-09-22 17:42:21 2020-09-22 17:42:21 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:214:58)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28))
+
+2020-09-22 17:46:18 2020-09-22 17:46:18 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:228:65)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28))
+
+2020-09-22 17:46:18 2020-09-22 17:46:18 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:228:65)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28))
+
+2020-09-22 19:36:30 2020-09-22 19:36:30 this.addTags is not a function 
+TypeError: this.addTags is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:261:50)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-22 19:36:30 2020-09-22 19:36:30 this.addTags is not a function 
+TypeError: this.addTags is not a function
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:261:50)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-22 20:16:35 Error: ER_DUP_ENTRY: Duplicate entry 'WAoaocwB' for key 'media.PRIMARY'
+2020-09-22 20:16:35 Error: ER_DUP_ENTRY: Duplicate entry 'iaZbnYy5' for key 'media.PRIMARY'
+2020-09-22 20:16:35 Error: ER_DUP_ENTRY: Duplicate entry 'W7JWsVSv' for key 'media.PRIMARY'
+2020-09-22 20:16:35 Error: ER_DUP_ENTRY: Duplicate entry 'nngaGh7e' for key 'media.PRIMARY'
+2020-09-22 20:19:49 2020-09-22 20:19:49 Cannot read property 'query' of undefined 
+TypeError: Cannot read property 'query' of undefined
+    at MediaDAO.addAlbumItems (/home/nils/gif-it/server/data/MediaDAO.js:202:33)
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:365:26)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-22 21:22:43 2020-09-22 21:22:43 albumTitle is not defined 
+ReferenceError: albumTitle is not defined
+    at /home/nils/gif-it/server/data/MediaDAO.js:358:33
+    at /home/nils/gif-it/server/data/DAO.js:32:20
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:64:7)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.Sequence.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-22 21:23:16 2020-09-22 21:23:16 albumTitle is not defined 
+ReferenceError: albumTitle is not defined
+    at /home/nils/gif-it/server/data/MediaDAO.js:358:33
+    at /home/nils/gif-it/server/data/DAO.js:32:20
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:64:7)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.Sequence.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-22 21:26:04 2020-09-22 21:26:04 ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INT O album SET `title` = 'the one goat', `descript` = 'TODO', `owner_id` = 5' at line 1 
+Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INT O album SET `title` = 'the one goat', `descript` = 'TODO', `owner_id` = 5' at line 1
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at MediaDAO.query (/home/nils/gif-it/server/data/MediaDAO.js:434:33)
+    at /home/nils/gif-it/server/data/MediaDAO.js:363:36
+    at /home/nils/gif-it/server/data/DAO.js:32:20
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:64:7)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.Sequence.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:92:8))
+
+2020-09-22 21:37:42 2020-09-22 21:37:42 result is not defined 
+ReferenceError: result is not defined
+    at MediaDAO.query (/home/nils/gif-it/server/data/MediaDAO.js:434:23)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-22 22:13:21 2020-09-22 22:13:21 resolve is not defined 
+ReferenceError: resolve is not defined
+    at Query.<anonymous> (/home/nils/gif-it/server/data/MediaDAO.js:441:13)
+    at Query.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Query._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Query.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Query._handleFinalResultPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:149:8)
+    at Query.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:74:10)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16))
+
+2020-09-22 22:23:44 2020-09-22 22:23:44 doQuery.then is not a function 
+TypeError: doQuery.then is not a function
+    at query (/home/nils/gif-it/server/data/MediaDAO.js:448:26)
+    at /home/nils/gif-it/server/data/MediaDAO.js:363:31
+    at /home/nils/gif-it/server/data/DAO.js:32:20
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:64:7)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.Sequence.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10))
+
+2020-09-23 11:29:48 Bad login attempt from ::1. Invalid Password.
+2020-09-23 11:48:06 2020-09-23 11:48:06 ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INSE RT INTO album SET `title` = NULL, `descript` = 'TODO', `owner_id` = 5' at line 1 
+Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INSE RT INTO album SET `title` = NULL, `descript` = 'TODO', `owner_id` = 5' at line 1
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/MediaDAO.js:376:20
+    at new Promise (<anonymous>)
+    at query (/home/nils/gif-it/server/data/MediaDAO.js:375:12)
+    at /home/nils/gif-it/server/data/MediaDAO.js:361:33
+    at /home/nils/gif-it/server/data/DAO.js:32:20
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:64:7)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16))
+
+2020-09-23 16:32:54 2020-09-23 16:32:54 userId is not defined 
+ReferenceError: userId is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/makeGifAPI.js:189:30)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-09-23 16:34:22 2020-09-23 16:34:22 ipAddr is not defined 
+ReferenceError: ipAddr is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/makeGifAPI.js:191:38)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-09-23 16:51:41 2020-09-23 16:51:41 description is not defined 
+ReferenceError: description is not defined
+    at insertMedia (/home/nils/gif-it/server/data/MediaDAO.js:353:38)
+    at /home/nils/gif-it/server/data/MediaDAO.js:178:27
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-23 16:52:19 2020-09-23 16:52:19 this.query is not a function 
+TypeError: this.query is not a function
+    at insertMedia (/home/nils/gif-it/server/data/MediaDAO.js:353:23)
+    at /home/nils/gif-it/server/data/MediaDAO.js:178:27
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-23 16:53:49 2020-09-23 16:53:49 sql is not defined 
+ReferenceError: sql is not defined
+    at MediaDAO.insertMedia (/home/nils/gif-it/server/data/MediaDAO.js:351:13)
+    at /home/nils/gif-it/server/data/MediaDAO.js:178:32
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-23 16:54:36 2020-09-23 16:54:36 ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1 
+Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertMedia (/home/nils/gif-it/server/data/MediaDAO.js:352:27)
+    at /home/nils/gif-it/server/data/MediaDAO.js:178:32
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-23 17:00:35 2020-09-23 17:00:35 ER_BAD_FIELD_ERROR: Unknown column 'fileeName' in 'field list' 
+Error: ER_BAD_FIELD_ERROR: Unknown column 'fileeName' in 'field list'
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertMedia (/home/nils/gif-it/server/data/MediaDAO.js:351:27)
+    at /home/nils/gif-it/server/data/MediaDAO.js:179:32
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-23 17:19:26 2020-09-23 17:19:26 ER_BAD_FIELD_ERROR: Unknown column 'date' in 'field list' 
+Error: ER_BAD_FIELD_ERROR: Unknown column 'date' in 'field list'
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertMedia (/home/nils/gif-it/server/data/MediaDAO.js:337:27)
+    at /home/nils/gif-it/server/data/MediaDAO.js:164:32
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-23 17:21:56 2020-09-23 17:21:56 ER_BAD_FIELD_ERROR: Unknown column 'date' in 'field list' 
+Error: ER_BAD_FIELD_ERROR: Unknown column 'date' in 'field list'
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertMedia (/home/nils/gif-it/server/data/MediaDAO.js:338:27)
+    at /home/nils/gif-it/server/data/MediaDAO.js:164:32
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-23 17:25:02 2020-09-23 17:25:02 ER_BAD_FIELD_ERROR: Unknown column 'date' in 'field list' 
+Error: ER_BAD_FIELD_ERROR: Unknown column 'date' in 'field list'
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertMedia (/home/nils/gif-it/server/data/MediaDAO.js:340:27)
+    at /home/nils/gif-it/server/data/MediaDAO.js:164:32
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+

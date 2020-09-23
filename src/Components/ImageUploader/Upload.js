@@ -32,19 +32,22 @@ class Upload extends Component {
     constructor(props) {
         super(props);
 
+        const { upload } = this.props;
+
         this.state = {
-            description: "",
-            tags: []
+            src: URL.createObjectURL(upload.file),
+            shouldUpload: false
         };
     }
 
     componentDidMount = () => {
         const { upload } = this.props;
+        let src = document.getElementById("input-" + upload.uploadId);
+        let dst = document.getElementById("thumb-" + upload.uploadId);
+        scaleMat(src, dst, 300, (blob) => {
+            this.props.onThumbnailMade(upload.uploadId, blob);
+        });
 
-        let srcElem = document.getElementById("cavas-in-" + upload.uploadId);
-        let dstElem = document.getElementById("cavas-out-" + upload.uploadId);
-
-        scaleMat(srcElem, dstElem, upload.file, 800);
     }
 
     setDescription = (input) => {
@@ -92,8 +95,9 @@ class Upload extends Component {
                         <ProgressBar value={this.props.upload.percentUploaded}/>
                     </Grid>
                     <Grid item xs={10}>
-                        <canvas className={`${classes.fullWidth} ${upload.status === "uploading" ? classes.uploading: ""}`} id={"cavas-out-" + upload.uploadId} ></canvas>
-                        <img className={classes.hidden} id={"cavas-in-" + upload.uploadId} ></img>
+                        {/* <canvas className={`${classes.fullWidth} ${upload.status === "uploading" ? classes.uploading: ""}`} id={"cavas-out-" + upload.uploadId} ></canvas> */}
+                        <img className={`${classes.fullWidth} ${upload.status === "uploading" ? classes.uploading: ""}`} id={"input-" + upload.uploadId} src={this.state.src}></img>
+                        <canvas className={classes.hidden} id={"thumb-" + upload.uploadId} src={this.state.src}/>
                     </Grid>
                     <Grid xs={10} item>
                         <EnterDescription setDescription={this.setDescription} />

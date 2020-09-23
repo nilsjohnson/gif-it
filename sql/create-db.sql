@@ -89,31 +89,37 @@ CREATE TABLE gif_owner (
 );
 
 -- users can now have photos
-CREATE TABLE photo (
-	id VARCHAR(32), -- The id
-	descript VARCHAR(1000), -- A description, ie. 'This is how my dog playing fetch'
-	fileName VARCHAR(32), -- The name of the file, ie. '8374jf7.jpg'
-	thumbName VARCHAR(38), -- The name of the gifs thumbnail, ie. '8374jf7.thumb.jpg'
-	dimensions VARCHAR(12),	-- The dimensions, ie. '800x600'
-	PRIMARY KEY (id)
+RENAME TABLE gif TO media;
+RENAME TABLE gif_tag to media_tag;
+RENAME TABLE gif_owner TO media_owner;
+
+ALTER TABLE media ADD COLUMN fileType varchar(16) AFTER fileName;
+ALTER TABLE media_tag RENAME COLUMN gif_id TO media_id;
+ALTER TABLE media_owner RENAME COLUMN gif_id TO media_id;
+
+update media set fileType = 'gif'; -- at this point, they're all gifs
+
+-- we now have albums
+CREATE TABLE album (
+	id INT NOT NULL AUTO_INCREMENT,
+	title VARCHAR(128),
+	descript VARCHAR(10000),
+	owner_id INT NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (owner_id) 
+		REFERENCES user(id)
+		ON DELETE CASCADE
 );
 
-CREATE TABLE photo_tag (
-	photo_id VARCHAR(32),
-	tag_id INT,
-	FOREIGN KEY (photo_id) 
-		REFERENCES photo(id)
+CREATE TABLE album_items (
+	media_id VARCHAR(32),
+	album_id INT,
+	item_index INT, -- is this the 3rd item? 4th item? etc.
+	FOREIGN KEY (media_id) 
+		REFERENCES media(id)
 		ON DELETE CASCADE,
-	FOREIGN KEY (tag_id) 
-		REFERENCES tag(id)
+	FOREIGN KEY (album_id) 
+		REFERENCES album(id)
 		ON DELETE CASCADE,
-	UNIQUE KEY photo_id (photo_id, tag_id)
-);
-
--- gifs now belong to a user, or users
-CREATE TABLE photo_owner (
-	photo_id VARCHAR(32) NOT NULL,
-	user_id INT NOT NULL,
-	FOREIGN KEY (photo_id) REFERENCES photo(id),
-	FOREIGN KEY (user_id) REFERENCES user(id)
+	UNIQUE KEY id (media_id, album_id)
 );

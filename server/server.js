@@ -30,7 +30,7 @@ let corsOptions = {
 }
 
 if (DEBUG) {
-	console.log("App set to print DEBUG statements.");
+	console.log("DEBUG set to true. App will print debug statements.");
 }
 if (DEV) {
 	console.log("DEV set to true. Gifs will be served from this server and objects will not be written to s3.");

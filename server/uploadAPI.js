@@ -193,8 +193,6 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
 });
 
 app.post('/upload/addPhotoGallery', function (req, res) {
-  console.log("/upload/addPhotoGallery hit");
-
   let userId = authDAO.authenticate(req.headers);
   if (!userId) {
     console.log("Sending Redirect.");
@@ -202,10 +200,19 @@ app.post('/upload/addPhotoGallery', function (req, res) {
     return;
   }
 
-  console.log(req.body);
-  res.send(200);
-  
-  
+  let album = req.body;
+  album.ownerId = userId;
+  console.log(album);
+
+  mediaDAO.createAlbum(album, req.ip, () => {
+    console.log("Album created!");
+    res.sendStatus(200);
+
+  }, err => {
+    console.log(err);
+    console.log("album not created.");
+    res.send(500);
+  });
 });
 
 function addUpload(uploadId, uploadDst, givenFileName, ipAddr, socketId, userId, action) {

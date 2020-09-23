@@ -38,7 +38,7 @@ class Dashboard extends Component {
                 <Header />
                 <Container>
                     <Box m={2}>
-                        {/* <GifUploader/> */}
+                        <GifUploader/>
                         <ImageUploader/>
                     </Box>
                 </Container>

@@ -6,6 +6,7 @@ import Upload from "./Upload";
 import TagInputBox from '../TagInputBox';
 import { getPresignedPost, doSignedS3Post, postPhotoGallery } from '../../util/data';
 import { formatBytes } from '../../util/util';
+import { Redirect } from "react-router-dom";
 
 const INPUT_ID = "img-uploader-input";
 const PROGRESS_BAR_UPDATE_INTERVAL = 250; // milliseconds
@@ -111,9 +112,14 @@ class ImageUploader extends UploaderBase {
 
         postPhotoGallery(album).then(res => {
             if (res.ok) {
-                console.log("ok!");
+                console.log(res);
+                res.json().then(resJson => {
+                    console.log(resJson);
+                    this.setState({redirect: `/explore?albumId=${resJson.albumId}`})
+                }).catch(err => console.log(err))
+                
             }
-        }).catch(err => console.log(err))
+        }).catch(err => console.log(err));
 
 
     }
@@ -434,6 +440,10 @@ class ImageUploader extends UploaderBase {
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+        }
+
         const { classes } = this.props;
 
         if(!this.state.cvLoaded) {

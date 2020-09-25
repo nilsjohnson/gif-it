@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import Header from "./Components/Header";
 import { getNew, search } from "./util/data";
 import { Container, Box, Grid, Typography } from '@material-ui/core';
+import Header from "./Components/Header";
 import GifCard from "./Components/GifCard";
 import SearchBar from "./Components/SearchBar";
 import GifBox from "./Components/GifBox";
+import Album from "./Components/Album";
+
 
 /**
  * Component handles searching and fetching gifs
@@ -40,6 +42,11 @@ class Explore extends Component {
   getSearchParam = () => {
     let url = new URL(window.location.href);
     return url.searchParams.get("search");
+  }
+
+  getAlbumParam = () => {
+    let url = new URL(window.location.href);
+    return url.searchParams.get("albumId");
   }
 
   /**
@@ -99,6 +106,7 @@ class Explore extends Component {
   getView = () => {
     let curGif = this.getGifParam();
     let searchInput = this.getSearchParam();
+    let albumId = this.getAlbumParam();
     searchInput = (searchInput ? searchInput : "");
 
     if (curGif) {
@@ -107,6 +115,11 @@ class Explore extends Component {
           gifId={curGif}
         />
       );
+    }
+    else if(albumId) {
+      return <Album 
+        albumId={albumId}
+      />
     }
     else {
       return (

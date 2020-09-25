@@ -10,6 +10,9 @@ import FullWidthDivider from '../FullWidthDivider';
 const useStyles = theme => ({
     shareContainer: {
         width: '100%'
+    },
+    root: {
+        paddingBottom: theme.spacing(2)
     }
 });
 
@@ -22,13 +25,23 @@ class GifBox extends Component {
         super(props);
 
         this.state = {
-            tags: {},
-            descriptionLines: [],
-            fileName: ""
+            tags: this.props.tags ? this.props.tags : [],
+            descriptionLines: this.props.description ? this.splitLines(this.props.description) : [],
+            fileName: this.props.fileName ? this.props.fileName : ""
         };
     }
 
+    splitLines = (str) => {
+        if(str) {
+            return str.split('\n');
+        }
+        return [];
+    }
+
     componentDidMount = () => {
+        if(!this.props.gifId) {
+            return;
+        }
         getGifById(this.props.gifId)
             .then(res => {
                 if (res.ok) {
@@ -52,7 +65,7 @@ class GifBox extends Component {
         const { classes } = this.props;
 
         return (
-            <Container component="main" maxWidth="sm" >
+            <Container component="main" maxWidth="md" className={classes.root}>
                 <Card>
                     <Box m={2}>
                         <Grid

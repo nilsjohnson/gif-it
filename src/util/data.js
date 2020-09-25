@@ -141,7 +141,12 @@ function postPhotoGallery(data) {
   });
 }
 
+function getAlbumById(albumId) {
+  return fetch(`${server}/album/${albumId}`);
+}
+
 export {
+  getAlbumById,
   postPhotoGallery,
   doSignedS3Post,
   getPresignedPost,

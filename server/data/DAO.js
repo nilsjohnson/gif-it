@@ -53,6 +53,7 @@ module.exports = class DAO {
                 resolve(results);
             });
         }).catch(err => {
+            console.log("throwing.");
             throw (err);
         });
     }

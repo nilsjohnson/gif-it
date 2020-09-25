@@ -204,14 +204,12 @@ app.post('/upload/addPhotoGallery', function (req, res) {
   album.ownerId = userId;
   console.log(album);
 
-  mediaDAO.createAlbum(album, req.ip, () => {
+  mediaDAO.createAlbum(album, req.ip, (albumId) => {
     console.log("Album created!");
-    res.sendStatus(200);
-
+    res.send({albumId: albumId});
   }, err => {
     console.log(err);
-    console.log("album not created.");
-    res.send(500);
+    res.sendStatus(500);
   });
 });
 

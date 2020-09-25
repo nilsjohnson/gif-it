@@ -64,3 +64,17 @@ app.get(`/popularTags/:limit`, function(req, res) {
     }
   });
 });
+
+app.get(`/album/:albumId`, function(req, res) {
+  let albumId = req.params.albumId;
+  
+  if(DEBUG) {
+    console.log('Looking for album: ' + albumId);
+  }
+
+  mediaDAO.getAlbumById(albumId, (album) => {
+    res.json(album);
+  }, err => {
+    res.status(500).send(err);
+  });
+});

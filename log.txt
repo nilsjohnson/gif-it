@@ -2829,3 +2829,310 @@ Error: ER_BAD_FIELD_ERROR: Unknown column 'date' in 'field list'
     at /home/nils/gif-it/server/data/MediaDAO.js:164:32
     at processTicksAndRejections (internal/process/task_queues.js:97:5))
 
+2020-09-25 09:03:38 2020-09-25 09:03:38 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:60:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-09-25 09:17:14 2020-09-25 09:17:14 args is not defined 
+ReferenceError: args is not defined
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:326:18)
+    at /home/nils/gif-it/server/data/MediaDAO.js:186:22
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 09:19:25 2020-09-25 09:19:25 results is not defined 
+ReferenceError: results is not defined
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:329:21)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 09:20:13 2020-09-25 09:20:13 ER_NO_REFERENCED_ROW_2: Cannot add or update a child row: a foreign key constraint fails (`gif_it`.`media_tag`, CONSTRAINT `media_tag_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT) 
+Error: ER_NO_REFERENCED_ROW_2: Cannot add or update a child row: a foreign key constraint fails (`gif_it`.`media_tag`, CONSTRAINT `media_tag_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT)
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertMediaTag (/home/nils/gif-it/server/data/MediaDAO.js:358:27)
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:347:28)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 09:26:22 2020-09-25 09:26:22 ER_NO_REFERENCED_ROW_2: Cannot add or update a child row: a foreign key constraint fails (`gif_it`.`media_tag`, CONSTRAINT `media_tag_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT) 
+Error: ER_NO_REFERENCED_ROW_2: Cannot add or update a child row: a foreign key constraint fails (`gif_it`.`media_tag`, CONSTRAINT `media_tag_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT)
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertMediaTag (/home/nils/gif-it/server/data/MediaDAO.js:358:27)
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:347:28)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 09:31:56 2020-09-25 09:31:56 ER_NO_REFERENCED_ROW_2: Cannot add or update a child row: a foreign key constraint fails (`gif_it`.`media_tag`, CONSTRAINT `media_tag_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT) 
+Error: ER_NO_REFERENCED_ROW_2: Cannot add or update a child row: a foreign key constraint fails (`gif_it`.`media_tag`, CONSTRAINT `media_tag_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT)
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertMediaTag (/home/nils/gif-it/server/data/MediaDAO.js:358:27)
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:347:28)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 09:33:55 2020-09-25 09:33:55 ER_NO_REFERENCED_ROW_2: Cannot add or update a child row: a foreign key constraint fails (`gif_it`.`media_tag`, CONSTRAINT `media_tag_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT) 
+Error: ER_NO_REFERENCED_ROW_2: Cannot add or update a child row: a foreign key constraint fails (`gif_it`.`media_tag`, CONSTRAINT `media_tag_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT)
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertMediaTag (/home/nils/gif-it/server/data/MediaDAO.js:363:27)
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:347:32)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 09:37:24 2020-09-25 09:37:24 ER_NO_REFERENCED_ROW_2: Cannot add or update a child row: a foreign key constraint fails (`gif_it`.`media_tag`, CONSTRAINT `media_tag_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT) 
+Error: ER_NO_REFERENCED_ROW_2: Cannot add or update a child row: a foreign key constraint fails (`gif_it`.`media_tag`, CONSTRAINT `media_tag_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT)
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertMediaTag (/home/nils/gif-it/server/data/MediaDAO.js:363:27)
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:346:32)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 09:48:44 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'media SET `id` = 'msGQyLU6', `descript` = '', `fileName` = 'msGQyLU6.gif', `thum' at line 1
+2020-09-25 09:50:45 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'media SET `id` = 'QKcY8HbT', `descript` = '', `fileName` = 'QKcY8HbT.gif', `thum' at line 1
+2020-09-25 09:52:48 2020-09-25 09:52:48 ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aINSERT IGNORE INTO tag SET tag = 'adfsdf'' at line 1 
+Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aINSERT IGNORE INTO tag SET tag = 'adfsdf'' at line 1
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertTag (/home/nils/gif-it/server/data/MediaDAO.js:378:27)
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:329:38)
+    at /home/nils/gif-it/server/data/MediaDAO.js:186:22
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 09:53:55 2020-09-25 09:53:55 ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aINSERT IGNORE INTO tag SET tag = 'taggg'' at line 1 
+Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aINSERT IGNORE INTO tag SET tag = 'taggg'' at line 1
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertTag (/home/nils/gif-it/server/data/MediaDAO.js:371:27)
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:328:34)
+    at /home/nils/gif-it/server/data/MediaDAO.js:186:22
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 09:57:46 2020-09-25 09:57:46 ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aINSERT IGNORE INTO tag SET tag = 'tagag'' at line 1 
+Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aINSERT IGNORE INTO tag SET tag = 'tagag'' at line 1
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertTag (/home/nils/gif-it/server/data/MediaDAO.js:372:27)
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:329:34)
+    at /home/nils/gif-it/server/data/MediaDAO.js:186:22
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 09:59:54 2020-09-25 09:59:54 ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aINSERT IGNORE INTO tag SET tag = 'gagggag'' at line 1 
+Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aINSERT IGNORE INTO tag SET tag = 'gagggag'' at line 1
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertTag (/home/nils/gif-it/server/data/MediaDAO.js:372:27)
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:329:34)
+    at /home/nils/gif-it/server/data/MediaDAO.js:186:22
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 10:02:59 2020-09-25 10:02:59 ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aINSERT IGNORE INTO tag SET tag = 'tagag'' at line 1 
+Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aINSERT IGNORE INTO tag SET tag = 'tagag'' at line 1
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertTag (/home/nils/gif-it/server/data/MediaDAO.js:378:27)
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:330:38)
+    at /home/nils/gif-it/server/data/MediaDAO.js:186:22
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 10:06:53 2020-09-25 10:06:53 ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INSaERT INTO media_tag SET `media_id` = 'o9eG63qk', `tag_id` = 273' at line 1 
+Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INSaERT INTO media_tag SET `media_id` = 'o9eG63qk', `tag_id` = 273' at line 1
+    at Query.Sequence._packetToError (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Query.js:79:18)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10)
+    at Protocol.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    --------------------
+    at Protocol._enqueue (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:144:48)
+    at PoolConnection.query (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:198:25)
+    at /home/nils/gif-it/server/data/DAO.js:49:24
+    at new Promise (<anonymous>)
+    at MediaDAO.query (/home/nils/gif-it/server/data/DAO.js:48:16)
+    at MediaDAO.insertMediaTag (/home/nils/gif-it/server/data/MediaDAO.js:357:27)
+    at MediaDAO.insertTags (/home/nils/gif-it/server/data/MediaDAO.js:346:28)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+    at async /home/nils/gif-it/server/data/MediaDAO.js:186:17)
+
+2020-09-25 10:22:10 TypeError: Cannot read property 'length' of undefined
+2020-09-25 10:24:57 ReferenceError: sql is not defined
+2020-09-25 10:25:27 ReferenceError: results is not defined
+2020-09-25 10:36:19 TypeError: this.insertMedia is not a function
+2020-09-25 11:01:42 ReferenceError: tinsertMediaOwner is not defined
+2020-09-25 11:40:54 TypeError: this.query is not a function
+2020-09-25 12:51:54 2020-09-25 12:51:54 album_id is not defined 
+ReferenceError: album_id is not defined
+    at /home/nils/gif-it/server/data/MediaDAO.js:407:58
+    at /home/nils/gif-it/server/data/DAO.js:32:20
+    at Handshake.onConnect (/home/nils/gif-it/node_modules/mysql/lib/Pool.js:64:7)
+    at Handshake.<anonymous> (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:526:10)
+    at Handshake._callback (/home/nils/gif-it/node_modules/mysql/lib/Connection.js:488:16)
+    at Handshake.Sequence.end (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:83:24)
+    at Handshake.Sequence.OkPacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/sequences/Sequence.js:92:8)
+    at Protocol._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Protocol.js:291:23)
+    at Parser._parsePacket (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:433:10)
+    at Parser.write (/home/nils/gif-it/node_modules/mysql/lib/protocol/Parser.js:43:10))
+
+2020-09-25 13:06:43 TypeError: connection.query is not a function
+2020-09-25 13:06:43 2020-09-25 13:06:43 onFail is not defined 
+ReferenceError: onFail is not defined
+    at /home/nils/gif-it/server/data/MediaDAO.js:429:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-25 13:08:59 TypeError: connection.query is not a function
+2020-09-25 13:09:53 TypeError: connection.query is not a function
+2020-09-25 17:06:45 Error: ER_DUP_ENTRY: Duplicate entry 'BdObVrXi' for key 'media.PRIMARY'
+2020-09-25 17:09:13 Error: ER_DUP_ENTRY: Duplicate entry 'WplGqJwy' for key 'media.PRIMARY'

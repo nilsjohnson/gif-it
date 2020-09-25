@@ -1,10 +1,125 @@
 const DAO = require("./DAO");
 const log = require("../util/logger");
+const { BUCKET_NAME } = require("../const");
 
+/** function that gets called to execute sql. See MediaDAO constructor. */
+let query;
+
+async function getAlbumById(connection, args) {
+    let sql =
+    `SELECT
+	    album.title, 
+	    album.descript, 
+	    album.owner_id, 
+	    media.id, 
+	    media.descript,
+	    media.fileName, 
+	    media.fileType, 
+	    media.thumbName,
+	    album_items.item_index,
+	    JSON_OBJECTAGG(tag.tag, 
+		    (SELECT COUNT(media_tag.tag_id)
+			    FROM media_tag
+			    WHERE media_tag.tag_id = tag.id)
+		) as tags 
+    FROM album
+	    JOIN album_items ON album_items.album_id = album.id
+	    JOIN media ON media.id = album_items.media_id
+	    JOIN media_tag ON media_tag.media_id = media.id
+	    JOIN tag on tag.id = media_tag.tag_id
+    WHERE album.id = ?
+    GROUP BY media.id
+    ORDER BY album_items.item_index`;
+    return await query(connection, sql, args);
+}
+
+async function insertAlbumItem(connection, args) {
+    let sql = 'INSERT INTO album_items SET ?';
+    return await query(connection, sql, args);
+}
+
+async function insertAlbum(connection, args) {
+    let sql = `INSERT INTO album SET ?`;
+    return await query(connection, sql, args);
+}
+
+async function insertMediaOwner(connection, args) {
+    let sql = 'INSERT INTO media_owner SET ?';
+    return await query(connection, sql, args);
+}
+
+async function insertMediaTag(connection, args) {
+    let sql = `INSERT INTO media_tag SET ?`
+    return await query(connection, sql, args);
+}
+
+async function insertMedia(connection, args) {
+    let sql = `INSERT INTO media SET ?`;
+    return await query(connection, sql, args);
+}
+
+async function insertUpload(connection, args) {
+    let sql = `INSERT INTO upload SET ?`;
+    return await query(connection, sql, args);
+}
+
+async function insertTag(connection, args) {
+    let sql = `INSERT IGNORE INTO tag SET tag = ?`;
+    return await query(connection, sql, args);
+}
+
+async function getTagId(connection, tag) {
+    let sql = "SELECT id FROM tag WHERE tag = ?";
+    return await query(connection, sql, tag);
+}
+
+async function insertTags(connection, uploadId, tags) {
+    if (!tags || tags.length < 1) {
+        return;
+    }
+
+    let args, results;
+    // for each tag
+    for (let i = 0; i < tags.length; i++) {
+        // insert tag
+        args = tags[i];
+        results = await insertTag(connection, args);
+
+        // insert tag_id/media_id into the media_tag join table
+        let tagId;
+        if (results.insertId > 0) {
+            // if this was a new tag, we know it's id
+            tagId = results.insertId;
+        }
+        else {
+            // get tagId by tag
+            args = tags[i];
+            results = await getTagId(connection, args);
+            console.log(results);
+            tagId = results[0].id;
+        }
+
+        args = { media_id: uploadId, tag_id: tagId }
+        results = await insertMediaTag(connection, args);
+    }
+}
+
+
+/**
+ * DAO for creating and retrieving media.
+ */
 class MediaDAO extends DAO {
     constructor() {
-        //maxConnections, host, user, password, database
-        super(10, 'localhost', 'bryn', 'doggie', 'gif_it');
+        super(
+            51,             // max connectiond 
+            'localhost',    // location
+            'bryn',         // username
+            'doggie',       // pw
+            'gif_it'        // databse
+        );
+
+        // allow private methods access to the classes sql execution method
+        query = this.query;
     }
 
     /**
@@ -127,30 +242,23 @@ class MediaDAO extends DAO {
         });
     }
 
-
-    async addAlbumItems(media_id, album_id, connection) {
-        let sql = "INSERT INTO album_items ?";
-        let row = { media_id: media_id, album_id: album_id };
-        let result = connection.query(sql, row, (error, results, fields) => {
-            if (error) {
-                console.log(error);
-                return false;
-            }
-            return true;
-        });
-
-        return await result;
-    }
-
+    /**
+     * Inserts a new media item into the database
+     * @param {*} media 
+     * @param {*} userId 
+     * @param {*} userIpAddr 
+     * @param {*} onSuccess callback, taking zero arguments
+     * @param {*} onFail callback, taking a message to give to user.
+     */
     addMedia(media, userId, userIpAddr, onSuccess, onFail) {
         const {
-            uploadId, 
-            fileName, 
-            thumbFileName, 
-            tags, 
-            description, 
-            originalFileName, 
-            type 
+            uploadId,
+            fileName,
+            thumbFileName,
+            tags,
+            description,
+            originalFileName,
+            type
         } = media;
 
         let args, results;
@@ -164,36 +272,37 @@ class MediaDAO extends DAO {
                 await this.startTransaction(connection);
 
                 // insert the media
-                args = { 
-                    id: uploadId, 
-                    descript: description, 
-                    fileName: fileName, 
-                    thumbName: thumbFileName, 
-                    fileType: type 
+                args = {
+                    id: uploadId,
+                    descript: description,
+                    fileName: fileName,
+                    thumbName: thumbFileName,
+                    fileType: type
                 };
-                results = await this.insertMedia(connection, args);
+                results = await insertMedia(connection, args);
 
                 // insert the upload
-                args = { 
-                    id: uploadId, 
-                    date: this.getTimeStamp(), 
-                    ipAddr: userIpAddr, 
-                    originalFileName: originalFileName 
+                args = {
+                    id: uploadId,
+                    date: this.getTimeStamp(),
+                    ipAddr: userIpAddr,
+                    originalFileName: originalFileName
                 };
-                results = await this.insertUpload(connection, args);
+                results = await insertUpload(connection, args);
 
                 // insert tags
-                this.insertTags(connection, tags);
+                await insertTags(connection, uploadId, tags);
 
                 // insert into the media_owner table
                 args = { media_id: uploadId, user_id: userId };
-                results = await this.insertMediaOwner(connection, args);
+                results = await insertMediaOwner(connection, args);
 
                 await this.completeTransation(connection);
                 return onSuccess();
 
             }
             catch (ex) {
+                console.log("catching db err");
                 log(ex);
                 connection.rollback();
                 return onFail("Problem inserting media into database. Please try again later.");
@@ -233,22 +342,28 @@ class MediaDAO extends DAO {
         });
     }
 
+    /**
+     * 
+     * @param {*} album 
+     * @param {*} uploadIp 
+     * @param {*} onSuccess callback taking zero arguments.
+     * @param {*} onFail callback taking a string with a generic message to show user if error occured.
+     */
     createAlbum(album, uploadIp, onSuccess, onFail) {
         const { albumTitle = "", photos = [], ownerId } = album;
-        let sql, args, results;
+        let args, results;
 
         this.getConnection(async (connection) => {
             if (!connection) {
-                onFail("Couldn't get db connection.");
+                onFail("Problem connecting to database.");
             }
 
             try {
                 await this.startTransaction(connection);
 
                 // 1.) create album
-                sql = `INSERT INTO album SET ?`;
                 args = { title: albumTitle, descript: "TODO", owner_id: ownerId };
-                results = await this.query(connection, sql, args);
+                results = await insertAlbum(connection, args);
                 let albumId = results.insertId;
 
                 // 2.) insert the media and upload info
@@ -257,127 +372,77 @@ class MediaDAO extends DAO {
                     const { uploadId, fileName, thumbFileName, tags, description, originalFileName } = photos[i];
 
                     // insert the media
-                    sql = `INSERT INTO media SET ?`;
                     args = { id: uploadId, descript: description, fileName: fileName, thumbName: thumbFileName, fileType: 'image' };
-                    results = await this.query(connection, sql, args);
+                    results = await insertMedia(connection, args);
+
+                    // insert the tags
+                    await insertTags(connection, uploadId, tags);
 
                     // insert the upload
-                    sql = `INSERT INTO upload SET ?`;
                     args = { id: uploadId, date: this.getTimeStamp(), ipAddr: uploadIp, originalFileName: originalFileName };
-                    results = await this.query(connection, sql, args);
+                    results = await insertUpload(connection, args);
 
                     // insert the album item
-                    sql = 'INSERT INTO album_items SET ?';
                     args = { media_id: uploadId, album_id: albumId, item_index: i };
-                    results = await this.query(connection, sql, args);
-
-                    if (tags) {
-                        // for each tag
-                        for (let i = 0; i < tags.length; i++) {
-                            // insert the tag
-                            sql = `INSERT IGNORE INTO tag SET tag = ?`;
-                            args = tags[i];
-                            results = await this.query(connection, sql, args);
-
-                            // insert tag_id/media_id into the media_tag join table
-                            let tagId;
-                            if (results.insertId > 0) {
-                                // if this was a new tag, we know it's id
-                                tagId = results.insertId;
-                            }
-                            else {
-                                // otherwise we query for it
-                                sql = "SELECT id FROM tag WHERE tag = ?";
-                                args = tags[i];
-                                results = await this.query(connection, sql, args);
-                                console.log("this tag is new.");
-                                console.log(results);
-                                tagId = results[0].id;
-                            }
-
-                            sql = `INSERT INTO media_tag SET ?`
-                            args = { media_id: uploadId, tag_id: tagId }
-                            results = await (query(connection, sql, args));
-                        }
-                    }
+                    results = await insertAlbumItem(connection, args);
 
                     // insert into the media_owner table
-                    sql = 'INSERT INTO media_owner SET ?';
                     args = { media_id: uploadId, user_id: ownerId };
-                    results = await this.query(connection, sql, args);
+                    results = await insertMediaOwner(connection, args);
                 }
 
                 await this.completeTransation(connection);
-                return onSuccess("Good work.")
+                onSuccess(albumId);
 
             }
             catch (ex) {
-                console.log("Exception thrown. Rolling back.");
+                log(ex);
                 connection.rollback();
-                onFail(ex);
+                onFail("Database problem. Couldn't create album.");
             }
         });
     }
 
-    async insertTags(connection, tags) {
-        // for each tag
-        for (let i = 0; i < tags.length; i++) {
-            // insert tag
-            args = tags[i];
-            results = await this.insertTag(connection, args);
-
-
-            // insert tag_id/media_id into the media_tag join table
-            let tagId;
-            if (results.insertId > 0) {
-                // if this was a new tag, we know it's id
-                tagId = results.insertId;
-            }
-            else {
-                // get tagId by tag
-                args = tags[i];
-                results = await this.getTagId(connection, args);
+    getAlbumById(albumId, onSuccess, onFail) {
+        this.getConnection(async connection => {
+            try {
+                // get the album. There should only be 1.
+                let results = await getAlbumById(connection, albumId);
                 console.log(results);
-                tagId = results[0].id;
+                
+                // if we didnt find album, return null;
+                if(!results || results.length < 1) {
+                    return onSuccess(null);
+                }
+
+                let album = {};
+                album.title = results[0].title;
+                album.description = "this should be the description of the album.";
+                album.ownerId = results[0].owner_id;
+                album.items = [];
+
+                // add items;
+                for(let i = 0; i < results.length; i++) {
+                    album.items.push({
+                        fileName: `${DEV ? 'https://s3.amazonaws.com/' + BUCKET_NAME + '/' : ''}${results[i].fileName}`,
+                        fileType: results[i].fileType,
+                        thumbName: `${DEV ? BUCKET_NAME + '/' : '' }results[i].thumbName`,
+                        tags: JSON.parse(results[i].tags),
+                        description: results[i].descript
+                    });
+                }
+
+                console.log("Here is the response: ");
+                console.log(album);
+                onSuccess(album);
+            }
+            catch(ex) {
+                log(ex);
+                onFail("Database Problem.");
             }
 
-            args = { media_id: uploadId, tag_id: tagId }
-            results = this.insertMediaTag(connection, args);
-        }
+        } );
     }
-
-    async insertMediaOwner(connection, args) {
-        let sql = 'INSERT INTO media_owner SET ?';
-        return await this.query(connection, sql, args);
-    }
-
-    async insertMediaTag(connection, args) {
-        let sql = `INSERT INTO media_tag SET ?`
-        return await this.query(connection, sql, args);
-    }
-
-    async insertMedia(connection, args) {
-        let sql = `INSERT INTO media SET ?`;
-        return await this.query(connection, sql, args);
-    }
-
-    async insertUpload(connection, args) {
-        let sql = `INSERT INTO upload SET ?`;
-        return await this.query(connection, sql, args);
-    }
-
-    async insertTag(connection, args) {
-        let sql = `INSERT IGNORE INTO tag SET tag = ?`;
-        return await this.query(connection, sql, args);
-    }
-
-    async getTagId(connection, tag) {
-        let sql = "SELECT id FROM tag WHERE tag = ?";
-        return await this.query(connection, sql, tag);
-    }
-
 }
-
-
 
 module.exports = MediaDAO;

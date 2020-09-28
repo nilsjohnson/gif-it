@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import TagInputBox from '../TagInputBox';
+import TagInputBox from '../../TagInputBox';
 import { Grid, Button } from '@material-ui/core';
-import EnterDescription from '../UploaderBase/EnterDescription';
+import EnterDescription from '../EnterDescription';
 
 function Complete(props) {
   const {
@@ -13,8 +13,7 @@ function Complete(props) {
     removeTag,
     tags, 
     addTag, 
-    setDescription, 
-    servePath, 
+    setDescription,  
     requestTagSuggestions, 
     suggestions, 
     message } = props;
@@ -29,7 +28,7 @@ function Complete(props) {
       alignItems="center"
     >
       <Grid item>
-        <img className={classes.image} src={servePath} alt={fileName} />
+        <img className={classes.image} src={fileName} alt={fileName} />
       </Grid>
       <Grid item xs={12}>
         <EnterDescription
@@ -52,7 +51,7 @@ function Complete(props) {
         justify="center"
         alignItems="flex-start" >
         <Button className={classes.btn} variant="contained" color="secondary" onClick={cancel} > Cancel </Button>
-        <Button className={classes.btn} variant="contained" color="primary" onClick={share} > Share! </Button>
+        {/* <Button className={classes.btn} variant="contained" color="primary" onClick={share} > Share! </Button> */}
       </Grid>
     </Grid>
   );

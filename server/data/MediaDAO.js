@@ -5,31 +5,56 @@ const { BUCKET_NAME } = require("../const");
 /** function that gets called to execute sql. See MediaDAO constructor. */
 let query;
 
+async function getMediaById(connection, id) {
+    let sql =
+    `SELECT 
+        media.descript, 
+        media.fileName, 
+        JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id)
+                FROM media_tag
+                WHERE media_tag.tag_id = tag.id)
+            ) as tags 
+        FROM media
+            LEFT JOIN media_tag ON media.id = media_tag.media_id
+            LEFT JOIN tag ON media_tag.tag_id = tag.id
+        WHERE media.id = ?`;
+        let results = await query(connection, sql, id);
+        console.log(results);
+        if(results[0].tags) {
+            let tags = JSON.parse(results[0].tags);
+            delete tags['$'];
+            results[0].tags = tags;
+        }
+       
+        return results;
+}
+
 async function getAlbumById(connection, args) {
     let sql =
     `SELECT
-	    album.title, 
-	    album.descript, 
-	    album.owner_id, 
-	    media.id, 
-	    media.descript,
-	    media.fileName, 
-	    media.fileType, 
-	    media.thumbName,
-	    album_items.item_index,
-	    JSON_OBJECTAGG(tag.tag, 
-		    (SELECT COUNT(media_tag.tag_id)
-			    FROM media_tag
-			    WHERE media_tag.tag_id = tag.id)
-		) as tags 
-    FROM album
-	    JOIN album_items ON album_items.album_id = album.id
-	    JOIN media ON media.id = album_items.media_id
-	    JOIN media_tag ON media_tag.media_id = media.id
-	    JOIN tag on tag.id = media_tag.tag_id
-    WHERE album.id = ?
-    GROUP BY media.id
-    ORDER BY album_items.item_index`;
+        album.title, 
+        album.descript, 
+        album.owner_id, 
+        media.id, 
+        media.descript,
+        media.fileName, 
+        media.fileType, 
+        media.thumbName,
+        album_items.item_index,
+        JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id)
+                FROM media_tag
+                WHERE media_tag.tag_id = tag.id)
+            ) as tags 
+        FROM album
+            JOIN album_items ON album_items.album_id = album.id
+            JOIN media ON media.id = album_items.media_id
+            LEFT JOIN media_tag ON media_tag.media_id = media.id
+            LEFT JOIN tag on tag.id = media_tag.tag_id
+        WHERE album.id = ?
+        GROUP BY media.id
+        ORDER BY album_items.item_index`;
     return await query(connection, sql, args);
 }
 
@@ -75,7 +100,8 @@ async function getTagId(connection, tag) {
 
 async function insertTags(connection, uploadId, tags) {
     if (!tags || tags.length < 1) {
-        return;
+        console.log("no tags.");
+        return;        
     }
 
     let args, results;
@@ -169,6 +195,20 @@ class MediaDAO extends DAO {
 
             connection.query(sql, (error, results, fields) => {
                 connection.release();
+
+                console.log("flkjfdf");
+                console.log(results);
+
+                if(DEV) {
+                    for(let i = 0; i < results.length; i++) {
+                        results[i].fileName = makeDevPath(results[i].fileName);
+                        results[i].thumbName = makeDevPath(results[i].thumbName);
+                    }
+                }
+
+                console.log("most recent");
+                console.log(results);
+
                 callback(results);
                 if (error) {
                     this.logFailure(error);
@@ -182,32 +222,32 @@ class MediaDAO extends DAO {
      * @param {*} gifId 
      * @param {*} callback callback function that takes an object
      */
-    getGifById(gifId, callback) {
-        this.getConnection(connection => {
+    getMediaById(mId, onSuccess, onFail) {
+        this.getConnection(async connection => {
             if (!connection) {
                 return callback(null);
             }
-
-            let sql = `SELECT 
-            media.descript, 
-            media.fileName, 
-            JSON_OBJECTAGG(tag.tag, 
-                (SELECT COUNT(media_tag.tag_id)
-                    FROM media_tag
-                    WHERE media_tag.tag_id = tag.id)) as tags 
-            FROM media
-                JOIN media_tag ON media.id = media_tag.media_id
-                JOIN tag ON media_tag.tag_id = tag.id
-            WHERE media.id = ?`;
-
-
-            connection.query(sql, gifId, (error, results, fields) => {
-                callback(results);
-                connection.release();
-                if (error) {
-                    this.logFailure(error);
+        
+            try {
+                let results = await getMediaById(connection, mId);
+                console.log(results);
+                if(DEV) {
+                    results[0].fileName =  makeDevPath(results[0].fileName);
+                    results[0].thumbName = makeDevPath(results[0].thumbName);
                 }
-            });
+
+                console.log(results);
+                onSuccess(results[0]);
+                
+                connection.release();
+            }
+            catch (ex) {
+                log(ex);
+                onFail("Database problem. Couldn't create album.");
+            }
+            
+
+
         });
     }
 
@@ -245,21 +285,23 @@ class MediaDAO extends DAO {
     /**
      * Inserts a new media item into the database
      * @param {*} media 
-     * @param {*} userId 
+     * @param {*} ownerId 
      * @param {*} userIpAddr 
      * @param {*} onSuccess callback, taking zero arguments
      * @param {*} onFail callback, taking a message to give to user.
      */
-    addMedia(media, userId, userIpAddr, onSuccess, onFail) {
+    addMedia(media, ownerId, userIpAddr, onSuccess, onFail) {
         const {
             uploadId,
             fileName,
-            thumbFileName,
+            thumbName,
             tags,
             description,
             originalFileName,
             type
         } = media;
+
+        console.log(media);
 
         let args, results;
 
@@ -276,7 +318,7 @@ class MediaDAO extends DAO {
                     id: uploadId,
                     descript: description,
                     fileName: fileName,
-                    thumbName: thumbFileName,
+                    thumbName: thumbName,
                     fileType: type
                 };
                 results = await insertMedia(connection, args);
@@ -294,11 +336,11 @@ class MediaDAO extends DAO {
                 await insertTags(connection, uploadId, tags);
 
                 // insert into the media_owner table
-                args = { media_id: uploadId, user_id: userId };
+                args = { media_id: uploadId, user_id: ownerId };
                 results = await insertMediaOwner(connection, args);
 
                 await this.completeTransation(connection);
-                return onSuccess();
+                return onSuccess(uploadId);
 
             }
             catch (ex) {
@@ -349,8 +391,8 @@ class MediaDAO extends DAO {
      * @param {*} onSuccess callback taking zero arguments.
      * @param {*} onFail callback taking a string with a generic message to show user if error occured.
      */
-    createAlbum(album, uploadIp, onSuccess, onFail) {
-        const { albumTitle = "", photos = [], ownerId } = album;
+    createAlbum(album, ownerId, uploadIp, onSuccess, onFail) {
+        const { albumTitle = "", albumDescription = "", items = [] } = album;
         let args, results;
 
         this.getConnection(async (connection) => {
@@ -362,17 +404,24 @@ class MediaDAO extends DAO {
                 await this.startTransaction(connection);
 
                 // 1.) create album
-                args = { title: albumTitle, descript: "TODO", owner_id: ownerId };
+                args = { title: albumTitle, descript: albumDescription, owner_id: ownerId };
                 results = await insertAlbum(connection, args);
                 let albumId = results.insertId;
 
                 // 2.) insert the media and upload info
-                for (let i = 0; i < album.photos.length; i++) {
+                for (let i = 0; i < album.items.length; i++) {
                     // destructure the photo
-                    const { uploadId, fileName, thumbFileName, tags, description, originalFileName } = photos[i];
+                    const { 
+                        uploadId, 
+                        fileName, 
+                        thumbName, 
+                        tags = [], 
+                        description = '', 
+                        originalFileName,
+                        fileType } = items[i];
 
                     // insert the media
-                    args = { id: uploadId, descript: description, fileName: fileName, thumbName: thumbFileName, fileType: 'image' };
+                    args = { id: uploadId, descript: description, fileName: fileName, thumbName: thumbName, fileType: fileType };
                     results = await insertMedia(connection, args);
 
                     // insert the tags
@@ -414,26 +463,33 @@ class MediaDAO extends DAO {
                 if(!results || results.length < 1) {
                     return onSuccess(null);
                 }
+                console.log("raw");
+                console.log(results);
 
                 let album = {};
                 album.title = results[0].title;
-                album.description = "this should be the description of the album.";
+                album.description = results[0].descript;
                 album.ownerId = results[0].owner_id;
                 album.items = [];
 
                 // add items;
                 for(let i = 0; i < results.length; i++) {
+                    let tags = JSON.parse(results[i].tags);
+                    delete tags['$'];
+
                     album.items.push({
-                        fileName: `${DEV ? 'https://s3.amazonaws.com/' + BUCKET_NAME + '/' : ''}${results[i].fileName}`,
+                        fileName: !DEV ? results[i].fileName : makeDevPath(results[i].fileName),
+                        thumbName: !DEV ? results[i].thumbName : makeDevPath(results[i].thumbName),
+                        tags: tags,
                         fileType: results[i].fileType,
-                        thumbName: `${DEV ? BUCKET_NAME + '/' : '' }results[i].thumbName`,
-                        tags: JSON.parse(results[i].tags),
                         description: results[i].descript
                     });
                 }
 
                 console.log("Here is the response: ");
                 console.log(album);
+
+                connection.release();
                 onSuccess(album);
             }
             catch(ex) {
@@ -443,6 +499,10 @@ class MediaDAO extends DAO {
 
         } );
     }
+}
+
+function makeDevPath(fileName) {
+    return `https://s3.amazonaws.com/${BUCKET_NAME}/${fileName}`;
 }
 
 module.exports = MediaDAO;

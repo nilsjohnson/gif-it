@@ -2,10 +2,10 @@ import React, { Component } from "react";
 
 import { Grid, Button, Card, CardContent } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
-import EnterDescription from "../UploaderBase/EnterDescription";
-import { scaleMat } from "./cvUtil";
-import TagInputBox from '../TagInputBox';
-import ProgressBar from '../ProgressBar';
+import EnterDescription from "../EnterDescription";
+import { scaleMat } from "../cvUtil";
+import TagInputBox from '../../TagInputBox';
+import ProgressBar from '../../ProgressBar';
 
 const useStyles = theme => ({
     hidden: {
@@ -28,7 +28,7 @@ const useStyles = theme => ({
     }
 });
 
-class Upload extends Component {
+class MakeImage extends Component {
     constructor(props) {
         super(props);
 
@@ -36,7 +36,6 @@ class Upload extends Component {
 
         this.state = {
             src: URL.createObjectURL(upload.file),
-            shouldUpload: false
         };
     }
 
@@ -63,10 +62,6 @@ class Upload extends Component {
 
     removeTag = (tag) => {
         this.props.removeTag(this.props.upload, tag);
-    }
-
-    share = () => {
-        console.log("share fired");
     }
 
     componentDidUpdate = () => {
@@ -118,4 +113,4 @@ class Upload extends Component {
     }
 }
 
-export default withStyles(useStyles)(Upload);
+export default withStyles(useStyles)(MakeImage);

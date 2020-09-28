@@ -4,7 +4,7 @@ import { Container, Box, Grid, Typography } from '@material-ui/core';
 import Header from "./Components/Header";
 import GifCard from "./Components/GifCard";
 import SearchBar from "./Components/SearchBar";
-import GifBox from "./Components/GifBox";
+import MediaBox from "./Components/MediaBox";
 import Album from "./Components/Album";
 
 
@@ -21,18 +21,18 @@ class Explore extends Component {
   }
 
   componentDidMount = () => {
-    if (!this.getGifParam() && !this.getSearchParam()) {
+    if (!this.getMediaParam() && !this.getSearchParam()) {
       this.getNew();
     }
   }
 
   /**
-   * Checks the window for a 'gid' (gif id) param 
+   * Checks the window for a media id 
    * @return the gif id if present otherwise null
    */
-  getGifParam = () => {
+  getMediaParam = () => {
     let url = new URL(window.location.href);
-    return url.searchParams.get("gid");
+    return url.searchParams.get("mId");
   }
 
   /**
@@ -104,15 +104,15 @@ class Explore extends Component {
    * helper function for render
    */
   getView = () => {
-    let curGif = this.getGifParam();
+    let media = this.getMediaParam();
     let searchInput = this.getSearchParam();
     let albumId = this.getAlbumParam();
     searchInput = (searchInput ? searchInput : "");
 
-    if (curGif) {
+    if (media) {
       return (
-        <GifBox
-          gifId={curGif}
+        <MediaBox
+          mId={media}
         />
       );
     }

@@ -3136,3 +3136,313 @@ ReferenceError: onFail is not defined
 2020-09-25 13:09:53 TypeError: connection.query is not a function
 2020-09-25 17:06:45 Error: ER_DUP_ENTRY: Duplicate entry 'BdObVrXi' for key 'media.PRIMARY'
 2020-09-25 17:09:13 Error: ER_DUP_ENTRY: Duplicate entry 'WplGqJwy' for key 'media.PRIMARY'
+2020-09-28 12:37:20 TypeError: Promise.resolve is not a constructor
+2020-09-28 12:37:37 TypeError: Promise resolver undefined is not a function
+2020-09-28 14:06:47 ReferenceError: thumbName is not defined
+2020-09-28 14:47:29 Error: ER_DUP_ENTRY: Duplicate entry 'opsrrK4V' for key 'media.PRIMARY'
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:22:44 TypeError: Cannot read property '0' of undefined
+2020-09-28 16:22:44 2020-09-28 16:22:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:216:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-28 16:23:47 TypeError: connection.query is not a function
+2020-09-28 16:28:06 TypeError: Cannot convert undefined or null to object
+2020-09-28 16:30:15 TypeError: Cannot convert undefined or null to object
+2020-09-28 16:53:09 TypeError: Cannot read property 'length' of undefined
+2020-09-28 17:16:30 ReferenceError: i is not defined

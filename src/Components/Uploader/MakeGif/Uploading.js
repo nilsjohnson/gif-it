@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Button, Typography } from '@material-ui/core';
-import ProgressBar from '../ProgressBar';
+import ProgressBar from '../../ProgressBar';
 
 export default function Uploading(props) {
   const { fileName, fileSize, error, cancel } = props;

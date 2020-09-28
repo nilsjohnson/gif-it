@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { formatBytes } from '../../util/util';
+import { formatBytes } from '../../../util/util';
 import { Card } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Uploading from './Uploading';
 import SettingOptions from './SettingOptions';
 import Complete from './Complete';
 import Converting from './Converting';
-import GifBox from '../GifBox';
 
 const useStyles = theme => ({
   root: {
@@ -31,7 +30,7 @@ const useStyles = theme => ({
 /**
  * Each Upload gets its own Component
  */
-class Upload extends Component {
+class MakeGif extends Component {
   constructor(props) {
     super(props)
 
@@ -164,12 +163,11 @@ class Upload extends Component {
             addTag={this.addTag}
             removeTag={this.removeTag}
             setDescription={this.setDescription}
-            download={this.triggerDownload}
-            servePath={servePath}
             requestTagSuggestions={this.requestTagSuggestions}
             suggestions={suggestions}
             message={this.state.message}
             classes={classes}
+            fileName={fileName}
           />
         );
 
@@ -184,12 +182,12 @@ class Upload extends Component {
   render() {
     const { classes, error, status, uploadId } = this.props;
 
-    if(status === 'shared') {
-      // since GifBox is already wrapped in a Card, we can just render it.
-      return (
-        <GifBox gifId={uploadId} />
-      );
-    }
+    // if(status === 'shared') {
+    //   // since GifBox is already wrapped in a Card, we can just render it.
+    //   return (
+    //     // <Media gifId={uploadId} />
+    //   );
+    // }
 
     return (
       <Card className={`${classes.root} ${error ? classes.uploadError : ''}`}>
@@ -201,7 +199,7 @@ class Upload extends Component {
   }
 }
 
-Upload.propTypes = {
+MakeGif.propTypes = {
   name: PropTypes.string,
   size: PropTypes.number,
   percentUploaded: PropTypes.number
@@ -209,4 +207,4 @@ Upload.propTypes = {
 
 
 
-export default withStyles(useStyles)(Upload);
+export default withStyles(useStyles)(MakeGif);

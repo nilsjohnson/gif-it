@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles';
 import { Card, Box, Grid, CardMedia, Typography, Container } from '@material-ui/core/';
-import { getGifById } from '../../util/data';
+import { getMediaById } from '../../util/data';
 import { ShareBox } from './ShareBox';
 import Tag from '../Tag/Tag';
 import FullWidthDivider from '../FullWidthDivider';
@@ -20,7 +20,7 @@ const useStyles = theme => ({
  * This component is what the users see when they watch a gif on 
  * the webapp. 
  */
-class GifBox extends Component {
+class MediaBox extends Component {
     constructor(props) {
         super(props);
 
@@ -39,18 +39,18 @@ class GifBox extends Component {
     }
 
     componentDidMount = () => {
-        if(!this.props.gifId) {
+        if(!this.props.mId) {
             return;
         }
-        getGifById(this.props.gifId)
+        getMediaById(this.props.mId)
             .then(res => {
                 if (res.ok) {
                     res.json().then(resJson => {
                         console.log(resJson);
                         this.setState({
-                            tags: JSON.parse(resJson.tags),
+                            tags: resJson.tags,
                             fileName: resJson.fileName,
-                            descriptionLines: resJson.descript.split('\n')
+                            descriptionLines: resJson.descript ? resJson.descript.split('\n') : []
                         });
                     })
                 }
@@ -107,7 +107,7 @@ class GifBox extends Component {
                             <Box m={2} className={classes.shareContainer}>
                                 <ShareBox
                                     fileName={this.state.fileName}
-                                    id={this.props.gifId}
+                                    id={this.props.mId}
                                 />
                             </Box>
 
@@ -119,10 +119,8 @@ class GifBox extends Component {
     }
 }
 
-GifBox.propTypes = {
-    gifId: PropTypes.string,
-    gifSrc: PropTypes.string
-
+MediaBox.propTypes = {
+    mId: PropTypes.string,
 }
 
-export default withStyles(useStyles)(GifBox);
+export default withStyles(useStyles)(MediaBox);

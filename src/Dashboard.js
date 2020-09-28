@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import GifUploader from "./Components/GifUploader";
 import Header from "./Components/Header";
 import Box from "@material-ui/core/Box"
 import { Container, Typography } from "@material-ui/core";
 import { Redirect } from 'react-router-dom'
 import { checkToken } from './util/data';
-import ImageUploader from "./Components/ImageUploader";
+import Uploader from "./Components/Uploader";
 
 class Dashboard extends Component {
     constructor(props){
@@ -38,8 +37,7 @@ class Dashboard extends Component {
                 <Header />
                 <Container>
                     <Box m={2}>
-                        <GifUploader/>
-                        <ImageUploader/>
+                        <Uploader/>
                     </Box>
                 </Container>
             </Box>

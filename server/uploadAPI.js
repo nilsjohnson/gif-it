@@ -192,7 +192,7 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
   }
 });
 
-app.post('/upload/addPhotoGallery', function (req, res) {
+app.post('/upload/addMedia', function (req, res) {
   let userId = authDAO.authenticate(req.headers);
   if (!userId) {
     console.log("Sending Redirect.");
@@ -200,18 +200,35 @@ app.post('/upload/addPhotoGallery', function (req, res) {
     return;
   }
 
-  let album = req.body;
-  album.ownerId = userId;
-  console.log(album);
+  if(req.body.album) {
+    // if this is an 'album' of items
+    let album = req.body.album;
 
-  mediaDAO.createAlbum(album, req.ip, (albumId) => {
-    console.log("Album created!");
-    res.send({albumId: albumId});
-  }, err => {
-    console.log(err);
-    res.sendStatus(500);
-  });
+    mediaDAO.createAlbum(album, userId, req.ip, (albumId) => {
+      // on success
+      console.log("Album created!");
+      res.send({redirect: `/explore?albumId=${albumId}`});
+    }, err => {
+      // on error
+      console.log(err);
+      res.sendStatus(500);
+    });
+  }
+  else if(req.body.media) {
+    // if this is just a single item
+    let media = req.body.media;
+    mediaDAO.addMedia(media, userId, req.ip, mediaId => {
+      // on success
+      res.send({redirect: `/explore?mId=${mediaId}`});
+    }, err => {
+      // on error
+      console.log(err);
+      res.sendStatus(500);
+    });
+  }
+
 });
+
 
 function addUpload(uploadId, uploadDst, givenFileName, ipAddr, socketId, userId, action) {
   if (connections[socketId]) {

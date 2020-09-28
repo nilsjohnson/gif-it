@@ -42,12 +42,12 @@ function search(searchInput) {
 }
 
 /**
- * Returns a gif by its id
+ * Returns a media object by its id
  * 
  * @param {*} gifId 
  */
-function getGifById(gifId) {
-  return fetch(`${server}/gif/${gifId}`);
+function getMediaById(id) {
+  return fetch(`${server}/media/${id}`);
 }
 
 /**
@@ -131,7 +131,7 @@ function doSignedS3Post(url = '', formData = {}) {
 }
 
 function postPhotoGallery(data) {
-  return fetch(`${server}/upload/addPhotoGallery`, {
+  return fetch(`${server}/upload/addMedia`, {
     method: 'POST',
     body: JSON.stringify(data),
     headers: {
@@ -155,10 +155,10 @@ export {
   checkToken,
   signUp,
   login,
+  getNew,
   getServer,
   getPopularTags,
-  getGifById,
-  getNew,
+  getMediaById,
   uploadFile,
   search
 }

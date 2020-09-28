@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles';
 import { Container, Typography, Grid, Box } from '@material-ui/core/';
 import { getAlbumById } from '../../util/data';
-import GifBox from '../GifBox';
+import MediaBox from '../MediaBox';
 
 const useStyles = theme => ({
     root: {
@@ -66,7 +66,7 @@ class Album extends Component {
         return (
             <Container component='main' >
                 {this.state.items.map((item, index) => (
-                    <GifBox
+                    <MediaBox
                         key={index}
                         tags={item.tag}
                         description={item.description}

@@ -55,7 +55,7 @@ function deleteUnsharedGifs(socketId) {
  * @param {*} data 
  */
 function sendConversionProgress(socketId, data) {
-  //if (DEBUG) { console.log('sendConversionProgress: '); console.log(data); }
+  if (DEBUG) { console.log('sendConversionProgress: '); console.log(data); }
   connections[socketId].socket.emit("ConversionProgress", data);
 }
 
@@ -78,22 +78,22 @@ function onGifMade(socketId, uploadId, fileName, thumbFileName) {
     thumbFileName: ${thumbFileName}`);
   }
 
-  // if running production, send to s3
-  if (!DEV) {
-    transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, fileName),
-      (data) => { // on success
-        connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
-        if (DEBUG) { console.log(`s3 transfer sucess! - ${data}`); }
-      },
-      (err) => { // on failure
-        connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, error: "Something Went Wrong. Sorry! :(" });
-        console.log(`Problem Uploading to s3. ${err}`);
+  // send to s3
+  transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, fileName),
+    (data) => {
+      // on success
+      connections[socketId].socket.emit("ConversionComplete", {
+        uploadId: uploadId,
+        fileName: fileName,
+        thumbName: thumbFileName
       });
-  }
-  // otherwise we are in DEV mode so we just serve it from where we saved it.
-  else {
-    connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
-  }
+      if (DEBUG) { console.log(`s3 transfer sucess! - ${data}`); }
+    },
+    (err) => {
+      // on failure
+      connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, error: "Something Went Wrong. Sorry! :(" });
+      console.log(`Problem Uploading to s3. ${err}`);
+    });
 }
 
 /**
@@ -104,19 +104,15 @@ function onGifMade(socketId, uploadId, fileName, thumbFileName) {
 function onThumbMade(thumbName) {
   if (DEBUG) { console.log(`onThumbMade called - thumbName: ${thumbName}`); }
 
-  if (!DEV) {
-    transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, thumbName),
-      (data) => { // if success
-        if (DEBUG) { console.log(`Thumbnail s3 transfer success: ${data}`); }
-      }),
-      (err) => { // if failure
-        console.log(`Thumbnail s3 transfer failed: ${err}`);
-      };
-  }
-  else {
-    // Do nothing. The thumbnail should be sitting in the serve directory 
-    // ready to go. See see 'const.js' for that location. 
-  }
+  transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, thumbName),
+    (data) => {
+      // if success
+      if (DEBUG) { console.log(`Thumbnail s3 transfer success: ${data}`); }
+    }),
+    (err) => {
+      // if failure
+      console.log(`Thumbnail s3 transfer failed: ${err}`);
+    };
 }
 
 /**

@@ -1,12 +1,13 @@
 import React from "react";
 import { Typography, Container, Grid, Box, TextField, Button } from "@material-ui/core";
-import UploaderBase from "../UploaderBase";
+import UploaderBase from "./UploaderBase";
 import { withStyles } from '@material-ui/core/styles';
-import Upload from "./Upload";
+import ImageUpload from "./MakeImage";
 import TagInputBox from '../TagInputBox';
-import { getPresignedPost, doSignedS3Post, postPhotoGallery } from '../../util/data';
 import { formatBytes } from '../../util/util';
 import { Redirect } from "react-router-dom";
+import { getPresignedPost, doSignedS3Post, postPhotoGallery } from '../../util/data';
+import MakeGif from "./MakeGif/index.js";
 
 const INPUT_ID = "img-uploader-input";
 const PROGRESS_BAR_UPDATE_INTERVAL = 250; // milliseconds
@@ -18,14 +19,15 @@ const useStyles = theme => ({
     },
     container: {
         backgroundColor: theme.palette.primary.light,
-        padding: theme.spacing(2),
+        padding: theme.spacing(1),
         border: `4px dashed ${theme.palette.secondary.light}`,
         marginTop: theme.spacing(2),
         width: '100%',
     },
     subContainer: {
         backgroundColor: "white",
-        borderRadius: theme.spacing(1)
+        borderRadius: theme.spacing(1),
+        marginBottom: theme.spacing(2)
     },
     droppingFiles: {
         opacity: .5
@@ -40,17 +42,111 @@ const useStyles = theme => ({
 });
 
 
-class ImageUploader extends UploaderBase {
+class Uploader extends UploaderBase {
     constructor(props) {
         super(props);
 
-        this.setAllowedMimeTypes(['image/*']);
-        this.setMaxNumUploads(1000);
+        this.setMakeHandlersCallback(this.defineHandlers);
+        this.setAllowedMimeTypes(['image/*', 'video/*']);
+        this.setMaxNumUploads(500);
         this.setInputElementId(INPUT_ID);
         this.setMaxUploadSize(70);
         this.cv = null;
         this.estimatedUploadRate = 500;
     }
+
+    defineHandlers = () => {
+        /*
+          To handle conversion progress updates
+         */
+        this.socket.on("ConversionProgress", (data) => {
+          // console.log("Conversion Data:");
+          // console.log(data);
+          const { uploadId } = data;
+    
+          this.updateUploads(uploadId, {
+            conversionData: data
+          });
+        });
+    
+        /*
+          Marks the conversion as complete so we can serve the .gif
+         */
+        this.socket.on("ConversionComplete", (data) => {
+          console.log("ConversionComplete");
+          console.log(data);
+          let { fileName, uploadId, thumbName } = data;
+    
+          if (fileName) {
+            this.updateUploads(uploadId, {
+              fileName: fileName,
+              status: "complete",
+              thumbName: thumbName
+            });
+          }
+          else {
+            this.updateUploads(uploadId, {
+              error: "File could not be converted. The video is most likely not a supported format."
+            });
+          }
+        });
+    
+        /*
+          If the user shares, we update the status to 'shared'
+        */
+        this.socket.on("ShareResult", (data) => {
+          console.log("ShareResult hit");
+          console.log(data);
+          const { status, uploadId, error } = data;
+    
+          if (error) {
+            this.updateUploads(uploadId, {
+              error: error
+            });
+    
+            return;
+          }
+    
+          this.updateUploads(uploadId, {
+            status: status
+          });
+        });
+    
+      }
+    
+      /**
+       * Tells the server to convert an upload.
+       */
+      convert = (uploadId, quality) => {
+        console.log(`convert: ${uploadId}`);
+        this.socket.emit("ConvertRequested", { uploadId: uploadId, quality: quality });
+    
+        for (let i = 0; i < this.uploads.length; i++) {
+          if (this.uploads[i].uploadId === uploadId) {
+            this.uploads[i].status = "converting";
+            break;
+          }
+        }
+    
+        this.setState({
+          uploads: this.uploads
+        });
+      }
+    
+      /**
+       * Tells the server to add gif to database with given tags.
+       */
+      share = (uploadId, tags, description) => {
+        console.log(uploadId);
+        console.log(tags);
+        console.log(description);
+    
+        this.socket.emit("ShareRequest", {
+          uploadId: uploadId,
+          tags: tags,
+          description: description
+        });
+      }
 
     cancel = () => {
         console.log("cancel clicked");
@@ -88,36 +184,58 @@ class ImageUploader extends UploaderBase {
     }
 
     share = () => {
-        console.log(this.state.uploads);
+        const { albumTitle = "", albumDescription = "" } = this.state;
+        let album, media;
+        console.log(this.uploads);
 
-        let album = {
-            albumTitle: this.state.albumDescription,
-            photos: []
-        };
-      
-        
-        for (let i = 0; i < this.state.uploads.length; i++) {
-            let curUpload = this.state.uploads[i];
-            let photo = {
+
+        if(this.uploads.length > 1) {
+            console.log("album.");
+            // this is an album
+             album = {
+                albumTitle: albumTitle.trim(),
+                albumDescription: albumDescription.trim(),
+                items: []
+            };
+            // add each item to the album
+            for (let i = 0; i < this.state.uploads.length; i++) {
+                let curUpload = this.state.uploads[i];
+                album.items.push({
+                    uploadId: curUpload.uploadId,
+                    description: curUpload.description,
+                    fileName: curUpload.fileName,
+                    tags: curUpload.tags,
+                    thumbName: curUpload.thumbName,
+                    originalFileName: curUpload.file.name,
+                    fileType: curUpload.file.type
+                });
+            };
+        }
+        else if(this.uploads.length === 1) {
+            console.log("single");
+            // this is just a single item
+            let curUpload = this.state.uploads[0];
+            media = {
                 uploadId: curUpload.uploadId,
                 description: curUpload.description,
                 fileName: curUpload.fileName,
                 tags: curUpload.tags,
-                thumbFileName: curUpload.thumbName,
-                originalFileName: curUpload.file.name
+                thumbName: curUpload.thumbName,
+                originalFileName: curUpload.file.name,
+                fileType: curUpload.file.type
             };
-
-            album.photos.push(photo);
-        };
-
-        postPhotoGallery(album).then(res => {
+        }
+        let obj = {album: album, media: media};
+        console.log(obj);
+           
+        postPhotoGallery(obj).then(res => {
             if (res.ok) {
                 console.log(res);
                 res.json().then(resJson => {
                     console.log(resJson);
-                    this.setState({redirect: `/explore?albumId=${resJson.albumId}`})
+                    this.setState({ redirect: resJson.redirect })
                 }).catch(err => console.log(err))
-                
+
             }
         }).catch(err => console.log(err));
 
@@ -126,7 +244,7 @@ class ImageUploader extends UploaderBase {
 
     componentDidMount = () => {
         this.setInitalSpeed();
-        
+
         const script = document.createElement("script");
         script.src = './opencv4.4.js';
         script.async = true;
@@ -225,6 +343,12 @@ class ImageUploader extends UploaderBase {
         let val = event.target.value;
         this.setState({
             albumDescription: val
+        });
+    }
+
+    setAlbumDescription = (event) => {
+        this.setState({
+            albumTitle: event.target.value
         });
     }
 
@@ -330,114 +454,52 @@ class ImageUploader extends UploaderBase {
         });
     }
 
-    upload = () => {
-        if (this.curFileNum >= this.uploads.length) {
-            return;
-        }
-        console.log(`Starting upload at index ${this.curFileNum}`);
-
-        let curFile = this.uploads[this.curFileNum].file;
-        let curThumbFile = this.uploads[this.curFileNum].thumbfile;
-        
-        // it's likely that the thumbnail hasn't been generated yet, especially if this is the first upload. 
-        if(!curThumbFile) {
-            setTimeout(() => {
-                this.upload();
-            }, 250)
-            return;
-        }
-
-        let tempUploadId = this.uploads[this.curFileNum].uploadId;
-        let fileSize = curFile.size;
-
-
-        if (curFile.size / (1000 * 1000) > this.maxUploadSize) {
-            this.setError(this.curFileNum, `File Must Not Exceed ${formatBytes(this.maxUploadSize * 1000 * 1000)}`);
-            this.curFileNum++;
-            return this.upload();
-        }
-
-        if (!this.isValidType(curFile.type)) {
-            this.setError(this.curFileNum, `File must be of type {${this.allowedMimeTypes}}. '${curFile.type}' was provided`);
-            this.curFileNum++;
-            return this.upload();
-        }
-
-        let fileParts = curFile.name.split('.');
-
-        let fileInfo = {
-            fileName: fileParts[0],
-            fileType: fileParts[1],
-            action: "photo"
-        };
-
-        let startTime = new Date().getTime();
-        getPresignedPost(fileInfo).then(res => {
-            if (res.ok) {
-                res.json().then(data => {
-                    const { photoData = {}, thumbData = {}, uploadId } = data;
-                    const photoFormData = this.createForm(photoData.fields, curFile);
-                    
-                    this.updateUploads(tempUploadId, { uploadId: uploadId, fileName: photoData.fields.key, thumbName: thumbData.fields.key });
-        
-                    // starts the progress bar rolling...
-                    this.doProgressBar(this.uploads[this.curFileNum], fileSize, this.state.estimatedUploadRate);
-                    // upload photo to s3
-                    doSignedS3Post(photoData.url, photoFormData).then(res => {
-                        if (res.ok) {
-                            let endTime = new Date().getTime();
-                            this.setUploadRate(endTime, startTime, fileSize);
-                            this.updateUploads(uploadId, { status: 'editing' });
-                            console.log("file uploaded to s3!");
-                        }
-                        else {
-                            console.log("File could not be uploaded to s3.");
-                            this.updateUploads(uploadId, { err: "File couldnt be uploaded." });
-                            res.text().then(text => {
-                                console.log(text);
-                            });
-                        }
-                        this.curFileNum++;
-                        return this.upload();
-
-                    }).catch(err => {
-                        console.log("Problem doing signed s3 post: " + err);
-                        this.curFileNum++;
-                        return this.upload();
-                    });
-                    // upload thumbnail to s3
-                    const thumbFormData = this.createForm(thumbData.fields, curThumbFile);
-                    doSignedS3Post(thumbData.url, thumbFormData).then(res => {
-                        if (res.ok) {
-                            console.log("thumbnail uploaded!");
-                        }
-                        else {
-                            console.log("thumbnail not uploaded");
-                        }
-
-                    });
-                }).catch(err => {
-                    console.log("Problem with the JSON returned from fetching presigned posts: " + err);
-                    this.curFileNum++;
-                    return this.upload();
-                });
-            }
-            else {
-                console.log("Problem generating presigned post. Here's the response...");
-                console.log(res);
-                this.curFileNum++;
-                return this.upload();
-            }
-        }).catch(err => {
-            console.log("Problem fetching presigned post: " + err);
-            this.curFileNum++;
-            return this.upload();
-        });
-    }
-
     setThumbnail = (uploadId, blob) => {
-        this.updateUploads(uploadId, {thumbfile: blob})
+        this.updateUploads(uploadId, { thumbFile: blob })
     }
+
+    getUploadComponent = (upload) => {
+
+        if (upload.file.type.startsWith('image')) {
+            return (
+                <ImageUpload
+                    uploadId={upload.uploadId}
+                    upload={upload}
+                    requestTagSuggestions={this.requestTagSuggestions}
+                    suggestions={upload.suggestions}
+                    addTag={this.addTag}
+                    removeTag={this.removeTag}
+                    setDescription={this.setDescription}
+                    onThumbnailMade={this.setThumbnail}
+                />
+            );
+        }
+        else if (upload.file.type.startsWith('video')) {
+            return (
+                <MakeGif
+                    key={upload.uploadId}
+                    file={upload.file}
+                    upload={upload}
+                    uploadId={upload.uploadId}
+                    fileName={upload.fileName}
+                    size={upload.file.size}
+                    percentUploaded={upload.percentUploaded}
+                    conversionData={upload.conversionData}
+                    status={upload.status}
+                    conversionComplete={upload.conversionComplete}
+                    requestTagSuggestions={this.requestTagSuggestions}
+                    suggestions={upload.suggestions}
+                    share={this.share}
+                    convert={this.convert}
+                    removeUpload={this.removeUpload}
+                    error={upload.error}
+                />
+            );
+        }
+
+
+    }
+
 
     render() {
         if (this.state.redirect) {
@@ -446,8 +508,8 @@ class ImageUploader extends UploaderBase {
 
         const { classes } = this.props;
 
-        if(!this.state.cvLoaded) {
-            return(
+        if (!this.state.cvLoaded) {
+            return (
                 <h4>Please Wait</h4>
             );
         }
@@ -472,14 +534,22 @@ class ImageUploader extends UploaderBase {
                             onDragOver={this.dragOverHandler}
                             onDragLeave={this.dragEndHandler}
                         >
-                            {this.state.uploads.length > 0 &&
+                            {this.state.uploads.length > 1 &&
                                 <Grid item xs={12}>
                                     <Box className={classes.subContainer} p={2}>
                                         <TextField
                                             fullWidth
-                                            label="Please Enter Album Title"
+                                            label="Album Title"
                                             variant="outlined"
                                             onChange={this.setAlbumTitle}
+                                        />
+                                    </Box>
+                                    <Box className={classes.subContainer} p={2}>
+                                    <TextField
+                                            fullWidth
+                                            label="Album Description"
+                                            variant="outlined"
+                                            onChange={this.setAlbumDescription}
                                         />
                                     </Box>
                                 </Grid>
@@ -488,16 +558,7 @@ class ImageUploader extends UploaderBase {
 
                             {this.state.uploads.map(upload =>
                                 <Grid item xs={12} key={upload.uploadId + "_grid"}>
-                                    <Upload
-                                        uploadId={upload.uploadId}
-                                        upload={upload}
-                                        requestTagSuggestions={this.requestTagSuggestions}
-                                        suggestions={upload.suggestions}
-                                        addTag={this.addTag}
-                                        removeTag={this.removeTag}
-                                        setDescription={this.setDescription}
-                                        onThumbnailMade={this.setThumbnail}
-                                    />
+                                    {this.getUploadComponent(upload)}
                                 </Grid>
                             )}
 
@@ -530,4 +591,4 @@ class ImageUploader extends UploaderBase {
     }
 }
 
-export default withStyles(useStyles)(ImageUploader);
+export default withStyles(useStyles)(Uploader);

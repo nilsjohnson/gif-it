@@ -1,15 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import TagInputBox from '../../TagInputBox';
-import { Grid, Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import EnterDescription from '../EnterDescription';
 
-function Complete(props) {
+export default function Complete(props) {
   const {
     classes,
     fileName,
     share,
-    cancel,
     removeTag,
     tags, 
     addTag, 
@@ -17,8 +16,6 @@ function Complete(props) {
     requestTagSuggestions, 
     suggestions, 
     message } = props;
-
-
 
   return (
     <Grid
@@ -46,29 +43,17 @@ function Complete(props) {
       <Grid item>
         {message ? message : ''}
       </Grid>
-      <Grid item container
-        direction="row"
-        justify="center"
-        alignItems="flex-start" >
-        <Button className={classes.btn} variant="contained" color="secondary" onClick={cancel} > Cancel </Button>
-        {/* <Button className={classes.btn} variant="contained" color="primary" onClick={share} > Share! </Button> */}
-      </Grid>
     </Grid>
   );
 }
 
 Complete.propTypes = {
-  share: PropTypes.func,
-  cancel: PropTypes.func,
   tags: PropTypes.array,
   addTag: PropTypes.func,
   removeTag: PropTypes.func,
   setDescription: PropTypes.func,
-  download: PropTypes.func,
-  servePath: PropTypes.string,
+  fileName: PropTypes.string,
   requestTagSuggestions: PropTypes.func,
   suggestions: PropTypes.array,
   inputError: PropTypes.string
 }
-
-export default Complete;

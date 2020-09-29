@@ -113,8 +113,7 @@ class MakeGif extends Component {
       error,
       fileName,
       size,
-      percentUploaded,
-      servePath, 
+      percentUploaded, 
       suggestions } = this.props
 
     switch (status) {

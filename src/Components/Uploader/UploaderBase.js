@@ -31,6 +31,8 @@ class UploaderBase extends Component {
         this.uploads = [];
         // The socket for this upload session
         this.socket = null;
+        // the value for estimating progress of s3 uploads
+        this.estimatedUploadRate = null;
 
         /*
             You can override these values using the available pulic methods
@@ -39,8 +41,7 @@ class UploaderBase extends Component {
         this.allowedMimeTypes = []; // allows any file
         this.maxUploadSize = 70; // MB
         this.maxNumUploads = 1;
-        this.inputElementId = null; 
-        this.uploadOnFile = true;
+        this.inputElementId = null;
     }
 
     /**
@@ -77,9 +78,6 @@ class UploaderBase extends Component {
         this.inputElementId = id;
     }
 
-    setUploadOnFile = (val) => {
-        this.uploadOnFile = val;
-    }
     componentDidUpdate = () => {
         if (this.uploads.length === 0 && this.socket) {
             this.socket.close();
@@ -226,8 +224,7 @@ class UploaderBase extends Component {
     upload = () => {
         if (this.curFileNum >= this.uploads.length) {
             return;
-          }
-        console.log(`Starting upload at index ${this.curFileNum}`);
+        }
 
         let curFile = this.uploads[this.curFileNum].file;
         let curThumbFile = this.uploads[this.curFileNum].thumbFile;
@@ -247,9 +244,8 @@ class UploaderBase extends Component {
 
         let regex = /.*\//g;
         let mediaType = curFile.type.match(regex)[0];
-        console.log("media type: " + mediaType);
 
-        switch(mediaType) {
+        switch (mediaType) {
             case 'image/':
                 console.log("case image/");
                 this.doImageUpload(curFile, curThumbFile, tempUploadId);
@@ -259,10 +255,8 @@ class UploaderBase extends Component {
                 this.doGifUpload(curFile, tempUploadId);
                 break;
             default:
-                console.log(`Unsure what to do with ${curFile.type} ${mediaType}`);        
+                console.log(`Unsure what to do with ${curFile.type} ${mediaType}`);
         }
-
-
     }
 
     /**
@@ -270,8 +264,8 @@ class UploaderBase extends Component {
      * use this method to funnel them all down into one single array.
      */
     initUpload = () => {
-        if (!this.checkNumUploads()) {
-            console.log("too many ploads");
+        if (this.maxFilesChosen()) {
+            console.log(`The maximum number of files (${this.maxNumUploads}) have already been chosen.`);
             this.unprocessedFiles = [];
             return;
         }
@@ -290,11 +284,6 @@ class UploaderBase extends Component {
         // reset this array so that user can add more files and update the state.
         this.unprocessedFiles = [];
         this.setState({ uploads: this.uploads });
-
-        if(!this.uploadOnFile) {
-            console.log("Upload on file is set to false. Not uploading.");
-            return;
-        }
 
         // open the socket if necessary
         if (this.socket === null) {
@@ -324,7 +313,7 @@ class UploaderBase extends Component {
      */
     selectFilesUpload = () => {
         let videos;
-        if(!this.inputElementId) {
+        if (!this.inputElementId) {
             console.log("querySelector called to get input element.")
             videos = document.querySelector('input[type="file"][multiple]');
         }
@@ -332,7 +321,7 @@ class UploaderBase extends Component {
             console.log("getElementById called to get input element.");
             videos = document.getElementById(this.inputElementId);
         }
-        
+
 
         for (let i = 0; i < videos.files.length; i++) {
             console.log("pushing file: " + videos.files[i].name);
@@ -398,7 +387,7 @@ class UploaderBase extends Component {
             i++;
         }
 
-        this.setState({ uploads: this.uploads }, this.checkNumUploads);
+        this.setState({ uploads: this.uploads }, this.maxFilesChosen);
         this.curFileNum--;
     }
 
@@ -439,20 +428,18 @@ class UploaderBase extends Component {
         return false;
     }
 
-    checkNumUploads = () => {
+    maxFilesChosen = () => {
         if (this.unprocessedFiles.length + this.state.uploads.length > this.maxNumUploads) {
             this.setState({ tooManyFilesSelected: true });
-            return false;
+            return true;
         }
         else {
             this.setState({ tooManyFilesSelected: false });
-            return true;
+            return false;
         }
     }
 
     doGifUpload = (file, tempUploadId) => {
-        console.log("doing gif upload");
-
         let formData = new FormData();
         formData.append("files", file);
 
@@ -464,11 +451,8 @@ class UploaderBase extends Component {
                     this.upload();
                 }
                 else {
-                    console.log("response not ok..");
                     response.json().then(resJson => {
-                        console.log(resJson);
                         this.uploads[this.curFileNum].error = resJson.error;
-
                         this.setState({
                             uploads: this.uploads
                         });
@@ -487,8 +471,6 @@ class UploaderBase extends Component {
     }
 
     doImageUpload = (curFile, curThumbFile, tempUploadId) => {
-        
-
         // it's likely that the thumbnail hasn't been generated yet, especially if this is the first upload. 
         if (!curThumbFile) {
             setTimeout(() => {
@@ -498,19 +480,6 @@ class UploaderBase extends Component {
         }
 
         let fileSize = curFile.size;
-
-        if (curFile.size / (1000 * 1000) > this.maxUploadSize) {
-            this.setError(this.curFileNum, `File Must Not Exceed ${formatBytes(this.maxUploadSize * 1000 * 1000)}`);
-            this.curFileNum++;
-            return this.upload();
-        }
-
-        if (!this.isValidType(curFile.type)) {
-            this.setError(this.curFileNum, `File must be of type {${this.allowedMimeTypes}}. '${curFile.type}' was provided`);
-            this.curFileNum++;
-            return this.upload();
-        }
-
         let fileParts = curFile.name.split('.');
 
         let fileInfo = {
@@ -519,50 +488,56 @@ class UploaderBase extends Component {
             action: "photo"
         };
 
-        let startTime = new Date().getTime();
+
         getPresignedPost(fileInfo).then(res => {
             if (res.ok) {
                 res.json().then(data => {
                     const { photoData = {}, thumbData = {}, uploadId } = data;
                     const photoFormData = this.createForm(photoData.fields, curFile);
 
-                    this.updateUploads(tempUploadId, { uploadId: uploadId, fileName: photoData.fields.key, thumbName: thumbData.fields.key });
+                    // update the upload with its server generated key
+                    this.updateUploads(tempUploadId, {
+                        uploadId: uploadId,
+                        fileName: photoData.fields.key,
+                        thumbName: thumbData.fields.key
+                    });
 
-                    // starts the progress bar rolling...
-                    this.doProgressBar(this.uploads[this.curFileNum], fileSize, this.state.estimatedUploadRate);
-                    // upload photo to s3
-                    doSignedS3Post(photoData.url, photoFormData).then(res => {
+                    // upload the thumbnail, and use this time as a
+                    // metric to guess the progress of the fullsize photo.
+                    const thumbFormData = this.createForm(thumbData.fields, curThumbFile);
+                    let startTime = new Date().getTime();
+                    doSignedS3Post(thumbData.url, thumbFormData).then(res => {
                         if (res.ok) {
                             let endTime = new Date().getTime();
                             this.setUploadRate(endTime, startTime, fileSize);
-                            this.updateUploads(uploadId, { status: 'editing' });
-                            console.log("file uploaded to s3!");
                         }
                         else {
-                            console.log("File could not be uploaded to s3.");
-                            this.updateUploads(uploadId, { err: "File couldnt be uploaded." });
-                            res.text().then(text => {
-                                console.log(text);
-                            });
-                        }
-                        this.curFileNum++;
-                        return this.upload();
-
-                    }).catch(err => {
-                        console.log("Problem doing signed s3 post: " + err);
-                        this.curFileNum++;
-                        return this.upload();
-                    });
-                    // upload thumbnail to s3
-                    const thumbFormData = this.createForm(thumbData.fields, curThumbFile);
-                    doSignedS3Post(thumbData.url, thumbFormData).then(res => {
-                        if (res.ok) {
-                            console.log("thumbnail uploaded!");
-                        }
-                        else {
-                            console.log("thumbnail not uploaded");
+                            console.log("Thumbnail not uploaded. Attempting to upload fullsize photo.");
                         }
 
+                        // starts the progress bar rolling...
+                        this.doProgressBar(this.uploads[this.curFileNum], fileSize, this.state.estimatedUploadRate);
+                        // upload photo to s3
+                        doSignedS3Post(photoData.url, photoFormData).then(res => {
+                            if (res.ok) {
+                                this.updateUploads(uploadId, { status: 'editing' });
+                                console.log("file uploaded to s3!");
+                            }
+                            else {
+                                console.log("File could not be uploaded to s3.");
+                                this.updateUploads(uploadId, { err: "File couldnt be uploaded." });
+                                res.text().then(text => {
+                                    console.log(text);
+                                });
+                            }
+                            this.curFileNum++;
+                            return this.upload();
+
+                        }).catch(err => {
+                            console.log("Problem doing signed s3 post: " + err);
+                            this.curFileNum++;
+                            return this.upload();
+                        });
                     });
                 }).catch(err => {
                     console.log("Problem with the JSON returned from fetching presigned posts: " + err);

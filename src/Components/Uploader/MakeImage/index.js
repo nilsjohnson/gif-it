@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 
-import { Grid, Button, Card, CardContent } from "@material-ui/core";
+import { Grid, Button, Card } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import EnterDescription from "../EnterDescription";
 import { scaleMat } from "../cvUtil";
 import TagInputBox from '../../TagInputBox';
 import ProgressBar from '../../ProgressBar';
+import FileBar from "./FileBar";
 
 const useStyles = theme => ({
     hidden: {
@@ -74,7 +75,7 @@ class MakeImage extends Component {
       }
 
     render() {
-        const { classes, upload = {} } = this.props;
+        const { classes, upload = {}, removeUpload } = this.props;
 
         return (
             <Card className={classes.card}>
@@ -87,7 +88,10 @@ class MakeImage extends Component {
                     className="root"
                 >
                     <Grid item xs={10}>
-                        <ProgressBar value={this.props.upload.percentUploaded}/>
+                        <FileBar 
+                            upload={upload}
+                            removeUpload={removeUpload}
+                        />
                     </Grid>
                     <Grid item xs={10}>
                         {/* <canvas className={`${classes.fullWidth} ${upload.status === "uploading" ? classes.uploading: ""}`} id={"cavas-out-" + upload.uploadId} ></canvas> */}

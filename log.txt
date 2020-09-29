@@ -3446,3 +3446,7 @@ TypeError: onFail is not a function
 2020-09-28 16:30:15 TypeError: Cannot convert undefined or null to object
 2020-09-28 16:53:09 TypeError: Cannot read property 'length' of undefined
 2020-09-28 17:16:30 ReferenceError: i is not defined
+2020-09-28 21:22:56 Error: ER_DUP_ENTRY: Duplicate entry 'Tina' for key 'user.username'
+2020-09-28 21:23:04 sendmail: Cannot open mail:25
+
+2020-09-28 21:23:04 Confirmation Email Not Sent. Code: 1

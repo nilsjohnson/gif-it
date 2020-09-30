@@ -1,9 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-
-
-// Add this import:
 import { AppContainer } from 'react-hot-loader';
 
 // Wrap the rendering in a function:
@@ -22,7 +19,6 @@ const render = () => {
 render();
 
 if (module.hot) {
-  console.log("hot");
   module.hot.accept('./App', () => {
     const NextApp = require('./App').default
     ReactDOM.render(
@@ -30,7 +26,4 @@ if (module.hot) {
       document.getElementById('root')
     )
   })
-}
-else {
-  console.log("cold");
 }

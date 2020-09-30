@@ -64,7 +64,8 @@ class AppBarCollapse extends Component {
             // regardless, we delete the auth token and redirect
             deleteAuthToken();
             this.setState({
-                redirect: "/?loggedOut=true"
+                redirect: "/?loggedOut=true",
+                authenticated: false
             });
 
         }).catch(err => {
@@ -105,7 +106,8 @@ class AppBarCollapse extends Component {
                     <MenuItem href='./explore'>Explore</MenuItem>
                 </Link>
                 <Link to="./dashboard">
-                    <MenuItem href='./explore'>Explore</MenuItem>
+                    <MenuItem href='./dashboard'>Upload</MenuItem>
+
                 </Link>
                 {this.state.authenticated
                     ?
@@ -133,13 +135,10 @@ class AppBarCollapse extends Component {
     }
 
     render() {
-        if (this.state.redirect) {
-            return <Redirect to={this.state.redirect} />
-        }
-
         const { classes } = this.props;
         return (
             <div className={classes.root}>
+                {this.state.redirect && <Redirect to={this.state.redirect} />}
                 <ButtonAppBarCollapse>
                     {this.getLinks()}
                 </ButtonAppBarCollapse>

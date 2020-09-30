@@ -46,7 +46,6 @@ class MediaBox extends Component {
             .then(res => {
                 if (res.ok) {
                     res.json().then(resJson => {
-                        console.log(resJson);
                         this.setState({
                             tags: resJson.tags,
                             fileName: resJson.fileName,

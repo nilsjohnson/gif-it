@@ -30,7 +30,6 @@ class Verify extends Component {
     getId = () => {
         let url = new URL(window.location.href);
         let id = url.searchParams.get("userId");
-        console.log("id " + id);
         return url.searchParams.get("userId");
     }
 

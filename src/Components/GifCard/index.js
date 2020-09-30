@@ -30,11 +30,11 @@ export default function GifCard(props) {
     <Card className={classes.root}>
       <CardContent>
         <Link
-          to={`/explore?gid=${props.id}`}
+          to={`/explore?mId=${props.id}`}
         >
           <CardMedia
             component="img"
-            alt="Cool Gif"
+            alt={props.src}
             height="auto"
             image={props.src}
             title={props.src}

@@ -9,6 +9,7 @@ let mediaDAO = new MediaDAO();
 app.get('/explore', function (req, res) {
     mediaDAO.getMostRecent(15, result =>  {
       if(result) {
+        //console.log(result);
         res.send(result);
       }
       else {
@@ -29,21 +30,29 @@ app.get('/search', function(req, res) {
   }
 
   let tags = makeAllPossibleTags(req.query.input);
-  mediaDAO.getGifsByTag(tags, (result => res.send(result)))
+  mediaDAO.getGifsByTag(tags, result => {
+    res.send(result)},
+    err => {
+      res.status(500).send(err);
+    });
 });
 
-// TOOD return a specific error, if the gif wasn't found versus a server error
-app.get('/gif/:gifId', function(req, res) {
-  let gifId = req.params.gifId;
-  console.log("fetching gif: " + gifId);
 
-  mediaDAO.getGifById(gifId, (results) => {
-    if(results) {
-      res.json(results[0]);
+app.get('/media/:mId', function(req, res) {
+  let mId = req.params.mId;
+  console.log("fetching gif: " + mId);
+
+  mediaDAO.getMediaById(mId, (media) => {
+    // onSucess
+    if(media) {
+      res.json(media);
     }
     else {
-      res.status(500).send("Problem Fetching that gif. Sorry!");
+      res.sendStatus(400);
     }
+  }, err => {
+    // onFail
+    res.sendStatus(500);
   });
 
 });
@@ -62,5 +71,23 @@ app.get(`/popularTags/:limit`, function(req, res) {
     else {
       res.status(500).send("Problem Fetching Popular Tags. Sorry!");
     }
+  });
+});
+
+app.get(`/album/:albumId`, function(req, res) {
+  let albumId = req.params.albumId;
+  
+  if(DEBUG) {
+    console.log('Looking for album: ' + albumId);
+  }
+
+  mediaDAO.getAlbumById(albumId, (album) => {
+    if(DEBUG) {
+      console.log("here is the album: ");
+      console.log(album);
+    }
+    res.json(album);
+  }, err => {
+    res.status(500).send(err);
   });
 });

@@ -4,7 +4,7 @@ const { FilePaths } = require('./const');
 const { addJob } = require('./mediaUtil/gifMaker');
 const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
 const MediaDAO = require('./data/MediaDAO');
-let io = require('socket.io')(http) 
+let io = require('socket.io')(http)
 
 io.set('origins', DEV ? 'http://localhost:3000' : 'https://gif-it.io:*');
 
@@ -55,7 +55,7 @@ function deleteUnsharedGifs(socketId) {
  * @param {*} data 
  */
 function sendConversionProgress(socketId, data) {
-  //if (DEBUG) { console.log('sendConversionProgress: '); console.log(data); }
+  if (DEBUG) { console.log('sendConversionProgress: '); console.log(data); }
   connections[socketId].socket.emit("ConversionProgress", data);
 }
 
@@ -78,22 +78,22 @@ function onGifMade(socketId, uploadId, fileName, thumbFileName) {
     thumbFileName: ${thumbFileName}`);
   }
 
-  // if running production, send to s3
-  if (!DEV) {
-    transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, fileName),
-      (data) => { // on success
-        connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
-        if (DEBUG) { console.log(`s3 transfer sucess! - ${data}`); }
-      },
-      (err) => { // on failure
-        connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, error: "Something Went Wrong. Sorry! :(" });
-        console.log(`Problem Uploading to s3. ${err}`);
+  // send to s3
+  transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, fileName),
+    (data) => {
+      // on success
+      connections[socketId].socket.emit("ConversionComplete", {
+        uploadId: uploadId,
+        fileName: fileName,
+        thumbName: thumbFileName
       });
-  }
-  // otherwise we are in DEV mode so we just serve it from where we saved it.
-  else {
-    connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, servePath: fileName });
-  }
+      if (DEBUG) { console.log(`s3 transfer sucess! - ${data}`); }
+    },
+    (err) => {
+      // on failure
+      connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, error: "Something Went Wrong. Sorry! :(" });
+      console.log(`Problem Uploading to s3. ${err}`);
+    });
 }
 
 /**
@@ -104,19 +104,15 @@ function onGifMade(socketId, uploadId, fileName, thumbFileName) {
 function onThumbMade(thumbName) {
   if (DEBUG) { console.log(`onThumbMade called - thumbName: ${thumbName}`); }
 
-  if (!DEV) {
-    transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, thumbName),
-      (data) => { // if success
-        if (DEBUG) { console.log(`Thumbnail s3 transfer success: ${data}`); }
-      }),
-      (err) => { // if failure
-        console.log(`Thumbnail s3 transfer failed: ${err}`);
-      };
-  }
-  else {
-    // Do nothing. The thumbnail should be sitting in the serve directory 
-    // ready to go. See see 'const.js' for that location. 
-  }
+  transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, thumbName),
+    (data) => {
+      // if success
+      if (DEBUG) { console.log(`Thumbnail s3 transfer success: ${data}`); }
+    }),
+    (err) => {
+      // if failure
+      console.log(`Thumbnail s3 transfer failed: ${err}`);
+    };
 }
 
 /**
@@ -175,42 +171,28 @@ function addEventHandlers(newSocket, socketId) {
       console.log(processedTags);
     }
 
-    let ipAddr = connections[socketId].uploads[uploadId].ipAddr;
-    let originalFileName = connections[socketId].uploads[uploadId].originalFileName;
-    let fileName = connections[socketId].uploads[uploadId].fileName;
-    let thumbFileName = connections[socketId].uploads[uploadId].thumbFileName;
+    // const { uploadId, fileName, thumbFileName, tags, description, originalFileName } = media;
+
+    media = {
+      uploadId: uploadId,
+      fileName: fileName = connections[socketId].uploads[uploadId].fileName,
+      thumbFileName: connections[socketId].uploads[uploadId].thumbFileName,
+      tags: processedTags,
+      description: description,
+      originalFileName: connections[socketId].uploads[uploadId].originalFileName,
+      type: "gif"
+    }
+
     let userId = connections[socketId].uploads[uploadId].userId;
+    let ipAddr = connections[socketId].uploads[uploadId].ipAddr;
 
-    mediaDAO.addGif(uploadId,
-      fileName,
-      thumbFileName,
-      processedTags,
-      description,
-      ipAddr,
-      originalFileName,
-      userId
-    ).then((result) => {
-      console.log(result);
+    mediaDAO.addMedia(media, userId, ipAddr, () => {
       newSocket.emit("ShareResult", { uploadId: uploadId, status: "shared" });
-      connections[socketId].uploads[uploadId].shared = true;
-    }).catch(err => {
-        newSocket.emit("ShareResult", { uploadId: uploadId, error: err.toString() })
+    }, err => {
+      console.log(err);
+      newSocket.emit("ShareResult", { uploadId: uploadId, error: err.toString() })
     });
-  });
 
-newSocket.on("SuggestTags", (data) => {
-    if (DEBUG) { console.log(`SuggestTags: `); console.log(data); }
-
-    const { uploadId, input } = data;
-
-    mediaDAO.getSuggestedTags(input, (results) => {
-      if (results) {
-        connections[socketId].socket.emit("SuggestionsFound", {
-          uploadId: uploadId,
-          tags: results
-        });
-      }
-    });
   });
 }
 
@@ -230,18 +212,18 @@ function sendRetryRequest(socketId, uploadId) {
  * @param {*} uploadId 
  * @param {*} upload 
  */
-function addGifMakerUpload(socketId, socket, uploadId, upload)  {
-    // if this socket already has uploads associated with it
-    if(connections[socketId]) {
-        connections[socketId].uploads[uploadId] = upload;
-    }
-    else {
-        connections[socketId] = {};
-        connections[socketId].uploads = {};
-        connections[socketId].uploads[uploadId] = upload;
-        connections[socketId].socket = socket;
-        addEventHandlers(socket, socketId);
-    }
+function addGifMakerUpload(socketId, socket, uploadId, upload) {
+  // if this socket already has uploads associated with it
+  if (connections[socketId]) {
+    connections[socketId].uploads[uploadId] = upload;
+  }
+  else {
+    connections[socketId] = {};
+    connections[socketId].uploads = {};
+    connections[socketId].uploads[uploadId] = upload;
+    connections[socketId].socket = socket;
+    addEventHandlers(socket, socketId);
+  }
 }
 
 exports.addGifMakerUpload = addGifMakerUpload;

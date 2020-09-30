@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container } from "@material-ui/core";
 import { verifyAccount } from "./util/data";
 import { Redirect } from 'react-router-dom'
+import { saveAuthToken } from "./util/util";
 
 class Verify extends Component {
     constructor(props) {
@@ -36,7 +37,11 @@ class Verify extends Component {
     componentDidMount = () => {
         verifyAccount(this.getId(), this.getCode()).then(res => {
             if(res.ok) {
-                this.setState({ message: "Success! Redirecting..." });
+                res.json().then(resJson => {
+                    saveAuthToken(resJson.token);
+                    this.setState({message: "Success! Logging in and redirecting..."})
+                }).catch(err => console.log(err));
+                
 
                 setTimeout(() => {
                     this.setState({

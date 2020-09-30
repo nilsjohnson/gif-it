@@ -11,6 +11,8 @@ import Container from '@material-ui/core/Container';
 import { Paper } from '@material-ui/core';
 import { signUp } from '../../util/data';
 import Login from '../Login';
+import { saveAuthToken } from '../../util/util';
+import { Redirect } from 'react-router';
 
 const useStyles = (theme => ({
     paper: {
@@ -51,15 +53,12 @@ class MakeAccount extends Component {
             pwErr: false,
             agree: false,
             errMsg: "",
-            success: false
+            redirect: false
         };
-
-        this.acceptedUsername = null;
-        this.acceptedPw = null;
     }
 
     handleEnter = (event) => {
-        if(event.keyCode === 13) {
+        if (event.keyCode === 13) {
             this.signUp();
         }
     }
@@ -70,7 +69,7 @@ class MakeAccount extends Component {
         let errMsg = "";
 
         // 20 is the max that db will allow
-        if(val.length > 20) {
+        if (val.length > 20) {
             err = true;
             errMsg = "Username must be less than 20 characters.";
         }
@@ -96,7 +95,7 @@ class MakeAccount extends Component {
         let errMsg = "";
 
         // 128 was chosen arbitrarily
-        if(val.length > 128) {
+        if (val.length > 128) {
             pwErr = true;
             errMsg = "It's really great that you're choosing a nice long password, but please, keep it <= 128 characters.";
         }
@@ -135,29 +134,33 @@ class MakeAccount extends Component {
 
         signUp(newUserObj).then(res => {
             if (res.status === 201) {
-                console.log("Account Created.");
-                this.acceptedPw = this.state.pw;
-                this.acceptedUsername = this.state.desiredUsername;
-                this.setState({success: true});
+                res.text().then(token => {
+                    console.log("token: " + token);
+                    saveAuthToken(token);
+                    console.log("Account Created.");
+                    this.setState({ redirect: true });
+                }).catch(err => console.log(err));
             }
             else {
-                return res.text();
+                console.log(res);
+                res.text().then(text => {
+                    this.setState({
+                        errMsg: text
+                    }).catch(err => console.log(err));
+                }).catch(err => console.log(err));
             }
-        }).then(text => {
-            this.setState({
-                errMsg: text
-            });
-        }).catch(err => console.log(err));
+        })
     }
 
+
     isValidEmailAddr = (email) => {
-                                                                                                                                                                                                                      
+
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
 
     checkInput = () => {
-        if(this.state.pwErr || this.state.desiredUsernameErr) {
+        if (this.state.pwErr || this.state.desiredUsernameErr) {
             // there is already a visble error. We dont need to check.
             return false;
         }
@@ -195,8 +198,8 @@ class MakeAccount extends Component {
     render() {
         const { classes } = this.props;
 
-        if(this.state.success) {
-            return <Login username={this.acceptedUsername} pw={this.acceptedPw}/>
+        if (this.state.redirect) {
+            return <Redirect to="/dashboard" />
         }
 
         return (

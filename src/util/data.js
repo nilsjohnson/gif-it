@@ -1,7 +1,7 @@
 import { readAuthToken } from './util';
 
 // note: this bool must be set propery prior to building for production
-let production = false;
+let production = true;
 let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
 
 /**
@@ -25,7 +25,7 @@ function uploadFile(socketId, tempUploadId, data = {}, type = "") {
     method: 'POST',
     body: data,
     headers: {
-      'authorization' : readAuthToken()
+      'authorization': readAuthToken()
     }
   });
 }
@@ -42,12 +42,12 @@ function search(searchInput) {
 }
 
 /**
- * Returns a gif by its id
+ * Returns a media object by its id
  * 
  * @param {*} gifId 
  */
-function getGifById(gifId) {
-  return fetch(`${server}/gif/${gifId}`);
+function getMediaById(id) {
+  return fetch(`${server}/media/${id}`);
 }
 
 /**
@@ -80,7 +80,7 @@ function checkToken() {
   console.log("checking token");
   return fetch(`${server}/auth/checkToken/`, {
     headers: {
-      'authorization' : readAuthToken()
+      'authorization': readAuthToken()
     }
   });
 }
@@ -100,7 +100,7 @@ function signOut() {
   console.log("sign out");
   return fetch(`${server}/auth/signOut/`, {
     headers: {
-      'authorization' : readAuthToken()
+      'authorization': readAuthToken()
     }
   });
 }
@@ -109,16 +109,56 @@ function verifyAccount(userId, code) {
   return fetch(`${server}/verify/${userId}/${code}`);
 }
 
-export { 
+function getPresignedPost(data = {}) {
+  return fetch(`${server}/getPresignedPost`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': readAuthToken()
+    }
+  });
+}
+
+function doSignedS3Post(url = '', formData = {}) {
+  return fetch(url, {
+    // headers: {
+    //    'Content-Type': 'multipart/form-data'
+    // },
+    method: 'POST',
+    body: formData
+  });
+}
+
+function postPhotoGallery(data) {
+  return fetch(`${server}/upload/addMedia`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': readAuthToken()
+    }
+  });
+}
+
+function getAlbumById(albumId) {
+  return fetch(`${server}/album/${albumId}`);
+}
+
+export {
+  getAlbumById,
+  postPhotoGallery,
+  doSignedS3Post,
+  getPresignedPost,
   verifyAccount,
   signOut,
-  checkToken, 
-  signUp, 
-  login, 
-  getServer, 
-  getPopularTags, 
-  getGifById, 
-  getNew, 
-  uploadFile, 
-  search 
+  checkToken,
+  signUp,
+  login,
+  getNew,
+  getServer,
+  getPopularTags,
+  getMediaById,
+  uploadFile,
+  search
 }

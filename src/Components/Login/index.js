@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Paper } from '@material-ui/core';
+import { Paper, Link } from '@material-ui/core';
 import { login as getAuthToken } from '../../util/data';
 import { saveAuthToken } from '../../util/util';
 
@@ -98,9 +98,14 @@ class Login extends Component {
                         this.setState({ redirect: "/dashboard" });
                     }).catch(jsonErr => console.log(jsonErr));
                 }
-                else if (res.status === 409) {
+                else if (res.status === 401) {
                     this.setState({
                         message: "Invalid username/password"
+                    });
+                }
+                else if (res.status === 500) {
+                    this.setState({
+                        message: "Unable to login. Please try later."
                     });
                 }
                 else {
@@ -195,7 +200,12 @@ class Login extends Component {
                             </Button>
                         </form>
                         <Grid container justify="flex-end">
-                        </Grid>
+                            <Grid item>
+                                <Link href="/signup" variant="body2">
+                                    Don't have account? Sign Up!
+                                    </Link>
+                            </Grid>
+                        </Grid>    
                     </div>
                 </Paper>
             </Container>

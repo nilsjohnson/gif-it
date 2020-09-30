@@ -57,6 +57,7 @@ class TagBox extends Component {
     validates and adds a tag to the state
     */
     addTag = () => {
+        const { tags = [] } = this.props;
         if (this.state.inputError) {
             console.log(`'${this.state.curInput}' is not a valid tag. Cannot add it.`);
             return;
@@ -64,7 +65,7 @@ class TagBox extends Component {
 
         let tag = this.makeTag(this.state.curInput);
 
-        if (this.props.tags.includes(tag)) {
+        if (tags.includes(tag)) {
             console.log("This tag is already added. Re-setting the input.");
             this.resetState();
             return;
@@ -152,13 +153,12 @@ class TagBox extends Component {
      * @param {} event 
      */
     setCurInput = (event) => {
-        console.log("no suggestion up");
         let input = event.target.value;
         this.setCurInput_fromString(input);
     }
 
     handleBlur = () => {
-        console.log("on blur called");
+        //console.log("on blur called");
     }
 
     // this is a little weird. I would prefer to get the number in the pervious
@@ -173,7 +173,7 @@ class TagBox extends Component {
     }
 
     render() {
-        const { suggestions, error } = this.props;
+        const { suggestions, error, tags = [] } = this.props;
 
         // given that we dont know how quickly the user
         // will recieve the suggestions, we decide what to show
@@ -208,8 +208,8 @@ class TagBox extends Component {
                         }}
 
                         onHighlightChange={(event, newVal, reason) => {
-                            console.log("onHighlightChange called");
-                            console.log(reason);
+                            //console.log("onHighlightChange called");
+                            //console.log(reason);
                             if(reason !== 'auto') {
                                 this.inputFromSuggestion = true;
                             }
@@ -219,10 +219,10 @@ class TagBox extends Component {
                         }}
 
                         onOpen={event => {
-                            console.log("on open called");
+                            //console.log("on open called");
                         }}
                         onClose={event => {
-                            console.log("onClose called");
+                            //console.log("onClose called");
                         }}
 
                         value={this.state.curInput}
@@ -271,7 +271,7 @@ class TagBox extends Component {
                         justify="flex-start"
                         alignItems="flex-start"
                     >
-                        {this.props.tags.map((tag, index) => (
+                        {tags.map((tag, index) => (
                             <Tag key={index} tag={tag} removeTag={this.removeTag} />
                         ))}
                     </Grid>

@@ -18,11 +18,13 @@ const { app, http } = require('./server');
 const { FilePaths, MAX_UPLOAD_SIZE } = require('./const');
 const { getUniqueID, checkUnique } = require("./util/fileUtil");
 const AuthDAO = require('./data/AuthDAO');
+const MediaDAO = require('./data/MediaDAO');
 const { addGifMakerUpload } = require('./makeGifAPI');
-let io = require('socket.io')(http) 
+let io = require('socket.io')(http)
 
 io.set('origins', DEV ? 'http://localhost:3000' : 'https://gif-it.io:*');
 let authDAO = new AuthDAO();
+let mediaDAO = new MediaDAO();
 
 /**
  * Holds open connections - { socketId_1 : { socket: socket, uploads: {} }, socketId_2 : .... }
@@ -35,7 +37,7 @@ let connections = {};
 function deleteSocket(socketId) {
   if (delete connections[socketId]) {
     if (DEBUG) { console.log(`Socket ${socketId} has been deleted`); }
-  } 
+  }
   else {
     console.log(`Problem deleting ${socketId}.`);
   }
@@ -62,6 +64,21 @@ function addSocket(newSocket) {
     console.log(`Socket ${socketId} disconnected from uploadAPI`);
     deleteSocket(socketId);
   });
+
+  connections[socketId].socket.on("SuggestTags", (data) => {
+    if (DEBUG) { console.log(`SuggestTags: `); console.log(data); }
+
+    const { uploadId, input } = data;
+
+    mediaDAO.getSuggestedTags(input, (results) => {
+      if (results) {
+        connections[socketId].socket.emit("SuggestionsFound", {
+          uploadId: uploadId,
+          tags: results
+        });
+      }
+    });
+  });
 }
 
 /**
@@ -77,9 +94,9 @@ io.on("connection", (newSocket) => {
  */
 app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
   if (DEBUG) { console.log(`video upload hit by socket ${req.params.socketId}.`); }
-  
+
   let userId = authDAO.authenticate(req.headers);
-  if(!userId) {
+  if (!userId) {
     console.log("Sending Redirect.");
     res.redirect('/login');
     return;
@@ -111,12 +128,6 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
     let busboy = new Busboy({ headers: req.headers });
 
     busboy.on('file', function (fieldName, file, givenFileName, encoding, mimetype) {
-      if (!mimetype.startsWith('video')) {
-        if (DEBUG) { console.log(`${givenFileName} has invalid mimetype. ${mimetype} privided, but 'video/*' is required.`); }
-        res.status(400);
-        res.json({ error: `${givenFileName}: Unsupported Format` });
-        return;
-      }
       // set the fileName
       fileName = checkUnique(givenFileName, FilePaths.UPLOAD_DIR);
       // set the upload dst
@@ -141,10 +152,10 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
       file.on('data', function (data) {
         bytesRecieved = bytesRecieved + data.length;
         let newPercentUploaded = Math.round(bytesRecieved * 100 / fileSize);
-        if(DEBUG) { console.log(`upload progress: ${percentUploaded}% for uploadId ${uploadId}`); }
-        if(connections[socketId] && connections[socketId].socket) {
+        if (DEBUG) { console.log(`upload progress: ${percentUploaded}% for uploadId ${uploadId}`); }
+        if (connections[socketId] && connections[socketId].socket) {
           // only send new value if its greater than before to avoid sending like '2%...2%...3%...'
-          if(newPercentUploaded > percentUploaded) {
+          if (newPercentUploaded > percentUploaded) {
             connections[socketId].socket.emit("UploadProgress", {
               uploadId: uploadId,
               percentUploaded: newPercentUploaded,
@@ -165,13 +176,11 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
         uploadId: uploadId
       });
 
-      if(connections[socketId].uploads[uploadId].action === 'make_gif') {
+      if (connections[socketId].uploads[uploadId].action === 'make_gif') {
         // socketId, socket, uploadId, upload
         let socket = connections[socketId].socket;
         let upload = connections[socketId].uploads[uploadId];
-        delete connections[socketId];
         addGifMakerUpload(socketId, socket, uploadId, upload);
-        
       }
 
       // finish was called so upload was success.
@@ -182,6 +191,47 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
     return req.pipe(busboy);
   }
 });
+
+app.post('/upload/addMedia', function (req, res) {
+  let userId = authDAO.authenticate(req.headers);
+  if (!userId) {
+    console.log("Sending Redirect.");
+    res.redirect('/login');
+    return;
+  }
+
+  console.log("bod");
+  console.log(req.body);
+
+  if(req.body.album) {
+    // if this is an 'album' of items
+    let album = req.body.album;
+
+    mediaDAO.createAlbum(album, userId, req.ip, (albumId) => {
+      // on success
+      console.log("Album created!");
+      res.send({redirect: `/explore?albumId=${albumId}`});
+    }, err => {
+      // on error
+      console.log(err);
+      res.sendStatus(500);
+    });
+  }
+  else if(req.body.media) {
+    // if this is just a single item
+    let media = req.body.media;
+    mediaDAO.addMedia(media, userId, req.ip, mediaId => {
+      // on success
+      res.send({redirect: `/explore?mId=${mediaId}`});
+    }, err => {
+      // on error
+      console.log(err);
+      res.sendStatus(500);
+    });
+  }
+
+});
+
 
 function addUpload(uploadId, uploadDst, givenFileName, ipAddr, socketId, userId, action) {
   if (connections[socketId]) {

@@ -1,6 +1,7 @@
 import React from "react";
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   dropBox: {
@@ -17,19 +18,32 @@ const useStyles = makeStyles((theme) => ({
 
 export function DropBox(props) {
   const classes = useStyles();
+  const {id, onDrop, onDragOver, onDragLeave, hovering, selectFilesUpload, uploadInstructionsText, mimeTypes, error } = props;
+
   return (
       <Grid container item
         direction="column"
         justify="center"
         alignItems="center"
-        onDrop={props.onDrop}
-        onDragOver={props.onDragOver}
-        onDragLeave={props.onDragLeave}
-        className={props.hovering ? `${classes.chooseFiles} ${classes.dropBox}` : classes.dropBox}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
+        className={hovering ? `${classes.chooseFiles} ${classes.dropBox}` : classes.dropBox}
       >
-          <p>Drag and Drop Video Files or</p>
-          <input className={classes.fileInput} type="file" accept="video/*, image/*" multiple onChange={props.selectFilesUpload} />
+          <p>{uploadInstructionsText}</p>
+          <input className={classes.fileInput} id={id} type="file" accept={mimeTypes} multiple onChange={selectFilesUpload} />
+          <p>{error ? error : ""}</p>
       </Grid>
 
   );
 }
+
+DropBox.propTypes = {
+  selectFilesUpload: PropTypes.func,
+  onDrop: PropTypes.func,
+  onDragLeave: PropTypes.func,
+  onHovering: PropTypes.func,
+  onDragOver: PropTypes.func,
+  uploadInstructionsText: PropTypes.string,
+  id: PropTypes.string
+};

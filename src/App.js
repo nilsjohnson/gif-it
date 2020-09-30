@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader';
 import React from 'react';
 import Explore from './Explore';
 import SignUp from './SignUp';
@@ -7,7 +8,6 @@ import Dashboard from './Dashboard'
 import { BrowserRouter, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
-import { hot } from 'react-hot-loader';
 import './css/style.css';
 
 function App() {
@@ -19,11 +19,13 @@ function App() {
                 <Route path="/signup" component={SignUp} exact />
                 <Route path="/login" component={Login} exact />
                 <Route path="/verify" component={Verify} exact />
-                <Route path="/dashboard" component={Dashboard} exact />
+                <Route path="/dashboard" component={Dashboard} exact /> 
+                
             </ThemeProvider>
         </BrowserRouter>
     );
 }
+
 
 export default hot(module)(App);
 

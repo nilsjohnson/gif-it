@@ -20,7 +20,6 @@ function getNew() {
  * @param {*} type            
  */
 function uploadFile(socketId, tempUploadId, data = {}, type = "") {
-  console.log(socketId);
   return fetch(`${server}/upload/${socketId}/${tempUploadId}/${type}`, {
     method: 'POST',
     body: data,
@@ -77,7 +76,6 @@ function login(loginCredentials = {}) {
 }
 
 function checkToken() {
-  console.log("checking token");
   return fetch(`${server}/auth/checkToken/`, {
     headers: {
       'authorization': readAuthToken()
@@ -86,7 +84,6 @@ function checkToken() {
 }
 
 function signUp(newUser = {}) {
-  console.log("fetchin");
   return fetch(`${server}/auth/newUser`, {
     method: 'POST',
     headers: {
@@ -97,7 +94,6 @@ function signUp(newUser = {}) {
 }
 
 function signOut() {
-  console.log("sign out");
   return fetch(`${server}/auth/signOut/`, {
     headers: {
       'authorization': readAuthToken()

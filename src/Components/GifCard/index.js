@@ -34,7 +34,7 @@ export default function GifCard(props) {
         >
           <CardMedia
             component="img"
-            alt="Cool Gif"
+            alt={props.src}
             height="auto"
             image={props.src}
             title={props.src}

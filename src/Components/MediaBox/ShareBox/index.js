@@ -20,14 +20,14 @@ export function ShareBox(props) {
         >
             <LinkCopyBox
                 type="on gif-it"
-                text={`https://gif-it.io/explore?gid=${id}`}
+                text={`https://gif-it.io/explore?mId=${id}`}
             />
             <LinkCopyBox
                 type="html"
                 text={`<img src='https://gif-it.io/${fileName}'>`}
             />
             <LinkCopyBox
-                type="just the gif"
+                type="just the file"
                 text={`https://gif-it.io/${fileName}`}
             />
         </Grid>

@@ -30,7 +30,11 @@ app.get('/search', function(req, res) {
   }
 
   let tags = makeAllPossibleTags(req.query.input);
-  mediaDAO.getGifsByTag(tags, (result => res.send(result)))
+  mediaDAO.getGifsByTag(tags, result => {
+    res.send(result)},
+    err => {
+      res.status(500).send(err);
+    });
 });
 
 

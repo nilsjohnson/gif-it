@@ -10,7 +10,8 @@ class SettingOptions extends Component {
   // }
 
   render() {
-    const { cancel, convert, fileName, classes, setSize, size } = this.props;
+  
+    const { upload = {}, convert, size, setSize, } = this.props;
 
     return (
       <Grid
@@ -20,9 +21,14 @@ class SettingOptions extends Component {
         alignItems="flex-start"
         spacing={1}
       >
-        <Grid item xs={12}>
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+        >
           <Typography noWrap variant="h5">
-            {fileName}
+            Select Gif Options
           </Typography>
         </Grid>
 
@@ -47,7 +53,6 @@ class SettingOptions extends Component {
           {/* Add New Items Here, when the time comes. */}
           <Grid item md={1}></Grid>
         </Grid>
-        
         {/* for the buttons */}
         <Grid
           container
@@ -55,8 +60,7 @@ class SettingOptions extends Component {
           justify="center"
           alignItems="center"
         >
-          <Button className={classes.btn} onClick={cancel} variant="contained" color="secondary">Cancel</Button>
-          <Button className={classes.btn} onClick={convert} variant="contained" color="primary">Convert</Button>
+          <Button onClick={convert} variant="contained" color="primary">Convert</Button>
         </Grid>
       </Grid>
     );

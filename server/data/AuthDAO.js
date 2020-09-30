@@ -1,6 +1,38 @@
 const crypto = require("crypto");
 const DAO = require("./DAO");
 const tokenHandler = require('../authUtil/TokenHandler');
+const { NewUserError, LoginError } = require("./dataAccessErrors");
+const log = require("../util/logger");
+
+let query;
+
+async function logIn(connection, args) {
+    let sql =
+        `SELECT user.id, user_credential.hashed, user_credential.salt, user_verification.verified 
+    FROM user_credential 
+        JOIN user ON user_credential.id = user.id
+        JOIN user_verification ON user_verification.id = user.id 
+    WHERE user.email = ? OR user.username = ?`;
+
+    return await query(connection, sql, args);
+}
+
+async function insertUser(connection, args) {
+    let sql = `INSERT INTO user SET ?`;
+    return await query(connection, sql, args);
+}
+
+async function insertUserCredential(connection, args) {
+    let sql = `INSERT INTO user_credential SET ?`;
+    return await query(connection, sql, args);
+}
+
+async function insertUserVerification(connection, args) {
+    let sql = `INSERT INTO user_verification SET ?`;
+    return await query(connection, sql, args);
+}
+
+
 
 /**
  * @returns a 32 byte random string of hex digits
@@ -32,6 +64,7 @@ class AuthDAO extends DAO {
     constructor() {
         super(10, 'localhost', 'gracie', 'pass123$', 'gif_it');
         this.tokenHandler = tokenHandler;
+        query = this.query;
     }
 
     /**
@@ -39,120 +72,71 @@ class AuthDAO extends DAO {
      * @param {*} desiredUsername 
      * @param {*} email 
      * @param {*} pw 
+     * @param {*} onSuccess
+     * @param {*} onFail 
      */
-    createNewUser(desiredUsername, email, pw) {
-        const salt = createSalt();
-        const hash = getHash(pw, salt);
+    createNewUser(desiredUsername, email, pw, ipAddr, onSuccess, onFail) {
+        this.getConnection(async connection => {
+            try {
+                await this.startTransaction(connection);
 
-        let user = {
-            username: desiredUsername,
-            email: email,
-            active: 1,
-            signupDate: this.getTimeStamp(),
-        };
+                // generate salt, hash and make make user object
+                const salt = createSalt();
+                const hash = getHash(pw, salt);
+                let results;
 
-        let credentials = {
-            hashed: hash,
-            salt: salt,
-            id: null // this will get set before insertion
-        };
+                let newUser = {
+                    username: desiredUsername,
+                    email: email,
+                    active: 1,
+                    signupDate: this.getTimeStamp()
+                };
 
-        // attempt to insert this new user into db
-        let logFailure = this.logFailure; // this is a scoping thing
-        return new Promise((resolve, reject) => {
-            this.getConnection(connection => {
-                if (!connection) {
-                    logFailure("Problem getting DB connection when attempting to add user.");
-                    reject("Database Issue. Try again later.");
-                    return;
-                }
+                let credentials = {
+                    hashed: hash,
+                    salt: salt,
+                    id: null
+                };
 
-                connection.beginTransaction(function (error) {
-                    if (error) {
-                        logFailure()
-                        return connection.rollback(function () {
-                            reject({ error: error, message: "Database Error. Please Try Later." });
-                        });
-                    }
+                // insert the user and get their ID
+                results = await insertUser(connection, newUser);
+                let userId = results.insertId;
+                credentials.id = userId;
 
-                    // 1.) insert the user
-                    let userSql = `INSERT INTO user SET ?`;
-                    connection.query(userSql, user, (error, results, fields) => {
-                        if (error) {
-                            let responseMessage = "There was an unknown error. Please try again.";
-                            // if ER_DUP_ENTRY
-                            if (error.errno === 1062) {
-                                if (error.message.includes("user.email")) {
-                                    responseMessage = "It looks like this email is already in use.";
-                                }
-                                else if (error.message.includes("user.username")) {
-                                    responseMessage = "This username is already taken.";
-                                }
-                                else {
-                                    // this should never be hit.
-                                    logFailure("Inserting new user into database failed for a duplicate entry, however, we were unable to parse the error to find out why.");
-                                    logFailure(error.message);
-                                    responseMessage = error.message;
-                                }
-                            }
+                // insert their login credentials
+                results = await insertUserCredential(connection, credentials);
 
-                            return connection.rollback(function () {
-                                logFailure(error);
-                                reject({ error: error, message: responseMessage });
-                            });
-                        }
-
-                        // 2.) get id
-                        let getIdSql = 'SELECT LAST_INSERT_ID() as id';
-                        connection.query(getIdSql, (error, results, fields) => {
-                            if (error) {
-                                return connection.rollback(function () {
-                                    logFailure(error.message);
-                                    reject({ error: error, message: "Database issue. Please Try Later." });
-                                });
-                            }
-
-                            let userId = results[0].id;
-                            credentials.id = userId;
-
-                            // 2.) insert the credentials
-                            let credSql = `INSERT INTO user_credential SET ?`
-                            connection.query(credSql, credentials, (error, results, fields) => {
-                                if (error) {
-                                    return connection.rollback(function () {
-                                        logFailure(error);
-                                        reject({ error: error, message: "Database issue. Please Try Later." });
-                                    });
-                                }
-
-                                // 3 insert the verification code
-                                let verSql = `INSERT INTO user_verification SET ?`;
-                                let verificationCode = createVerificationCode();
-                                connection.query(verSql, { id: userId, code: verificationCode }, (error, results, fields) => {
-                                    if (error) {
-                                        return connection.rollback(function () {
-                                            logFailure(error.message);
-                                            reject({ error: error, message: "Database issue. Please Try Later." });
-                                        });
-                                    }
-
-                                    connection.commit(error => {
-                                        if (error) {
-                                            return connection.rollback(function () {
-                                                logFailure(error.message);
-                                                reject({ error: error, message: "Database issue. Please Try Later." });
-                                            });
-                                        }
-                                        else {
-                                            resolve({ userId: userId, verificationCode: verificationCode });
-                                        }
-                                    });
-                                });
-                            });
-                        });
-                    });
+                // make their verification code and insert it into user_verification
+                let verificationCode = createVerificationCode();
+                results = await insertUserVerification(connection, {
+                    id: userId,
+                    code: verificationCode
                 });
-            });
+
+                // we are going to log this user in right away. So we're gonna make a token.
+                let token = tokenHandler.createNewAuthToken(userId, ipAddr);
+
+                // done. Send back the userId, and the verification code.
+                await this.completeTransation(connection);
+                return onSuccess(userId, verificationCode, token);
+            }
+            catch (error) {
+                log(error);
+                connection.rollback();
+
+                // if ER_DUP_ENTRY
+                if (error.errno === 1062) {
+                    if (error.message.includes("user.email")) {
+                        onFail(NewUserError.EMAIL_ADDR_IN_USE);
+                    }
+                    else if (error.message.includes("user.username")) {
+                        onFail(NewUserError.USERNAME_TAKEN);
+                    }
+                }
+                else {
+                    onFail("Problem Creating New User.")
+                }
+            }
         });
     }
 
@@ -174,81 +158,54 @@ class AuthDAO extends DAO {
     * @param {*} ipAddr 
     * @returns a Promise that resolves with a new auth token and rejects with an error message.
     */
-    logIn(nameOrEmail, password, ipAddr) {
-        return new Promise((resolve, reject) => {
-            let loginError = null;
-            let logFailure = this.logFailure;
+    logIn(nameOrEmail, password, ipAddr, onSuccess, onFail) {
+        this.getConnection(async connection => {
+            if (!connection) {
+                onFail("Couldn't get db connection.");
+            }
 
-            this.getConnection((connection => {
-                if (!connection) {
-                    logFailure("Could not get database connection when attempting to log user in.");
-                    reject("Database Problem.");
-                }
-                connection.beginTransaction(function (err) {
-                    if (err) {
-                        reject(err)
+            let token = null;
+            let userId = null;
+            let verified = null;
+
+            try {
+                let results = await logIn(connection, [nameOrEmail, nameOrEmail]);
+
+                if (results[0]) {
+                    let hash = results[0].hashed;
+                    let salt = results[0].salt;
+                    userId = results[0].id;
+                    verified = results[0].verified;
+
+                    // this is a good login attempt
+                    if (hash === getHash(password, salt) && userId && verified) {
+                        token = tokenHandler.createNewAuthToken(userId, ipAddr);
+                    }
+                    // this was a good login attempt, but the account isn't verified.
+                    else if (hash === getHash(password, salt) && userId && !verified) {
+                        // response = LoginError.NOT_VERIFIED;
+                        // we dont reject for this issue at the moment.
+                        token = tokenHandler.createNewAuthToken(userId, ipAddr);
+                    }
+                    // this is a bad login attempt
+                    else {
+                        onFail(LoginError.INVALID_USERNAME_PASSWORD)
+                        return connection.release();
                     }
 
-                    // 1.) insert the user
-
-                    let params = [];
-                    params.push(nameOrEmail);
-                    params.push(nameOrEmail);
-
-                    let getUserSql = `SELECT user_credential.hashed, user_credential.salt, user.id 
-                FROM user_credential 
-                    JOIN user ON user_credential.id = user.id 
-                WHERE user.email = ? OR user.username = ?`;
-                    connection.query(getUserSql, params, (error, results, fields) => {
-                        if (error) {
-                            return connection.rollback(function () {
-                                reject(error);
-                            });
-                        }
-
-                        let token = null;
-                        let userId = null;
-                        if (results[0]) {
-                            console.log(results);
-                            let hash = results[0].hashed;
-                            let salt = results[0].salt;
-                            userId = results[0].id;
-                            if (userId === null) {
-                                console.log("UserId is null. This should never happen.");
-                            }
-
-                            // this is a good login attempt
-                            if (hash === getHash(password, salt) && userId) {
-                                token = tokenHandler.createNewAuthToken(userId, ipAddr);
-                            }
-                            // this is a bad login attempt
-                            else {
-                                logFailure(`Bad login attempt from ${ipAddr}. Invalid Password.`);
-                                loginError = "Invalid Username/Password";
-                            }
-                        }
-                        else {
-                            logFailure(`Bad login attempt from ${ipAddr}. ${nameOrEmail} not found.`);
-                            loginError = "Invalid Username/Password";
-                        }
-
-                        connection.commit(function (err) {
-                            if (err) {
-                                return connection.rollback(function () {
-                                    reject(err);
-                                });
-                            }
-                            if (token) {
-                                resolve(token);
-                            }
-                            else {
-                                resolve(null);
-                            }
-
-                        });
-                    });
-                });
-            }));
+                    onSuccess(token);
+                    connection.release();
+                }
+                else {
+                    onFail(LoginError.INVALID_USERNAME_PASSWORD)
+                    return connection.release();
+                }
+            }
+            catch (ex) {
+                log(ex);
+                onFail("Databse Issue.");
+                connection.release();
+            }
         });
     }
 
@@ -260,12 +217,12 @@ class AuthDAO extends DAO {
     authenticate(headers) {
         const token = headers.authorization;
         let userId = tokenHandler.getUserId(token);
-        
+
         if (DEBUG) {
             console.log(`UserId: ${userId}`);
             console.log(`Auth Token: ${token}`);
         }
-        
+
         if (userId) {
             return userId;
         }
@@ -277,7 +234,7 @@ class AuthDAO extends DAO {
         tokenHandler.deleteToken(headers.authorization);
     }
 
-    verifyUserEmailAddr(userId, code) {
+    verifyUserEmailAddr(userId, code, ipAddr) {
         return new Promise((resolve, reject) => {
             this.getConnection(connection => {
                 if (!connection) {
@@ -294,7 +251,8 @@ class AuthDAO extends DAO {
                     }
 
                     if (results.changedRows === 1) {
-                        resolve("Verification success!");
+                        let token = tokenHandler.createNewAuthToken(userId, ipAddr)
+                        resolve(token);
                     }
                     else {
                         this.logFailure(`Could not verify user ${userId}, with verification code ${code}`);
@@ -309,4 +267,3 @@ class AuthDAO extends DAO {
 }
 
 module.exports = AuthDAO;
-

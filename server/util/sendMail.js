@@ -32,7 +32,6 @@ class MailSender {
         </html>`;    
 
         str = str.replace(/\n\s+/g, '\n');
-        console.log(str);
         
         const sendMail = spawn('sendmail', ['-t']);
         sendMail.stdin.write(str);

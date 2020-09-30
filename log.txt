@@ -3450,3 +3450,125 @@ TypeError: onFail is not a function
 2020-09-28 21:23:04 sendmail: Cannot open mail:25
 
 2020-09-28 21:23:04 Confirmation Email Not Sent. Code: 1
+2020-09-29 14:18:50 ReferenceError: result is not defined
+2020-09-29 14:19:02 ReferenceError: result is not defined
+2020-09-29 14:19:19 ReferenceError: result is not defined
+2020-09-29 14:19:54 SyntaxError: Unexpected token o in JSON at position 1
+2020-09-29 14:20:06 SyntaxError: Unexpected token o in JSON at position 1
+2020-09-29 14:20:57 ReferenceError: tags is not defined
+2020-09-29 14:21:06 ReferenceError: tags is not defined
+2020-09-29 14:52:30 sendmail: Cannot open mail:25
+
+2020-09-29 14:52:30 Confirmation Email Not Sent. Code: 1
+2020-09-29 15:15:03 sendmail: Cannot open mail:25
+
+2020-09-29 15:15:03 Confirmation Email Not Sent. Code: 1
+2020-09-29 16:14:32 sendmail: Cannot open mail:25
+
+2020-09-29 16:14:32 Confirmation Email Not Sent. Code: 1
+2020-09-29 16:14:51 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?' at line 5
+2020-09-29 16:21:48 sendmail: Cannot open mail:25
+
+2020-09-29 16:21:48 Confirmation Email Not Sent. Code: 1
+2020-09-30 11:51:48 Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+2020-09-30 11:51:48 Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+2020-09-30 11:59:55 sendmail: Cannot open mail:25
+
+2020-09-30 11:59:55 Confirmation Email Not Sent. Code: 1
+2020-09-30 12:02:26 sendmail: Cannot open mail:25
+
+2020-09-30 12:02:26 Confirmation Email Not Sent. Code: 1
+2020-09-30 12:03:30 Error: ER_BAD_FIELD_ERROR: Unknown column 'descript' in 'field list'
+2020-09-30 12:05:32 Error: ER_BAD_FIELD_ERROR: Unknown column 'fileType' in 'field list'
+2020-09-30 12:07:05 Error: ER_BAD_FIELD_ERROR: Unknown column 'user_id' in 'field list'
+2020-09-30 12:08:54 Error: ER_BAD_FIELD_ERROR: Unknown column 'album.descript' in 'field list'
+2020-09-30 12:09:44 Error: ER_BAD_FIELD_ERROR: Unknown column 'user_id' in 'field list'
+2020-09-30 12:37:22 sendmail: Cannot open mail:25
+
+2020-09-30 12:37:22 Confirmation Email Not Sent. Code: 1
+2020-09-30 14:30:44 ReferenceError: userId is not defined
+2020-09-30 14:30:44 2020-09-30 14:30:44 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/AuthDAO.js:124:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-30 14:31:39 Error: ER_DUP_ENTRY: Duplicate entry 'Tina' for key 'user.username'
+2020-09-30 14:31:39 2020-09-30 14:31:39 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/AuthDAO.js:121:25
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-30 14:32:06 ReferenceError: verificationCode is not defined
+2020-09-30 14:32:06 2020-09-30 14:32:06 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/AuthDAO.js:124:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-30 14:38:48 Error: ER_DUP_ENTRY: Duplicate entry 'Tina' for key 'user.username'
+2020-09-30 14:38:48 2020-09-30 14:38:48 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/AuthDAO.js:123:25
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-30 14:40:51 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-30 14:40:51 2020-09-30 14:40:51 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/AuthDAO.js:126:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-30 14:45:54 Error: ER_BAD_NULL_ERROR: Column 'id' cannot be null
+2020-09-30 14:47:11 sendmail: Cannot open mail:25
+
+2020-09-30 14:47:11 Confirmation Email Not Sent. Code: 1
+2020-09-30 14:53:49 Error: ER_DUP_ENTRY: Duplicate entry 'Tina' for key 'user.username'
+2020-09-30 14:53:49 2020-09-30 14:53:49 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/authAPI.js:38:33
+    at /home/nils/gif-it/server/data/AuthDAO.js:133:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-30 14:57:16 Error: ER_DUP_ENTRY: Duplicate entry 'Tina' for key 'user.username'
+2020-09-30 14:57:31 Error: ER_DUP_ENTRY: Duplicate entry 'tina@gmail.com' for key 'user.email'
+2020-09-30 14:57:58 sendmail: Cannot open mail:25
+
+2020-09-30 14:57:58 Confirmation Email Not Sent. Code: 1
+2020-09-30 15:19:55 ReferenceError: LOGIN_RESULT is not defined
+2020-09-30 15:20:57 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-09-30 15:20:57 2020-09-30 15:20:57 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/authAPI.js:62:33
+    at /home/nils/gif-it/server/data/AuthDAO.js:203:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-09-30 15:38:13 sendmail: Cannot open mail:25
+
+2020-09-30 15:38:13 Confirmation Email Not Sent. Code: 1
+2020-09-30 15:40:25 sendmail: Cannot open mail:25
+
+2020-09-30 15:40:25 Confirmation Email Not Sent. Code: 1
+2020-09-30 15:49:39 ReferenceError: ipAddr is not defined
+2020-09-30 15:50:57 sendmail: Cannot open mail:25
+
+2020-09-30 15:50:57 Confirmation Email Not Sent. Code: 1
+2020-09-30 15:52:50 Error: ER_DUP_ENTRY: Duplicate entry 'Arle' for key 'user.username'
+2020-09-30 15:52:55 sendmail: Cannot open mail:25
+
+2020-09-30 15:52:55 Confirmation Email Not Sent. Code: 1
+2020-09-30 15:56:27 sendmail: Cannot open mail:25
+
+2020-09-30 15:56:27 Confirmation Email Not Sent. Code: 1
+2020-09-30 15:57:36 sendmail: Cannot open mail:25
+
+2020-09-30 15:57:36 Confirmation Email Not Sent. Code: 1
+2020-09-30 15:59:06 sendmail: Cannot open mail:25
+
+2020-09-30 15:59:06 Confirmation Email Not Sent. Code: 1
+2020-09-30 16:04:24 sendmail: Cannot open mail:25
+
+2020-09-30 16:04:24 Confirmation Email Not Sent. Code: 1

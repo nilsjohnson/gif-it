@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-
-import { Grid, Button, Card } from "@material-ui/core";
+import { Grid, Card } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import EnterDescription from "../EnterDescription";
 import { scaleMat } from "../cvUtil";
 import TagInputBox from '../../TagInputBox';
-import ProgressBar from '../../ProgressBar';
 import FileBar from "./FileBar";
 
 const useStyles = theme => ({
@@ -23,9 +21,6 @@ const useStyles = theme => ({
         marginBottom: theme.spacing(2),
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2)
-    },
-    uploading: {
-        opacity: "50%"
     }
 });
 
@@ -51,9 +46,8 @@ class MakeImage extends Component {
     }
 
     setDescription = (input) => {
-        // TODO validate
-        const { upload, setDescription } = this.props;
-        setDescription(upload, input);
+        const { upload = {}, setDescription } = this.props;
+        setDescription(upload.uploadId, input);
     }   
 
 
@@ -75,7 +69,7 @@ class MakeImage extends Component {
       }
 
     render() {
-        const { classes, upload = {}, removeUpload } = this.props;
+        const { classes, upload = {}, removeUpload, shiftUpload } = this.props;
 
         return (
             <Card className={classes.card}>
@@ -91,6 +85,7 @@ class MakeImage extends Component {
                         <FileBar 
                             upload={upload}
                             removeUpload={removeUpload}
+                            shiftUpload={shiftUpload}
                         />
                     </Grid>
                     <Grid item xs={10}>
@@ -103,7 +98,7 @@ class MakeImage extends Component {
                     </Grid>
                     <Grid xs={10} item>
                         <TagInputBox
-                            suggestions={this.props.upload.suggestions}
+                            suggestions={upload.suggestions}
                             tags={upload.tags}
                             addTag={this.addTag}
                             removeTag={this.removeTag}

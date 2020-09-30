@@ -200,6 +200,9 @@ app.post('/upload/addMedia', function (req, res) {
     return;
   }
 
+  console.log("bod");
+  console.log(req.body);
+
   if(req.body.album) {
     // if this is an 'album' of items
     let album = req.body.album;

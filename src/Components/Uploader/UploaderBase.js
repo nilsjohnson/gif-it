@@ -4,6 +4,8 @@ import { uploadFile, getServer } from "../../util/data"
 import { formatBytes } from '../../util/util';
 import { getPresignedPost, doSignedS3Post, postPhotoGallery } from '../../util/data';
 
+const PROGRESS_BAR_UPDATE_INTERVAL = 250; // milliseconds
+
 /**
  * This Componenent allows users to upload files and convert them to gifs
  */
@@ -180,7 +182,7 @@ class UploaderBase extends Component {
             const { uploadId, tags } = data;
 
             this.updateUploads(uploadId, {
-                suggestions: tags
+                tagSuggestions: tags
             });
         });
 
@@ -439,6 +441,37 @@ class UploaderBase extends Component {
         }
     }
 
+    /**
+     * A recursive method to update the progress bar of an upload.
+     * @param {*} totalUploaded the amount of data that has been uploaded
+     * @param {*} upload the upload being uploaded
+     * @param {*} fileSize the size of the file being uploaded
+     */
+    doProgressBar = (upload, fileSize, rate, totalUploaded = 0) => {
+        setTimeout(() => {
+            if (totalUploaded >= fileSize) {
+                return;
+            }
+
+            totalUploaded += rate;
+            let percent = Math.round(totalUploaded / fileSize * 100);
+            percent = percent < 100 ? percent : 100;
+
+            if (upload.status === 'uploading') {
+                this.updateUploads(upload.uploadId, { percentUploaded: percent });
+                this.doProgressBar(upload, fileSize, rate, totalUploaded);
+            }
+            else {
+                this.updateUploads(upload.uploadId, { percentUploaded: 100 });
+                return;
+            }
+        }, PROGRESS_BAR_UPDATE_INTERVAL);
+    }
+
+    setUploadRate = (startTime, endTime, fileSize) => {
+        this.estimatedUploadRate = fileSize * PROGRESS_BAR_UPDATE_INTERVAL / (endTime - startTime);
+    }
+
     doGifUpload = (file, tempUploadId) => {
         let formData = new FormData();
         formData.append("files", file);
@@ -558,6 +591,43 @@ class UploaderBase extends Component {
         });
     }
 
+    shiftUpload = (uploadId, direction) => {
+        if(!this.uploads || this.uploads.length < 2) {
+            return;
+        }
+
+        for(let i = 0; i < this.uploads.length; i++) {
+            if(this.uploads[i].uploadId === uploadId) {
+                let tmp = this.uploads[i];
+
+                // if we want the image to go to a lower index
+                if(direction > 0) {
+                    if(i === this.uploads.length-1) {
+                        // should wrap. swap first and last elements
+                        this.uploads[i] = this.uploads[0];
+                        this.uploads[0] = tmp;
+                        break;
+                    }
+                    this.uploads[i] = this.uploads[i+1];
+                    this.uploads[i+1] = tmp;
+                }
+                // we want the image to go to a higher index
+                else {
+                    if(i === 0) {
+                        this.uploads[i] = this.uploads[this.uploads.length -1];
+                        this.uploads[this.uploads.length -1] = tmp;
+                        break;
+                    }
+                    this.uploads[i] = this.uploads[i-1];
+                    this.uploads[i-1] = tmp;                
+                }
+
+                break;
+            }
+        }
+
+        this.setState({uploads: this.uploads});
+    }
 }
 
 export default UploaderBase;

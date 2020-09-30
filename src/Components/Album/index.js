@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles';
-import { Container, Typography, Grid, Box } from '@material-ui/core/';
+import { Container, Typography, Grid, Box, Card } from '@material-ui/core/';
 import { getAlbumById } from '../../util/data';
 import MediaBox from '../MediaBox';
 
@@ -45,7 +45,7 @@ class Album extends Component {
         super(props);
 
         this.state = {
-            title: "",
+            title: "lol",
             description: "",
             ownerId: null,
             items: []
@@ -64,11 +64,20 @@ class Album extends Component {
 
     render() {
         return (
-            <Container component='main' >
+            <Container component='main' maxWidth="md" >
+                {this.state.title &&
+                    <Box m={2}>
+                        <Card>
+                            <Typography align="center" variant="h4">
+                                {this.state.title}
+                            </Typography>
+                        </Card>
+                    </Box>
+                }
                 {this.state.items.map((item, index) => (
                     <MediaBox
                         key={index}
-                        tags={item.tag}
+                        tags={item.tags}
                         description={item.description}
                         fileName={item.fileName}
                     />

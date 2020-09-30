@@ -5,9 +5,24 @@ const { BUCKET_NAME } = require("../const");
 /** function that gets called to execute sql. See MediaDAO constructor. */
 let query;
 
+async function getMediaByTags(connection, tags) {
+    let sql =
+        `SELECT distinct media.fileName, media.descript, media.thumbName, media.id from media
+            JOIN media_tag ON media.id = media_tag.media_id
+            JOIN tag ON media_tag.tag_id = tag.id
+        WHERE `;
+
+    for (let i = 0; i < tags.length; i++) {
+        sql += `tag = ?`;
+        sql += (i + 1 < tags.length ? " OR " : " ");
+    }
+
+    return await query(connection, sql, tags);
+}
+
 async function getMediaById(connection, id) {
     let sql =
-    `SELECT 
+        `SELECT 
         media.descript, 
         media.fileName, 
         JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
@@ -19,22 +34,20 @@ async function getMediaById(connection, id) {
             LEFT JOIN media_tag ON media.id = media_tag.media_id
             LEFT JOIN tag ON media_tag.tag_id = tag.id
         WHERE media.id = ?`;
-        let results = await query(connection, sql, id);
-        console.log(results);
-        if(results[0].tags) {
-            let tags = JSON.parse(results[0].tags);
-            delete tags['$'];
-            results[0].tags = tags;
-        }
-       
-        return results;
+    let results = await query(connection, sql, id);
+    if (results[0].tags) {
+        let tags = JSON.parse(results[0].tags);
+        delete tags['$'];
+        results[0].tags = tags;
+    }
+
+    return results;
 }
 
 async function getAlbumById(connection, args) {
     let sql =
-    `SELECT
+        `SELECT
         album.title, 
-        album.descript, 
         album.owner_id, 
         media.id, 
         media.descript,
@@ -55,7 +68,11 @@ async function getAlbumById(connection, args) {
         WHERE album.id = ?
         GROUP BY media.id
         ORDER BY album_items.item_index`;
-    return await query(connection, sql, args);
+
+    let results = await query(connection, sql, args);
+    results = parseTags(results);
+
+    return results;
 }
 
 async function insertAlbumItem(connection, args) {
@@ -101,7 +118,7 @@ async function getTagId(connection, tag) {
 async function insertTags(connection, uploadId, tags) {
     if (!tags || tags.length < 1) {
         console.log("no tags.");
-        return;        
+        return;
     }
 
     let args, results;
@@ -130,6 +147,17 @@ async function insertTags(connection, uploadId, tags) {
     }
 }
 
+function parseTags(results) {
+    for (let i = 0; i < results.length; i++) {
+        if (results[i].tags) {
+            let tags = JSON.parse(results[i].tags);
+            delete tags['$'];
+            results[i].tags = tags;
+        }
+    }
+
+    return results;
+}
 
 /**
  * DAO for creating and retrieving media.
@@ -196,18 +224,12 @@ class MediaDAO extends DAO {
             connection.query(sql, (error, results, fields) => {
                 connection.release();
 
-                console.log("flkjfdf");
-                console.log(results);
-
-                if(DEV) {
-                    for(let i = 0; i < results.length; i++) {
+                if (DEV) {
+                    for (let i = 0; i < results.length; i++) {
                         results[i].fileName = makeDevPath(results[i].fileName);
                         results[i].thumbName = makeDevPath(results[i].thumbName);
                     }
                 }
-
-                console.log("most recent");
-                console.log(results);
 
                 callback(results);
                 if (error) {
@@ -227,25 +249,25 @@ class MediaDAO extends DAO {
             if (!connection) {
                 return callback(null);
             }
-        
+
             try {
                 let results = await getMediaById(connection, mId);
                 console.log(results);
-                if(DEV) {
-                    results[0].fileName =  makeDevPath(results[0].fileName);
+                if (DEV) {
+                    results[0].fileName = makeDevPath(results[0].fileName);
                     results[0].thumbName = makeDevPath(results[0].thumbName);
                 }
 
                 console.log(results);
                 onSuccess(results[0]);
-                
+
                 connection.release();
             }
             catch (ex) {
                 log(ex);
                 onFail("Database problem. Couldn't create album.");
             }
-            
+
 
 
         });
@@ -336,7 +358,7 @@ class MediaDAO extends DAO {
                 await insertTags(connection, uploadId, tags);
 
                 // insert into the media_owner table
-                args = { media_id: uploadId, user_id: ownerId };
+                args = { media_id: uploadId, owner_id: ownerId };
                 results = await insertMediaOwner(connection, args);
 
                 await this.completeTransation(connection);
@@ -357,30 +379,28 @@ class MediaDAO extends DAO {
      * @param {*} tags 
      * @param {*} callback a function that takes an array of gif objects
      */
-    getGifsByTag(tags, callback) {
-        this.getConnection(connection => {
+    getGifsByTag(tags, onSuccess, onFail) {
+        this.getConnection(async connection => {
             if (!connection) {
                 return callback(null);
             }
 
-            let getGif_sql =
-                "SELECT distinct media.fileName, media.descript, media.thumbName, media.id from media \
-                    JOIN media_tag ON media.id = media_tag.media_id \
-                    JOIN tag ON media_tag.tag_id = tag.id \
-                WHERE ";
-
-            for (let i = 0; i < tags.length; i++) {
-                getGif_sql += `tag = ?`;
-                getGif_sql += (i + 1 < tags.length ? " OR " : " ");
-            }
-
-            connection.query(getGif_sql, tags, (error, results, fields) => {
-                connection.release();
-                callback(results);
-                if (error) {
-                    this.logFailure(error);
+            try {
+                let results = await getMediaByTags(connection, tags);
+                if(DEV) {
+                    for(let i = 0; i < results.length; i++) {
+                        results[i].thumbName = makeDevPath(results[i].thumbName);
+                    }
                 }
-            });
+
+                onSuccess(results);
+            }
+            catch(ex) {
+                log(ex);
+                onFail("database issue");
+            }
+            connection.release()
+
         });
     }
 
@@ -392,7 +412,7 @@ class MediaDAO extends DAO {
      * @param {*} onFail callback taking a string with a generic message to show user if error occured.
      */
     createAlbum(album, ownerId, uploadIp, onSuccess, onFail) {
-        const { albumTitle = "", albumDescription = "", items = [] } = album;
+        const { albumTitle = "", items = [] } = album;
         let args, results;
 
         this.getConnection(async (connection) => {
@@ -404,19 +424,19 @@ class MediaDAO extends DAO {
                 await this.startTransaction(connection);
 
                 // 1.) create album
-                args = { title: albumTitle, descript: albumDescription, owner_id: ownerId };
+                args = { title: albumTitle, owner_id: ownerId };
                 results = await insertAlbum(connection, args);
                 let albumId = results.insertId;
 
                 // 2.) insert the media and upload info
                 for (let i = 0; i < album.items.length; i++) {
                     // destructure the photo
-                    const { 
-                        uploadId, 
-                        fileName, 
-                        thumbName, 
-                        tags = [], 
-                        description = '', 
+                    const {
+                        uploadId,
+                        fileName,
+                        thumbName,
+                        tags = [],
+                        description = '',
                         originalFileName,
                         fileType } = items[i];
 
@@ -436,7 +456,7 @@ class MediaDAO extends DAO {
                     results = await insertAlbumItem(connection, args);
 
                     // insert into the media_owner table
-                    args = { media_id: uploadId, user_id: ownerId };
+                    args = { media_id: uploadId, owner_id: ownerId };
                     results = await insertMediaOwner(connection, args);
                 }
 
@@ -458,9 +478,9 @@ class MediaDAO extends DAO {
                 // get the album. There should only be 1.
                 let results = await getAlbumById(connection, albumId);
                 console.log(results);
-                
+
                 // if we didnt find album, return null;
-                if(!results || results.length < 1) {
+                if (!results || results.length < 1) {
                     return onSuccess(null);
                 }
                 console.log("raw");
@@ -473,10 +493,8 @@ class MediaDAO extends DAO {
                 album.items = [];
 
                 // add items;
-                for(let i = 0; i < results.length; i++) {
-                    let tags = JSON.parse(results[i].tags);
-                    delete tags['$'];
-
+                for (let i = 0; i < results.length; i++) {
+                    let tags = results[i].tags;
                     album.items.push({
                         fileName: !DEV ? results[i].fileName : makeDevPath(results[i].fileName),
                         thumbName: !DEV ? results[i].thumbName : makeDevPath(results[i].thumbName),
@@ -492,12 +510,12 @@ class MediaDAO extends DAO {
                 connection.release();
                 onSuccess(album);
             }
-            catch(ex) {
+            catch (ex) {
                 log(ex);
                 onFail("Database Problem.");
             }
 
-        } );
+        });
     }
 }
 

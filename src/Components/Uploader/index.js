@@ -8,7 +8,7 @@ import { postPhotoGallery } from '../../util/data';
 import MakeGif from "./MakeGif";
 
 const INPUT_ID = "img-uploader-input";
-const PROGRESS_BAR_UPDATE_INTERVAL = 250; // milliseconds
+
 
 const useStyles = theme => ({
     container: {
@@ -41,77 +41,69 @@ class Uploader extends UploaderBase {
         super(props);
         this.setMakeHandlersCallback(this.defineHandlers);
         this.setAllowedMimeTypes(['image/*', 'video/*']);
-        this.setMaxNumUploads(2);
+        this.setMaxNumUploads(10);
         this.setInputElementId(INPUT_ID);
         this.setMaxUploadSize(70);
         this.cv = null;
     }
 
+    /** addational handlers needed for gif conversion. */
     defineHandlers = () => {
         /*
           To handle gif conversion progress updates
          */
         this.socket.on("ConversionProgress", (data) => {
-          // console.log("Conversion Data:");
-          // console.log(data);
-          const { uploadId } = data;
-    
-          this.updateUploads(uploadId, {
-            conversionData: data
-          });
+            // console.log("Conversion Data:");
+            // console.log(data);
+            const { uploadId } = data;
+
+            this.updateUploads(uploadId, {
+                conversionData: data
+            });
         });
-    
+
         /*
           Marks the conversion as complete so we can serve the .gif
          */
         this.socket.on("ConversionComplete", (data) => {
-          console.log("ConversionComplete");
-          console.log(data);
-          let { fileName, uploadId, thumbName } = data;
-    
-          if (fileName) {
-            this.updateUploads(uploadId, {
-              fileName: fileName,
-              status: "complete",
-              thumbName: thumbName
-            });
-          }
-          else {
-            this.updateUploads(uploadId, {
-              error: "File could not be converted. The video is most likely not a supported format."
-            });
-          }
-        });
-      }
-    
-      /**
-       * Tells the server to convert an upload.
-       */
-      convert = (uploadId, quality) => {
-        console.log(`convert: ${uploadId}`);
-        this.socket.emit("ConvertRequested", { 
-            uploadId: uploadId, 
-            quality: quality 
-        });
-        
-        this.updateUploads(uploadId, {status: "converting"});
-      }
-    
-      /**
-       * Tells the server to add gif to database with given tags.
-       */
-      share = (uploadId, tags, description) => {
-        console.log(uploadId);
-        console.log(tags);
-        console.log(description);
-    
-        this.socket.emit("ShareRequest", {
-          uploadId: uploadId,
-          tags: tags,
-          description: description
-        });
-      }
+            console.log("ConversionComplete");
+            console.log(data);
+            let { fileName, uploadId, thumbName } = data;
 
+            if (fileName) {
+                this.updateUploads(uploadId, {
+                    fileName: fileName,
+                    status: "complete",
+                    thumbName: thumbName
+                });
+            }
+            else {
+                this.updateUploads(uploadId, {
+                    error: "File could not be converted. The video is most likely not a supported format."
+                });
+            }
+        });
+    }
+
+    /**
+     * Tells the server to convert an upload. - Use for making gifs.
+     */
+    convert = (uploadId, quality) => {
+        console.log(`convert: ${uploadId}`);
+        this.socket.emit("ConvertRequested", {
+            uploadId: uploadId,
+            quality: quality
+        });
+
+        this.updateUploads(uploadId, { status: "converting" });
+    }
+
+
+    /**
+     * Adds a tag to an upload
+     * @param {*} upload 
+     * @param {*} tag 
+     */
     addTag = (upload, tag) => {
         let tags;
         if (upload.tags) {
@@ -125,10 +117,20 @@ class Uploader extends UploaderBase {
         this.updateUploads(upload.uploadId, { tags: tags })
     }
 
-    setDescription = (upload, description) => {
-        this.updateUploads(upload.uploadId, { description: description });
+    /**
+     * Sets the description of an upload
+     * @param {*} uploadId
+     * @param {*} description 
+     */
+    setItemDescription = (uploadId, description) => {
+        this.updateUploads(uploadId, { description: description });
     }
 
+    /**
+     * Removes a tag from an upload.
+     * @param {*} upload 
+     * @param {*} tag 
+     */
     removeTag = (upload, tag) => {
         if (upload.tags) {
             let tmp = upload.tags;
@@ -141,18 +143,21 @@ class Uploader extends UploaderBase {
         }
     }
 
+    /**
+     * Determines whether this upload session produced
+     * an album or a single media item and POSTs to server accordingly
+     */
     share = () => {
-        const { albumTitle = "", albumDescription = "" } = this.state;
+        const { albumTitle = "" } = this.state;
         let album, media;
         console.log(this.uploads);
 
 
-        if(this.uploads.length > 1) {
+        if (this.uploads.length > 1) {
             console.log("album.");
             // this is an album
-             album = {
+            album = {
                 albumTitle: albumTitle.trim(),
-                albumDescription: albumDescription.trim(),
                 items: []
             };
             // add each item to the album
@@ -169,7 +174,7 @@ class Uploader extends UploaderBase {
                 });
             };
         }
-        else if(this.uploads.length === 1) {
+        else if (this.uploads.length === 1) {
             console.log("single");
             // this is just a single item
             let curUpload = this.state.uploads[0];
@@ -183,16 +188,14 @@ class Uploader extends UploaderBase {
                 fileType: curUpload.file.type
             };
         }
-           
-        postPhotoGallery({album: album, media: media}).then(res => {
+
+        postPhotoGallery({ album: album, media: media }).then(res => {
             if (res.ok) {
                 res.json().then(resJson => {
                     this.setState({ redirect: resJson.redirect })
                 }).catch(err => console.log(err))
             }
         }).catch(err => console.log(err));
-
-
     }
 
     componentDidMount = () => {
@@ -208,6 +211,11 @@ class Uploader extends UploaderBase {
         }
     }
 
+    /**
+     * Creates a form and appends a file to it.
+     * @param {*} fields 
+     * @param {*} file 
+     */
     createForm = (fields, file) => {
         const formData = new FormData();
         Object.entries(fields).forEach(([k, v]) => {
@@ -217,98 +225,52 @@ class Uploader extends UploaderBase {
         return formData;
     }
 
-
-    /**
-     * A recursive method to update the progress bar of an upload.
-     * @param {*} totalUploaded the amount of data that has been uploaded
-     * @param {*} upload the upload being uploaded
-     * @param {*} fileSize the size of the file being uploaded
-     */
-    doProgressBar = (upload, fileSize, rate, totalUploaded = 0) => {
-        setTimeout(() => {
-            if (totalUploaded >= fileSize) {
-                return;
-            }
-
-            totalUploaded += rate;
-            let percent = Math.round(totalUploaded / fileSize * 100);
-            percent = percent < 100 ? percent : 100;
-
-            if (upload.status === 'uploading') {
-                this.updateUploads(upload.uploadId, { percentUploaded: percent });
-                this.doProgressBar(upload, fileSize, rate, totalUploaded);
-            }
-            else {
-                this.updateUploads(upload.uploadId, { percentUploaded: 100 });
-                return;
-            }
-        }, PROGRESS_BAR_UPDATE_INTERVAL);
-    }
-
     setAlbumTitle = (event) => {
-        let val = event.target.value;
-        this.setState({
-            albumDescription: val
-        });
-    }
-
-    setAlbumDescription = (event) => {
         this.setState({
             albumTitle: event.target.value
         });
     }
 
-    setUploadRate = (startTime, endTime, fileSize) => {
-        this.estimatedUploadRate = fileSize * PROGRESS_BAR_UPDATE_INTERVAL / (endTime - startTime);
-    }
-
+    /**
+     * add's a thumbnail to the upload
+     * @param {*} uploadId 
+     * @param {*} blob the thumbnail
+     */
     setThumbnail = (uploadId, blob) => {
         this.updateUploads(uploadId, { thumbFile: blob })
     }
 
     getUploadComponent = (upload) => {
-
         if (upload.file.type.startsWith('image')) {
             return (
                 <MakeImage
-                    uploadId={upload.uploadId}
                     upload={upload}
                     requestTagSuggestions={this.requestTagSuggestions}
-                    suggestions={upload.suggestions}
                     addTag={this.addTag}
                     removeTag={this.removeTag}
-                    setDescription={this.setDescription}
+                    setDescription={this.setItemDescription}
                     onThumbnailMade={this.setThumbnail}
                     removeUpload={this.removeUpload}
+                    shiftUpload={this.shiftUpload}
                 />
             );
         }
         else if (upload.file.type.startsWith('video')) {
             return (
                 <MakeGif
-                    key={upload.uploadId}
-                    file={upload.file}
                     upload={upload}
-                    uploadId={upload.uploadId}
-                    fileName={upload.fileName}
-                    size={upload.file.size}
-                    percentUploaded={upload.percentUploaded}
-                    conversionData={upload.conversionData}
-                    status={upload.status}
-                    conversionComplete={upload.conversionComplete}
                     requestTagSuggestions={this.requestTagSuggestions}
-                    suggestions={upload.suggestions}
-                    share={this.share}
-                    convert={this.convert}
+                    addTag={this.addTag}
+                    removeTag={this.removeTag}
+                    setDescription={this.setItemDescription}
+                    onThumbnailMade={this.setThumbnail}
                     removeUpload={this.removeUpload}
-                    error={upload.error}
+                    shiftUpload={this.shiftUpload}
+                    convert={this.convert}
                 />
             );
         }
-
-
     }
-
 
     render() {
         if (this.state.redirect) {
@@ -343,6 +305,7 @@ class Uploader extends UploaderBase {
                             onDragOver={this.dragOverHandler}
                             onDragLeave={this.dragEndHandler}
                         >
+                            {/* It's not an album unless there are multiple items */}
                             {this.state.uploads.length > 1 &&
                                 <Grid item xs={12}>
                                     <Box className={classes.subContainer} p={2}>
@@ -357,14 +320,13 @@ class Uploader extends UploaderBase {
                             }
 
 
+                            {/* Show each upload */}
                             {this.state.uploads.map(upload =>
                                 <Grid item xs={12} key={upload.uploadId + "_grid"}>
                                     {this.getUploadComponent(upload)}
                                 </Grid>
                             )}
 
-
-                            {this.state.tooManyFilesSelected && <p>Too many Files!</p>}
                             <Grid item container
                                 className={classes.inputContainer}
                                 direction="column"
@@ -373,7 +335,6 @@ class Uploader extends UploaderBase {
                                 <input type="file" id={INPUT_ID} accept={this.allowedMimeTypes} multiple onChange={this.selectFilesUpload} />
                                 <p>Or Drag and Drop Files</p>
                             </Grid>
-
 
                             {this.state.uploads.length > 0 &&
                                 <Grid item container

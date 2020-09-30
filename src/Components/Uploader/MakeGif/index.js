@@ -1,28 +1,27 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { formatBytes } from '../../../util/util';
-import { Card } from '@material-ui/core';
+import { Card, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import Uploading from './Uploading';
 import SettingOptions from './SettingOptions';
 import Complete from './Complete';
 import Converting from './Converting';
+import FileBar from '../MakeImage/FileBar';
+import EnterDescription from '../EnterDescription';
+import TagInputBox from '../../TagInputBox';
+
 
 const useStyles = theme => ({
-  root: {
-    margin: theme.spacing(1),
-    padding: theme.spacing(1),
+  fullWidth: {
+    width: '100%'
   },
-  btn: {
-    margin: theme.spacing(2)
-  },
-  image: {
-    maxWidth: '100%',
-    maxHeight: '100%',
-    paddingBottom: theme.spacing(1)
-  },
-  uploadError: {
-    border: '2px solid ' + theme.palette.error.light
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2)
   }
 });
 
@@ -35,8 +34,6 @@ class MakeGif extends Component {
     super(props)
 
     this.state = ({
-      tags: [],
-      description: '',
       size: 'md',
       message: ''
     });
@@ -47,29 +44,19 @@ class MakeGif extends Component {
   }
 
   addTag = (tag) => {
-    this.setState({
-      tags: [...this.state.tags, tag],
-      message: ''
-    });
+    this.props.addTag(this.props.upload, tag)
   }
 
   removeTag = (tag) => {
-    let tmp = this.state.tags;
-    console.log(tmp);
-    let index = tmp.findIndex(elem => elem === tag);
-    tmp.splice(index, 1);
-    this.setState({ tags: tmp });
+    this.props.removeTag(this.props.upload, tag)
   }
 
   setDescription = (description) => {
-    this.setState({
-      description: description
-    });
+    this.props.setDescription(this.props.upload.uploadId, description);
   }
 
   convert = () => {
-    let id = this.props.uploadId;
-    // TODO reflect this change upstream
+    let id = this.props.upload.uploadId;
     this.props.convert(id, this.state.size);
   }
 
@@ -77,63 +64,28 @@ class MakeGif extends Component {
     this.props.removeUpload(this.props.uploadId);
   }
 
-  share = () => {
-    let noErrors = true;
-    const { uploadId } = this.props;
-    const { tags, description } = this.state;
-
-    if(description === null) {
-      console.log('Description is null. A valid description must be entered.');
-      noErrors = false;
-    }
-    if(tags.length === 0) {
-      console.log('Tags array is empty. There must be at least 1 valid tag.');
-      this.setState({message: 'Please enter a tag.'});
-      noErrors = false;
-    }
-
-    if(noErrors) {
-      this.props.share(uploadId, tags, description);
-    }
-    else {
-      console.log('User input errors were present. No attempt to share made.');
-    }
-  }
-
   requestTagSuggestions = (curInput) => {
-    const { requestTagSuggestions, uploadId } = this.props;
-    requestTagSuggestions(uploadId, curInput);
+    const { requestTagSuggestions, upload = {} } = this.props;
+    requestTagSuggestions(upload.uploadId, curInput);
   }
 
   getElement = () => {
-    const { 
-      conversionData = {}, 
-      classes, 
-      status, 
-      error,
-      fileName,
-      size,
-      percentUploaded, 
-      suggestions } = this.props
 
-    switch (status) {
+    const { upload = {}, classes } = this.props;
+    const { conversionData = {} } = upload;
+
+
+    switch (upload.status) {
       case 'uploading':
         return (
-          <Uploading
-            classes={classes}
-            fileName={fileName}
-            fileSize={formatBytes(size)}
-            percentUploaded={percentUploaded}
-            error={error}
-            cancel={this.cancel}
-          />);
+          ""
+        );
 
       case 'settingOptions':
         return (
           <SettingOptions
             classes={classes}
-            fileName={fileName}
-            cancel={this.cancel}
+            upload={upload}
             convert={this.convert}
             size={this.state.size}
             setSize={this.setSize}
@@ -143,58 +95,65 @@ class MakeGif extends Component {
       case 'converting':
         return (
           <Converting
-            classes={classes}
-            fileName={fileName}
+            fileName={upload.fileName}
             speed={conversionData.curSpeed}
-            error={error}
+            error={upload.error}
             progress={conversionData.progress}
-            cancel={this.cancel}
           />
         );
 
       case 'complete':
         return (
           <Complete
-            convert={this.convert}
-            share={this.share}
-            cancel={this.cancel}
-            tags={this.state.tags}
-            addTag={this.addTag}
-            removeTag={this.removeTag}
-            setDescription={this.setDescription}
-            requestTagSuggestions={this.requestTagSuggestions}
-            suggestions={suggestions}
-            message={this.state.message}
-            classes={classes}
-            fileName={fileName}
+            fileName={upload.fileName}
           />
         );
 
-      default:
-        // This ensures that render alaways returns something
-        return (
-          <p>Please Wait...</p>
-        );
+      default: return ("");
     }
   }
 
   render() {
-    const { classes, error, status, uploadId } = this.props;
-
-    // if(status === 'shared') {
-    //   // since GifBox is already wrapped in a Card, we can just render it.
-    //   return (
-    //     // <Media gifId={uploadId} />
-    //   );
-    // }
+    const { upload, classes, removeUpload, shiftUpload } = this.props;
 
     return (
-      <Card className={`${classes.root} ${error ? classes.uploadError : ''}`}>
-        {this.getElement()}
+      <Card className={classes.card}>
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          spacing={2}
+          className="root"
+        >
+          <Grid item xs={10}>
+            <FileBar
+              upload={upload}
+              removeUpload={removeUpload}
+              shiftUpload={shiftUpload}
+            />
+          </Grid>
+          <Grid item xs={10}>
+            {this.getElement()}
+          </Grid>
+          {upload.status === 'complete' && <React.Fragment>
+          <Grid xs={10} item>
+            <EnterDescription setDescription={this.setDescription} />
+          </Grid>
+          <Grid xs={10} item>
+            <TagInputBox
+              suggestions={upload.tagSuggestions}
+              tags={upload.tags}
+              addTag={this.addTag}
+              removeTag={this.removeTag}
+              requestTagSuggestions={this.requestTagSuggestions}
+              share={this.share}
+            />
+          </Grid> </React.Fragment>}
+  
+        </Grid>
       </Card>
     );
-
-
   }
 }
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { Grid, Button, Box } from '@material-ui/core';
+import { Grid, Box } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 function Converting(props) {
-    const { speed, fileName, progress, error, cancel } = props;
+    const { speed, fileName, progress, error } = props;
     return (
         <Grid
             container item
@@ -35,9 +35,6 @@ function Converting(props) {
                         <Typography variant="subtitle1" component="h5">
                             {error}
                         </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" color="secondary" onClick={cancel}>Close</Button>
                     </Grid>
                 </Grid>
                 : ''}

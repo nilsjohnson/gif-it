@@ -43,17 +43,12 @@ class AppBarCollapse extends Component {
     }
 
     componentDidMount = () => {
-        console.log("mounted");
         checkToken().then(res => {
             if (res.ok) {
                 this.setState({ authenticated: true });
             }
-            else if(res.status === 409){
+            else if(res.status === 401){
                 this.setState({ authenticated: false });
-            }
-            else {
-                console.log("Unexpected response from server: ");
-                console.log(res);
             }
         }).catch(err => console.log(err));
     }
@@ -77,15 +72,15 @@ class AppBarCollapse extends Component {
             // if request didnt go through, we still delete token.
             deleteAuthToken();
         });
-
-       // this.setState({ authenticated: false });
     }
 
+    // buttons are for not collapsed
     getButtons = () => {
         const { classes } = this.props;
         return (
             <div>
                 <Button className={classes.btn} variant="contained" color="primary" href='./'>Explore</Button>
+                <Button className={classes.btn} variant="contained" color="primary" href='./dashboard'>Upload</Button>
                 {this.state.authenticated
                     ?
                     <span>
@@ -102,10 +97,14 @@ class AppBarCollapse extends Component {
         );
     }
 
+    // links are for collapsed
     getLinks = () => {
         return (
             <div>
                 <Link to="./explore">
+                    <MenuItem href='./explore'>Explore</MenuItem>
+                </Link>
+                <Link to="./dashboard">
                     <MenuItem href='./explore'>Explore</MenuItem>
                 </Link>
                 {this.state.authenticated

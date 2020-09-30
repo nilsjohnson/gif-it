@@ -107,6 +107,7 @@ class AppBarCollapse extends Component {
                 </Link>
                 <Link to="./dashboard">
                     <MenuItem href='./dashboard'>Upload</MenuItem>
+
                 </Link>
                 {this.state.authenticated
                     ?

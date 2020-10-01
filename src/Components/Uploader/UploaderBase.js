@@ -177,8 +177,6 @@ class UploaderBase extends Component {
           As user enters tags, we try to suggest what they might be looking for.
         */
         this.socket.on("SuggestionsFound", (data) => {
-            console.log("suggestions found");
-            console.log(data);
             const { uploadId, tags } = data;
 
             this.updateUploads(uploadId, {
@@ -509,6 +507,7 @@ class UploaderBase extends Component {
             setTimeout(() => {
                 this.upload();
             }, 250)
+
             return;
         }
 
@@ -592,41 +591,41 @@ class UploaderBase extends Component {
     }
 
     shiftUpload = (uploadId, direction) => {
-        if(!this.uploads || this.uploads.length < 2) {
+        if (!this.uploads || this.uploads.length < 2) {
             return;
         }
 
-        for(let i = 0; i < this.uploads.length; i++) {
-            if(this.uploads[i].uploadId === uploadId) {
+        for (let i = 0; i < this.uploads.length; i++) {
+            if (this.uploads[i].uploadId === uploadId) {
                 let tmp = this.uploads[i];
 
                 // if we want the image to go to a lower index
-                if(direction > 0) {
-                    if(i === this.uploads.length-1) {
+                if (direction > 0) {
+                    if (i === this.uploads.length - 1) {
                         // should wrap. swap first and last elements
                         this.uploads[i] = this.uploads[0];
                         this.uploads[0] = tmp;
                         break;
                     }
-                    this.uploads[i] = this.uploads[i+1];
-                    this.uploads[i+1] = tmp;
+                    this.uploads[i] = this.uploads[i + 1];
+                    this.uploads[i + 1] = tmp;
                 }
                 // we want the image to go to a higher index
                 else {
-                    if(i === 0) {
-                        this.uploads[i] = this.uploads[this.uploads.length -1];
-                        this.uploads[this.uploads.length -1] = tmp;
+                    if (i === 0) {
+                        this.uploads[i] = this.uploads[this.uploads.length - 1];
+                        this.uploads[this.uploads.length - 1] = tmp;
                         break;
                     }
-                    this.uploads[i] = this.uploads[i-1];
-                    this.uploads[i-1] = tmp;                
+                    this.uploads[i] = this.uploads[i - 1];
+                    this.uploads[i - 1] = tmp;
                 }
 
                 break;
             }
         }
 
-        this.setState({uploads: this.uploads});
+        this.setState({ uploads: this.uploads });
     }
 }
 

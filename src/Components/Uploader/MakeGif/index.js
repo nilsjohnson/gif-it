@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import SettingOptions from './SettingOptions';
 import Complete from './Complete';
 import Converting from './Converting';
-import FileBar from '../MakeImage/FileBar';
+import FileBar from '../FileBar';
 import EnterDescription from '../EnterDescription';
 import TagInputBox from '../../TagInputBox';
 

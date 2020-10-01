@@ -2,9 +2,9 @@ import React from 'react';
 import ProgressBar from '../../ProgressBar';
 import { Toolbar, Typography, IconButton } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+
 import CloseIcon from '@material-ui/icons/Close';
+import ShiftButtons from './ShiftButtons';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function FileBar(props) {
-    const { upload = {}, removeUpload, shiftUpload } = props;
+    const { upload = {}, removeUpload, shiftUpload, showShift } = props;
     const classes = useStyles();
 
     const callRemoveUpload = () => {
@@ -44,17 +44,16 @@ export default function FileBar(props) {
                      <Typography>Please Wait...</Typography>   
                 </React.Fragment>
                 :
-                <div>
-                    <IconButton aria-label="move-up" onClick={callShiftUp} >
-                        <ArrowUpwardIcon />
-                    </IconButton>
-                    <IconButton arai-label="move-down" onClick={callShiftDown} >
-                        <ArrowDownwardIcon />
-                    </IconButton>
+                <React.Fragment>
+                    
+                    { showShift && 
+                    <ShiftButtons callShiftUp={callShiftUp} 
+                    callShiftDown={callShiftDown}/> }
+
                     <IconButton aria-label="delete" onClick={callRemoveUpload} >
                         <CloseIcon />
                     </IconButton>
-                </div>
+                </React.Fragment>
             }
 
         </Toolbar>

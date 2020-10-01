@@ -237,6 +237,8 @@ class Uploader extends UploaderBase {
      * @param {*} blob the thumbnail
      */
     setThumbnail = (uploadId, blob) => {
+        console.log("adding thumbnail: " + uploadId);
+        console.log(blob);
         this.updateUploads(uploadId, { thumbFile: blob })
     }
 
@@ -252,6 +254,7 @@ class Uploader extends UploaderBase {
                     onThumbnailMade={this.setThumbnail}
                     removeUpload={this.removeUpload}
                     shiftUpload={this.shiftUpload}
+                    singleImage={this.state.uploads.length === 1}
                 />
             );
         }
@@ -267,6 +270,7 @@ class Uploader extends UploaderBase {
                     removeUpload={this.removeUpload}
                     shiftUpload={this.shiftUpload}
                     convert={this.convert}
+                    singleImage={this.state.uploads.length > 1}
                 />
             );
         }

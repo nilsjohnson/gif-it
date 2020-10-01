@@ -20,8 +20,6 @@ function scaleMat(srcElem, dstElem, maxDim, onBlobMade = null) {
 
         let width = Math.round(scaleFactor * inputMat.cols);
         let height = Math.round(scaleFactor * inputMat.rows);
-        //  console.log("Width: " + width);
-        //console.log("Height: " + height)
 
         let outputMat = new cv.Mat();
         let dSize = new cv.Size(width, height);
@@ -30,12 +28,22 @@ function scaleMat(srcElem, dstElem, maxDim, onBlobMade = null) {
         inputMat.delete();
         outputMat.delete();
 
-        if(onBlobMade) {
+        if (onBlobMade) {
             dstElem.toBlob(onBlobMade, 'image/jpeg', .95);
         }
-        
-
     }
+}
+
+function blackAndWhite(srcElem, dstElem) {
+    let src = cv.imread(srcElem);
+    let dst = new cv.Mat();
+
+    // You can try more different parameters
+    cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY, 0);
+    cv.imshow(dstElem, dst);
+
+    src.delete();
+    dst.delete();
 }
 
 /**
@@ -48,4 +56,4 @@ function isLandScape(mat) {
     return false
 }
 
-export { scaleMat };
+export { scaleMat, blackAndWhite };

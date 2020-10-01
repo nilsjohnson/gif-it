@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Card, IconButton } from "@material-ui/core";
+import { Grid, Card, IconButton, Box } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import EnterDescription from "../EnterDescription";
 import { scaleMat } from "../cvUtil";
@@ -57,27 +57,26 @@ class MakeImage extends Component {
         requestTagSuggestions(uploadId, curInput);
     }
 
-  
+
 
     render() {
-        const { classes, 
-            upload = {}, 
-            removeUpload, 
-            shiftUpload, 
-            singleImage, 
+        const { classes,
+            upload = {},
+            removeUpload,
+            shiftUpload,
+            singleImage,
             onThumbnailMade } = this.props;
 
-            console.log(this.props);
+        console.log(this.props);
 
         return (
             <Card className={classes.card}>
                 <Grid
                     container
                     direction="row"
-                    justify="center"
-                    alignItems="center"
+                    justify="flex-start"
+                    alignItems="flex-start"
                     spacing={2}
-                    className="root"
                 >
                     <Grid item xs={12}>
                         <FileBar
@@ -87,24 +86,32 @@ class MakeImage extends Component {
                             showShift={!singleImage}
                         />
                     </Grid>
-                    <ImageEditor 
-                        upload={upload}
-                        onThumbnailMade={onThumbnailMade}
-                    />
 
-                    <Grid xs={10} item>
-                        <EnterDescription setDescription={this.setDescription} />
-                    </Grid>
-                    <Grid xs={10} item>
-                        <TagInputBox
-                            suggestions={upload.tagSuggestions}
-                            tags={upload.tags}
-                            addTag={this.addTag}
-                            removeTag={this.removeTag}
-                            requestTagSuggestions={this.requestTagSuggestions}
-                            share={this.share}
+                    <Box p={2}>
+                        <ImageEditor
+                            upload={upload}
+                            onThumbnailMade={onThumbnailMade}
                         />
+                    </Box>
+
+
+                    <Grid xs={0} sm={1}></Grid>
+                    <Grid xs={12} sm={10} item>
+                        <Box p={2}>
+                            <EnterDescription
+                                setDescription={this.setDescription}
+                            />
+                            <TagInputBox
+                                suggestions={upload.tagSuggestions}
+                                tags={upload.tags}
+                                addTag={this.addTag}
+                                removeTag={this.removeTag}
+                                requestTagSuggestions={this.requestTagSuggestions}
+                                share={this.share}
+                            />
+                        </Box>
                     </Grid>
+                    <Grid xs={0} sm={1}></Grid>
                 </Grid>
             </Card>
         );

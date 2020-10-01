@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, IconButton } from "@material-ui/core";
+import { Grid, IconButton, Box } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import { blackAndWhite, scaleMat } from '../../cvUtil';
 
@@ -23,7 +23,7 @@ const useStyles = theme => ({
         paddingBottom: theme.spacing(2)
     },
     editorContainer: {
-        backgroundColor: theme.palette.success.light
+        backgroundColor: theme.palette.success.light,
     },
     uploading: {
         opacity: .5
@@ -33,7 +33,7 @@ const useStyles = theme => ({
 class ImageEditor extends Component {
     constructor(props) {
         super(props);
-        
+
         const { upload } = this.props;
 
         this.state = {
@@ -62,6 +62,9 @@ class ImageEditor extends Component {
             this.props.onThumbnailMade(upload.uploadId, blb);
         });
 
+        this.outputElement.addEventListener('click', event => {
+            console.log(event);
+        });
     }
 
     renderBlackAndWhite = () => {
@@ -70,22 +73,24 @@ class ImageEditor extends Component {
     }
 
     crop = () => {
-        
+
     }
 
     render() {
         const { classes, upload } = this.props;
-        console.log(upload);
+
         return (
             <Grid
                 container item
                 direction="row"
                 justify="flex-start"
-                alignItems="center"
+                alignItems="flex-"
             >
-                <Grid item xs={1}></Grid>
-                <Grid item
-                    xs={1}
+                <Grid item xs={0} sm={1}></Grid>
+                <Grid container item xs={1}
+                    direction="column"
+                    justify="center"
+                    alignItems="center"
                     className={classes.editorContainer}
                 >
                     <IconButton aria-label="crop" onClick={this.renderBlackAndWhite} >
@@ -101,19 +106,44 @@ class ImageEditor extends Component {
                         <CropIcon />
                     </IconButton>
                 </Grid>
-                <Grid item xs={9}>
-                    {/* This element is the original source */}
-                    <img className={classes.hidden} id={"input-" + upload.uploadId} src={this.state.originalImage}></img>
-                    {/* this is the the thumbnail */}
-                    <canvas className={classes.hidden} id={"thumb-" + upload.uploadId} />
-                    {/* this is the edited version */}
-                    <canvas className={`${classes.fullWidth} ${upload.status === "uploading" ? classes.uploading : ""}`} 
-                        id={"out-" + upload.uploadId} >
-                    </canvas>
 
+                <Grid xs={11} sm={9}>
+                    <Grid
+                        container item
+                        direction="column"
+                        justify="center"
+                        alignItems="center"
+                    >
+                        {/* This element is the original source */}
+                        <img className={classes.hidden} id={"input-" + upload.uploadId} src={this.state.originalImage}></img>
+                        {/* this is the the thumbnail */}
+                        <canvas className={classes.hidden} id={"thumb-" + upload.uploadId} />
+                        {/* this is the edited version */}
+                        <canvas
+                            className={`${classes.fullWidth} ${upload.status === "uploading" ? classes.uploading : ""}`}
+                            id={"out-" + upload.uploadId} >
+
+                        </canvas>
+
+                        <Grid item container
+                            direction="row"
+                            justify="center"
+                            alignItems="center"
+                            xs={12}
+                            className={classes.editorContainer}
+                        >
+                            <IconButton aria-label="crop" onClick={this.crop} >
+                                <CropIcon />
+                            </IconButton>
+                            <IconButton aria-label="crop" onClick={this.crop} >
+                                <CropIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
                 </Grid>
-                <Grid item xs={1}></Grid>
+                <Grid xs={0} sm={1}></Grid>
             </Grid>
+
         );
     }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, TextField } from '@material-ui/core';
+import { Grid as Box, TextField } from '@material-ui/core';
 
 const MAX_LENGTH = 1000;
 
@@ -64,7 +64,7 @@ export default class EnterDescription extends Component {
 
     render() {
         return (
-            <Grid item>
+            <React.Fragment>
                 <TextField 
                     multiline fullWidth rows={3} 
                     label={"Please Enter Description"} 
@@ -73,7 +73,7 @@ export default class EnterDescription extends Component {
                     error={!this.state.isValidInput}
                     helperText={this.state.errorMessage}
                 />
-            </Grid>
+            </React.Fragment>
         );
     }
 }

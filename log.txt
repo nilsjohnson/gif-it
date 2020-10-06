@@ -3572,3 +3572,12 @@ Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the cli
 2020-09-30 16:04:24 sendmail: Cannot open mail:25
 
 2020-09-30 16:04:24 Confirmation Email Not Sent. Code: 1
+2020-10-01 11:40:05 Error: ER_DUP_ENTRY: Duplicate entry 'TiNa' for key 'user.username'
+2020-10-01 11:40:21 Error: ER_DUP_ENTRY: Duplicate entry 'tinA@gmail.com' for key 'user.email'
+2020-10-05 17:14:49 Error: ER_DUP_ENTRY: Duplicate entry 'temp_id_1_7y07f59r62rb41.jpg' for key 'media.PRIMARY'
+2020-10-06 10:53:35 sendmail: Cannot open mail:25
+
+2020-10-06 10:53:35 Confirmation Email Not Sent. Code: 1
+2020-10-06 13:54:30 sendmail: Cannot open mail:25
+
+2020-10-06 13:54:30 Confirmation Email Not Sent. Code: 1

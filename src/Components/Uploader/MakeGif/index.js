@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import SettingOptions from './SettingOptions';
 import Complete from './Complete';
 import Converting from './Converting';
-import FileBar from '../MakeImage/FileBar';
+import FileBar from '../FileBar';
 import EnterDescription from '../EnterDescription';
 import TagInputBox from '../../TagInputBox';
 
@@ -114,7 +114,7 @@ class MakeGif extends Component {
   }
 
   render() {
-    const { upload, classes, removeUpload, shiftUpload } = this.props;
+    const { upload, classes, removeUpload, shiftUpload, singleImage } = this.props;
 
     return (
       <Card className={classes.card}>
@@ -126,11 +126,12 @@ class MakeGif extends Component {
           spacing={2}
           className="root"
         >
-          <Grid item xs={10}>
+          <Grid item xs={12}>
             <FileBar
               upload={upload}
               removeUpload={removeUpload}
               shiftUpload={shiftUpload}
+              showShift={!singleImage}
             />
           </Grid>
           <Grid item xs={10}>

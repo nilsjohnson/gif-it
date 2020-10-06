@@ -1,6 +1,6 @@
 # [gif-it.io](https://gif-it.io "Free + Easy Gif Conversion")
 
-### gif-it.io is a website where users can create and share gifs.
+### gif-it.io is a website where users can create gifs and share images..
 
 To run project:
 
@@ -10,15 +10,15 @@ To run project:
 
 ```$ sudo apt install ffmpeg```
 
-#### 2.) Install mySQL and run the script in ./sql/create-db.sql
+#### 2.) Install mySQL (version 8.x) and run the script in ./sql/create-db.sql
 
 #### 3.) Install dependencies
 
 ```$ npm install```
 
-#### 4.) Start the app for development using the create-react-app scripts
+#### 4.) Start the server for development and build/serve the frontend
 
-```$ node ./server/server.js```
+```$ node ./server/server.js --dev```
 
 ```$ npm run start```
 
@@ -30,7 +30,7 @@ You can pass '--debug' to server.js flag to print debug statements.
 
 ```$ node ./server/server.js --debug```
 
-If you are working on the app, you should pass in the '--dev' flag. This makes it so the app doesnt make S3 requests and also serves gifs from a local directory.
+If you are working on the app, you should pass in the '--dev' flag. This makes it so the app sends files to the test.gif.io S3 bucket.
 
 ```$ node ./server/server.js --dev```
 
@@ -54,9 +54,12 @@ If you are developing the app, typically you might want to pass both.
 - ~~Serve the website from S3 to reduce load on the EC2 instance~~
 - ~~Properly escape all SQL~~
 - Create a dashboard for logged in users where they can:
+  - ~~upload videos to convert to gifs~~
+  - ~~upload images~~
   - view, edit and delete their uploads
   - see things they've liked
   - Have a profile
+- Have more options for rendering gifs (frames per second, size, speed)  
 - Allow authenticated users to leave comments and like gifs
 - Users can search by description
 - Users can categorize gifs (educational, funny, pets, etc.)

@@ -98,6 +98,14 @@ class Uploader extends UploaderBase {
         this.updateUploads(uploadId, { status: "converting" });
     }
 
+    markShared = (uploadId) => {
+        console.log(`marking ${uploadId} as shared`);
+        this.socket.emit("MarkShared", {
+            uploadId: uploadId,
+        });
+
+    }
+
 
     /**
      * Adds a tag to an upload
@@ -162,7 +170,11 @@ class Uploader extends UploaderBase {
             if(this.uploads[i].error) {
                 this.removeUpload(this.uploads[i].uploadId);
             }
-
+            // if it's a gif, it was already loaded to s3, but will
+            //  be deleted unless we mark it as shared
+            if(this.uploads[i].file.type.startsWith("video/")) {
+                this.markShared(this.uploads[i].uploadId);
+            }
         }
 
         this.curFileNum = 0;

@@ -45,7 +45,7 @@ class Album extends Component {
         super(props);
 
         this.state = {
-            title: "lol",
+            title: "",
             description: "",
             ownerId: null,
             items: []
@@ -80,6 +80,7 @@ class Album extends Component {
                         tags={item.tags}
                         description={item.description}
                         fileName={item.fileName}
+                        mId={item.id}
                     />
                 ))}
             </Container>

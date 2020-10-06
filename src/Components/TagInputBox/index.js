@@ -89,7 +89,6 @@ class TagBox extends Component {
      * @return empty string if its a valid tag, otherwise an error message.
      */
     validateTag = (tag) => {
-        console.log(`testing tag '${tag}'`);
         let letters = /^[0-9a-zA-Z ]+$/;
         if (tag.match(letters) && tag.length <= MAX_TAG_LENGTH) {
             return '';

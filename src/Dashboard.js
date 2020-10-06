@@ -35,10 +35,8 @@ class Dashboard extends Component {
         return (
             <Box>
                 <Header />
-                <Container>
-                    <Box m={2}>
+                <Container component='main'>
                         <Uploader/>
-                    </Box>
                 </Container>
             </Box>
         );

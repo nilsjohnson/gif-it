@@ -71,6 +71,8 @@ async function getAlbumById(connection, args) {
 
     let results = await query(connection, sql, args);
     results = parseTags(results);
+    console.log("raw");
+    console.log(results);
 
     return results;
 }
@@ -483,12 +485,9 @@ class MediaDAO extends DAO {
                 if (!results || results.length < 1) {
                     return onSuccess(null);
                 }
-                console.log("raw");
-                console.log(results);
 
                 let album = {};
                 album.title = results[0].title;
-                album.description = results[0].descript;
                 album.ownerId = results[0].owner_id;
                 album.items = [];
 
@@ -500,7 +499,8 @@ class MediaDAO extends DAO {
                         thumbName: !DEV ? results[i].thumbName : makeDevPath(results[i].thumbName),
                         tags: tags,
                         fileType: results[i].fileType,
-                        description: results[i].descript
+                        description: results[i].descript,
+                        id: results[i].id
                     });
                 }
 

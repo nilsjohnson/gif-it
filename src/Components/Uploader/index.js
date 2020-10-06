@@ -6,6 +6,7 @@ import MakeImage from "./MakeImage";
 import { Redirect } from "react-router-dom";
 import { postPhotoGallery } from '../../util/data';
 import MakeGif from "./MakeGif";
+import ShowError from "./ShowError";
 
 const INPUT_ID = "img-uploader-input";
 
@@ -41,7 +42,7 @@ class Uploader extends UploaderBase {
         super(props);
         this.setMakeHandlersCallback(this.defineHandlers);
         this.setAllowedMimeTypes(['image/*', 'video/*']);
-        this.setMaxNumUploads(10);
+        this.setMaxNumUploads(1000);
         this.setInputElementId(INPUT_ID);
         this.setMaxUploadSize(70);
         this.cv = null;
@@ -67,7 +68,6 @@ class Uploader extends UploaderBase {
          */
         this.socket.on("ConversionComplete", (data) => {
             console.log("ConversionComplete");
-            console.log(data);
             let { fileName, uploadId, thumbName } = data;
 
             if (fileName) {
@@ -152,18 +152,49 @@ class Uploader extends UploaderBase {
         let album, media;
         console.log(this.uploads);
 
+        for (let i = 0; i < this.uploads.length; i++) {
+            // videos should have already had their status changed a few times,
+            // so only images will have a status of null
+            if (this.uploads[i].status === null) {
+                this.updateUploads(this.uploads[i].uploadId, { status: "ready to share" });
+            }
+            // videos that are in the error state can just be discarded.
+            if(this.uploads[i].error) {
+                this.removeUpload(this.uploads[i].uploadId);
+            }
 
-        if (this.uploads.length > 1) {
-            console.log("album.");
-            // this is an album
-            album = {
-                albumTitle: albumTitle.trim(),
-                items: []
-            };
-            // add each item to the album
-            for (let i = 0; i < this.state.uploads.length; i++) {
-                let curUpload = this.state.uploads[i];
-                album.items.push({
+        }
+
+        this.curFileNum = 0;
+        this.upload(() => {
+            if(this.uploads.length < 1) {
+                alert("Please choose some content to share.");
+                return;
+            }
+            else if (this.uploads.length > 1) {
+                // this is an album
+                album = {
+                    albumTitle: albumTitle.trim(),
+                    items: []
+                };
+                // add each item to the album
+                for (let i = 0; i < this.state.uploads.length; i++) {
+                    let curUpload = this.state.uploads[i];
+                    album.items.push({
+                        uploadId: curUpload.uploadId,
+                        description: curUpload.description,
+                        fileName: curUpload.fileName,
+                        tags: curUpload.tags,
+                        thumbName: curUpload.thumbName,
+                        originalFileName: curUpload.file.name,
+                        fileType: curUpload.file.type
+                    });
+                };
+            }
+            else if (this.uploads.length === 1) {
+                // this is just a single item
+                let curUpload = this.state.uploads[0];
+                media = {
                     uploadId: curUpload.uploadId,
                     description: curUpload.description,
                     fileName: curUpload.fileName,
@@ -171,31 +202,17 @@ class Uploader extends UploaderBase {
                     thumbName: curUpload.thumbName,
                     originalFileName: curUpload.file.name,
                     fileType: curUpload.file.type
-                });
-            };
-        }
-        else if (this.uploads.length === 1) {
-            console.log("single");
-            // this is just a single item
-            let curUpload = this.state.uploads[0];
-            media = {
-                uploadId: curUpload.uploadId,
-                description: curUpload.description,
-                fileName: curUpload.fileName,
-                tags: curUpload.tags,
-                thumbName: curUpload.thumbName,
-                originalFileName: curUpload.file.name,
-                fileType: curUpload.file.type
-            };
-        }
-
-        postPhotoGallery({ album: album, media: media }).then(res => {
-            if (res.ok) {
-                res.json().then(resJson => {
-                    this.setState({ redirect: resJson.redirect })
-                }).catch(err => console.log(err))
+                };
             }
-        }).catch(err => console.log(err));
+
+            postPhotoGallery({ album: album, media: media }).then(res => {
+                if (res.ok) {
+                    res.json().then(resJson => {
+                        this.setState({ redirect: resJson.redirect })
+                    }).catch(err => console.log(err))
+                }
+            }).catch(err => console.log(err));
+        });
     }
 
     componentDidMount = () => {
@@ -237,13 +254,35 @@ class Uploader extends UploaderBase {
      * @param {*} blob the thumbnail
      */
     setThumbnail = (uploadId, blob) => {
-        console.log("adding thumbnail: " + uploadId);
-        console.log(blob);
         this.updateUploads(uploadId, { thumbFile: blob })
     }
 
+    setImage = (uploadId, blob) => {
+        this.updateUploads(uploadId, { file: blob })
+    }
+
+    getNumValidUploads = () => {
+        let num = 0;
+        for (let i = 0; i < this.uploads.length; i++) {
+            if (!this.uploads[i].error) {
+                num++;
+            }
+        }
+
+        return num;
+    }
+
     getUploadComponent = (upload) => {
-        if (upload.file.type.startsWith('image')) {
+        let type = upload.file.type;
+ 
+        if (upload.error) {
+            return (
+                <ShowError
+                    message={upload.error}
+                    upload={upload}
+                />);
+        }
+        else if (type.startsWith('image') && !type.startsWith('image/gif')) {
             return (
                 <MakeImage
                     upload={upload}
@@ -252,13 +291,14 @@ class Uploader extends UploaderBase {
                     removeTag={this.removeTag}
                     setDescription={this.setItemDescription}
                     onThumbnailMade={this.setThumbnail}
+                    onImageMade={this.setImage}
                     removeUpload={this.removeUpload}
                     shiftUpload={this.shiftUpload}
                     singleImage={this.state.uploads.length === 1}
                 />
             );
         }
-        else if (upload.file.type.startsWith('video')) {
+        else if (type.startsWith('video') || type.startsWith('image/gif')) {
             return (
                 <MakeGif
                     upload={upload}
@@ -270,7 +310,7 @@ class Uploader extends UploaderBase {
                     removeUpload={this.removeUpload}
                     shiftUpload={this.shiftUpload}
                     convert={this.convert}
-                    singleImage={this.state.uploads.length > 1}
+                    singleImage={this.state.uploads.length === 1}
                 />
             );
         }
@@ -290,7 +330,7 @@ class Uploader extends UploaderBase {
         }
 
         return (
-            <Container component="main" maxWidth="sm" className={classes.root} >
+            <Container disableGutters={true} component="div" maxWidth="md" >
                 <Grid
                     container item
                     direction="row"
@@ -304,7 +344,7 @@ class Uploader extends UploaderBase {
                         onDragLeave={this.dragEndHandler}
                     >
                         {/* It's not an album unless there are multiple items */}
-                        {this.state.uploads.length > 1 &&
+                        {this.getNumValidUploads() > 1 &&
                             <Grid item xs={12}>
                                 <Box className={classes.subContainer} p={2}>
                                     <TextField
@@ -347,6 +387,7 @@ class Uploader extends UploaderBase {
                     </Box>
                 </Grid>
             </Container>
+
         );
     }
 }

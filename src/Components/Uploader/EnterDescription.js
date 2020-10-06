@@ -32,11 +32,11 @@ export default class EnterDescription extends Component {
      * @return {string} Error message if error, otherwise empty string.
      */
     validateDescription = (description) => {
-        if(description.length <= MAX_LENGTH) {
+        if (description.length <= MAX_LENGTH) {
             return '';
         }
-        
-        return(`Description must be less than ${MAX_LENGTH} characters.`);
+
+        return (`Description must be less than ${MAX_LENGTH} characters.`);
     }
 
     /**
@@ -47,8 +47,8 @@ export default class EnterDescription extends Component {
         let input = event.target.value;
         let description = this.makeDescription(input);
         let errorMessage = this.validateDescription(description);
-    
-        if(errorMessage) {
+
+        if (errorMessage) {
             this.props.setDescription(null);
         }
         else {
@@ -64,16 +64,14 @@ export default class EnterDescription extends Component {
 
     render() {
         return (
-            <React.Fragment>
-                <TextField 
-                    multiline fullWidth rows={3} 
-                    label={"Please Enter Description"} 
-                    variant="outlined" onChange={this.setCurInput} 
-                    value={this.state.curInput}
-                    error={!this.state.isValidInput}
-                    helperText={this.state.errorMessage}
-                />
-            </React.Fragment>
+            <TextField
+                multiline fullWidth={true} rows={3}
+                label={"Please Enter Description"}
+                variant="outlined" onChange={this.setCurInput}
+                value={this.state.curInput}
+                error={!this.state.isValidInput}
+                helperText={this.state.errorMessage}
+            />
         );
     }
 }

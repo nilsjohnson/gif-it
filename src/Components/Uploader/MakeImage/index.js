@@ -32,11 +32,7 @@ const useStyles = theme => ({
 class MakeImage extends Component {
     constructor(props) {
         super(props);
-
-        const { upload } = this.props;
     }
-
-
 
     setDescription = (input) => {
         const { upload = {}, setDescription } = this.props;
@@ -53,8 +49,8 @@ class MakeImage extends Component {
     }
 
     requestTagSuggestions = (curInput) => {
-        const { requestTagSuggestions, uploadId } = this.props;
-        requestTagSuggestions(uploadId, curInput);
+        const { requestTagSuggestions, upload = {} } = this.props;
+        requestTagSuggestions(upload.uploadId, curInput);
     }
 
 
@@ -65,10 +61,9 @@ class MakeImage extends Component {
             removeUpload,
             shiftUpload,
             singleImage,
-            onThumbnailMade } = this.props;
-
-        console.log(this.props);
-
+            onThumbnailMade,
+        onImageMade } = this.props;
+            
         return (
             <Card className={classes.card}>
                 <Grid
@@ -91,27 +86,36 @@ class MakeImage extends Component {
                         <ImageEditor
                             upload={upload}
                             onThumbnailMade={onThumbnailMade}
+                            onImageMade={onImageMade}
                         />
                     </Box>
 
 
-                    <Grid xs={0} sm={1}></Grid>
-                    <Grid xs={12} sm={10} item>
-                        <Box p={2}>
-                            <EnterDescription
-                                setDescription={this.setDescription}
-                            />
-                            <TagInputBox
-                                suggestions={upload.tagSuggestions}
-                                tags={upload.tags}
-                                addTag={this.addTag}
-                                removeTag={this.removeTag}
-                                requestTagSuggestions={this.requestTagSuggestions}
-                                share={this.share}
-                            />
-                        </Box>
+                    <Grid item container
+                        direction='row'
+                        justify="flex-start"
+                        alignItems="flex-start"
+                        spacing={2}
+                    >
+                        <Grid item xs={false} sm={1}></Grid>
+                        <Grid item xs={12} sm={10}>
+                            <Box p={2}>
+                                <EnterDescription
+                                    setDescription={this.setDescription}
+                                />
+                                <TagInputBox
+                                    suggestions={upload.tagSuggestions}
+                                    tags={upload.tags}
+                                    addTag={this.addTag}
+                                    removeTag={this.removeTag}
+                                    requestTagSuggestions={this.requestTagSuggestions}
+                                    share={this.share}
+                                />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={false} sm={1}></Grid>
                     </Grid>
-                    <Grid xs={0} sm={1}></Grid>
+
                 </Grid>
             </Card>
         );

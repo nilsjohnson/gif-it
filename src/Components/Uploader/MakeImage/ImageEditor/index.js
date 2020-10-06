@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Grid, IconButton, Box } from "@material-ui/core";
+import { Grid, IconButton, Box, Typography, CircularProgress } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
-import { blackAndWhite, scaleMat } from '../../cvUtil';
+import { biLateralFilter, gaussianBlur, grayscale, showImage, doInitialLoad, scaleMat } from '../../cvUtil';
 
-import CropIcon from '@material-ui/icons/Crop';
+import ToolBar from './ToolBar';
 
 
 const useStyles = theme => ({
@@ -13,20 +13,17 @@ const useStyles = theme => ({
     fullWidth: {
         width: '100%'
     },
-    card: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2)
-    },
     editorContainer: {
         backgroundColor: theme.palette.success.light,
     },
     uploading: {
         opacity: .5
+    },
+    centered: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)'
     }
 });
 
@@ -38,11 +35,25 @@ class ImageEditor extends Component {
 
         this.state = {
             originalImage: URL.createObjectURL(upload.file),
+            dimensions: {
+                width: 0,
+                height: 0,
+                enteredWidth: 0,
+                enteredHeight: 0,
+                widthRatio: 0,
+                heightRatio: 0,
+                widthInputErr: false,
+                heightInputErr: false },
+            transforming: false
+
+            
         };
 
         this.srcElement = null;
         this.thumbElement = null;
         this.outputElement = null;
+        this.renderImage = this.original;
+
     }
 
     componentDidMount = () => {
@@ -51,26 +62,96 @@ class ImageEditor extends Component {
         this.thumbElement = document.getElementById("thumb-" + upload.uploadId);
         this.outputElement = document.getElementById("out-" + upload.uploadId);
 
-        // make the thumbnail
-        scaleMat(this.srcElement, this.thumbElement, 300, (blob) => {
-            console.log("calling on thumb made");
-            this.props.onThumbnailMade(upload.uploadId, blob);
-        });
+        this.srcElement.onload = () => {
+            // display the image, and get it's height and width
+            doInitialLoad(this.srcElement, this.outputElement, (width, height) => {
+                let dimensions = {
+                    width: width,
+                    height: height,
+                    enteredWidth: width,
+                    enteredHeight: height,
+                    widthRatio: height / width,
+                    heightRatio: width / height
+                }
+                this.setState({
+                    dimensions: dimensions
+                });
 
-        // display the image
-        scaleMat(this.srcElement, this.outputElement, 500, blb => {
-            this.props.onThumbnailMade(upload.uploadId, blb);
-        });
-
-        this.outputElement.addEventListener('click', event => {
-            console.log(event);
-        });
+                this.makeImages();
+            });
+        }
     }
 
-    renderBlackAndWhite = () => {
-        console.log("blk and wht");
-        blackAndWhite(this.srcElement, this.outputElement);
+    setNewSize = (newDimensions) => {
+        console.log("new: ");
+        console.log(newDimensions);
+        console.log("old");
+        console.log(this.state.dimensions);
+
+        let callback = null;
+        // if the text input blurred, the width and height have been updated, 
+        // so we need to draw the image again
+        if (newDimensions.height !== this.state.dimensions.height
+            || newDimensions.width !== this.state.dimensions.width) {
+            callback = this.renderImage;
+        }
+
+        this.setState({
+            dimensions: newDimensions
+        }, callback);
     }
+
+    grayscale = () => {
+        console.log("grayscale");
+        console.log(this.state);
+        grayscale(
+            this.srcElement,
+            this.outputElement,
+            this.state.dimensions.width,
+            this.state.dimensions.height
+        );
+
+        this.makeImages();
+        this.renderImage = this.grayscale;
+    }
+
+    gaussianBlur = () => {
+        console.log("do gaussian blur");
+        gaussianBlur(
+            this.srcElement,
+            this.outputElement,
+            this.state.dimensions.width,
+            this.state.dimensions.height
+        );
+
+        this.makeImages();
+        this.renderImage = gaussianBlur;
+    }
+
+    original = () => {
+        console.log("original");
+        showImage(
+            this.srcElement,
+            this.outputElement,
+            this.state.dimensions.width,
+            this.state.dimensions.height
+        );
+
+        this.makeImages();
+        this.renderImage = this.original;
+    }
+
+    makeImages = () => {
+        scaleMat(this.outputElement, this.thumbElement, 300, (blob) => {
+            this.props.onThumbnailMade(this.props.upload.uploadId, blob);
+        });
+
+        this.outputElement.toBlob(blob => {
+            blob.name = this.props.upload.file.name;
+            this.props.onImageMade(this.props.upload.uploadId, blob);
+        }, 'image/jpeg', .95);
+    }
+
 
     crop = () => {
 
@@ -78,70 +159,47 @@ class ImageEditor extends Component {
 
     render() {
         const { classes, upload } = this.props;
-
         return (
             <Grid
                 container item
                 direction="row"
-                justify="flex-start"
-                alignItems="flex-"
+                justify="center"
+                alignItems="center"
             >
-                <Grid item xs={0} sm={1}></Grid>
-                <Grid container item xs={1}
-                    direction="column"
-                    justify="center"
-                    alignItems="center"
-                    className={classes.editorContainer}
-                >
-                    <IconButton aria-label="crop" onClick={this.renderBlackAndWhite} >
-                        <CropIcon />
-                    </IconButton>
-                    <IconButton aria-label="crop" onClick={this.crop} >
-                        <CropIcon />
-                    </IconButton>
-                    <IconButton aria-label="crop" onClick={this.crop} >
-                        <CropIcon />
-                    </IconButton>
-                    <IconButton aria-label="crop" onClick={this.crop} >
-                        <CropIcon />
-                    </IconButton>
-                </Grid>
-
-                <Grid xs={11} sm={9}>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={10} >
                     <Grid
                         container item
                         direction="column"
                         justify="center"
                         alignItems="center"
                     >
-                        {/* This element is the original source */}
-                        <img className={classes.hidden} id={"input-" + upload.uploadId} src={this.state.originalImage}></img>
-                        {/* this is the the thumbnail */}
-                        <canvas className={classes.hidden} id={"thumb-" + upload.uploadId} />
-                        {/* this is the edited version */}
-                        <canvas
-                            className={`${classes.fullWidth} ${upload.status === "uploading" ? classes.uploading : ""}`}
-                            id={"out-" + upload.uploadId} >
+                        
+                        <div>
+                            {/* This element is the original source */}
+                            <img className={classes.hidden} id={"input-" + upload.uploadId} src={this.state.originalImage}></img>
+                            {/* this is the the thumbnail */}
+                            <canvas className={classes.hidden} id={"thumb-" + upload.uploadId} />
+                            {/* this is the edited version */}
+                            <canvas
+                                className={`${classes.fullWidth} ${upload.status === "uploading" || upload.status === "complete"? classes.uploading : ""}`}
+                                id={"out-" + upload.uploadId} >
 
-                        </canvas>
+                            </canvas>
+                        </div>
 
-                        <Grid item container
-                            direction="row"
-                            justify="center"
-                            alignItems="center"
-                            xs={12}
-                            className={classes.editorContainer}
-                        >
-                            <IconButton aria-label="crop" onClick={this.crop} >
-                                <CropIcon />
-                            </IconButton>
-                            <IconButton aria-label="crop" onClick={this.crop} >
-                                <CropIcon />
-                            </IconButton>
-                        </Grid>
+
+                        <ToolBar
+                            grayscale={this.grayscale}
+                            gaussianBlur={this.gaussianBlur}
+                            original={this.original}
+                            setNewSize={this.setNewSize}
+                            dimensions={this.state.dimensions}
+                        />
+
                     </Grid>
                 </Grid>
-                <Grid xs={0} sm={1}></Grid>
+                <Grid item xs={1}></Grid>
             </Grid>
 
         );

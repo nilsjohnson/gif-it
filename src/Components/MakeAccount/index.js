@@ -10,7 +10,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Paper } from '@material-ui/core';
 import { signUp } from '../../util/data';
-import Login from '../Login';
 import { saveAuthToken } from '../../util/util';
 import { Redirect } from 'react-router';
 
@@ -154,7 +153,7 @@ class MakeAccount extends Component {
 
 
     isValidEmailAddr = (email) => {
-
+        /*ignore*/
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }

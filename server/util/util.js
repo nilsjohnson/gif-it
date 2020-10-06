@@ -103,7 +103,7 @@ function deleteFromS3(key = "", onSucess = null, onFail = null) {
 
     s3.deleteObject(params, (err, data) => {
         if (err) {
-            console.log(err, err.stack);  // error
+            console.log(err, err.stack);
             if (onFail) {
                 onFail(err);
             }

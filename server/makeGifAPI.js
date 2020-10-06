@@ -2,13 +2,11 @@ const path = require('path');
 const { http } = require('./server');
 const { FilePaths } = require('./const');
 const { addJob } = require('./mediaUtil/gifMaker');
-const { processTags, transferGifToS3, deleteFromS3 } = require('./util/util');
-const MediaDAO = require('./data/MediaDAO');
+const { transferGifToS3, deleteFromS3 } = require('./util/util');
+const log = require('./util/logger');
 let io = require('socket.io')(http)
 
 io.set('origins', DEV ? 'http://localhost:3000' : 'https://gif-it.io:*');
-
-let mediaDAO = new MediaDAO();
 
 /**
  * Holds open connections - { socketId_1 : { socket: socket, uploads: {} }, socketId_2 : .... }
@@ -23,13 +21,9 @@ function deleteSocket(socketId) {
 
   if (delete connections[socketId]) {
     if (DEBUG) { console.log(`Socket ${socketId} has been deleted`); }
-  } else {
+  } 
+  else {
     console.log(`Problem deleting ${socketId}.`);
-  }
-
-  if (DEBUG) {
-    console.log(`Here are the current connections.`);
-    console.log(connections);
   }
 }
 
@@ -43,7 +37,13 @@ function deleteUnsharedGifs(socketId) {
 
     for (let i = 0; i < uploadIds.length; i++) {
       if (!connections[socketId].uploads[uploadIds[i]].shared) {
-        deleteFromS3(`${uploadIds[i]}.gif`);
+        deleteFromS3(`${uploadIds[i]}.gif`, null, (err) => {
+          log(err);
+        });
+        deleteFromS3(`${uploadIds[i]}.thumb.gif`, null, (err) => {
+          log(err);
+        });
+        
       }
     }
   }
@@ -61,7 +61,7 @@ function sendConversionProgress(socketId, data) {
 
 /**
  * Callback for successfully making a gif
- * @param {*} socketId  The socketId of the man or woman who made this gif
+ * @param {*} socketId  The socketId of the user who made this gif
  * @param {*} uploadId  The uploadId
  * @param {*} fileName  The fileName of the gif
  * @param {*} thumbFileName   The (tentative) thumbnail file's name
@@ -119,11 +119,13 @@ function onThumbMade(thumbName) {
  * defines new listeners for this socket
  */
 function addEventHandlers(newSocket, socketId) {
+  // when the socket is disconnected
   newSocket.on("disconnect", () => {
     console.log(`Socket ${socketId} disconnected`);
     deleteSocket(socketId);
   });
 
+  // when the client requests this be converted to gif
   newSocket.on("ConvertRequested", (data) => {
     const { uploadId, quality } = data;
     console.log(`Client using socket ${socketId} requesting uploadId ${uploadId} to be converted.`);
@@ -146,53 +148,19 @@ function addEventHandlers(newSocket, socketId) {
     }
   });
 
-  newSocket.on("ShareRequest", (data) => {
-    if (DEBUG) { console.log(`ShareRequest - `); console.log(data); }
+  // so this gif isnt deleted after the user shares it
+  newSocket.on("MarkShared", data => {
+    const { uploadId } = data;
+    console.log(`Marking as shared: ${uploadId}`);
 
-    const { uploadId, tags, description } = data;
-    let processedTags;
-
-    if (!connections[socketId].uploads[uploadId]) {
-      console.log(`Upload ${uploadId} not found. Sending retry request.`);
-      sendRetryRequest(socketId, uploadId);
-      return;
+    if(connections[socketId].uploads[uploadId]) {
+      connections[socketId].uploads[uploadId].shared = true;
+      console.log("marked as shared.");
     }
-
-    try {
-      processedTags = processTags(tags);
+    else {
+      log("Tried to mark a gif as shared, but it wasn't found");
     }
-    catch (err) {
-      connections[socketId].socket.emit("ShareResult", { uploadId: uploadId, error: err })
-      return;
-    }
-
-    if (DEBUG) {
-      console.log("processed tags:");
-      console.log(processedTags);
-    }
-
-    // const { uploadId, fileName, thumbFileName, tags, description, originalFileName } = media;
-
-    media = {
-      uploadId: uploadId,
-      fileName: fileName = connections[socketId].uploads[uploadId].fileName,
-      thumbFileName: connections[socketId].uploads[uploadId].thumbFileName,
-      tags: processedTags,
-      description: description,
-      originalFileName: connections[socketId].uploads[uploadId].originalFileName,
-      type: "gif"
-    }
-
-    let userId = connections[socketId].uploads[uploadId].userId;
-    let ipAddr = connections[socketId].uploads[uploadId].ipAddr;
-
-    mediaDAO.addMedia(media, userId, ipAddr, () => {
-      newSocket.emit("ShareResult", { uploadId: uploadId, status: "shared" });
-    }, err => {
-      console.log(err);
-      newSocket.emit("ShareResult", { uploadId: uploadId, error: err.toString() })
-    });
-
+    
   });
 }
 

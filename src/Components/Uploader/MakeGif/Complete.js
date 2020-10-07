@@ -1,11 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  responsive: {
+    width: '100%'
+  }
+});
 
 export default function Complete(props) {
-  const {
-    fileName,
-  } = props;
+  const { fileName } = props;
+  const classes = useStyles();
 
   return (
     <Grid
@@ -15,7 +21,7 @@ export default function Complete(props) {
       alignItems="center"
     >
       <Grid item>
-        <img src={fileName} alt={fileName} />
+          <img className={classes.responsive} src={fileName} alt={fileName} />
       </Grid>
     </Grid>
   );

@@ -18,7 +18,7 @@ const useStyles = theme => ({
 
 
 function ShowError(props) {
-    const { classes, upload } = props;
+    const { classes, upload = {} } = props;
 
     return (
         <Card className={classes.card}>
@@ -38,7 +38,7 @@ function ShowError(props) {
                 <Grid item xs={false} sm={1}></Grid>
                 <Grid item xs={12} sm={10}>
                     <Box p={2}>
-                        <Typography variant="h6">{upload.error}</Typography>
+                        <Typography variant="h6">{upload.err}</Typography>
                     </Box>
                 </Grid>
                 <Grid item xs={false} sm={1}></Grid>

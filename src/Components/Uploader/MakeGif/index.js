@@ -8,6 +8,7 @@ import Converting from './Converting';
 import FileBar from '../FileBar';
 import EnterDescription from '../EnterDescription';
 import TagInputBox from '../../TagInputBox';
+import { UploadState } from '../UploadState';
 
 
 const useStyles = theme => ({
@@ -75,13 +76,14 @@ class MakeGif extends Component {
     const { conversionData = {} } = upload;
 
 
-    switch (upload.status) {
-      case 'uploading':
+    switch (upload.uploadState) {
+      // Do nothing, showing the FileBar is enough
+      case UploadState.UPLOADING:
         return (
           ""
         );
 
-      case 'settingOptions':
+      case UploadState.SETTING_OPTIONS:
         return (
           <SettingOptions
             classes={classes}
@@ -92,7 +94,7 @@ class MakeGif extends Component {
           />
         );
 
-      case 'converting':
+      case UploadState.RENDERING:
         return (
           <Converting
             fileName={upload.fileName}
@@ -102,7 +104,7 @@ class MakeGif extends Component {
           />
         );
 
-      case 'complete':
+      case UploadState.DONE:
         return (
           <Complete
             fileName={upload.fileName}
@@ -137,7 +139,7 @@ class MakeGif extends Component {
           <Grid item xs={10}>
             {this.getElement()}
           </Grid>
-          {upload.status === 'complete' && <React.Fragment>
+          {upload.uploadState === UploadState.DONE && <React.Fragment>
           <Grid xs={10} item>
             <EnterDescription setDescription={this.setDescription} />
           </Grid>

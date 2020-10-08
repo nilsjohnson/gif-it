@@ -3,6 +3,8 @@ import socketIOClient from "socket.io-client";
 import { uploadFile, getServer } from "../../util/data"
 import { formatBytes } from '../../util/util';
 import { getPresignedPost, doSignedS3Post, postPhotoGallery } from '../../util/data';
+import { UploadState } from "./UploadState";
+import { UploadType } from "./UploadType";
 
 const PROGRESS_BAR_UPDATE_INTERVAL = 250; // milliseconds
 
@@ -16,7 +18,8 @@ class UploaderBase extends Component {
         this.state = ({
             uploads: [],
             filesHovering: false,
-            tooManyFilesSelected: false
+            tooManyFilesSelected: false,
+            fileLoadProgress : 0
 
         });
 
@@ -93,7 +96,7 @@ class UploaderBase extends Component {
      * @param {*} uploadId     The upload to update
      * @param {*} obj          The values to update. If field doesnt exist, it will be added.
      */
-    updateUploads = (uploadId, obj) => {
+    updateUploads = (uploadId, obj, callSetState = true) => {
         let keys = Object.keys(obj);
 
         for (let i = 0; i < this.uploads.length; i++) {
@@ -104,9 +107,11 @@ class UploaderBase extends Component {
             }
         }
 
-        this.setState({ uploads: this.uploads })
+        if(callSetState) {
+            this.setState({ uploads: this.uploads });
+        }
+        
     }
-
 
     /**
      *  To flag or unflag if a user is dragging files over the drop-zone
@@ -144,7 +149,6 @@ class UploaderBase extends Component {
             const { uploadId, tempUploadId } = data;
 
             this.updateUploads(tempUploadId, {
-                status: "uploading",
                 uploadId: uploadId
             });
         });
@@ -165,9 +169,9 @@ class UploaderBase extends Component {
         */
         this.socket.on("uploadComplete", (data) => {
             const { uploadId } = data;
-
+            console.log("Upload complete");
             this.updateUploads(uploadId, {
-                status: "settingOptions"
+                uploadState: UploadState.SETTING_OPTIONS
             });
         });
 
@@ -219,7 +223,7 @@ class UploaderBase extends Component {
     /**
      * Takes files from unprocessedFiles and recursively uploads them.
      */
-    upload = (callback = null) => {
+    upload = async (callback = null) => {
         if (this.curFileNum >= this.uploads.length) {
             if(callback) {
                 callback();
@@ -227,52 +231,80 @@ class UploaderBase extends Component {
             return;
         }
 
-        let curFile = this.uploads[this.curFileNum].file;
-        let status = this.uploads[this.curFileNum].status;
-        let curThumbFile = this.uploads[this.curFileNum].thumbFile;
+        // we render any media on upload, if applicable
+        if(this.uploads[this.curFileNum].renderMedia) {
+            await await this.uploads[this.curFileNum].renderMedia();
+            console.log("loly");
+            console.log(this.uploads[this.curFileNum]);
+        }
+
+        let file = this.uploads[this.curFileNum].file;
+        let thumbnail = this.uploads[this.curFileNum].thumbFile;
         let uploadId = this.uploads[this.curFileNum].uploadId;
-        let msg;
+        let uploadState = this.uploads[this.curFileNum].uploadState;
 
-        if (curFile.size / (1000 * 1000) > this.maxUploadSize) {
-            msg = `File Must Not Exceed ${formatBytes(this.maxUploadSize * 1000 * 1000)}`;
-            this.setError(this.curFileNum, msg);
-            this.curFileNum++;
-            return this.upload(callback);
+        // if this is the first time going through the uploads,
+        // we need to validate them for filesize and type.
+        if(uploadState === null) {
+            if (file.size / (1000 * 1000) > this.maxUploadSize) {
+                this.updateUploads(uploadId, {
+                    uploadState: UploadState.ERR,
+                    err: `File too large. Please choose file < ${this.maxUploadSize}mb.`
+                });
+                this.curFileNum++;
+                return this.upload(callback);
+            }
+            if (!this.isValidType(file.type)) {
+                this.updateUploads(uploadId, {
+                    uploadState: UploadState.ERR, 
+                    err: `Invalid filetype. Please choose only ${this.allowedMimeTypes}`
+                });
+                this.curFileNum++;
+                return this.upload(callback);
+            }
         }
-
-        if (!this.isValidType(curFile.type)) {
-            msg = `File must be of type {${this.allowedMimeTypes}}. '${curFile.type}' was provided`;
-            this.setError(this.curFileNum, msg);
-            this.curFileNum++;
-            return this.upload(callback);
-        }
+        
 
         let regex = /.*\//g;
-        let mediaType = curFile.type.match(regex)[0];
+        let mediaType = file.type.match(regex)[0];
 
         switch (mediaType) {
             case 'image/':
-                if(status === null && curFile.type === 'image/gif') {
-                    console.log("itss a gif!");
-                    this.updateUploads(uploadId, {status: "uploading"} );
-                    this.doGifUpload(curFile, uploadId, callback);
+                // The user selected a gif. We run it though the
+                // video pipeline and re-render it as a gif.
+                if(uploadState === null && file.type === 'image/gif') {
+                    console.log("It's a gif. We're converting to to gif again...");
+                    this.updateUploads(uploadId, {
+                        uploadState: UploadState.UPLOADING,
+                        uploadType: UploadType.VID_TO_GIF
+                    });
+                    this.doVidToGifUpload(file, uploadId, callback);
                 }
-                else if(status === null) {
-                    // we are going to edit this first, then upload
+                // The user selected some image. Render it in the browser for editing.
+                else if(uploadState === null) {
+                    // the user hasn't done anything with this yet.
+                    this.updateUploads(uploadId, {
+                        uploadState: UploadState.SETTING_OPTIONS,
+                        uploadType: UploadType.IMG
+                    });
                     this.curFileNum++;
                     return this.upload(callback);
                 }
-                // only upload if status is not null
-                else {
-                    this.doImageUpload(curFile, curThumbFile, uploadId, callback);
+                // This is not a gif, and it's ready to be uploaded.
+                else if(file.type !== 'image/gif' && uploadState !== null) {
+                    console.log("about to make images");
+                    this.doImageUpload(file, thumbnail, uploadId, callback);
                 }
                 
                 break;
             case 'video/':
                 // only upload if status is null.
-                if(status === null) {
-                    this.updateUploads(uploadId, {status: "uploading"} );
-                    this.doGifUpload(curFile, uploadId, callback);
+                if(uploadState === null) {
+                    this.updateUploads(uploadId, {
+                        uploadState: UploadState.UPLOADING,
+                        uploadType: UploadType.VID_TO_GIF
+                    });
+                    this.doVidToGifUpload(file, uploadId, callback);
                 }
                 else {
                     this.curFileNum++;
@@ -280,9 +312,11 @@ class UploaderBase extends Component {
                 }
                 break;
             default:
-                console.log(`Unsure what to do with ${curFile.type} ${mediaType}`);
+                console.log(`Unsure what to do with ${file.type} ${mediaType}`);
         }
     }
+
+    
 
     /**
      * Given that there are three possible entry points for files, we
@@ -297,19 +331,27 @@ class UploaderBase extends Component {
 
         for (let i = 0; i < this.unprocessedFiles.length; i++) {
             this.numFilesChosen++;
+
             let temp = {
                 uploadId: `temp_id_${i + this.numFilesChosen}_${this.unprocessedFiles[i].name}`,
                 percentUploaded: 0,
-                status: null,
-                file: this.unprocessedFiles[i]
+                uploadState: null,
+                uploadType: null,
+                file: this.unprocessedFiles[i],
+                update: this.updateUploads
             }
             this.uploads.push(temp);
+            // this.setState({
+            //     fileLoadProgress: Math.round(i/this.unprocessedFiles.length)
+            // });
+            // console.log(this.state.fileLoadProgress + '%');
         }
 
         // reset this array so that user can add more files and update the state.
         this.unprocessedFiles = [];
+        // remove any uploads in the error state. 
         for(let i = 0; i < this.uploads.length; i++) {
-            if(this.uploads[i].error) {
+            if(this.uploads[i].uploadState === UploadState.ERR) {
                 this.removeUpload(this.uploads[i].uploadId);
             }
         }
@@ -325,18 +367,6 @@ class UploaderBase extends Component {
         else {
             this.upload();
         }
-    }
-
-    /**
-     * Sets an upload error by its index. Used for catching gross errors
-     * before even attempting upload. - i.e user selects a file that is too big,
-     * incorrect extension, etc.
-     */
-    setError = (index, error) => {
-        this.uploads[index].error = error;
-        this.setState({
-            uploads: this.uploads
-        });
     }
 
     /**
@@ -478,9 +508,7 @@ class UploaderBase extends Component {
      */
     doProgressBar = (upload, fileSize, rate, totalUploaded = 0) => {
         setTimeout(() => {
-            if (totalUploaded >= fileSize) {
-                return;
-            }
+            if (totalUploaded >= fileSize) { return; }
 
             totalUploaded += rate;
             let percent = Math.round(totalUploaded / fileSize * 100);
@@ -501,14 +529,16 @@ class UploaderBase extends Component {
         this.estimatedUploadRate = fileSize * PROGRESS_BAR_UPDATE_INTERVAL / (endTime - startTime);
     }
 
-    doGifUpload = (file, tempUploadId, callback) => {
+    doVidToGifUpload = (file, tempUploadId, callback) => {
         let formData = new FormData();
         formData.append("files", file);
 
         return uploadFile(this.socket.id, tempUploadId, formData, 'make_gif')
             .then(response => {
                 if (response.ok) {
-                    console.log(`Upload #${this.curFileNum + 1} successfully uploaded.`)
+                    console.log(`${file.name} for video-to-gif uploaded.`);
+                    // note: we change the state from the socket response, 
+                    // since the upload id will have changed at this point
                     this.curFileNum++;
                     this.upload(callback);
                 }
@@ -532,11 +562,12 @@ class UploaderBase extends Component {
 
     }
 
-    doImageUpload = (curFile, curThumbFile, tempUploadId, callback) => {
-       
+    doImageUpload = (file, thumbnail, tempUploadId, callback) => {
+        console.log("but here is the file...");
+        console.log(file);
 
-        let fileSize = curFile.size;
-        let fileParts = curFile.name.split('.');
+        let fileSize = file.size;
+        let fileParts = file.name.split('.');
 
         let fileInfo = {
             fileName: fileParts[0],
@@ -544,24 +575,23 @@ class UploaderBase extends Component {
             action: "photo"
         };
 
-
         return getPresignedPost(fileInfo).then(res => {
             if (res.ok) {
                 return res.json().then(data => {
                     const { photoData = {}, thumbData = {}, uploadId } = data;
-                    const photoFormData = this.createForm(photoData.fields, curFile);
+                    const photoFormData = this.createForm(photoData.fields, file);
 
                     // update the upload with its server generated key, id, filename, etc
                     this.updateUploads(tempUploadId, {
                         uploadId: uploadId,
                         fileName: photoData.fields.key,
                         thumbName: thumbData.fields.key,
-                        status: 'uploading'
+                        uploadState: UploadState.UPLOADING
                     });
 
-                    // upload the thumbnail, and use this time as a
-                    // metric to guess the progress of the fullsize photo.
-                    const thumbFormData = this.createForm(thumbData.fields, curThumbFile);
+                    // upload the thumbnail, and use the total time as a
+                    // metric to guess the progress for the fullsize photo.
+                    const thumbFormData = this.createForm(thumbData.fields, thumbnail);
                     let startTime = new Date().getTime();
                     return doSignedS3Post(thumbData.url, thumbFormData).then(res => {
                         if (res.ok) {
@@ -577,11 +607,11 @@ class UploaderBase extends Component {
                         // upload photo to s3
                         return doSignedS3Post(photoData.url, photoFormData).then(res => {
                             if (res.ok) {
-                                this.updateUploads(uploadId, { status: 'complete' });
-                                console.log("file uploaded to s3!");
+                                this.updateUploads(uploadId, { uploadState: UploadState.DONE });
+                                console.log(`${file.name} uploaded to s3`);
                             }
                             else {
-                                console.log("File could not be uploaded to s3.");
+                                console.log(`${file.name} not uploaded to s3`);
                                 this.updateUploads(uploadId, { err: "File couldnt be uploaded." });
                                 res.text().then(text => {
                                     console.log(text);
@@ -615,6 +645,11 @@ class UploaderBase extends Component {
         });
     }
 
+    /**
+     * Moves an upload either 'up' or 'down'
+     * @param {*} uploadId 
+     * @param {*} direction +1 for up, -1 for down 
+     */
     shiftUpload = (uploadId, direction) => {
         if (!this.uploads || this.uploads.length < 2) {
             return;

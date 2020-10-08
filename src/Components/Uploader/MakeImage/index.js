@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { Grid, Card, IconButton, Box } from "@material-ui/core";
+import { Grid, Card, Box } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import EnterDescription from "../EnterDescription";
-import { scaleMat } from "../cvUtil";
 import TagInputBox from '../../TagInputBox';
 import FileBar from "../FileBar";
-import CropIcon from '@material-ui/icons/Crop';
 import ImageEditor from "./ImageEditor";
+import { UploadState } from "../UploadState";
 
 const useStyles = theme => ({
     hidden: {
@@ -39,7 +38,6 @@ class MakeImage extends Component {
         setDescription(upload.uploadId, input);
     }
 
-
     addTag = (tag) => {
         this.props.addTag(this.props.upload, tag);
     }
@@ -53,17 +51,14 @@ class MakeImage extends Component {
         requestTagSuggestions(upload.uploadId, curInput);
     }
 
-
-
     render() {
         const { classes,
             upload = {},
             removeUpload,
             shiftUpload,
             singleImage,
-            onThumbnailMade,
-        onImageMade } = this.props;
-            
+            setMakeImages } = this.props;
+
         return (
             <Card className={classes.card}>
                 <Grid
@@ -82,13 +77,15 @@ class MakeImage extends Component {
                         />
                     </Grid>
 
-                    <Box p={2}>
-                        <ImageEditor
-                            upload={upload}
-                            onThumbnailMade={onThumbnailMade}
-                            onImageMade={onImageMade}
-                        />
-                    </Box>
+                    <Grid item xs={12}>
+                        <Box p={2}>
+                            <ImageEditor
+                                upload={upload}
+                                setMakeImages={setMakeImages}
+                            />
+                        </Box>
+                    </Grid>
+
 
 
                     <Grid item container
@@ -115,7 +112,6 @@ class MakeImage extends Component {
                         </Grid>
                         <Grid item xs={false} sm={1}></Grid>
                     </Grid>
-
                 </Grid>
             </Card>
         );

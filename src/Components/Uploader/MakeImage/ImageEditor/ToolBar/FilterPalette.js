@@ -5,17 +5,27 @@ import FilterIcon from '@material-ui/icons/Filter';
 
 const useStyles = theme => ({
     root: {
-        
+
     }
 });
 
 class FilterPalette extends Component {
-    render() {
-        const { grayscale, 
-            gaussianBlur, 
-            original
-        } = this.props;
+    
+    // we wrap these methods because we dont
+    // want to pass the event up.
+    doGrayscale = (event) => {
+        this.props.grayscale();
+    }
 
+    doOrignal = (event) => {
+        this.props.original();
+    }
+
+    doGaussianBlur = (event) => {
+        this.props.gaussianBlur();
+    }
+
+    render() {
         return (
             <Box m={1}>
                 <Grid
@@ -32,19 +42,19 @@ class FilterPalette extends Component {
                         xs={12}
                     >
                         {/* blck white */}
-                        <IconButton onClick={grayscale}>
+                        <IconButton onClick={this.doGrayscale}>
                             <FilterIcon />
-                            <Typography variant="subtitle1">Greyscale</Typography>
+                            <Typography variant="subtitle1">Grayscale</Typography>
                         </IconButton>
 
                         {/* Gaussian Blur Example */}
-                        <IconButton onClick={gaussianBlur}>
+                        <IconButton onClick={this.doGaussianBlur}>
                             <FilterIcon />
                             <Typography variant="subtitle1">Smooth</Typography>
                         </IconButton>
 
                         {/* No Filter*/}
-                        <IconButton onClick={original}>
+                        <IconButton onClick={this.doOrignal}>
                             <FilterIcon />
                             <Typography variant="subtitle1">Original</Typography>
                         </IconButton>

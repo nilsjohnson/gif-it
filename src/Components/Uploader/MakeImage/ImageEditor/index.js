@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Grid, IconButton, Box, Typography, CircularProgress } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
-import { biLateralFilter, gaussianBlur, grayscale, showImage, doInitialLoad, scaleMat } from '../../cvUtil';
+import { gaussianBlur, grayscale, makeThumbnail, doInitialLoad, original } from '../../cvUtil';
 
 import ToolBar from './ToolBar';
-
 
 const useStyles = theme => ({
     hidden: {
@@ -30,8 +29,7 @@ const useStyles = theme => ({
 class ImageEditor extends Component {
     constructor(props) {
         super(props);
-
-        const { upload } = this.props;
+        const { upload, setMakeImages } = this.props;
 
         this.state = {
             originalImage: URL.createObjectURL(upload.file),
@@ -43,43 +41,36 @@ class ImageEditor extends Component {
                 widthRatio: 0,
                 heightRatio: 0,
                 widthInputErr: false,
-                heightInputErr: false },
-            transforming: false
-
-            
+                heightInputErr: false
+            }
         };
 
-        this.srcElement = null;
-        this.thumbElement = null;
-        this.outputElement = null;
+        this.srcElement = React.createRef();
+        this.outputThumbElement = React.createRef();
+        this.outputWebElement = React.createRef();
+        this.outputFullSizeElement = React.createRef();
         this.renderImage = this.original;
-
+        setMakeImages(upload.uploadId, this.makeImages);
     }
 
-    componentDidMount = () => {
-        const { upload } = this.props;
-        this.srcElement = document.getElementById("input-" + upload.uploadId);
-        this.thumbElement = document.getElementById("thumb-" + upload.uploadId);
-        this.outputElement = document.getElementById("out-" + upload.uploadId);
+    doInitialLoad = () => {
+        console.log("initial loading.");
+        console.log(this.srcElement.current);
+        console.log(this.outputWebElement.current);
 
-        this.srcElement.onload = () => {
-            // display the image, and get it's height and width
-            doInitialLoad(this.srcElement, this.outputElement, (width, height) => {
-                let dimensions = {
-                    width: width,
-                    height: height,
-                    enteredWidth: width,
-                    enteredHeight: height,
-                    widthRatio: height / width,
-                    heightRatio: width / height
-                }
-                this.setState({
-                    dimensions: dimensions
-                });
-
-                this.makeImages();
+        doInitialLoad(this.srcElement.current, this.outputWebElement.current, (width, height) => {
+            let dimensions = {
+                width: width,
+                height: height,
+                enteredWidth: width,
+                enteredHeight: height,
+                widthRatio: height / width,
+                heightRatio: width / height
+            }
+            this.setState({
+                dimensions: dimensions
             });
-        }
+        });
     }
 
     setNewSize = (newDimensions) => {
@@ -101,60 +92,64 @@ class ImageEditor extends Component {
         }, callback);
     }
 
-    grayscale = () => {
-        console.log("grayscale");
-        console.log(this.state);
-        grayscale(
-            this.srcElement,
-            this.outputElement,
-            this.state.dimensions.width,
-            this.state.dimensions.height
-        );
-
-        this.makeImages();
+    grayscale = (src = this.srcElement.current, dst = this.outputWebElement.current, dimensions = null ) => {
+        grayscale(src, dst, dimensions);
         this.renderImage = this.grayscale;
     }
 
-    gaussianBlur = () => {
-        console.log("do gaussian blur");
-        gaussianBlur(
-            this.srcElement,
-            this.outputElement,
-            this.state.dimensions.width,
-            this.state.dimensions.height
-        );
-
-        this.makeImages();
-        this.renderImage = gaussianBlur;
+    gaussianBlur = (src = this.srcElement.current, dst = this.outputWebElement.current, dimensions = null ) => {
+        gaussianBlur(src, dst, dimensions);
+        this.renderImage = this.gaussianBlur;
     }
 
-    original = () => {
-        console.log("original");
-        showImage(
-            this.srcElement,
-            this.outputElement,
-            this.state.dimensions.width,
-            this.state.dimensions.height
-        );
-
-        this.makeImages();
+    original = (src = this.srcElement.current, dst = this.outputWebElement.current, dimensions = null ) => {
+        original(src, dst, dimensions);
         this.renderImage = this.original;
     }
 
-    makeImages = () => {
-        scaleMat(this.outputElement, this.thumbElement, 300, (blob) => {
-            this.props.onThumbnailMade(this.props.upload.uploadId, blob);
+    doMakeThumbnail = async () => {
+        return new Promise((resolve, reject) => {
+            makeThumbnail(this.outputWebElement.current, this.outputThumbElement.current, (blob) => {
+                resolve(blob);
+            });
         });
-
-        this.outputElement.toBlob(blob => {
-            blob.name = this.props.upload.file.name;
-            this.props.onImageMade(this.props.upload.uploadId, blob);
-        }, 'image/jpeg', .95);
     }
 
+    doMakeWebImage = async () => {
+        return new Promise((resolve, reject) => {
+            this.outputWebElement.current.toBlob(blob => {
+                resolve(blob);
+            }, 'image/jpeg', .95);
+        });
+    }
 
-    crop = () => {
+    doMakeFullSize = async () => {
+        const { dimensions = {} } = this.state;
+        const { width, height } = dimensions;
 
+        let dims = { width: width, height: height };
+
+        return new Promise((resolve, reject) => {
+            this.renderImage(this.srcElement.current, this.outputFullSizeElement.current, dims);
+            this.outputFullSizeElement.toBlob(blob => {
+                resolve(blob);
+            }, 'img/jpeg', .95);
+        });
+    }
+
+    makeImages = async () => {
+        console.log('make images called');
+        const { upload = {} } = this.props;
+
+        let thumbnail = await this.doMakeThumbnail();
+        let websize = await this.doMakeWebImage();
+        let fullsize = await this.doMakeWebImage();
+        websize.name = upload.file.name;
+        upload.update(upload.uploadId, {
+            file: websize,
+            thumbFile: thumbnail,
+            fullFile: fullsize
+        });
     }
 
     render() {
@@ -174,19 +169,35 @@ class ImageEditor extends Component {
                         justify="center"
                         alignItems="center"
                     >
-                        
-                        <div>
-                            {/* This element is the original source */}
-                            <img className={classes.hidden} id={"input-" + upload.uploadId} src={this.state.originalImage}></img>
-                            {/* this is the the thumbnail */}
-                            <canvas className={classes.hidden} id={"thumb-" + upload.uploadId} />
-                            {/* this is the edited version */}
-                            <canvas
-                                className={`${classes.fullWidth} ${upload.status === "uploading" || upload.status === "complete"? classes.uploading : ""}`}
-                                id={"out-" + upload.uploadId} >
 
+                        <Box>
+                            {/* This element is the original source */}
+                            <img 
+                                ref={this.srcElement} 
+                                className={classes.hidden} 
+                                src={this.state.originalImage}
+                                onLoad={this.doInitialLoad}
+                            />
+                            
+                            {/* this is the the thumbnail */}
+                            <canvas ref={this.outputThumbElement} 
+                                className={classes.hidden}
+                            />
+                            
+                            {/* this is the web version version */}
+                            <canvas
+                                ref={this.outputWebElement}
+                                className={classes.fullWidth}
+                                id={"out-" + upload.uploadId} >
                             </canvas>
-                        </div>
+                            
+                            {/* This is the fullsize version */}
+                            <canvas
+                                ref={this.outputFullSizeElement}
+                                className={`${classes.hidden}`}>
+                            </canvas>
+
+                        </Box>
 
 
                         <ToolBar

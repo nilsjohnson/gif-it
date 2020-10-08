@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import CloseIcon from '@material-ui/icons/Close';
 import ShiftButtons from './ShiftButtons';
+import { UploadState } from '../UploadState';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -37,7 +38,7 @@ export default function FileBar(props) {
                 {upload.file.name}
             </Typography>
 
-            {upload.status === 'uploading'
+            {upload.uploadState === UploadState.UPLOADING
                 ?
                 <React.Fragment>
                      <ProgressBar value={upload.percentUploaded} />

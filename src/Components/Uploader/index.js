@@ -7,9 +7,11 @@ import { Redirect } from "react-router-dom";
 import { postPhotoGallery } from '../../util/data';
 import MakeGif from "./MakeGif";
 import ShowError from "./ShowError";
+import { UploadState } from "./UploadState";
+import { UploadType } from "./UploadType";
 
 const INPUT_ID = "img-uploader-input";
-
+const MAX_UPLOAD_SIZE = 70;
 
 const useStyles = theme => ({
     container: {
@@ -33,6 +35,9 @@ const useStyles = theme => ({
     inputContainer: {
         height: '200px',
         background: 'linear-gradient(100deg, rgba(25,209,146,0.5746673669467788) 0%, rgba(15,95,209,0.6222864145658263) 100%)'
+    },
+    uploadItem: {
+        minWidth: '375px'
     }
 });
 
@@ -44,7 +49,7 @@ class Uploader extends UploaderBase {
         this.setAllowedMimeTypes(['image/*', 'video/*']);
         this.setMaxNumUploads(1000);
         this.setInputElementId(INPUT_ID);
-        this.setMaxUploadSize(70);
+        this.setMaxUploadSize(MAX_UPLOAD_SIZE);
         this.cv = null;
     }
 
@@ -73,7 +78,7 @@ class Uploader extends UploaderBase {
             if (fileName) {
                 this.updateUploads(uploadId, {
                     fileName: fileName,
-                    status: "complete",
+                    uploadState: UploadState.DONE,
                     thumbName: thumbName
                 });
             }
@@ -95,7 +100,7 @@ class Uploader extends UploaderBase {
             quality: quality
         });
 
-        this.updateUploads(uploadId, { status: "converting" });
+        this.updateUploads(uploadId, { uploadState: UploadState.RENDERING });
     }
 
     markShared = (uploadId) => {
@@ -157,35 +162,41 @@ class Uploader extends UploaderBase {
     share = () => {
         const { albumTitle = "" } = this.state;
         let album, media;
-        console.log(this.uploads);
 
+        // check each upload to make sure we're good to go
         for (let i = 0; i < this.uploads.length; i++) {
-            // videos should have already had their status changed a few times,
-            // so only images will have a status of null
-            if (this.uploads[i].status === null) {
-                this.updateUploads(this.uploads[i].uploadId, { status: "ready to share" });
-            }
+            // if(this.uploads[i].makeImages) {
+            //     console.log("makin' them images");
+            //     console.log(this.uploads[i]);
+            //     this.uploads[i].makeImages();
+            //     console.log("done");
+            //     console.log(this.uploads[i]);    
+            // }
+
+            // console.log("go");
+
             // videos that are in the error state can just be discarded.
-            if(this.uploads[i].error) {
+            if (this.uploads[i].error) {
                 this.removeUpload(this.uploads[i].uploadId);
                 continue;
             }
             // if it's a partially made gif, alert the user.
-            if(this.uploads[i].file.type.startsWith("video/")
-                && this.uploads[i].status !== 'complete') {
-                alert(`Please convert ${this.uploads[i].file.name} to a gif, or remove it.`);
-                return;
+            if (this.uploads[i].uploadType === UploadType.VID_TO_GIF) {
+                if (this.uploads[i].uploadState !== UploadState.DONE) {
+                    alert(`Please finish converting ${this.uploads[i].file.name} to a gif, or remove it.`);
+                    return;
+                }
             }
             // if it's a gif, it was already loaded to s3, but will
             // be deleted unless we mark it as shared
-            if(this.uploads[i].file.type.startsWith("video/")) {
+            if (this.uploads[i].file.type.startsWith("video/")) {
                 this.markShared(this.uploads[i].uploadId);
             }
         }
 
         this.curFileNum = 0;
         this.upload(() => {
-            if(this.uploads.length < 1) {
+            if (this.uploads.length < 1) {
                 alert("Please choose some content to share.");
                 return;
             }
@@ -290,17 +301,26 @@ class Uploader extends UploaderBase {
         return num;
     }
 
+    /**
+     * Sets the make images callback to allow images to be created at upload time.
+     * @param {*} uploadId 
+     * @param {*} func function to render media, such as cropped images, thumbnails, etc.
+     */
+    setRenderMedia = (uploadId, func) => {
+        this.updateUploads(uploadId, { renderMedia: func });
+    }
+
     getUploadComponent = (upload) => {
-        let type = upload.file.type;
- 
-        if (upload.error) {
+        const { uploadState, uploadType } = upload;
+
+        if (uploadState === UploadState.ERR) {
             return (
                 <ShowError
-                    message={upload.error}
                     upload={upload}
                 />);
         }
-        else if (type.startsWith('image') && !type.startsWith('image/gif')) {
+
+        if (uploadType === UploadType.IMG) {
             return (
                 <MakeImage
                     upload={upload}
@@ -313,10 +333,11 @@ class Uploader extends UploaderBase {
                     removeUpload={this.removeUpload}
                     shiftUpload={this.shiftUpload}
                     singleImage={this.state.uploads.length === 1}
+                    setMakeImages={this.setRenderMedia}
                 />
             );
         }
-        else if (type.startsWith('video') || type.startsWith('image/gif')) {
+        if (uploadType === UploadType.VID_TO_GIF) {
             return (
                 <MakeGif
                     upload={upload}
@@ -348,10 +369,10 @@ class Uploader extends UploaderBase {
         }
 
         return (
-            <Container disableGutters={true} component="div" maxWidth="sm" >
+            <Container disableGutters={true} component="div" maxWidth="lg" >
                 <Grid
                     container item
-                    direction="row"
+                    direction="column"
                     justify="center"
                     alignItems="center"
                     spacing={2}
@@ -375,13 +396,20 @@ class Uploader extends UploaderBase {
                             </Grid>
                         }
 
-
-                        {/* Show each upload */}
-                        {this.state.uploads.map(upload =>
-                            <Grid item xs={12} key={upload.uploadId + "_grid"}>
-                                {this.getUploadComponent(upload)}
-                            </Grid>
-                        )}
+                        <Grid
+                            container
+                            direction="row"
+                            justify="flex-start"
+                            alignItems="center"
+                            spacing={2}
+                        >
+                            {/* Show each upload */}
+                            {this.state.uploads.map(upload =>
+                                <Grid className={classes.uploadItem} item xs key={upload.uploadId + "_grid"}>
+                                    {this.getUploadComponent(upload)}
+                                </Grid>
+                            )}
+                        </Grid>
 
                         <Grid item container
                             className={classes.inputContainer}

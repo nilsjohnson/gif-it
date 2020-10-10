@@ -37,7 +37,8 @@ const useStyles = theme => ({
         background: 'linear-gradient(100deg, rgba(25,209,146,0.5746673669467788) 0%, rgba(15,95,209,0.6222864145658263) 100%)'
     },
     uploadItem: {
-        minWidth: '375px'
+        minWidth: '375px',
+        maxWidth: '800px'
     }
 });
 
@@ -160,22 +161,15 @@ class Uploader extends UploaderBase {
      * an album or a single media item and POSTs to server accordingly
      */
     share = () => {
+        console.log("woof!");
+        console.log(this.state);
+
         const { albumTitle = "" } = this.state;
         let album, media;
 
         // check each upload to make sure we're good to go
         for (let i = 0; i < this.uploads.length; i++) {
-            // if(this.uploads[i].makeImages) {
-            //     console.log("makin' them images");
-            //     console.log(this.uploads[i]);
-            //     this.uploads[i].makeImages();
-            //     console.log("done");
-            //     console.log(this.uploads[i]);    
-            // }
-
-            // console.log("go");
-
-            // videos that are in the error state can just be discarded.
+            // uploads in the error state can just be discarded.
             if (this.uploads[i].error) {
                 this.removeUpload(this.uploads[i].uploadId);
                 continue;
@@ -189,7 +183,9 @@ class Uploader extends UploaderBase {
             }
             // if it's a gif, it was already loaded to s3, but will
             // be deleted unless we mark it as shared
-            if (this.uploads[i].file.type.startsWith("video/")) {
+            // if (this.uploads[i].file.type.startsWith("video/")) {
+            // if (this.fileManger.getFile(this.uploads[i].file).type.startsWith("video/")) {   
+            if (this.getFile(this.uploads[i].file).type.startsWith("/video")) {
                 this.markShared(this.uploads[i].uploadId);
             }
         }
@@ -215,7 +211,8 @@ class Uploader extends UploaderBase {
                         fileName: curUpload.fileName,
                         tags: curUpload.tags,
                         thumbName: curUpload.thumbName,
-                        originalFileName: curUpload.file.name,
+                        fullSizeName: curUpload.fullSizeName,
+                        originalFileName: curUpload.getFile(curUpload.file).name,
                         fileType: curUpload.file.type
                     });
                 };
@@ -230,7 +227,8 @@ class Uploader extends UploaderBase {
                     tags: curUpload.tags,
                     thumbName: curUpload.thumbName,
                     originalFileName: curUpload.file.name,
-                    fileType: curUpload.file.type
+                    fileType: curUpload.file.type,
+                    fullSizeName: curUpload.fullSizeName
                 };
             }
 
@@ -301,6 +299,15 @@ class Uploader extends UploaderBase {
         return num;
     }
 
+    getMaxWidth = () => {
+        if(this.state.uploads.length > 1) {
+            return "lg";
+        }
+        else {
+            return "sm";
+        }
+    }
+
     /**
      * Sets the make images callback to allow images to be created at upload time.
      * @param {*} uploadId 
@@ -369,7 +376,7 @@ class Uploader extends UploaderBase {
         }
 
         return (
-            <Container disableGutters={true} component="div" maxWidth="lg" >
+            <Container disableGutters={true} component="div" maxWidth={this.getMaxWidth()} >
                 <Grid
                     container item
                     direction="column"

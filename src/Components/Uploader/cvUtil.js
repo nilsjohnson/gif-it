@@ -54,9 +54,11 @@ function scaleByWidth(mat, desiredWidth) {
 function original(srcElem, dstElem, dimensions = null) {
     let srcMat;
     if(!dimensions) {
+        console.log("gettting web scaled");
         srcMat = getWebScaledMat(srcElem);
     }
     else {
+        console.log("scaling: " + dimensions);
         srcMat = cv.imread(srcElem);
         srcMat = scaleByWidth(srcMat, dimensions.width);
     }
@@ -113,5 +115,6 @@ export {
     gaussianBlur, 
     doInitialLoad, 
     original,
-    makeThumbnail
+    makeThumbnail,
+    WEB_WIDTH
 };

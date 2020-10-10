@@ -33,7 +33,7 @@ if (DEBUG) {
 	console.log("DEBUG set to true. App will print debug statements.");
 }
 if (DEV) {
-	console.log("DEV set to true. Gifs will be served from this server and objects will not be written to s3.");
+	console.log("DEV set to true. Using test s3 bucket.");
 	corsOptions = {
 		origin: 'http://localhost:3000',
 		optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204

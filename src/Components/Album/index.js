@@ -33,6 +33,9 @@ const useStyles = theme => ({
     },
     imgResponsive: {
         width: '100%'
+    },
+    albumItem: {
+        minWidth: '375px'
     }
 });
 
@@ -63,10 +66,11 @@ class Album extends Component {
     }
 
     render() {
+        const { classes } = this.props;
         return (
-            <Container component='main' maxWidth="md" >
+            <Container component='main' maxWidth="lg" >
                 {this.state.title &&
-                    <Box m={2}>
+                    <Box p={3}>
                         <Card>
                             <Typography align="center" variant="h4">
                                 {this.state.title}
@@ -74,15 +78,28 @@ class Album extends Component {
                         </Card>
                     </Box>
                 }
-                {this.state.items.map((item, index) => (
-                    <MediaBox
-                        key={index}
-                        tags={item.tags}
-                        description={item.description}
-                        fileName={item.fileName}
-                        mId={item.id}
-                    />
-                ))}
+
+                <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center"
+                    spacing={2}
+                >
+                    {this.state.items.map((item, index) => (
+                        <Grid className={classes.albumItem} item xs key={index}>
+                            <MediaBox
+                                key={index}
+                                tags={item.tags}
+                                description={item.description}
+                                fileName={item.fileName}
+                                fullSizeName={item.fullSizeName}
+                                mId={item.id}
+                            />
+                        </Grid>
+
+                    ))}
+                </Grid>
             </Container>
         );
     }

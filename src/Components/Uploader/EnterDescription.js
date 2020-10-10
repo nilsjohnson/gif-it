@@ -48,18 +48,21 @@ export default class EnterDescription extends Component {
         let description = this.makeDescription(input);
         let errorMessage = this.validateDescription(description);
 
-        if (errorMessage) {
-            this.props.setDescription(null);
-        }
-        else {
-            this.props.setDescription(description);
-        }
-
         this.setState({
             curInput: input,
             isValidInput: errorMessage ? false : true,
             errorMessage: errorMessage
         });
+    }
+
+    setDescription = (event) => {
+        if (this.state.errorMessage) {
+            this.props.setDescription(null);
+        }
+        else {
+            this.props.setDescription(this.makeDescription(this.state.curInput));
+        }
+
     }
 
     render() {
@@ -68,6 +71,7 @@ export default class EnterDescription extends Component {
                 multiline fullWidth={true} rows={3}
                 label={"Please Enter Description"}
                 variant="outlined" onChange={this.setCurInput}
+                onBlur={this.setDescription}
                 value={this.state.curInput}
                 error={!this.state.isValidInput}
                 helperText={this.state.errorMessage}

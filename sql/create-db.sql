@@ -38,6 +38,7 @@ CREATE TABLE media (
 	descript VARCHAR(9000), -- A description, ie. 'This is how my dog playing fetch'
 	fileName VARCHAR(64), -- The name of the file, ie. '8374jf7.gif'
 	thumbName VARCHAR(64), -- The name of the gifs thumbnail, ie. '8374jf7.thumb.gif'
+	fullSizeName VARCHAR(64),
 	fileType VARCHAR(16),
 	PRIMARY KEY (id)
 );
@@ -129,4 +130,3 @@ GRANT SELECT ON user to 'bryn'@'localhost';
 ALTER USER 'gracie'@'localhost' IDENTIFIED WITH mysql_native_password BY 'pass123$';
 ALTER USER 'bryn'@'localhost' IDENTIFIED WITH mysql_native_password BY 'doggie';
 flush privileges;
-

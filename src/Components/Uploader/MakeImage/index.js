@@ -31,6 +31,9 @@ const useStyles = theme => ({
 class MakeImage extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            loading: true
+        }
     }
 
     setDescription = (input) => {
@@ -49,6 +52,12 @@ class MakeImage extends Component {
     requestTagSuggestions = (curInput) => {
         const { requestTagSuggestions, upload = {} } = this.props;
         requestTagSuggestions(upload.uploadId, curInput);
+    }
+
+    setLoading = (val) => {
+        this.setState({
+            loading: val
+        });
     }
 
     render() {
@@ -77,11 +86,14 @@ class MakeImage extends Component {
                         />
                     </Grid>
 
+                    {this.state.loading && <p>Loading...</p>}
+
                     <Grid item xs={12}>
                         <Box p={2}>
                             <ImageEditor
                                 upload={upload}
                                 setMakeImages={setMakeImages}
+                                onLoad={this.setLoading}
                             />
                         </Box>
                     </Grid>
@@ -94,8 +106,8 @@ class MakeImage extends Component {
                         alignItems="flex-start"
                         spacing={2}
                     >
-                        <Grid item xs={false} sm={1}></Grid>
-                        <Grid item xs={12} sm={10}>
+                        {/* <Grid item xs={false} sm={1}></Grid> */}
+                        <Grid item xs={12}>
                             <Box p={2}>
                                 <EnterDescription
                                     setDescription={this.setDescription}
@@ -110,7 +122,7 @@ class MakeImage extends Component {
                                 />
                             </Box>
                         </Grid>
-                        <Grid item xs={false} sm={1}></Grid>
+                        {/* <Grid item xs={false} sm={1}></Grid> */}
                     </Grid>
                 </Grid>
             </Card>

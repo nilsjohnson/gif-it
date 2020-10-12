@@ -25,6 +25,7 @@ async function getMediaById(connection, id) {
         `SELECT 
         media.descript, 
         media.fileName, 
+        media.fullSizeName,
         JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
             (SELECT COUNT(media_tag.tag_id)
                 FROM media_tag
@@ -53,7 +54,7 @@ async function getAlbumById(connection, args) {
         media.descript,
         media.fileName, 
         media.fileType, 
-        media.thumbName,
+        media.fullSizeName,
         album_items.item_index,
         JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
             (SELECT COUNT(media_tag.tag_id)
@@ -258,8 +259,9 @@ class MediaDAO extends DAO {
                 if (DEV) {
                     results[0].fileName = makeDevPath(results[0].fileName);
                     results[0].thumbName = makeDevPath(results[0].thumbName);
+                    results[0].fullSizeName = makeDevPath(results[0].fullSizeName);
                 }
-
+                console.log("Here is the media: ");
                 console.log(results);
                 onSuccess(results[0]);
 
@@ -269,9 +271,6 @@ class MediaDAO extends DAO {
                 log(ex);
                 onFail("Database problem. Couldn't create album.");
             }
-
-
-
         });
     }
 
@@ -322,7 +321,8 @@ class MediaDAO extends DAO {
             tags,
             description,
             originalFileName,
-            type
+            type,
+            fullSizeName
         } = media;
 
         console.log(media);
@@ -343,6 +343,7 @@ class MediaDAO extends DAO {
                     descript: description,
                     fileName: fileName,
                     thumbName: thumbName,
+                    fullSizeName: fullSizeName,
                     fileType: type
                 };
                 results = await insertMedia(connection, args);
@@ -440,10 +441,18 @@ class MediaDAO extends DAO {
                         tags = [],
                         description = '',
                         originalFileName,
-                        fileType } = items[i];
+                        fileType,
+                        fullSizeName } = items[i];
 
                     // insert the media
-                    args = { id: uploadId, descript: description, fileName: fileName, thumbName: thumbName, fileType: fileType };
+                    args = { 
+                        id: uploadId, 
+                        descript: description, 
+                        fileName: fileName, 
+                        thumbName: thumbName, 
+                        fullSizeName: fullSizeName, 
+                        fileType: fileType 
+                    };
                     results = await insertMedia(connection, args);
 
                     // insert the tags
@@ -479,6 +488,7 @@ class MediaDAO extends DAO {
             try {
                 // get the album. There should only be 1.
                 let results = await getAlbumById(connection, albumId);
+                console.log("here is the album: ");
                 console.log(results);
 
                 // if we didnt find album, return null;
@@ -497,6 +507,7 @@ class MediaDAO extends DAO {
                     album.items.push({
                         fileName: !DEV ? results[i].fileName : makeDevPath(results[i].fileName),
                         thumbName: !DEV ? results[i].thumbName : makeDevPath(results[i].thumbName),
+                        fullSizeName: !DEV ? results[i].fullSizeName : makeDevPath(results[i].fullSizeName),
                         tags: tags,
                         fileType: results[i].fileType,
                         description: results[i].descript,
@@ -520,7 +531,10 @@ class MediaDAO extends DAO {
 }
 
 function makeDevPath(fileName) {
-    return `https://s3.amazonaws.com/${BUCKET_NAME}/${fileName}`;
+    if(fileName) {
+        return `https://s3.amazonaws.com/${BUCKET_NAME}/${fileName}`;
+    }
+    return fileName;
 }
 
 module.exports = MediaDAO;

@@ -6,9 +6,10 @@ import { getMediaById } from '../../util/data';
 import { ShareBox } from './ShareBox';
 import Tag from '../Tag/Tag';
 import FullWidthDivider from '../FullWidthDivider';
+import { Link } from 'react-router-dom';
 
 const useStyles = theme => ({
-    shareContainer: {
+    fullWidth: {
         width: '100%'
     },
     root: {
@@ -27,19 +28,20 @@ class MediaBox extends Component {
         this.state = {
             tags: this.props.tags ? this.props.tags : [],
             descriptionLines: this.props.description ? this.splitLines(this.props.description) : [],
-            fileName: this.props.fileName ? this.props.fileName : ""
+            fileName: this.props.fileName ? this.props.fileName : "",
+            fullSizeName: this.props.fullSizeName ? this.props.fullSizeName : ""
         };
     }
 
     splitLines = (str) => {
-        if(str) {
+        if (str) {
             return str.split('\n');
         }
         return [];
     }
 
     componentDidMount = () => {
-        if(!this.props.mId) {
+        if (!this.props.mId) {
             return;
         }
         getMediaById(this.props.mId)
@@ -49,7 +51,8 @@ class MediaBox extends Component {
                         this.setState({
                             tags: resJson.tags,
                             fileName: resJson.fileName,
-                            descriptionLines: resJson.descript ? resJson.descript.split('\n') : []
+                            descriptionLines: resJson.descript ? resJson.descript.split('\n') : [],
+                            fullSizeName: resJson.fullSizeName
                         });
                     })
                 }
@@ -62,6 +65,7 @@ class MediaBox extends Component {
 
     render() {
         const { classes } = this.props;
+        console.log(this.state);
 
         return (
             <Container component="main" maxWidth="md" className={classes.root}>
@@ -73,13 +77,27 @@ class MediaBox extends Component {
                             justify="flex-start"
                             alignItems="flex-start"
                             spacing={2}>
-                            <CardMedia
-                                component="img"
-                                alt="Cool Gif"
-                                height="auto"
-                                image={this.state.fileName}
-                                title={this.state.descriptionLines[0]}
-                            />
+                            {this.state.fullSizeName ?
+                                <a href={`https://gif-it.io/${this.state.fullSizeName}`} 
+                                    className={classes.fullWidth}
+                                >
+                                    <CardMedia
+                                        component="img"
+                                        alt="Cool Gif"
+                                        height="auto"
+                                        image={this.state.fileName}
+                                        title={this.state.descriptionLines[0]}
+                                    />
+                                </a>
+                                :
+                                <CardMedia
+                                    component="img"
+                                    alt="Cool Gif"
+                                    height="auto"
+                                    image={this.state.fileName}
+                                    title={this.state.descriptionLines[0]}
+                                />}
+
                             <Grid item>
                                 <Grid
                                     container item
@@ -103,7 +121,7 @@ class MediaBox extends Component {
                             </Grid>
                             <FullWidthDivider />
 
-                            <Box m={2} className={classes.shareContainer}>
+                            <Box m={2} className={classes.fullWidth}>
                                 <ShareBox
                                     fileName={this.state.fileName}
                                     id={this.props.mId}

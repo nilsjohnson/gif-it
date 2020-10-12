@@ -70,10 +70,11 @@ app.post('/getPresignedPost', (req, res) => {
         fileExt = fileExt.toLowerCase();
         let uploadId = getUniqueID();
 
+        // for the web-sized photo
         let photoParams = {
             Bucket: BUCKET_NAME,
             Fields: {
-                key: `${uploadId}.${req.body.fileType}`,
+                key: `${uploadId}.${fileExt}`,
                 ACL: 'public-read',
                 'Content-Type': 'image/jpeg'
             },
@@ -82,10 +83,11 @@ app.post('/getPresignedPost', (req, res) => {
             ]
         };
 
+        // for the thumbnail
         let thumbnailParams = {
             Bucket: BUCKET_NAME,
             Fields: {
-                key: `${uploadId}.thumb.${req.body.fileType}`,
+                key: `${uploadId}.thumb.${fileExt}`,
                 ACL: 'public-read',
                 'Content-Type': 'image/jpeg'
             },
@@ -94,32 +96,58 @@ app.post('/getPresignedPost', (req, res) => {
             ]
         };
 
-        s3.createPresignedPost(photoParams, (err, photoData) => {
+        // for the full-size render
+        let fullSizeParams = {
+            Bucket: BUCKET_NAME,
+            Fields: {
+                key: `${uploadId}.max.${fileExt}`,
+                ACL: 'public-read',
+                'Content-Type': 'image/jpeg'
+            },
+            Conditions: [
+                ["content-length-range", 0, 1_000_000 * MAX_UPLOAD_SIZE]
+            ]
+        };
+
+        s3.createPresignedPost(photoParams, (err, webSizePhotoData) => {
             if (err) {
-                log('Presigning post data encountered an error', err);
+                log(err);
                 res.send(500);
             }
             else {
-                s3.createPresignedPost(thumbnailParams, (err, thumbData) => {
+                s3.createPresignedPost(thumbnailParams, (err, thumbSizePhotoData) => {
                     if (err) {
-                        log('Presigning post data encountered an error', err);
+                        log(err);
                         res.send(500);
                     }
                     else {
-                        // Success! Both signed post urls created
-                        let obj = {
-                            uploadId: uploadId,
-                            photoData: {
-                                url: photoData.url,
-                                fields: photoData.fields,
-                            },
-                            thumbData: {
-                                url: thumbData.url,
-                                fields: thumbData.fields
+                        s3.createPresignedPost(fullSizeParams, (err, fullSizePhotoData) => {
+                            if(err) {
+                                log(err)
                             }
-                        };
-                        console.log(obj);
-                        res.json(obj);
+                            else {
+                                // Success! Go team!
+                                let obj = {
+                                    // TODO, uhhh? unwrap these?
+                                    uploadId: uploadId,
+                                    webSizePhotoData: {
+                                        url: webSizePhotoData.url,
+                                        fields: webSizePhotoData.fields,
+                                    },
+                                    thumbSizePhotoData: {
+                                        url: thumbSizePhotoData.url,
+                                        fields: thumbSizePhotoData.fields
+                                    },
+                                    fullSizePhotoData: {
+                                        url: fullSizePhotoData.url,
+                                        fields: fullSizePhotoData.fields
+                                    }
+                                };
+                                console.log("sending back presigned info: ");
+                                console.log(obj);
+                                res.json(obj);
+                            }
+                        });
                     }
                 });
             }

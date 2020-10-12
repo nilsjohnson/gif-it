@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, IconButton, Box, Typography, CircularProgress } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
-import { gaussianBlur, grayscale, makeThumbnail, doInitialLoad, original } from '../../cvUtil';
+import { gaussianBlur, grayscale, makeThumbnail, doInitialLoad, original, WEB_WIDTH } from '../../cvUtil';
 
 import ToolBar from './ToolBar';
 
@@ -30,9 +30,12 @@ class ImageEditor extends Component {
     constructor(props) {
         super(props);
         const { upload, setMakeImages } = this.props;
+        console.log(upload);
+
+        let file = upload.getFile(upload.file);
 
         this.state = {
-            originalImage: URL.createObjectURL(upload.file),
+            originalImage: URL.createObjectURL(file),
             dimensions: {
                 width: 0,
                 height: 0,
@@ -70,6 +73,8 @@ class ImageEditor extends Component {
             this.setState({
                 dimensions: dimensions
             });
+
+            this.props.onLoad(false);
         });
     }
 
@@ -92,17 +97,17 @@ class ImageEditor extends Component {
         }, callback);
     }
 
-    grayscale = (src = this.srcElement.current, dst = this.outputWebElement.current, dimensions = null ) => {
+    grayscale = (src = this.srcElement.current, dst = this.outputWebElement.current, dimensions = null) => {
         grayscale(src, dst, dimensions);
         this.renderImage = this.grayscale;
     }
 
-    gaussianBlur = (src = this.srcElement.current, dst = this.outputWebElement.current, dimensions = null ) => {
+    gaussianBlur = (src = this.srcElement.current, dst = this.outputWebElement.current, dimensions = null) => {
         gaussianBlur(src, dst, dimensions);
         this.renderImage = this.gaussianBlur;
     }
 
-    original = (src = this.srcElement.current, dst = this.outputWebElement.current, dimensions = null ) => {
+    original = (src = this.srcElement.current, dst = this.outputWebElement.current, dimensions = null) => {
         original(src, dst, dimensions);
         this.renderImage = this.original;
     }
@@ -124,16 +129,21 @@ class ImageEditor extends Component {
     }
 
     doMakeFullSize = async () => {
-        const { dimensions = {} } = this.state;
-        const { width, height } = dimensions;
-
-        let dims = { width: width, height: height };
-
         return new Promise((resolve, reject) => {
-            this.renderImage(this.srcElement.current, this.outputFullSizeElement.current, dims);
-            this.outputFullSizeElement.toBlob(blob => {
-                resolve(blob);
-            }, 'img/jpeg', .95);
+            const { dimensions = {} } = this.state;
+            const { width, height } = dimensions;
+
+            if (width > WEB_WIDTH) {
+                let dims = { width: width, height: height };
+                this.renderImage(this.srcElement.current, this.outputFullSizeElement.current, dims);
+                this.outputFullSizeElement.current.toBlob(blob => {
+                    resolve(blob);
+                }, 'image/jpeg', .95);
+            }
+            else {
+                console.log("This image is small enough that we are not going to render a fullsize.");
+                resolve(null);
+            }
         });
     }
 
@@ -141,14 +151,23 @@ class ImageEditor extends Component {
         console.log('make images called');
         const { upload = {} } = this.props;
 
-        let thumbnail = await this.doMakeThumbnail();
-        let websize = await this.doMakeWebImage();
-        let fullsize = await this.doMakeWebImage();
-        websize.name = upload.file.name;
+        let thumbnailFile = await this.doMakeThumbnail();
+        let websizeFile = await this.doMakeWebImage();
+        let fullsizeFile = await this.doMakeFullSize();
+
+        let thumbnailId = upload.addFile(thumbnailFile);
+        let websizeId = upload.addFile(websizeFile);
+        let fullsizeId = null;
+        
+        if(fullsizeFile) {
+            console.log("full size image generated.");
+            fullsizeId = upload.addFile(fullsizeFile);
+        }
+
         upload.update(upload.uploadId, {
-            file: websize,
-            thumbFile: thumbnail,
-            fullFile: fullsize
+            webSizeImage: websizeId,
+            thumbSizeImage: thumbnailId,
+            fullSizeImage: fullsizeId
         });
     }
 
@@ -161,8 +180,8 @@ class ImageEditor extends Component {
                 justify="center"
                 alignItems="center"
             >
-                <Grid item xs={1}></Grid>
-                <Grid item xs={10} >
+                {/* <Grid item xs={1}></Grid> */}
+                <Grid item xs={12} >
                     <Grid
                         container item
                         direction="column"
@@ -172,25 +191,25 @@ class ImageEditor extends Component {
 
                         <Box>
                             {/* This element is the original source */}
-                            <img 
-                                ref={this.srcElement} 
-                                className={classes.hidden} 
+                            <img
+                                ref={this.srcElement}
+                                className={classes.hidden}
                                 src={this.state.originalImage}
                                 onLoad={this.doInitialLoad}
                             />
-                            
+
                             {/* this is the the thumbnail */}
-                            <canvas ref={this.outputThumbElement} 
+                            <canvas ref={this.outputThumbElement}
                                 className={classes.hidden}
                             />
-                            
+
                             {/* this is the web version version */}
                             <canvas
                                 ref={this.outputWebElement}
                                 className={classes.fullWidth}
                                 id={"out-" + upload.uploadId} >
                             </canvas>
-                            
+
                             {/* This is the fullsize version */}
                             <canvas
                                 ref={this.outputFullSizeElement}
@@ -210,7 +229,7 @@ class ImageEditor extends Component {
 
                     </Grid>
                 </Grid>
-                <Grid item xs={1}></Grid>
+                {/* <Grid item xs={1}></Grid> */}
             </Grid>
 
         );

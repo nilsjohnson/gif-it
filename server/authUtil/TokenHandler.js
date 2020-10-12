@@ -33,6 +33,8 @@ class TokenHandler {
     }
 
     getUserId(token) {
+        console.log("getting tokens");
+        console.log(this.tokens);
         if(!token || token === 'null') {
             // this user probably logged out, or didnt get an auth token to begin with
             return null;

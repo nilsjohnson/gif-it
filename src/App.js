@@ -20,7 +20,6 @@ function App() {
                 <Route path="/login" component={Login} exact />
                 <Route path="/verify" component={Verify} exact />
                 <Route path="/dashboard" component={Dashboard} exact /> 
-                
             </ThemeProvider>
         </BrowserRouter>
     );

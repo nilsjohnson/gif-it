@@ -78,7 +78,7 @@ class MediaBox extends Component {
                             alignItems="flex-start"
                             spacing={2}>
                             {this.state.fullSizeName ?
-                                <Link to={`${this.state.fullSizeName}`}
+                                <a href={`https://gif-it.io/${this.state.fullSizeName}`} 
                                     className={classes.fullWidth}
                                 >
                                     <CardMedia
@@ -88,7 +88,7 @@ class MediaBox extends Component {
                                         image={this.state.fileName}
                                         title={this.state.descriptionLines[0]}
                                     />
-                                </Link>
+                                </a>
                                 :
                                 <CardMedia
                                     component="img"

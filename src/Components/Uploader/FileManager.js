@@ -15,6 +15,6 @@ export default class FileManager {
     }
 
     deleteFile(fId) {
-        delete files[fId];
+        delete this.files[fId];
     }
 }

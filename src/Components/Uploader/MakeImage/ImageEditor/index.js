@@ -141,6 +141,7 @@ class ImageEditor extends Component {
                 }, 'image/jpeg', .95);
             }
             else {
+                console.log("This image is small enough that we are not going to render a fullsize.");
                 resolve(null);
             }
         });
@@ -150,13 +151,18 @@ class ImageEditor extends Component {
         console.log('make images called');
         const { upload = {} } = this.props;
 
-        let thumbnail = await this.doMakeThumbnail();
-        let websize = await this.doMakeWebImage();
-        let fullsize = await this.doMakeFullSize();
+        let thumbnailFile = await this.doMakeThumbnail();
+        let websizeFile = await this.doMakeWebImage();
+        let fullsizeFile = await this.doMakeFullSize();
 
-        let thumbnailId = upload.addFile(thumbnail);
-        let websizeId = upload.addFile(websize);
-        let fullsizeId = upload.addFile(fullsize);
+        let thumbnailId = upload.addFile(thumbnailFile);
+        let websizeId = upload.addFile(websizeFile);
+        let fullsizeId = null;
+        
+        if(fullsizeFile) {
+            console.log("full size image generated.");
+            fullsizeId = upload.addFile(fullsizeFile);
+        }
 
         upload.update(upload.uploadId, {
             webSizeImage: websizeId,

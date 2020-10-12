@@ -271,9 +271,6 @@ class MediaDAO extends DAO {
                 log(ex);
                 onFail("Database problem. Couldn't create album.");
             }
-
-
-
         });
     }
 
@@ -534,7 +531,10 @@ class MediaDAO extends DAO {
 }
 
 function makeDevPath(fileName) {
-    return `https://s3.amazonaws.com/${BUCKET_NAME}/${fileName}`;
+    if(fileName) {
+        return `https://s3.amazonaws.com/${BUCKET_NAME}/${fileName}`;
+    }
+    return fileName;
 }
 
 module.exports = MediaDAO;

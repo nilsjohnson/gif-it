@@ -1,7 +1,6 @@
 import { Component } from "react";
 import socketIOClient from "socket.io-client";
 import { uploadFile, getServer } from "../../util/data"
-import { formatBytes } from '../../util/util';
 import { getPresignedPost, doSignedS3Post, postPhotoGallery } from '../../util/data';
 import { UploadState } from "./UploadState";
 import { UploadType } from "./UploadType";
@@ -21,7 +20,6 @@ class UploaderBase extends Component {
             filesHovering: false,
             tooManyFilesSelected: false,
             fileLoadProgress: 0
-
         });
 
         // Holding bin for files after the user has dragged/dropped or selected them.
@@ -52,6 +50,8 @@ class UploaderBase extends Component {
         // since files can be huge, we don't put them
         // in the state so the page paints quicker.
         this.fileManager = new FileManager();
+
+        this._isMounted = null;
     }
 
     /**
@@ -201,7 +201,8 @@ class UploaderBase extends Component {
             // moves the file back to the unprocessed array then retrys
             for (let i = 0; i < this.uploads.length; i++) {
                 if (this.uploads[i].uploadId === uploadId) {
-                    this.unprocessedFiles.push(this.uploads[i].file);
+                    this.unprocessedFiles.push(this.fileManager.getFile(this.uploads[i].file));
+                    this.fileManager.deleteFile(this.uploads[i].file);
                     this.uploads.splice(i, 1);
                     this.curFileNum--;
                     break;
@@ -210,6 +211,10 @@ class UploaderBase extends Component {
 
             this.setState({ uploads: this.uploads });
             this.initUpload();
+        });
+
+        this.socket.on('disconnect', () => {
+            console.log("socket disconnected.");
         });
 
         // make the rest of the handlers;
@@ -339,7 +344,7 @@ class UploaderBase extends Component {
 
         for (let i = 0; i < this.unprocessedFiles.length; i++) {
             this.numFilesChosen++;
-
+            console.log(this.socket);
             let temp = {
                 uploadId: `temp_id_${i + this.numFilesChosen}_${this.unprocessedFiles[i].name}`,
                 percentUploaded: 0,
@@ -351,16 +356,22 @@ class UploaderBase extends Component {
                 update: this.updateUploads
             }
             this.uploads.push(temp);
-            
+
             this.setState({ uploads: this.uploads });
+            
             // open the socket if necessary
             if (this.socket === null) {
-                // this will trigger an upload.
+                console.log("creating socket then uploading.");
                 this.createSocket();
             }
             // otherwise we're set to upload!
-            else {
+            else if(this.socket.connected) {
+                console.log("socket already made. uploading.");
                 this.upload();
+            }
+            else {
+                // this will happen a lot. Once the socket actually connects, 
+                // the uploads will be ready to go. So we do nothing in this case.
             }
 
         }
@@ -404,7 +415,6 @@ class UploaderBase extends Component {
 
 
         for (let i = 0; i < videos.files.length; i++) {
-            console.log("pushing file: " + videos.files[i].name);
             this.unprocessedFiles.push(videos.files[i]);
         }
 
@@ -527,7 +537,7 @@ class UploaderBase extends Component {
      */
     doProgressBar = (upload, fileSize, rate, totalUploaded = 0) => {
         setTimeout(() => {
-            if (totalUploaded >= fileSize) { return; }
+            if (totalUploaded >= fileSize || !this._isMounted) { return; }
 
             totalUploaded += rate;
             let percent = Math.round(totalUploaded / fileSize * 100);
@@ -552,6 +562,9 @@ class UploaderBase extends Component {
         let formData = new FormData();
         formData.append("files", file);
 
+        console.log("doing vidToGif upload");
+        console.log(this.socket.id);
+
         return uploadFile(this.socket.id, tempUploadId, formData, 'make_gif')
             .then(response => {
                 if (response.ok) {
@@ -563,11 +576,7 @@ class UploaderBase extends Component {
                 }
                 else {
                     response.json().then(resJson => {
-                        this.uploads[this.curFileNum].error = resJson.error;
-                        this.setState({
-                            uploads: this.uploads
-                        });
-
+                        this.updateUploads(tempUploadId, { error: resJson.error });
                         this.curFileNum++;
                         this.upload(callback);
                     });
@@ -582,11 +591,27 @@ class UploaderBase extends Component {
     }
 
     doImageUpload = (upload, callback) => {
+        console.log("doing image upload for: " + upload.uploadId);
+        console.log(upload);
 
         let originalFile = this.fileManager.getFile(upload.file);
         let webSizeFile = this.fileManager.getFile(upload.webSizeImage);
+        // fullSizeFile could be undefined.
         let fullSizeFile = this.fileManager.getFile(upload.fullSizeImage);
-        let thumbnailFile = upload.thumbSizeImage
+        let thumbnailFile = this.fileManager.getFile(upload.thumbSizeImage);
+
+        console.log(originalFile);
+        console.log(webSizeFile);
+        console.log(fullSizeFile);
+        console.log(thumbnailFile);
+
+        let totalUploadSize;
+        if (!fullSizeFile) {
+            totalUploadSize = webSizeFile.size;
+        }
+        else {
+            totalUploadSize = webSizeFile.size + fullSizeFile.size;
+        }
 
         let fileParts = originalFile.name.split('.');
 
@@ -608,7 +633,7 @@ class UploaderBase extends Component {
                         uploadId: uploadId,
                         fileName: webSizePhotoData.fields.key,
                         thumbName: thumbSizePhotoData.fields.key,
-                        fullSizeName: fullSizePhotoData.fields.key,
+                        fullSizeName: fullSizeFile ? fullSizePhotoData.fields.key : null,
                         uploadState: UploadState.UPLOADING
                     });
 
@@ -626,7 +651,7 @@ class UploaderBase extends Component {
                         }
 
                         // starts the progress bar rolling...
-                        this.doProgressBar(this.uploads[this.curFileNum], webSizeFile.size + fullSizeFile.size, this.state.estimatedUploadRate);
+                        this.doProgressBar(this.uploads[this.curFileNum], totalUploadSize, this.state.estimatedUploadRate);
                         // upload photo to s3
                         return doSignedS3Post(webSizePhotoData.url, photoFormData).then(res => {
                             if (res.ok) {
@@ -740,6 +765,11 @@ class UploaderBase extends Component {
         }
 
         this.setState({ uploads: this.uploads });
+    }
+
+    componentWillUnmount = () => {
+        // TODO - checkout why componenent.isMounted depreciated
+        this._isMounted = false;
     }
 }
 

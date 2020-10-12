@@ -1,4 +1,4 @@
-// This script compare all s3 objects to whats in the gif table and delete the *.gif files that are not referenced.
+// This script compares all s3 objects to whats in the gif table and delete the *.gif files that are not referenced.
 
 const AWS = require('aws-sdk');
 const { BUCKET_NAME } = require('../const');

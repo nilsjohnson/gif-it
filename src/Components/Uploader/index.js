@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Grid, Box, TextField, Button } from "@material-ui/core";
+import { Container, Grid, Card, Box, TextField, Button, Typography } from "@material-ui/core";
 import UploaderBase from "./UploaderBase";
 import { withStyles } from '@material-ui/core/styles';
 import MakeImage from "./MakeImage";
@@ -9,6 +9,7 @@ import MakeGif from "./MakeGif";
 import ShowError from "./ShowError";
 import { UploadState } from "./UploadState";
 import { UploadType } from "./UploadType";
+import FileBar from './FileBar';
 
 const INPUT_ID = "img-uploader-input";
 const MAX_UPLOAD_SIZE = 70;
@@ -33,12 +34,25 @@ const useStyles = theme => ({
         margin: theme.spacing(2)
     },
     inputContainer: {
+        marginTop: theme.spacing(2),
         height: '200px',
         background: 'linear-gradient(100deg, rgba(25,209,146,0.5746673669467788) 0%, rgba(15,95,209,0.6222864145658263) 100%)'
     },
     uploadItem: {
         minWidth: '375px',
         maxWidth: '800px'
+    },
+    fullWidth: {
+        width: '100%'
+    },
+    card: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2)
     }
 });
 
@@ -174,21 +188,26 @@ class Uploader extends UploaderBase {
                 this.removeUpload(this.uploads[i].uploadId);
                 continue;
             }
-            // if it's a partially made gif, alert the user.
+
+            // it's a video to gif
             if (this.uploads[i].uploadType === UploadType.VID_TO_GIF) {
-                if (this.uploads[i].uploadState !== UploadState.DONE) {
+                if (this.uploads[i].uploadState === UploadState.DONE) {
+                    this.markShared(this.uploads[i].uploadId);
+                }
+                else {
                     alert(`Please finish converting ${this.uploads[i].file.name} to a gif, or remove it.`);
                     return;
                 }
             }
-            // if it's a gif, it was already loaded to s3, but will
-            // be deleted unless we mark it as shared
-            // if (this.uploads[i].file.type.startsWith("video/")) {
-            // if (this.fileManger.getFile(this.uploads[i].file).type.startsWith("video/")) {   
-            if (this.getFile(this.uploads[i].file).type.startsWith("/video")) {
-                this.markShared(this.uploads[i].uploadId);
+
+            if (this.uploads[i].uploadType === UploadType.IMG) {
+                // TODO validate for rendering.
             }
         }
+
+        // we can close the socket now.
+        console.log("closing socket.");
+        this.socket.disconnect();
 
         this.curFileNum = 0;
         this.upload(() => {
@@ -226,7 +245,7 @@ class Uploader extends UploaderBase {
                     fileName: curUpload.fileName,
                     tags: curUpload.tags,
                     thumbName: curUpload.thumbName,
-                    originalFileName: curUpload.file.name,
+                    originalFileName: curUpload.getFile(curUpload.file).name,
                     fileType: curUpload.file.type,
                     fullSizeName: curUpload.fullSizeName
                 };
@@ -243,6 +262,9 @@ class Uploader extends UploaderBase {
     }
 
     componentDidMount = () => {
+        // TODO cancel subscription instead? 
+        this._isMounted = true;
+
         const script = document.createElement("script");
         script.src = './opencv4.4.js';
         script.async = true;
@@ -254,6 +276,7 @@ class Uploader extends UploaderBase {
             });
         }
     }
+
 
     /**
      * Creates a form and appends a file to it.
@@ -300,7 +323,7 @@ class Uploader extends UploaderBase {
     }
 
     getMaxWidth = () => {
-        if(this.state.uploads.length > 1) {
+        if (this.state.uploads.length > 1) {
             return "lg";
         }
         else {
@@ -319,6 +342,34 @@ class Uploader extends UploaderBase {
 
     getUploadComponent = (upload) => {
         const { uploadState, uploadType } = upload;
+        const { classes } = this.props;
+
+        if (uploadState === null) {
+            return (
+                <Card className={classes.card}>
+                    <Grid
+                        container
+                        direction="row"
+                        justify="center"
+                        alignItems="center"
+                        spacing={2}
+                        className="root"
+                    >
+                        <Grid item xs={12}>
+                            <FileBar
+                                upload={upload}
+                                removeUpload={this.removeUpload}
+                                shiftUpload={this.shiftUpload}
+                                showShift={this.state.uploads.length === 1}
+                            />
+                        </Grid>
+                        <Grid item xs={10}>
+                            <Typography variant='h6'>Please Wait...</Typography>
+                        </Grid>
+                    </Grid>
+                </Card>
+            );
+        }
 
         if (uploadState === UploadState.ERR) {
             return (
@@ -364,7 +415,9 @@ class Uploader extends UploaderBase {
 
     render() {
         if (this.state.redirect) {
-            return <Redirect to={this.state.redirect} />
+            return (
+                <Redirect to={this.state.redirect} />
+            );
         }
 
         const { classes } = this.props;

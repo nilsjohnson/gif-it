@@ -2,8 +2,10 @@ const UploadState = {
     UPLOADING: 'UPLOADING',
     ERR: 'ERR',
     SETTING_OPTIONS: 'SETTING_OPTIONS',
+    PENDING_RENDER: 'PENDING_RENDER',
     RENDERING: 'RENDERING',
-    DONE: 'DONE'
+    DONE: 'DONE',
+    PENDING_SHARE: 'PENDING_SHARE'
 }
 
 export { UploadState }

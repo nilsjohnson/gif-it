@@ -65,7 +65,6 @@ class MediaBox extends Component {
 
     render() {
         const { classes } = this.props;
-        console.log(this.state);
 
         return (
             <Container component="main" maxWidth="md" className={classes.root}>

@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { gaussianBlur, grayscale, makeThumbnail, doInitialLoad, original, WEB_WIDTH } from '../../cvUtil';
 
 import ToolBar from './ToolBar';
+import { UploadState } from '../../UploadState';
 
 const useStyles = theme => ({
     hidden: {
@@ -23,6 +24,10 @@ const useStyles = theme => ({
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)'
+    },
+    progressBox: {
+        width: '250px',
+        height: '250px'
     }
 });
 
@@ -45,7 +50,8 @@ class ImageEditor extends Component {
                 heightRatio: 0,
                 widthInputErr: false,
                 heightInputErr: false
-            }
+            },
+            doingInitialLoad: true
         };
 
         this.srcElement = React.createRef();
@@ -71,7 +77,8 @@ class ImageEditor extends Component {
                 heightRatio: width / height
             }
             this.setState({
-                dimensions: dimensions
+                dimensions: dimensions,
+                doingInitialLoad: false
             });
 
             this.props.onLoad(false);
@@ -151,6 +158,10 @@ class ImageEditor extends Component {
         console.log('make images called');
         const { upload = {} } = this.props;
 
+        upload.update(upload.uploadId, {
+            uploadState: UploadState.RENDERING
+        });
+
         let thumbnailFile = await this.doMakeThumbnail();
         let websizeFile = await this.doMakeWebImage();
         let fullsizeFile = await this.doMakeFullSize();
@@ -158,8 +169,8 @@ class ImageEditor extends Component {
         let thumbnailId = upload.addFile(thumbnailFile);
         let websizeId = upload.addFile(websizeFile);
         let fullsizeId = null;
-        
-        if(fullsizeFile) {
+
+        if (fullsizeFile) {
             console.log("full size image generated.");
             fullsizeId = upload.addFile(fullsizeFile);
         }
@@ -189,7 +200,7 @@ class ImageEditor extends Component {
                         alignItems="center"
                     >
 
-                        <Box>
+                        <Box className={this.state.doingInitialLoad ? classes.hidden : ""}>
                             {/* This element is the original source */}
                             <img
                                 ref={this.srcElement}
@@ -206,8 +217,7 @@ class ImageEditor extends Component {
                             {/* this is the web version version */}
                             <canvas
                                 ref={this.outputWebElement}
-                                className={classes.fullWidth}
-                                id={"out-" + upload.uploadId} >
+                                className={classes.fullWidth} >
                             </canvas>
 
                             {/* This is the fullsize version */}
@@ -218,6 +228,16 @@ class ImageEditor extends Component {
 
                         </Box>
 
+                        <Box className={!this.state.doingInitialLoad ? classes.hidden : classes.progressBox}>
+                            <Grid
+                                container item
+                                direction="row"
+                                justify="center"
+                                alignItems="center"
+                            >
+                                <CircularProgress />
+                            </Grid>
+                        </Box>
 
                         <ToolBar
                             grayscale={this.grayscale}

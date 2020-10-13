@@ -38,7 +38,9 @@ export default function FileBar(props) {
                 {upload.file.name}
             </Typography>
 
-            {upload.uploadState === UploadState.UPLOADING
+            {upload.uploadState === UploadState.UPLOADING 
+                || upload.uploadState === UploadState.PENDING_RENDER
+                || upload.uploadState === UploadState.DONE
                 ?
                 <React.Fragment>
                      <ProgressBar value={upload.percentUploaded} />

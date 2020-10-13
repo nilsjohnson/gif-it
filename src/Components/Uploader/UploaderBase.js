@@ -19,7 +19,8 @@ class UploaderBase extends Component {
             uploads: [],
             filesHovering: false,
             tooManyFilesSelected: false,
-            fileLoadProgress: 0
+            fileLoadProgress: 0,
+            uploadingModalOpen: false
         });
 
         // Holding bin for files after the user has dragged/dropped or selected them.
@@ -123,6 +124,14 @@ class UploaderBase extends Component {
         this.setState({
             filesHovering: val
         });
+    }
+
+    openUploadingModal = () => {
+        this.setState({uploadingModalOpen: true});
+    }
+
+    closeUploadingModal = () => {
+        this.setState({uploadingModalOpen: false});
     }
 
     /**
@@ -241,8 +250,9 @@ class UploaderBase extends Component {
         // we render any media on upload, if applicable
         if (this.uploads[this.curFileNum].renderMedia) {
             await await this.uploads[this.curFileNum].renderMedia();
-            console.log("rendered media: ");
-            console.log(this.uploads[this.curFileNum]);
+            this.updateUploads(this.uploads[this.curFileNum].uploadId, {
+                uploadState: UploadState.UPLOADING
+            });
         }
 
         let upload = this.uploads[this.curFileNum];

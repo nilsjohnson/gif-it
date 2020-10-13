@@ -86,8 +86,6 @@ class MakeImage extends Component {
                         />
                     </Grid>
 
-                    {this.state.loading && <p>Loading...</p>}
-
                     <Grid item xs={12}>
                         <Box p={2}>
                             <ImageEditor

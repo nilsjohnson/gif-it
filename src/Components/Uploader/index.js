@@ -52,15 +52,16 @@ Fade.propTypes = {
 const useStyles = theme => ({
     container: {
         backgroundColor: theme.palette.primary.light,
-        padding: theme.spacing(1),
+        padding: theme.spacing(2),
         border: `4px dashed ${theme.palette.secondary.light}`,
         marginTop: theme.spacing(2),
         width: '100%',
     },
-    subContainer: {
+    titleWell: {
         backgroundColor: "white",
         borderRadius: theme.spacing(1),
-        marginBottom: theme.spacing(2)
+        marginBottom: theme.spacing(2),
+        width: '100%'
     },
     droppingFiles: {
         opacity: .5
@@ -71,6 +72,7 @@ const useStyles = theme => ({
     inputContainer: {
         marginTop: theme.spacing(2),
         height: '200px',
+        width: '100%',
         background: 'linear-gradient(100deg, rgba(25,209,146,0.5746673669467788) 0%, rgba(15,95,209,0.6222864145658263) 100%)'
     },
     uploadItem: {
@@ -493,68 +495,80 @@ class Uploader extends UploaderBase {
         }
 
         return (
-            <Container disableGutters={true} component="div" maxWidth={this.getMaxWidth()} >
+            <Container
+                onDrop={this.dropHandler}
+                className={`${classes.container} ${this.state.filesHovering ? classes.droppingFiles : ''}`}
+                onDragOver={this.dragOverHandler}
+                onDragLeave={this.dragEndHandler} 
+                disableGutters={true} 
+                component="div" 
+                maxWidth={this.getMaxWidth()} >
                 <Grid
                     container item
                     direction="column"
-                    justify="center"
+                    justify="flex-start"
                     alignItems="center"
-                    spacing={2}
-                >
-                    <Box className={`${classes.container} ${this.state.filesHovering ? classes.droppingFiles : ''}`}
-                        onDrop={this.dropHandler}
-                        onDragOver={this.dragOverHandler}
-                        onDragLeave={this.dragEndHandler}
-                    >
-                        {/* It's not an album unless there are multiple items */}
-                        {this.getNumValidUploads() > 1 &&
-                            <Grid item xs={12}>
-                                <Box className={classes.subContainer} p={2}>
+                    spacing={1} >
+
+                    {/* It's not an album unless there are multiple items */}
+                    {this.getNumValidUploads() > 1 &&
+
+                        <Grid
+                            container setItemDescription
+                            direction="row"
+                            justify="flex-start"
+                            alignItems="center"
+                        >
+                            <Grid item xs={false} sm={1} md={2}></Grid>
+                            <Grid item xs={12} sm={10} md={8}>
+                                <Box className={classes.titleWell} p={2}>
                                     <TextField
-                                        fullWidth
+                                        fullWidth={true}
                                         label="Album Title"
                                         variant="outlined"
                                         onChange={this.setAlbumTitle}
                                     />
                                 </Box>
                             </Grid>
-                        }
 
-                        <Grid
-                            container
-                            direction="row"
-                            justify="flex-start"
-                            alignItems="center"
-                            spacing={2}
-                        >
-                            {/* Show each upload */}
-                            {this.state.uploads.map(upload =>
-                                <Grid className={classes.uploadItem} item xs key={upload.uploadId + "_grid"}>
-                                    {this.getUploadComponent(upload)}
-                                </Grid>
-                            )}
+                            <Grid item xs={false} sm={1} md={2}></Grid>
                         </Grid>
+                    }
 
-                        <Grid item container
-                            className={classes.inputContainer}
-                            direction="column"
-                            justify="center"
-                            alignItems="center" >
-                            <input type="file" id={INPUT_ID} accept={this.allowedMimeTypes} multiple onChange={this.selectFilesUpload} />
-                            <p>Or Drag and Drop Files</p>
-                        </Grid>
-
-                        {this.state.uploads.length > 0 &&
-                            <Grid item container
-                                direction="row"
-                                justify="center"
-                                alignItems="flex-start" >
-                                <Button className={classes.btn} variant="contained" color="secondary" onClick={this.cancel} > Cancel </Button>
-                                <Button className={classes.btn} variant="contained" color="primary" onClick={this.share} > Share! </Button>
+                    <Grid
+                        container
+                        direction="row"
+                        justify="flex-start"
+                        alignItems="center"
+                        spacing={2}
+                    >
+                        {/* Show each upload */}
+                        {this.state.uploads.map(upload =>
+                            <Grid className={classes.uploadItem} item xs key={upload.uploadId + "_grid"}>
+                                {this.getUploadComponent(upload)}
                             </Grid>
-                        }
+                        )}
+                    </Grid>
 
-                    </Box>
+                    <Grid item container
+                        className={classes.inputContainer}
+                        direction="column"
+                        justify="center"
+                        alignItems="center" >
+                        <input type="file" id={INPUT_ID} accept={this.allowedMimeTypes} multiple onChange={this.selectFilesUpload} />
+                        <p>Or Drag and Drop Files</p>
+                    </Grid>
+
+                    {this.state.uploads.length > 0 &&
+                        <Grid item container
+                            direction="row"
+                            justify="center"
+                            alignItems="flex-start" >
+                            <Button className={classes.btn} variant="contained" color="secondary" onClick={this.cancel} > Cancel </Button>
+                            <Button className={classes.btn} variant="contained" color="primary" onClick={this.share} > Share! </Button>
+                        </Grid>
+                    }
+
                 </Grid>
 
                 <Modal
@@ -569,7 +583,8 @@ class Uploader extends UploaderBase {
                         timeout: 500,
                     }}
                 >
-                    <Fade in={open}>
+                    {/* null should say open..this is quick fix for the production build */}
+                    <Fade in={null}>
                         <div className={classes.paper}>
                             <h2 id="spring-modal-title">Spring modal</h2>
                             <p id="spring-modal-description">react-spring animates me.</p>

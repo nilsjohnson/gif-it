@@ -81,7 +81,6 @@ class ImageEditor extends Component {
                 doingInitialLoad: false
             });
 
-            this.props.onLoad(false);
         });
     }
 

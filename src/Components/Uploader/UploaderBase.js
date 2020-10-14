@@ -5,6 +5,7 @@ import { getPresignedPost, doSignedS3Post, postPhotoGallery } from '../../util/d
 import { UploadState } from "./UploadState";
 import { UploadType } from "./UploadType";
 import FileManager from "./FileManager";
+import ProgressTimer from "./ProgressTimer";
 
 const PROGRESS_BAR_UPDATE_INTERVAL = 250; // milliseconds
 
@@ -127,11 +128,11 @@ class UploaderBase extends Component {
     }
 
     openUploadingModal = () => {
-        this.setState({uploadingModalOpen: true});
+        this.setState({ uploadingModalOpen: true });
     }
 
     closeUploadingModal = () => {
-        this.setState({uploadingModalOpen: false});
+        this.setState({ uploadingModalOpen: false });
     }
 
     /**
@@ -346,6 +347,13 @@ class UploaderBase extends Component {
      * use this method to funnel them all down into one single array.
      */
     initUpload = () => {
+        // remove any uploads in the error state. 
+        for (let i = 0; i < this.uploads.length; i++) {
+            if (this.uploads[i].uploadState === UploadState.ERR) {
+                this.removeUpload(this.uploads[i].uploadId);
+            }
+        }
+
         if (this.maxFilesChosen()) {
             console.log(`The maximum number of files (${this.maxNumUploads}) have already been chosen.`);
             this.unprocessedFiles = [];
@@ -368,44 +376,34 @@ class UploaderBase extends Component {
             this.uploads.push(temp);
 
             this.setState({ uploads: this.uploads });
-            
-            // open the socket if necessary
+
+            // if the socket is null it needs to be opened. 
             if (this.socket === null) {
-                console.log("creating socket then uploading.");
+                // upload will be called on connect.
                 this.createSocket();
             }
-            // otherwise we're set to upload!
-            else if(this.socket.connected) {
-                console.log("socket already made. uploading.");
-                this.upload();
+            // if the socket is not null
+            else if (this.socket.connected) {
+                // and the user has selected more files than were
+                // iterated though after the connection was made
+                if(this.numFilesChosen >= this.curFileNum) {
+                    // we make it upload again.
+                    this.upload();
+                }
+                else {
+                    // otherwise this upload will get uploaded in the current
+                    // upload recursion. Do nothing.
+                }
             }
             else {
-                // this will happen a lot. Once the socket actually connects, 
-                // the uploads will be ready to go. So we do nothing in this case.
+                // Once the socket actually connects, the uploads 
+                // will be ready to go. So we do nothing in this case.
             }
 
         }
 
         // reset this array so that user can add more files and update the state.
         this.unprocessedFiles = [];
-        // remove any uploads in the error state. 
-        for (let i = 0; i < this.uploads.length; i++) {
-            if (this.uploads[i].uploadState === UploadState.ERR) {
-                this.removeUpload(this.uploads[i].uploadId);
-            }
-        }
-
-        this.setState({ uploads: this.uploads });
-
-        // // open the socket if necessary
-        // if (this.socket === null) {
-        //     // this will trigger an upload.
-        //     this.createSocket();
-        // }
-        // // otherwise we're set to upload!
-        // else {
-        //     this.upload();
-        // }
     }
 
 
@@ -539,41 +537,13 @@ class UploaderBase extends Component {
         }
     }
 
-    /**
-     * A recursive method to update the progress bar of an upload.
-     * @param {*} totalUploaded the amount of data that has been uploaded
-     * @param {*} upload the upload being uploaded
-     * @param {*} fileSize the size of the file being uploaded
-     */
-    doProgressBar = (upload, fileSize, rate, totalUploaded = 0) => {
-        setTimeout(() => {
-            if (totalUploaded >= fileSize || !this._isMounted) { return; }
-
-            totalUploaded += rate;
-            let percent = Math.round(totalUploaded / fileSize * 100);
-            percent = percent < 100 ? percent : 100;
-
-            if (upload.status === 'uploading') {
-                this.updateUploads(upload.uploadId, { percentUploaded: percent });
-                this.doProgressBar(upload, fileSize, rate, totalUploaded);
-            }
-            else {
-                this.updateUploads(upload.uploadId, { percentUploaded: 100 });
-                return;
-            }
-        }, PROGRESS_BAR_UPDATE_INTERVAL);
-    }
-
     setUploadRate = (startTime, endTime, fileSize) => {
-        this.estimatedUploadRate = fileSize * PROGRESS_BAR_UPDATE_INTERVAL / (endTime - startTime);
+        this.estimatedUploadRate = (fileSize * PROGRESS_BAR_UPDATE_INTERVAL/1000 / (endTime - startTime));
     }
 
     doVidToGifUpload = (file, tempUploadId, callback) => {
         let formData = new FormData();
         formData.append("files", file);
-
-        console.log("doing vidToGif upload");
-        console.log(this.socket.id);
 
         return uploadFile(this.socket.id, tempUploadId, formData, 'make_gif')
             .then(response => {
@@ -620,7 +590,7 @@ class UploaderBase extends Component {
             totalUploadSize = webSizeFile.size;
         }
         else {
-            totalUploadSize = webSizeFile.size + fullSizeFile.size;
+            totalUploadSize = webSizeFile.size * fullSizeFile.size;
         }
 
         let fileParts = originalFile.name.split('.');
@@ -631,10 +601,11 @@ class UploaderBase extends Component {
             action: "photo"
         };
 
+        let startTime, endTime, progressTimer;
+
         return getPresignedPost(orignalFileInfo).then(res => {
             if (res.ok) {
                 return res.json().then(data => {
-                    //const { photoData = {}, thumbData = {}, fullSizeData = {}, uploadId } = data;
                     const { thumbSizePhotoData = {}, webSizePhotoData = {}, fullSizePhotoData = {}, uploadId } = data;
                     const photoFormData = this.createForm(webSizePhotoData.fields, webSizeFile);
 
@@ -650,22 +621,37 @@ class UploaderBase extends Component {
                     // upload the thumbnail, and use the total time as a
                     // metric to guess the progress for the fullsize photo.
                     const thumbFormData = this.createForm(thumbSizePhotoData.fields, thumbnailFile);
-                    let startTime = new Date().getTime();
+                    startTime = new Date().getTime();
                     return doSignedS3Post(thumbSizePhotoData.url, thumbFormData).then(res => {
                         if (res.ok) {
-                            let endTime = new Date().getTime();
-                            this.setUploadRate(endTime, startTime, thumbnailFile.size);
+                            endTime = new Date().getTime();
+                            this.setUploadRate(startTime, endTime, thumbnailFile.size);
+                            progressTimer = new ProgressTimer(
+                                upload.uploadId,
+                                this.updateUploads,
+                                totalUploadSize,
+                                this.estimatedUploadRate,
+                                PROGRESS_BAR_UPDATE_INTERVAL
+                            );
                         }
                         else {
                             console.log("Thumbnail not uploaded. Attempting to upload fullsize photo.");
                         }
 
-                        // starts the progress bar rolling...
-                        this.doProgressBar(this.uploads[this.curFileNum], totalUploadSize, this.state.estimatedUploadRate);
+                        // starts the progress bar rolling and the timer going again
+
+                        //this.doProgressBar(this.uploads[this.curFileNum], totalUploadSize, this.estimatedUploadRate);
+                        
+                        progressTimer.doProgressBar();
+                        startTime = new Date().getTime();
                         // upload photo to s3
                         return doSignedS3Post(webSizePhotoData.url, photoFormData).then(res => {
                             if (res.ok) {
-                                this.updateUploads(uploadId, { uploadState: UploadState.DONE });
+                                endTime = new Date().getTime();
+                                this.setUploadRate(startTime, endTime, webSizeFile.size);
+                                // we now have a better rate estimate to work with.
+                                progressTimer.setTotalUploaded(webSizeFile.size);
+                                progressTimer.updateRate(this.estimatedUploadRate);
                                 console.log(`${originalFile.name} websize uploaded to s3`);
                             }
                             else {
@@ -687,6 +673,9 @@ class UploaderBase extends Component {
                                 if (res.ok) {
                                     this.updateUploads(uploadId, { uploadState: UploadState.DONE });
                                     console.log(`${originalFile.name} full size uploaded to s3`);
+                                    // signal the progress timer to stop.
+                                    console.log("telling timer to stop.");
+                                    progressTimer.setUploadComplete();
                                 }
                                 else {
                                     console.log(`${originalFile.name} full size not uploaded to s3`);

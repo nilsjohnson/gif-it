@@ -111,6 +111,12 @@ class MakeGif extends Component {
           />
         );
 
+      case UploadState.PENDING_SHARE:
+        return (
+          <Complete
+            fileName={upload.fileName}
+          />
+        );
       default: return ("");
     }
   }
@@ -140,20 +146,20 @@ class MakeGif extends Component {
             {this.getElement()}
           </Grid>
           {upload.uploadState === UploadState.DONE && <React.Fragment>
-          <Grid xs={10} item>
-            <EnterDescription setDescription={this.setDescription} />
-          </Grid>
-          <Grid xs={10} item>
-            <TagInputBox
-              suggestions={upload.tagSuggestions}
-              tags={upload.tags}
-              addTag={this.addTag}
-              removeTag={this.removeTag}
-              requestTagSuggestions={this.requestTagSuggestions}
-              share={this.share}
-            />
-          </Grid> </React.Fragment>}
-  
+            <Grid xs={10} item>
+              <EnterDescription setDescription={this.setDescription} />
+            </Grid>
+            <Grid xs={10} item>
+              <TagInputBox
+                suggestions={upload.tagSuggestions}
+                tags={upload.tags}
+                addTag={this.addTag}
+                removeTag={this.removeTag}
+                requestTagSuggestions={this.requestTagSuggestions}
+                share={this.share}
+              />
+            </Grid> </React.Fragment>}
+
         </Grid>
       </Card>
     );

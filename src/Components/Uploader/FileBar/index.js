@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import ShiftButtons from './ShiftButtons';
 import { UploadState } from '../UploadState';
+import { UploadType } from '../UploadType';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -16,9 +17,42 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+function shouldDisplayProgress(uploadState, uploadType) {
+    if(uploadType === UploadType.VID_TO_GIF) {
+        if(uploadState === UploadState.UPLOADING || uploadState === UploadState.PENDING_SHARE) {
+            return true;
+        }
+    }
+
+    if(uploadType === UploadType.IMG) {
+        if(uploadState !== UploadState.SETTING_OPTIONS) {
+            return true;
+        }
+    }
+
+    return false;
+} 
+
+function getMessage(uploadState) {
+    switch(uploadState) {
+        case UploadState.UPLOADING:
+            return "Uploading...";
+        case UploadState.RENDERING:
+            return "Rendering...";
+        case UploadState.DONE:
+            return "Upload Succeeded";
+        case UploadState.PENDING_RENDER:
+            return "Waiting to be rendered..."; 
+        case UploadState.PENDING_SHARE:
+            return "Please Wait...";    
+    }
+}
+
 
 export default function FileBar(props) {
     const { upload = {}, removeUpload, shiftUpload, showShift } = props;
+    console.log("fb");
+    console.log(upload);
     const classes = useStyles();
 
     const callRemoveUpload = () => {
@@ -35,16 +69,14 @@ export default function FileBar(props) {
     return (
         <Toolbar className={classes.toolbar}>
             <Typography variant="h6" color="inherit" noWrap={true} className={classes.toolbarTitle}>
-                {upload.file.name}
+                {upload.getFile(upload.file).name}
             </Typography>
 
-            {upload.uploadState === UploadState.UPLOADING 
-                || upload.uploadState === UploadState.PENDING_RENDER
-                || upload.uploadState === UploadState.DONE
+            {shouldDisplayProgress(upload.uploadState, upload.uploadType)
                 ?
                 <React.Fragment>
                      <ProgressBar value={upload.percentUploaded} />
-                     <Typography>Please Wait...</Typography>   
+                     <Typography variant="subtitle1">{getMessage(upload.uploadState)}</Typography>   
                 </React.Fragment>
                 :
                 <React.Fragment>

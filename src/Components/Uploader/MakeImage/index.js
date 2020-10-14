@@ -31,9 +31,6 @@ const useStyles = theme => ({
 class MakeImage extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            loading: true
-        }
     }
 
     setDescription = (input) => {
@@ -52,12 +49,6 @@ class MakeImage extends Component {
     requestTagSuggestions = (curInput) => {
         const { requestTagSuggestions, upload = {} } = this.props;
         requestTagSuggestions(upload.uploadId, curInput);
-    }
-
-    setLoading = (val) => {
-        this.setState({
-            loading: val
-        });
     }
 
     render() {
@@ -91,7 +82,6 @@ class MakeImage extends Component {
                             <ImageEditor
                                 upload={upload}
                                 setMakeImages={setMakeImages}
-                                onLoad={this.setLoading}
                             />
                         </Box>
                     </Grid>

@@ -31,3 +31,4 @@ ReferenceError: transferGifToS3 is not defined
 2020-10-12 12:01:38 sendmail: Cannot open mail:25
 
 2020-10-12 12:01:38 Confirmation Email Not Sent. Code: 1
+2020-10-13 21:47:04 Tried to mark a gif as shared, but it wasn't found

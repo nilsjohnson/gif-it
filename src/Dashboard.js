@@ -7,7 +7,7 @@ import { checkToken } from './util/data';
 import Uploader from "./Components/Uploader";
 
 class Dashboard extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -19,15 +19,15 @@ class Dashboard extends Component {
     componentDidMount = () => {
         console.log("mounted");
         checkToken().then(res => {
-            if(!res.ok) {
-                this.setState({redirect: true});
+            if (!res.ok) {
+                this.setState({ redirect: true });
             }
         }).catch(err => console.log(err));
     }
 
     render() {
 
-        if(this.state.redirect) {
+        if (this.state.redirect) {
             return (<Redirect to='/login' />)
         }
 
@@ -35,9 +35,9 @@ class Dashboard extends Component {
         return (
             <Box>
                 <Header />
-                <Container component='main'>
-                        <Uploader/>
-                </Container>
+
+                <Uploader />
+
             </Box>
         );
     }

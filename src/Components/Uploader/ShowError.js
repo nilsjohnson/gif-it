@@ -9,7 +9,6 @@ const useStyles = theme => ({
         flexDirection: 'column',
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
-        paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
         border: `2px solid ${theme.palette.error.light}`
     }
@@ -18,7 +17,7 @@ const useStyles = theme => ({
 
 
 function ShowError(props) {
-    const { classes, upload = {} } = props;
+    const { classes, upload = {}, removeUpload } = props;
 
     return (
         <Card className={classes.card}>
@@ -31,8 +30,9 @@ function ShowError(props) {
             >
                 <Grid item xs={12}>
                     <FileBar
-                        upload={props.upload}
+                        upload={upload}
                         showShift={false}
+                        removeUpload={removeUpload}
                     />
                 </Grid>
                 <Grid item xs={false} sm={1}></Grid>

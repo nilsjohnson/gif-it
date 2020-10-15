@@ -5,7 +5,6 @@ import EnterDescription from "../EnterDescription";
 import TagInputBox from '../../TagInputBox';
 import FileBar from "../FileBar";
 import ImageEditor from "./ImageEditor";
-import { UploadState } from "../UploadState";
 
 const useStyles = theme => ({
     hidden: {
@@ -20,7 +19,6 @@ const useStyles = theme => ({
         flexDirection: 'column',
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
-        paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2)
     },
     editorContainer: {
@@ -66,7 +64,7 @@ class MakeImage extends Component {
                     direction="row"
                     justify="flex-start"
                     alignItems="flex-start"
-                    spacing={2}
+                    spacing={1}
                 >
                     <Grid item xs={12}>
                         <FileBar
@@ -78,15 +76,11 @@ class MakeImage extends Component {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Box p={2}>
-                            <ImageEditor
-                                upload={upload}
-                                setMakeImages={setMakeImages}
-                            />
-                        </Box>
+                        <ImageEditor
+                            upload={upload}
+                            setMakeImages={setMakeImages}
+                        />
                     </Grid>
-
-
 
                     <Grid item container
                         direction='row'

@@ -8,6 +8,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import Tag from '../Tag/Tag'
 
 const MAX_TAG_LENGTH = 32;
+const MAX_NUM_TAGS = 10;
 
 const useStyles = theme => ({
     tagInput: {
@@ -58,6 +59,16 @@ class TagBox extends Component {
     */
     addTag = () => {
         const { tags = [] } = this.props;
+
+        if(tags.length === MAX_NUM_TAGS) {
+            
+            this.setState({
+                inputError: true,
+                errorMessage: `No more than ${MAX_NUM_TAGS} tags allowed.`}
+            );
+            return;
+        }
+
         if (this.state.inputError) {
             console.log(`'${this.state.curInput}' is not a valid tag. Cannot add it.`);
             return;

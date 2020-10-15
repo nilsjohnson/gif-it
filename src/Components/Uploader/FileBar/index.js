@@ -3,14 +3,16 @@ import ProgressBar from '../../ProgressBar';
 import { Toolbar, Typography, IconButton } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 
-import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ShiftButtons from './ShiftButtons';
 import { UploadState } from '../UploadState';
 import { UploadType } from '../UploadType';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
     toolbar: {
         flexWrap: 'wrap',
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1)
     },
     toolbarTitle: {
         flexGrow: 1,
@@ -67,7 +69,7 @@ export default function FileBar(props) {
         shiftUpload(upload.uploadId, 1);
     }
     return (
-        <Toolbar className={classes.toolbar}>
+        <Toolbar className={classes.toolbar} disableGutters={true}>
             <Typography variant="h6" color="inherit" noWrap={true} className={classes.toolbarTitle}>
                 {upload.getFile(upload.file).name}
             </Typography>
@@ -86,7 +88,7 @@ export default function FileBar(props) {
                     callShiftDown={callShiftDown}/> }
 
                     <IconButton aria-label="delete" onClick={callRemoveUpload} >
-                        <CloseIcon />
+                        <DeleteIcon />
                     </IconButton>
                 </React.Fragment>
             }

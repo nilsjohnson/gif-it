@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Grid } from '@material-ui/core';
+import { Card, Grid, Box } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import SettingOptions from './SettingOptions';
 import Complete from './Complete';
@@ -9,6 +9,7 @@ import FileBar from '../FileBar';
 import EnterDescription from '../EnterDescription';
 import TagInputBox from '../../TagInputBox';
 import { UploadState } from '../UploadState';
+import Uploading from './Uploading';
 
 
 const useStyles = theme => ({
@@ -21,7 +22,6 @@ const useStyles = theme => ({
     flexDirection: 'column',
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2)
   }
 });
@@ -62,7 +62,7 @@ class MakeGif extends Component {
   }
 
   cancel = () => {
-    this.props.removeUpload(this.props.uploadId);
+    this.props.removeUpload(this.props.upload.uploadId);
   }
 
   requestTagSuggestions = (curInput) => {
@@ -80,7 +80,7 @@ class MakeGif extends Component {
       // Do nothing, showing the FileBar is enough
       case UploadState.UPLOADING:
         return (
-          ""
+          <Uploading cancel={this.cancel}/>
         );
 
       case UploadState.SETTING_OPTIONS:
@@ -142,22 +142,23 @@ class MakeGif extends Component {
               showShift={!singleImage}
             />
           </Grid>
-          <Grid item xs={10}>
+          <Grid item xs={12}>
             {this.getElement()}
           </Grid>
           {upload.uploadState === UploadState.DONE && <React.Fragment>
-            <Grid xs={10} item>
-              <EnterDescription setDescription={this.setDescription} />
-            </Grid>
-            <Grid xs={10} item>
-              <TagInputBox
-                suggestions={upload.tagSuggestions}
-                tags={upload.tags}
-                addTag={this.addTag}
-                removeTag={this.removeTag}
-                requestTagSuggestions={this.requestTagSuggestions}
-                share={this.share}
-              />
+            <Grid xs={12} item>
+              <Box p={2}>
+                <EnterDescription setDescription={this.setDescription} />
+                <TagInputBox
+                  suggestions={upload.tagSuggestions}
+                  tags={upload.tags}
+                  addTag={this.addTag}
+                  removeTag={this.removeTag}
+                  requestTagSuggestions={this.requestTagSuggestions}
+                  share={this.share}
+                />
+              </Box>
+
             </Grid> </React.Fragment>}
 
         </Grid>

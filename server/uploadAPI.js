@@ -49,7 +49,7 @@ function deleteUnsharedGifs(socketId) {
         deleteFromS3(`${uploadIds[i]}.thumb.gif`, null, (err) => {
           log(err);
         });
-        
+
       }
     }
   }
@@ -79,17 +79,28 @@ function onGifMade(socketId, uploadId, fileName, thumbFileName) {
   transferGifToS3(path.join(FilePaths.GIF_SAVE_DIR, fileName),
     (data) => {
       // on success
-      connections[socketId].socket.emit("ConversionComplete", {
-        uploadId: uploadId,
-        fileName: fileName,
-        thumbName: thumbFileName
-      });
-      if (DEBUG) { console.log(`s3 transfer sucess! - ${data}`); }
+      if (connections[socketId]) {
+        connections[socketId].socket.emit("ConversionComplete", {
+          uploadId: uploadId,
+          fileName: fileName,
+          thumbName: thumbFileName
+        });
+        log(`Socket closed before we could respond from share request. UploadId: ${uploadId}, fileName: ${fileName}`);
+      }
+      else {
+        if (DEBUG) { console.log(`s3 transfer sucess! - ${data}`); }
+      }
     },
     (err) => {
       // on failure
-      connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, error: "Something Went Wrong. Sorry! :(" });
-      console.log(`Problem Uploading to s3. ${err}`);
+      if(connections[socketId]) {
+        connections[socketId].socket.emit("ConversionComplete", { uploadId: uploadId, error: "Something Went Wrong. Sorry! :(" });
+        console.log(`Problem Uploading to s3. ${err}`);
+      }
+      else {
+        log(`Error uploading to s3, and socket closed. UploadId: ${uploadId}, fileName: ${fileName}`);
+      }
+
     });
 }
 
@@ -141,7 +152,7 @@ function addSocket(newSocket) {
   }
 
   connections[socketId].socket.on("disconnect", () => {
-    if(deleteSocket(socketId)) {
+    if (deleteSocket(socketId)) {
       console.log(`Socket ${socketId} deleted and disconnected`);
     }
     else {
@@ -192,14 +203,14 @@ function addSocket(newSocket) {
     const { uploadId } = data;
     console.log(`Marking as shared: ${uploadId}`);
 
-    if(connections[socketId].uploads[uploadId]) {
+    if (connections[socketId].uploads[uploadId]) {
       connections[socketId].uploads[uploadId].shared = true;
       console.log("marked as shared.");
     }
     else {
       log("Tried to mark a gif as shared, but it wasn't found");
     }
-    
+
   });
 }
 
@@ -297,6 +308,7 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
         }
         else {
           console.log(`No socket to send upload progress to for socket ${socketId}`);
+          req.unpipe();
         }
       });
 
@@ -328,26 +340,26 @@ app.post('/upload/addMedia', function (req, res) {
   console.log("bod");
   console.log(req.body);
 
-  if(req.body.album) {
+  if (req.body.album) {
     // if this is an 'album' of items
     let album = req.body.album;
 
     mediaDAO.createAlbum(album, userId, req.ip, (albumId) => {
       // on success
       console.log("Album created!");
-      res.send({redirect: `/explore?albumId=${albumId}`});
+      res.send({ redirect: `/explore?albumId=${albumId}` });
     }, err => {
       // on error
       console.log(err);
       res.sendStatus(500);
     });
   }
-  else if(req.body.media) {
+  else if (req.body.media) {
     // if this is just a single item
     let media = req.body.media;
     mediaDAO.addMedia(media, userId, req.ip, mediaId => {
       // on success
-      res.send({redirect: `/explore?mId=${mediaId}`});
+      res.send({ redirect: `/explore?mId=${mediaId}` });
     }, err => {
       // on error
       console.log(err);

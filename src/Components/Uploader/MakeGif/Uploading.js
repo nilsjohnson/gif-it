@@ -1,8 +1,8 @@
 import React from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, Button} from '@material-ui/core';
 
 export default function Uploading(props) {
-  const { error } = props;
+  const { cancel } = props;
 
   return (
     <Grid
@@ -29,7 +29,9 @@ export default function Uploading(props) {
           spacing={1}
         >
           <Grid item>
-            {(error ? error : 'Please Wait...')}
+            <Button variant="contained" color="secondary" onClick={cancel}>
+              Cancel
+            </Button>
           </Grid>
         </Grid>
       </Grid>

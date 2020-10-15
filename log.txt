@@ -32,3 +32,16 @@ ReferenceError: transferGifToS3 is not defined
 
 2020-10-12 12:01:38 Confirmation Email Not Sent. Code: 1
 2020-10-13 21:47:04 Tried to mark a gif as shared, but it wasn't found
+2020-10-15 15:33:34 Tried to mark a gif as shared, but it wasn't found
+2020-10-15 15:51:20 2020-10-15 15:51:20 Cannot read property 'socket' of undefined 
+TypeError: Cannot read property 'socket' of undefined
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:307:29)
+    at Busboy.emit (events.js:322:22)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at /home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:52:13
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-15 16:12:05 Tried to mark a gif as shared, but it wasn't found
+2020-10-15 16:24:31 Socket closed before we could respond from share request. UploadId: i91WxLG5, fileName: i91WxLG5.gif
+2020-10-15 16:24:32 Socket closed before we could respond from share request. UploadId: 0mROAIzs, fileName: 0mROAIzs.gif

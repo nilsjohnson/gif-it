@@ -70,7 +70,7 @@ const useStyles = theme => ({
         margin: theme.spacing(2)
     },
     inputContainer: {
-        marginTop: theme.spacing(2),
+        marginTop: theme.spacing(1),
         height: '200px',
         width: '100%',
         background: 'linear-gradient(100deg, rgba(25,209,146,0.5746673669467788) 0%, rgba(15,95,209,0.6222864145658263) 100%)'
@@ -82,15 +82,7 @@ const useStyles = theme => ({
     fullWidth: {
         width: '100%'
     },
-    card: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2)
-    },
+
     modal: {
         display: 'flex',
         alignItems: 'center',
@@ -102,6 +94,9 @@ const useStyles = theme => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
+    inputBtn: {
+        display: 'none'
+    }
 });
 
 
@@ -243,7 +238,8 @@ class Uploader extends UploaderBase {
                     this.markShared(this.uploads[i].uploadId);
                 }
                 else {
-                    alert(`Please finish converting ${this.uploads[i].file.name} to a gif, or remove it.`);
+                    let file = this.uploads[i].getFile(this.uploads[i].file);
+                    alert(`Please finish converting ${file.name} to a gif${this.uploads.length > 1 ? ' or remove it.' : "."}`);
                     return;
                 }
             }
@@ -412,7 +408,7 @@ class Uploader extends UploaderBase {
 
         if (uploadState === null) {
             return (
-                <Card className={classes.card}>
+                <Card>
                     <Grid
                         container
                         direction="row"
@@ -441,6 +437,7 @@ class Uploader extends UploaderBase {
             return (
                 <ShowError
                     upload={upload}
+                    removeUpload={this.removeUpload}
                 />);
         }
 
@@ -479,6 +476,10 @@ class Uploader extends UploaderBase {
         }
     }
 
+    triggerInputClick = () => {
+        document.getElementById(this.inputElementId).click();
+    }
+
     render() {
         if (this.state.redirect) {
             return (
@@ -499,9 +500,9 @@ class Uploader extends UploaderBase {
                 onDrop={this.dropHandler}
                 className={`${classes.container} ${this.state.filesHovering ? classes.droppingFiles : ''}`}
                 onDragOver={this.dragOverHandler}
-                onDragLeave={this.dragEndHandler} 
-                disableGutters={true} 
-                component="div" 
+                onDragLeave={this.dragEndHandler}
+                disableGutters={true}
+                component="div"
                 maxWidth={this.getMaxWidth()} >
                 <Grid
                     container item
@@ -554,9 +555,18 @@ class Uploader extends UploaderBase {
                         className={classes.inputContainer}
                         direction="column"
                         justify="center"
-                        alignItems="center" >
-                        <input type="file" id={INPUT_ID} accept={this.allowedMimeTypes} multiple onChange={this.selectFilesUpload} />
-                        <p>Or Drag and Drop Files</p>
+                        alignItems="center"
+                        spacing={2}
+                    >
+                        <Grid item>
+                            <Button onClick={this.triggerInputClick} variant="contained" color="primary">
+                                Choose Files
+                        </Button>
+                            <input className={classes.inputBtn} type="file" id={INPUT_ID} accept={this.allowedMimeTypes} multiple onChange={this.selectFilesUpload} />
+                        </Grid>
+                        <Grid item>
+                            <Typography variant='h6'>Or Drag and Drop Video or Image File(s)</Typography>
+                        </Grid>
                     </Grid>
 
                     {this.state.uploads.length > 0 &&
@@ -564,7 +574,6 @@ class Uploader extends UploaderBase {
                             direction="row"
                             justify="center"
                             alignItems="flex-start" >
-                            <Button className={classes.btn} variant="contained" color="secondary" onClick={this.cancel} > Cancel </Button>
                             <Button className={classes.btn} variant="contained" color="primary" onClick={this.share} > Share! </Button>
                         </Grid>
                     }

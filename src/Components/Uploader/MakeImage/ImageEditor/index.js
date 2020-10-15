@@ -224,7 +224,6 @@ class ImageEditor extends Component {
                                 ref={this.outputFullSizeElement}
                                 className={`${classes.hidden}`}>
                             </canvas>
-
                         </Box>
 
                         <Box className={!this.state.doingInitialLoad ? classes.hidden : classes.progressBox}>

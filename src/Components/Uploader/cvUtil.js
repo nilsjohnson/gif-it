@@ -1,6 +1,6 @@
  /*global cv*/
 const MAX_PIXELS = 800*800;
-const WEB_WIDTH = 600;
+const WEB_WIDTH = 625;
 const THUMB_WIDTH = 300;
 
 function makeThumbnail(srcElem, dstElem, onBlob) {

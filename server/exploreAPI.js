@@ -7,15 +7,17 @@ const MediaDAO = require('./data/MediaDAO');
 let mediaDAO = new MediaDAO();
 
 app.get('/explore', function (req, res) {
-    mediaDAO.getMostRecent(15, result =>  {
-      if(result) {
-        //console.log(result);
-        res.send(result);
-      }
-      else {
-        res.status(500).send("Problem fetching new media. Sorry!");
-      }
-    });
+  console.log("hit");
+  mediaDAO.getMostRecent(30, result => {
+    // on success
+    console.log("Getting most recent success.");
+    console.log(result);
+    res.send(result);
+  }, err => {
+    // on error
+    log(err);
+    res.status(500).send("Problem fetching new media. Sorry!");
+  });
 });
 
 app.get('/search', function(req, res) {

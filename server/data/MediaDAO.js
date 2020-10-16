@@ -5,6 +5,27 @@ const { BUCKET_NAME } = require("../const");
 /** function that gets called to execute sql. See MediaDAO constructor. */
 let query;
 
+async function getMostRecentMedia(connection, limit) {
+    let sql =
+        `SELECT 
+            media.id, 
+            media.descript, 
+            media.fileName, 
+            media.thumbName,
+            album_items.item_index, 
+            album.title as AlbumTitle,
+            album.id as albumId
+        FROM media
+            JOIN upload on media.id = upload.id
+            LEFT JOIN album_items ON media.id = album_items.media_id
+            LEFT JOIN album ON album.id = album_items.album_id
+        WHERE album_items.item_index is null OR album_items.item_index = 0
+        ORDER BY upload.date DESC
+        LIMIT ${limit}`;
+
+    return await query(connection, sql, limit);
+}
+
 async function getMediaByTags(connection, tags) {
     let sql =
         `SELECT distinct media.fileName, media.descript, media.thumbName, media.id from media
@@ -209,36 +230,30 @@ class MediaDAO extends DAO {
     }
 
     /**
-     * Gets the most recent uploads
-     * @param {*} qty 
-     * @param {*} callback callback method that returns an array of objects
+     * 
+     * @param {*} qty The limit for number of results
+     * @param {*} onSuccess success callback
+     * @param {*} onFail failure callback
      */
-    getMostRecent(qty, callback) {
-        this.getConnection(connection => {
+    getMostRecent(qty, onSuccess, onFail) {
+        this.getConnection(async connection => {
             if (!connection) {
-                return callback(null);
+                return onFail("Couldn't get a db connection :(");
             }
 
-            let sql = `SELECT media.id, media.descript, media.fileName, media.thumbName FROM media
-            JOIN upload ON media.id = upload.id
-            ORDER BY upload.date DESC 
-            limit ${qty};`;
-
-            connection.query(sql, (error, results, fields) => {
-                connection.release();
-
+            try {
+                let results = await getMostRecentMedia(connection, qty)
                 if (DEV) {
                     for (let i = 0; i < results.length; i++) {
                         results[i].fileName = makeDevPath(results[i].fileName);
                         results[i].thumbName = makeDevPath(results[i].thumbName);
                     }
                 }
-
-                callback(results);
-                if (error) {
-                    this.logFailure(error);
-                }
-            });
+                onSuccess(results);
+            }
+            catch (ex) {
+                onFail(ex);
+            }
         });
     }
 
@@ -390,15 +405,15 @@ class MediaDAO extends DAO {
 
             try {
                 let results = await getMediaByTags(connection, tags);
-                if(DEV) {
-                    for(let i = 0; i < results.length; i++) {
+                if (DEV) {
+                    for (let i = 0; i < results.length; i++) {
                         results[i].thumbName = makeDevPath(results[i].thumbName);
                     }
                 }
 
                 onSuccess(results);
             }
-            catch(ex) {
+            catch (ex) {
                 log(ex);
                 onFail("database issue");
             }
@@ -445,13 +460,13 @@ class MediaDAO extends DAO {
                         fullSizeName } = items[i];
 
                     // insert the media
-                    args = { 
-                        id: uploadId, 
-                        descript: description, 
-                        fileName: fileName, 
-                        thumbName: thumbName, 
-                        fullSizeName: fullSizeName, 
-                        fileType: fileType 
+                    args = {
+                        id: uploadId,
+                        descript: description,
+                        fileName: fileName,
+                        thumbName: thumbName,
+                        fullSizeName: fullSizeName,
+                        fileType: fileType
                     };
                     results = await insertMedia(connection, args);
 
@@ -531,7 +546,7 @@ class MediaDAO extends DAO {
 }
 
 function makeDevPath(fileName) {
-    if(fileName) {
+    if (fileName) {
         return `https://s3.amazonaws.com/${BUCKET_NAME}/${fileName}`;
     }
     return fileName;

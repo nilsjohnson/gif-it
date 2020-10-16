@@ -53,6 +53,7 @@ If you are developing the app, typically you might want to pass both.
 - ~~Save gifs in an S3 bucket instead of on the server~~
 - ~~Serve the website from S3 to reduce load on the EC2 instance~~
 - ~~Properly escape all SQL~~
+- Build socket-reconnect functionality to prevent file loss.
 - Create a dashboard for logged in users where they can:
   - ~~upload videos to convert to gifs~~
   - ~~upload images~~

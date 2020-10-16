@@ -23,24 +23,25 @@ const useStyles = makeStyles({
   },
 });
 
-export default function GifCard(props) {
+export default function MediaCard(props) {
   const classes = useStyles();
+  const { linkAddress, src, description } = props;
 
   return (
     <Card className={classes.root}>
       <CardContent>
         <Link
-          to={`/explore?mId=${props.id}`}
+          to={linkAddress}
         >
           <CardMedia
             component="img"
-            alt={props.src}
+            alt={description}
             height="auto"
-            image={props.src}
-            title={props.src}
+            image={src}
+            title={src}
           />
         </Link>
-        <Typography noWrap variant="h5" component="h2">{props.description}</Typography>
+        <Typography noWrap variant="h5" component="h2">{description}</Typography>
       </CardContent>
     </Card>
   );

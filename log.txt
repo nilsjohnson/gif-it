@@ -45,3 +45,24 @@ TypeError: Cannot read property 'socket' of undefined
 2020-10-15 16:12:05 Tried to mark a gif as shared, but it wasn't found
 2020-10-15 16:24:31 Socket closed before we could respond from share request. UploadId: i91WxLG5, fileName: i91WxLG5.gif
 2020-10-15 16:24:32 Socket closed before we could respond from share request. UploadId: 0mROAIzs, fileName: 0mROAIzs.gif
+2020-10-15 17:07:36 2020-10-15 17:07:36 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:60:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-15 17:57:06 sendmail: Cannot open mail:25
+
+2020-10-15 17:57:06 Confirmation Email Not Sent. Code: 1
+2020-10-16 11:29:13 2020-10-16 11:29:13 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:255:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+

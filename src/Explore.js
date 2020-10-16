@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { getNew, search } from "./util/data";
 import { Container, Box, Grid, Typography } from '@material-ui/core';
 import Header from "./Components/Header";
-import GifCard from "./Components/GifCard";
+import MediaCard from "./Components/MediaCard";
 import SearchBar from "./Components/SearchBar";
 import MediaBox from "./Components/MediaBox";
 import Album from "./Components/Album";
@@ -16,12 +16,14 @@ class Explore extends Component {
     super(props);
 
     this.state = ({
-      gifs: []
+      media: []
     });
+
+    this.noUrlParms = true;
   }
 
   componentDidMount = () => {
-    if (!this.getMediaParam() && !this.getSearchParam()) {
+    if (this.noUrlParms) {
       this.getNew();
     }
   }
@@ -64,8 +66,10 @@ class Explore extends Component {
   getNew = () => {
     getNew().then(res => {
       if (res.ok) {
+        console.log(res);
         res.json().then(resJson => {
-          this.setGifs(resJson)
+          console.log(resJson);
+          this.setMedia(resJson)
         }).catch(err => console.log(`Problem parsing JSON from request: ${err}`))
       } else {
         console.log(`Server had a problem fetching gifs ${res}`);
@@ -81,7 +85,7 @@ class Explore extends Component {
     search(query).then(res => {
       if (res.ok) {
         res.json().then(resJson => {
-          this.setGifs(resJson)
+          this.setMedia(resJson)
         }).catch(err => console.log(`Problem parsing JSON from request: ${err}`))
       } else {
         res.json().then(resJson => {
@@ -94,22 +98,24 @@ class Explore extends Component {
   /**
    * helper function set the state after a search
    */
-  setGifs = (gifs) => {
+  setMedia = (media) => {
     this.setState({
-      gifs: gifs
-    })
+      media: media
+    });
   }
 
   /**
    * helper function for render
    */
   getView = () => {
+
     let media = this.getMediaParam();
     let searchInput = this.getSearchParam();
     let albumId = this.getAlbumParam();
     searchInput = (searchInput ? searchInput : "");
 
     if (media) {
+      this.noUrlParms = false;
       return (
         <MediaBox
           mId={media}
@@ -117,6 +123,7 @@ class Explore extends Component {
       );
     }
     else if(albumId) {
+      this.noUrlParms = false;
       return <Album 
         albumId={albumId}
       />
@@ -140,13 +147,14 @@ class Explore extends Component {
             alignItems="center"
             spacing={2}
           >
-            {this.state.gifs.map((gif) => (
-              <Grid item xs={12} sm={6} md={4} key={gif.id}>
-                <GifCard
-                  key={gif.id}
-                  src={gif.thumbName}
-                  id={gif.id}
-                  description={gif.descript}
+            {/* linkAddress, src, altText, description  */}
+            {this.state.media.map((media) => (
+              <Grid item xs={12} sm={6} md={4} key={media.id}>
+                <MediaCard
+                  key={media.id}
+                  src={media.thumbName}
+                  description={media.albumId ? media.AlbumTitle : media.descript}
+                  linkAddress={media.albumId ? `/explore?albumId=${media.albumId}` : `/explore?mId=${media.id}`}
                 />
               </Grid>
             ))}

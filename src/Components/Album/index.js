@@ -68,7 +68,7 @@ class Album extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <Container component='main' maxWidth="lg" >
+            <Container disableGutters={true} component='main' maxWidth="lg" >
                 {this.state.title &&
                     <Box p={3}>
                         <Card>

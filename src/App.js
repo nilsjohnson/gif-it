@@ -9,6 +9,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import './css/style.css';
+import Blog from './Blog';
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/login" component={Login} exact />
                 <Route path="/verify" component={Verify} exact />
                 <Route path="/dashboard" component={Dashboard} exact /> 
+                <Route path="/blog" component={Blog} exact /> 
             </ThemeProvider>
         </BrowserRouter>
     );

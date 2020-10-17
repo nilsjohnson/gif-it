@@ -6,6 +6,7 @@ import MediaCard from "./Components/MediaCard";
 import SearchBar from "./Components/SearchBar";
 import MediaBox from "./Components/MediaBox";
 import Album from "./Components/Album";
+import Footer from "./Components/Footer";
 
 
 /**
@@ -173,6 +174,7 @@ class Explore extends Component {
             {this.getView()}
           </Box>
         </Container>
+        <Footer/>
       </div>
     );
   }

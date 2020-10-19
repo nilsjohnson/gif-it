@@ -66,3 +66,7 @@ TypeError: onFail is not a function
     at /home/nils/gif-it/server/data/MediaDAO.js:255:17
     at processTicksAndRejections (internal/process/task_queues.js:97:5))
 
+2020-10-19 10:36:30 Socket closed before we could respond from share request. UploadId: EIr3RCIY, fileName: EIr3RCIY.gif
+2020-10-19 10:36:33 Socket closed before we could respond from share request. UploadId: UVf6iKB7, fileName: UVf6iKB7.gif
+2020-10-19 10:44:51 Socket closed before we could respond from share request. UploadId: FqnQRaAb, fileName: FqnQRaAb.gif
+2020-10-19 10:45:08 Socket closed before we could respond from share request. UploadId: XsHNxx6u, fileName: XsHNxx6u.gif

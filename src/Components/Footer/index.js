@@ -30,8 +30,8 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
     footer: {
         backgroundColor: theme.palette.background.paper,
-        // marginTop: theme.spacing(8),
-        padding: theme.spacing(6, 0),
+        marginTop: theme.spacing(2),
+        padding: theme.spacing(1),
     },
 }));
 
@@ -41,10 +41,10 @@ export default function Footer(props) {
     return (
         <footer className={classes.footer}>
             <Container maxWidth="lg">
-                <Typography variant="h6" align="center" gutterBottom>
+                <Typography variant="h6" align="center">
                     {"gif-it.io"}
                 </Typography>
-                <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
+                <Typography variant="subtitle2" align="center" color="textSecondary" component="p">
                     {"Video to gif and media sharing."}
                 </Typography>
                 <Copyright />

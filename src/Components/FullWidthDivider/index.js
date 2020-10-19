@@ -5,6 +5,9 @@ import { Box, Divider } from '@material-ui/core'
 const useStyles = makeStyles(theme => ({
     fullWidth: {
         width: '100%'
+    },
+    gutterBottom: {
+        marginBottom: theme.spacing(2)
     }
 }));
 
@@ -13,7 +16,7 @@ export default function FullWidthDivider(props) {
     const classes = useStyles();
 
     return (
-        <Box className={classes.fullWidth}>
+        <Box className={`${classes.fullWidth} ${props.gutterBottom ? classes.gutterBottom : ""} `}>
             <Divider />
         </Box>
     );

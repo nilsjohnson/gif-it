@@ -34,8 +34,8 @@ const useStyles = theme => ({
     imgResponsive: {
         width: '100%'
     },
-    albumItem: {
-        minWidth: '375px'
+    title: {
+        marginBottom: theme.spacing(2)
     }
 });
 
@@ -68,9 +68,9 @@ class Album extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <Container disableGutters={true} component='main' maxWidth="lg" >
+            <React.Fragment>
                 {this.state.title &&
-                    <Box p={3}>
+                    <Box className={classes.title}>
                         <Card>
                             <Typography align="center" variant="h4">
                                 {this.state.title}
@@ -87,7 +87,7 @@ class Album extends Component {
                     spacing={2}
                 >
                     {this.state.items.map((item, index) => (
-                        <Grid className={classes.albumItem} item xs key={index}>
+                        <Grid className={classes.albumItem} item xs={12} sm={6} md={4} key={index}>
                             <MediaBox
                                 key={index}
                                 tags={item.tags}
@@ -100,7 +100,7 @@ class Album extends Component {
 
                     ))}
                 </Grid>
-            </Container>
+            </React.Fragment>
         );
     }
 }

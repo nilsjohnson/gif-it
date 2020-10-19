@@ -115,26 +115,29 @@ class Explore extends Component {
     let albumId = this.getAlbumParam();
     searchInput = (searchInput ? searchInput : "");
 
-    if (media) {
+    if (media || albumId) {
       this.noUrlParms = false;
+
       return (
-        <MediaBox
-          mId={media}
-        />
+        <Container disableGutters={true} maxWidth="lg" >
+          {media
+            ?
+            <MediaBox
+              mId={media}
+            />
+            :
+            <Album
+              albumId={albumId}
+            />}
+        </Container>
       );
-    }
-    else if(albumId) {
-      this.noUrlParms = false;
-      return <Album 
-        albumId={albumId}
-      />
     }
     else {
       return (
         <div>
-          {this.isLogoutRedirect() && 
-          <Typography align='center' variant="h6">
-            You are now logged out.
+          {this.isLogoutRedirect() &&
+            <Typography align='center' variant="h6">
+              You are now logged out.
           </Typography>
           }
           <SearchBar
@@ -168,13 +171,11 @@ class Explore extends Component {
   render() {
     return (
       <div>
-        <Header /> 
-        <Container>
-          <Box m={1}>
-            {this.getView()}
-          </Box>
-        </Container>
-        <Footer/>
+        <Header />
+        <div>
+          {this.getView()}
+        </div>
+        <Footer />
       </div>
     );
   }

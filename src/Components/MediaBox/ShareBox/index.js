@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { Grid } from '@material-ui/core';
-import { LinkCopyBox } from "./LinkCopyBox";
+import LinkCopyBox from "./LinkCopyBox";
 
 
 /**
@@ -12,11 +12,10 @@ export function ShareBox(props) {
 
     return (
         <Grid
-            container
+            item container
             direction="column"
-            justify="center"
-            alignItems="stretch"
-            spacing={2}
+            justify="flex-start"
+            alignItems="flex-start"
         >
             <LinkCopyBox
                 type="on gif-it"
@@ -39,3 +38,4 @@ ShareBox.prototypes = {
     id: PropTypes.string,
     fileName: PropTypes.string
 };
+

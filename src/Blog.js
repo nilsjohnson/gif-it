@@ -1,23 +1,19 @@
 import React, { Component, createRef } from "react";
-import { Container, Box, Grid, withStyles, Card } from '@material-ui/core';
+import { Container, Box, Grid, withStyles, Typography } from '@material-ui/core';
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import { getLatest, getPostById } from './util/blogData.js';
 import BlogThumbnail from "./Components/Blog/BlogThumbnail";
-import { green } from "@material-ui/core/colors";
 
 const useStyles = theme => ({
     container: {
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2)
     },
-    card: {
-        margin: theme.spacing(8),
-        border: '4 px solid black'
-    },
     postContainer: {
         backgroundColor: "white",
-        padding: theme.spacing(2)
+        paddingLeft: theme.spacing(6),
+        margin: theme.spacing(2)
     }
 });
 
@@ -104,7 +100,12 @@ class Blog extends Component {
                             {this.state.post
                                 ?
                                 <Grid item className={classes.postContainer}>
-                                    <div dangerouslySetInnerHTML={{ __html: this.state.post.content }}></div>
+                                    <Typography gutterBottom component="h1" variant="h4" align="center">
+                                        {this.state.post.title}
+                                    </Typography>
+                                    <Box p={1}>
+                                        <div dangerouslySetInnerHTML={{ __html: this.state.post.content }}></div>
+                                    </Box>
                                 </Grid>
                                 :
                                 this.state.posts.map((post, i) => (

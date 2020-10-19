@@ -5,6 +5,7 @@ import { Container, Typography } from "@material-ui/core";
 import { Redirect } from 'react-router-dom'
 import { checkToken } from './util/data';
 import Uploader from "./Components/Uploader";
+import Footer from "./Components/Footer";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -35,9 +36,8 @@ class Dashboard extends Component {
         return (
             <Box>
                 <Header />
-
                 <Uploader />
-
+                <Footer />
             </Box>
         );
     }

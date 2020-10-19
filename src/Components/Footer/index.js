@@ -32,7 +32,14 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         marginTop: theme.spacing(2),
         padding: theme.spacing(1),
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+        left: 0
     },
+    container: {
+
+    }
 }));
 
 export default function Footer(props) {
@@ -40,7 +47,7 @@ export default function Footer(props) {
 
     return (
         <footer className={classes.footer}>
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" className={classes.container}>
                 <Typography variant="h6" align="center">
                     {"gif-it.io"}
                 </Typography>

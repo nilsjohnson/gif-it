@@ -6,7 +6,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import AppBarCollapse from "./AppBarCollapse";
 
-const styles = {
+const useStyles = (theme => ({
   root: {
     flexGrow: 1
   },
@@ -17,10 +17,13 @@ const styles = {
     marginLeft: -12,
     marginRight: 20
   },
-  navigation: {},
+  navigation: {
+    marginBottom: theme.spacing(4)
+  },
   toggleDrawer: {},
-  appTitle: {}
-};
+  appTitle: {},
+  
+}));
 
 function Header(props) {
   const { classes } = props;
@@ -45,4 +48,4 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Header);
+export default withStyles(useStyles)(Header);

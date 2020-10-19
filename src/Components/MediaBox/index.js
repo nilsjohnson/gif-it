@@ -10,10 +10,10 @@ import { Link } from 'react-router-dom';
 
 const useStyles = theme => ({
     fullWidth: {
-        width: '100%'
+
     },
     root: {
-        paddingBottom: theme.spacing(2)
+        // paddingBottom: theme.spacing(2)
     }
 });
 
@@ -67,70 +67,66 @@ class MediaBox extends Component {
         const { classes } = this.props;
 
         return (
-            <Container component="main" maxWidth="md" className={classes.root}>
-                <Card>
-                    <Box m={2}>
-                        <Grid
-                            container
-                            direction="column"
-                            justify="flex-start"
-                            alignItems="flex-start"
-                            spacing={2}>
-                            {this.state.fullSizeName ?
-                                <a href={`https://gif-it.io/${this.state.fullSizeName}`} 
-                                    className={classes.fullWidth}
-                                >
-                                    <CardMedia
-                                        component="img"
-                                        alt="Cool Gif"
-                                        height="auto"
-                                        image={this.state.fileName}
-                                        title={this.state.descriptionLines[0]}
-                                    />
-                                </a>
-                                :
+            <Card>
+                <Box m={1}>
+                    <Grid
+                        container
+                        direction="column"
+                        justify="flex-start"
+                        alignItems="flex-start"
+                    >
+                        {this.state.fullSizeName ?
+                            <a href={`https://gif-it.io/${this.state.fullSizeName}`}
+                                className={classes.fullWidth}
+                            >
                                 <CardMedia
                                     component="img"
                                     alt="Cool Gif"
                                     height="auto"
                                     image={this.state.fileName}
                                     title={this.state.descriptionLines[0]}
-                                />}
+                                />
+                            </a>
+                            :
+                            <CardMedia
+                                component="img"
+                                alt="Cool Gif"
+                                height="auto"
+                                image={this.state.fileName}
+                                title={this.state.descriptionLines[0]}
+                            />}
 
-                            <Grid item>
-                                <Grid
-                                    container item
-                                    direction="row"
-                                    justify="flex-start"
-                                    alignItems="flex-start"
-                                >
-                                    {Object.keys(this.state.tags).map((key, index) =>
-                                        <Tag key={index} tag={key} count={this.state.tags[key]} explorable={true} />
-                                    )}
-                                </Grid>
-                            </Grid>
-
-                            {this.state.descriptionLines.length > 1 ? <FullWidthDivider /> : ""}
-                            <Grid item>
-                                {this.state.descriptionLines.map((line, index) =>
-                                    <Typography key={index}>
-                                        {line}
-                                    </Typography>
+                        <Grid item>
+                            <Grid
+                                container item
+                                direction="row"
+                                justify="flex-start"
+                                alignItems="flex-start"
+                            >
+                                {Object.keys(this.state.tags).map((key, index) =>
+                                    <Tag key={index} tag={key} count={this.state.tags[key]} explorable={true} />
                                 )}
                             </Grid>
-                            <FullWidthDivider />
-
-                            <Box m={2} className={classes.fullWidth}>
-                                <ShareBox
-                                    fileName={this.state.fileName}
-                                    id={this.props.mId}
-                                />
-                            </Box>
-
                         </Grid>
-                    </Box>
-                </Card >
-            </Container>
+
+                        {this.state.descriptionLines.length > 1 ? <FullWidthDivider /> : ""}
+                        <Grid item>
+                            {this.state.descriptionLines.map((line, index) =>
+                                <Typography key={index}>
+                                    {line}
+                                </Typography>
+                            )}
+                        </Grid>
+                        
+                        <FullWidthDivider gutterBottom />    
+                        <ShareBox
+                            fileName={this.state.fileName}
+                            id={this.props.mId}
+                        />
+
+                    </Grid>
+                </Box>
+            </Card >
         );
     }
 }

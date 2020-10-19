@@ -1,7 +1,7 @@
 import { readAuthToken } from './util';
 
 // note: this bool must be set propery prior to building for production
-let production = false;
+let production = true;
 let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
 
 /**
@@ -141,6 +141,17 @@ function getAlbumById(albumId) {
   return fetch(`${server}/album/${albumId}`);
 }
 
+function submitBugReport(data = {}) {
+  return fetch(`${server}/submitBugReport`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': readAuthToken()
+    }
+  });
+}
+
 export {
   getAlbumById,
   postPhotoGallery,
@@ -156,5 +167,6 @@ export {
   getPopularTags,
   getMediaById,
   uploadFile,
-  search
+  search,
+  submitBugReport
 }

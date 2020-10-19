@@ -55,6 +55,7 @@ require('./uploadAPI');
 require('./authAPI');
 require('./userAPI');
 require('./clientS3TransferAPI');
+require('./bugAPI');
 
 // listen for API requests
 http.listen(PORT_NUM, () => {

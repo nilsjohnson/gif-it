@@ -10,6 +10,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import './css/style.css';
 import Blog from './Blog';
+import Bugs from './Bugs';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/verify" component={Verify} exact />
                 <Route path="/dashboard" component={Dashboard} exact /> 
                 <Route path="/blog" component={Blog} exact /> 
+                <Route path="/bugs" component={Bugs} exact /> 
             </ThemeProvider>
         </BrowserRouter>
     );

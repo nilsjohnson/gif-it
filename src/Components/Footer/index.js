@@ -13,7 +13,7 @@ function Copyright() {
                     Blog
                 </Link>
                 {' | '}
-                <Link color="inherit" to="https://github.com/nilsjohnson/gif-it/issues">
+                <Link color="inherit" to="/bugs">
                     Bug Report / Feedback
                 </Link>
             </Typography>

@@ -128,8 +128,8 @@ class SearchBar extends Component {
                   onKeyDown={this.handleEnter}
                   onChange={this.setInput}
                   className={classes.input}
-                  placeholder="Search For Gifs"
-                  inputProps={{ 'aria-label': 'Search For Gifs' }}
+                  placeholder="Search For Gifs and Photos"
+                  inputProps={{ 'aria-label': 'Search For Gifs and Photos' }}
                   value={this.state.input}
                   label={"hello"}
                 />

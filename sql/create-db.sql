@@ -130,3 +130,20 @@ GRANT SELECT ON user to 'bryn'@'localhost';
 ALTER USER 'gracie'@'localhost' IDENTIFIED WITH mysql_native_password BY 'pass123$';
 ALTER USER 'bryn'@'localhost' IDENTIFIED WITH mysql_native_password BY 'doggie';
 flush privileges;
+
+-- 10/20/2020 - Bug reports submit to DB
+CREATE TABLE bugReport (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT,
+	date DATETIME NOT NULL,
+	message VARCHAR(1000),
+	fileName VARCHAR(255),
+	PRIMARY KEY (id)
+);	
+
+
+CREATE USER 'pickles'@'localhost' IDENTIFIED BY 'goodwoofer';
+GRANT ALL PRIVILEGES ON bugReport TO 'pickles'@'localhost';
+GRANT SELECT ON user TO 'pickles'@'localhost';
+ALTER USER 'pickles'@'localhost' IDENTIFIED WITH mysql_native_password BY 'goodwoofer';
+flush privileges;

@@ -12,6 +12,8 @@ AWS.config.update({
     region: 'us-east-1'
 });
 
+let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
+
 
 app.post('/getPresignedPost', (req, res) => {
     let userId = authDAO.authenticate(req.headers);
@@ -20,8 +22,6 @@ app.post('/getPresignedPost', (req, res) => {
         res.redirect('/login');
         return;
     }
-
-    let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
 
     if (DEBUG) {
         console.log("getPresignedPost hit. Body:");

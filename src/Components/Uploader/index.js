@@ -561,7 +561,7 @@ class Uploader extends UploaderBase {
                         <Grid item>
                             <Button onClick={this.triggerInputClick} variant="contained" color="primary">
                                 Choose Files
-                        </Button>
+                            </Button>
                             <input className={classes.inputBtn} type="file" id={INPUT_ID} accept={this.allowedMimeTypes} multiple onChange={this.selectFilesUpload} />
                         </Grid>
                         <Grid item>

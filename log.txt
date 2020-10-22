@@ -73,3 +73,1206 @@ TypeError: onFail is not a function
 2020-10-20 17:10:19 ReferenceError: data is not defined
 2020-10-20 19:49:22 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''report'' at line 1
 2020-10-20 19:50:18 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''report'' at line 1
+2020-10-20 20:17:23 Socket closed before we could respond from share request. UploadId: RooRCEbX, fileName: RooRCEbX.gif
+2020-10-20 20:18:00 Socket closed before we could respond from share request. UploadId: VE44cJGj, fileName: VE44cJGj.gif
+2020-10-21 11:42:19 2020-10-21 11:42:19 deleteUnsharedGifs is not defined 
+ReferenceError: deleteUnsharedGifs is not defined
+    at deleteSocket (/home/nils/gif-it/server/uploadAPI.js:43:3)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:54:9)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at Socket.emit (/home/nils/gif-it/node_modules/socket.io/lib/socket.js:142:10)
+    at Socket.onclose (/home/nils/gif-it/node_modules/socket.io/lib/socket.js:454:8)
+    at Socket.ondisconnect (/home/nils/gif-it/node_modules/socket.io/lib/socket.js:418:8)
+    at Socket.onpacket (/home/nils/gif-it/node_modules/socket.io/lib/socket.js:340:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/client.js:214:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 11:59:48 2020-10-21 11:59:48 sendConversionProgress is not defined 
+ReferenceError: sendConversionProgress is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:105:9)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 12:07:12 2020-10-21 12:07:12 sendConversionProgress is not defined 
+ReferenceError: sendConversionProgress is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:105:9)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 12:12:45 2020-10-21 12:12:45 onGifMade is not defined 
+ReferenceError: onGifMade is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:116:9)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 12:23:04 2020-10-21 12:23:04 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:23:04 2020-10-21 12:23:04 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:23:04 2020-10-21 12:23:04 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:23:04 2020-10-21 12:23:04 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:23:04 2020-10-21 12:23:04 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:23:05 2020-10-21 12:23:05 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:23:05 2020-10-21 12:23:05 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:23:05 2020-10-21 12:23:05 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:23:05 2020-10-21 12:23:05 data is not defined 
+ReferenceError: data is not defined
+    at updateConversionProgress (/home/nils/gif-it/server/uploadAPI.js:112:15)
+    at ChildProcess.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:129:7)
+    at ChildProcess.emit (events.js:310:20)
+    at ChildProcess.EventEmitter.emit (domain.js:482:12)
+    at maybeClose (internal/child_process.js:1021:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:286:5))
+
+2020-10-21 12:28:46 2020-10-21 12:28:46 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:28:46 2020-10-21 12:28:46 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:28:46 2020-10-21 12:28:46 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:28:46 2020-10-21 12:28:46 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:28:46 2020-10-21 12:28:46 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:28:46 2020-10-21 12:28:46 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:30:52 2020-10-21 12:30:52 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:30:52 2020-10-21 12:30:52 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:30:52 2020-10-21 12:30:52 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:30:52 2020-10-21 12:30:52 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:30:52 2020-10-21 12:30:52 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:30:52 2020-10-21 12:30:52 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:30:53 2020-10-21 12:30:53 onProgress is not a function 
+TypeError: onProgress is not a function
+    at Socket.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:118:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:186:23))
+
+2020-10-21 12:33:20 2020-10-21 12:33:20 socketId is not defined 
+ReferenceError: socketId is not defined
+    at connections.<computed>.socket.emit.uploadId (/home/nils/gif-it/server/uploadAPI.js:60:23)
+    at ManagedUpload.callback (/home/nils/gif-it/server/util/util.js:89:17)
+    at Response.finishSinglePart (/home/nils/gif-it/node_modules/aws-sdk/lib/s3/managed_upload.js:680:12)
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:369:18)
+    at Request.callListeners (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:78:10)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:688:14)
+    at Request.transition (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:22:10)
+    at AcceptorStateMachine.runTo (/home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:14:12)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:26:10)
+
+2020-10-21 14:22:04 2020-10-21 14:22:04 Cannot read property 'IQoaTmlg' of undefined 
+TypeError: Cannot read property 'IQoaTmlg' of undefined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:162:38)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 15:06:58 2020-10-21 15:06:58 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:117:35)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 15:07:12 2020-10-21 15:07:12 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:117:35)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 15:13:22 2020-10-21 15:13:22 uploadIds is not defined 
+ReferenceError: uploadIds is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:118:17)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 15:13:51 2020-10-21 15:13:51 uploadIds is not defined 
+ReferenceError: uploadIds is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:120:17)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 15:14:33 2020-10-21 15:14:33 uploadIds is not defined 
+ReferenceError: uploadIds is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:120:17)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 15:14:44 2020-10-21 15:14:44 Cannot read property 'length' of undefined 
+TypeError: Cannot read property 'length' of undefined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:122:34)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 17:00:22 2020-10-21 17:00:22 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:87:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:176:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:167:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 17:00:22 2020-10-21 17:00:22 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:87:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:176:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:167:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 17:00:22 2020-10-21 17:00:22 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:87:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:176:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:167:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 17:01:18 2020-10-21 17:01:18 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:87:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:177:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:167:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 17:01:18 2020-10-21 17:01:18 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:87:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:177:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:167:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 17:01:18 2020-10-21 17:01:18 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:87:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:177:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:167:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 17:01:18 2020-10-21 17:01:18 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:87:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:177:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:167:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 17:17:32 2020-10-21 17:17:32 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:87:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:179:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:168:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 17:17:32 2020-10-21 17:17:32 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:87:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:179:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:168:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 17:36:27 2020-10-21 17:36:27 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:87:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:184:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:173:5)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-21 18:00:14 2020-10-21 18:00:14 i is not defined 
+ReferenceError: i is not defined
+    at cleanUploads (/home/nils/gif-it/server/uploadAPI.js:80:28)
+    at addUpload (/home/nils/gif-it/server/uploadAPI.js:93:3)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:242:7)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13)
+    at PartStream.emit (events.js:310:20)
+    at PartStream.EventEmitter.emit (domain.js:482:12)
+    at HeaderParser.<anonymous> (/home/nils/gif-it/node_modules/dicer/lib/Dicer.js:50:16))
+
+2020-10-21 18:00:33 2020-10-21 18:00:33 Cannot read property 'uploadDst' of undefined 
+TypeError: Cannot read property 'uploadDst' of undefined
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:201:34)
+    at cleanUploads (/home/nils/gif-it/server/uploadAPI.js:80:7)
+    at addUpload (/home/nils/gif-it/server/uploadAPI.js:93:3)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:242:7)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13)
+    at PartStream.emit (events.js:310:20)
+    at PartStream.EventEmitter.emit (domain.js:482:12))
+
+2020-10-21 18:02:24 2020-10-21 18:02:24 Cannot read property 'uploadDst' of undefined 
+TypeError: Cannot read property 'uploadDst' of undefined
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI.js:202:26)
+    at cleanUploads (/home/nils/gif-it/server/uploadAPI.js:80:7)
+    at addUpload (/home/nils/gif-it/server/uploadAPI.js:93:3)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI.js:248:7)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13)
+    at PartStream.emit (events.js:310:20)
+    at PartStream.EventEmitter.emit (domain.js:482:12))
+
+2020-10-22 10:27:55 2020-10-22 10:27:55 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 10:56:49 2020-10-22 10:56:49 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 10:58:11 2020-10-22 10:58:11 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:15:06 2020-10-22 11:15:06 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:16:36 2020-10-22 11:16:36 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:18:33 2020-10-22 11:18:33 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:18:41 2020-10-22 11:18:41 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:19:58 2020-10-22 11:19:58 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:20:30 2020-10-22 11:20:30 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:20:58 2020-10-22 11:20:58 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:27:17 2020-10-22 11:27:17 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:39:08 2020-10-22 11:39:08 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:40:50 2020-10-22 11:40:50 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:41:02 2020-10-22 11:41:02 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:46:48 2020-10-22 11:46:48 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:49:45 2020-10-22 11:49:45 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:51:28 2020-10-22 11:51:28 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 11:59:11 2020-10-22 11:59:11 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:00:09 2020-10-22 12:00:09 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:02:11 2020-10-22 12:02:11 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:02:41 2020-10-22 12:02:41 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:03:39 2020-10-22 12:03:39 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:04:07 2020-10-22 12:04:07 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:04:14 2020-10-22 12:04:14 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:04:40 2020-10-22 12:04:40 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:05:33 2020-10-22 12:05:33 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:05:44 2020-10-22 12:05:44 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:08:52 2020-10-22 12:08:52 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:12:18 2020-10-22 12:12:18 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:12:48 2020-10-22 12:12:48 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:12:56 2020-10-22 12:12:56 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:13:46 2020-10-22 12:13:46 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:16:31 2020-10-22 12:16:31 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:16:33 2020-10-22 12:16:33 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:21:14 2020-10-22 12:21:14 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:22:13 2020-10-22 12:22:13 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 12:23:06 2020-10-22 12:23:06 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:61:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-10-22 13:10:17 2020-10-22 13:10:17 Upload is not defined 
+ReferenceError: Upload is not defined
+    at addUpload (/home/nils/gif-it/server/uploadAPI/index.js:204:32)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:292:13)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13)
+    at PartStream.emit (events.js:310:20)
+    at PartStream.EventEmitter.emit (domain.js:482:12)
+    at HeaderParser.<anonymous> (/home/nils/gif-it/node_modules/dicer/lib/Dicer.js:50:16)
+    at HeaderParser.emit (events.js:310:20))
+
+2020-10-22 13:11:00 2020-10-22 13:11:00 uploadIds is not defined 
+ReferenceError: uploadIds is not defined
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:47:29)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-22 13:11:59 2020-10-22 13:11:59 Upload is not a constructor 
+TypeError: Upload is not a constructor
+    at addUpload (/home/nils/gif-it/server/uploadAPI/index.js:206:28)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:294:13)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13)
+    at PartStream.emit (events.js:310:20)
+    at PartStream.EventEmitter.emit (domain.js:482:12)
+    at HeaderParser.<anonymous> (/home/nils/gif-it/node_modules/dicer/lib/Dicer.js:50:16)
+    at HeaderParser.emit (events.js:310:20))
+
+2020-10-22 13:15:43 2020-10-22 13:15:43 Upload is not a constructor 
+TypeError: Upload is not a constructor
+    at addUpload (/home/nils/gif-it/server/uploadAPI/index.js:206:28)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:294:13)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13)
+    at PartStream.emit (events.js:310:20)
+    at PartStream.EventEmitter.emit (domain.js:482:12)
+    at HeaderParser.<anonymous> (/home/nils/gif-it/node_modules/dicer/lib/Dicer.js:50:16)
+    at HeaderParser.emit (events.js:310:20))
+
+2020-10-22 13:16:46 2020-10-22 13:16:46 Upload is not a constructor 
+TypeError: Upload is not a constructor
+    at addUpload (/home/nils/gif-it/server/uploadAPI/index.js:206:18)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:295:13)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13)
+    at PartStream.emit (events.js:310:20)
+    at PartStream.EventEmitter.emit (domain.js:482:12)
+    at HeaderParser.<anonymous> (/home/nils/gif-it/node_modules/dicer/lib/Dicer.js:50:16)
+    at HeaderParser.emit (events.js:310:20))
+
+2020-10-22 13:18:08 2020-10-22 13:18:08 Upload is not a constructor 
+TypeError: Upload is not a constructor
+    at addUpload (/home/nils/gif-it/server/uploadAPI/index.js:206:18)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:295:13)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13)
+    at PartStream.emit (events.js:310:20)
+    at PartStream.EventEmitter.emit (domain.js:482:12)
+    at HeaderParser.<anonymous> (/home/nils/gif-it/node_modules/dicer/lib/Dicer.js:50:16)
+    at HeaderParser.emit (events.js:310:20))
+
+2020-10-22 13:19:00 2020-10-22 13:19:00 Job is not a constructor 
+TypeError: Job is not a constructor
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:75:23)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-22 13:19:51 2020-10-22 13:19:51 path is not defined 
+ReferenceError: path is not defined
+    at convertToGif (/home/nils/gif-it/server/mediaUtil/gifMaker.js:74:21)
+    at addJob (/home/nils/gif-it/server/mediaUtil/gifMaker.js:183:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:84:13)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-22 13:20:36 2020-10-22 13:20:36 fileName is not defined 
+ReferenceError: fileName is not defined
+    at onGifMade (/home/nils/gif-it/server/uploadAPI/index.js:154:16)
+    at ChildProcess.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:158:7)
+    at ChildProcess.emit (events.js:310:20)
+    at ChildProcess.EventEmitter.emit (domain.js:482:12)
+    at maybeClose (internal/child_process.js:1021:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:286:5))
+
+2020-10-22 13:21:30 2020-10-22 13:21:30 thumbDst is not defined 
+ReferenceError: thumbDst is not defined
+    at /home/nils/gif-it/server/uploadAPI/index.js:133:45
+    at ManagedUpload.callback (/home/nils/gif-it/server/util/util.js:89:17)
+    at Response.finishSinglePart (/home/nils/gif-it/node_modules/aws-sdk/lib/s3/managed_upload.js:680:12)
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:369:18)
+    at Request.callListeners (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:78:10)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:688:14)
+    at Request.transition (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:22:10)
+    at AcceptorStateMachine.runTo (/home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:14:12)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:26:10)
+
+2020-10-22 13:22:58 2020-10-22 13:22:58 fileName is not defined 
+ReferenceError: fileName is not defined
+    at /home/nils/gif-it/server/uploadAPI/index.js:156:27
+    at ManagedUpload.callback (/home/nils/gif-it/server/util/util.js:89:17)
+    at Response.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/s3/managed_upload.js:662:14)
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:369:18)
+    at Request.callListeners (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:78:10)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:688:14)
+    at Request.transition (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:22:10)
+    at AcceptorStateMachine.runTo (/home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:14:12)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:26:10)
+
+2020-10-22 13:43:17 Error: ER_DUP_ENTRY: Duplicate entry 'Tina' for key 'user.username'
+2020-10-22 13:43:24 sendmail: Cannot open mail:25
+
+2020-10-22 13:43:24 Confirmation Email Not Sent. Code: 1
+2020-10-22 14:07:54 2020-10-22 14:07:54 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:97:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI/index.js:234:5)
+    at Socket.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:94:9)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12)
+    at /home/nils/gif-it/node_modules/socket.io/lib/socket.js:528:12
+    at processTicksAndRejections (internal/process/task_queues.js:79:11))
+
+2020-10-22 14:15:01 2020-10-22 14:15:01 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:97:8)
+    at deleteUpload (/home/nils/gif-it/server/uploadAPI/index.js:235:5)
+    at cleanUploads (/home/nils/gif-it/server/uploadAPI/index.js:178:13)
+    at addUpload (/home/nils/gif-it/server/uploadAPI/index.js:200:5)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:295:13)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13))
+
+2020-10-22 14:16:19 2020-10-22 14:16:19 Cannot read property 'fileName' of undefined 
+TypeError: Cannot read property 'fileName' of undefined
+    at /home/nils/gif-it/server/uploadAPI/index.js:243:46
+    at Response.<anonymous> (/home/nils/gif-it/server/util/util.js:112:17)
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:369:18)
+    at Request.callListeners (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:78:10)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:688:14)
+    at Request.transition (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:22:10)
+    at AcceptorStateMachine.runTo (/home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:14:12)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:26:10
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:38:9))
+
+2020-10-22 14:19:08 2020-10-22 14:19:08 Cannot read property 'fileName' of undefined 
+TypeError: Cannot read property 'fileName' of undefined
+    at /home/nils/gif-it/server/uploadAPI/index.js:243:46
+    at Response.<anonymous> (/home/nils/gif-it/server/util/util.js:112:17)
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:369:18)
+    at Request.callListeners (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:78:10)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:688:14)
+    at Request.transition (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:22:10)
+    at AcceptorStateMachine.runTo (/home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:14:12)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:26:10
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:38:9))
+
+2020-10-22 14:31:01 sendmail: Cannot open mail:25
+
+2020-10-22 14:31:01 Confirmation Email Not Sent. Code: 1
+2020-10-22 14:36:58 2020-10-22 14:36:58 The "path" argument must be of type string or an instance of Buffer or URL. Received undefined 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+    at Object.unlink (fs.js:1043:10)
+    at deleteFile (/home/nils/gif-it/server/util/fileUtil.js:97:8)
+    at deleteUploadFromDisk (/home/nils/gif-it/server/uploadAPI/index.js:240:5)
+    at cleanUploads (/home/nils/gif-it/server/uploadAPI/index.js:181:13)
+    at addUpload (/home/nils/gif-it/server/uploadAPI/index.js:205:5)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:302:13)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13))
+
+2020-10-22 15:11:31 2020-10-22 15:11:31 Cannot read property 'fileName' of undefined 
+TypeError: Cannot read property 'fileName' of undefined
+    at deleteUploadFromS3 (/home/nils/gif-it/server/uploadAPI/index.js:241:30)
+    at cleanUploads (/home/nils/gif-it/server/uploadAPI/index.js:174:13)
+    at addUpload (/home/nils/gif-it/server/uploadAPI/index.js:197:5)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:310:13)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13)
+    at PartStream.emit (events.js:310:20)
+    at PartStream.EventEmitter.emit (domain.js:482:12))
+
+2020-10-22 15:13:54 2020-10-22 15:13:54 Cannot read property 'fileName' of undefined 
+TypeError: Cannot read property 'fileName' of undefined
+    at deleteUploadFromS3 (/home/nils/gif-it/server/uploadAPI/index.js:241:30)
+    at cleanUploads (/home/nils/gif-it/server/uploadAPI/index.js:174:13)
+    at addUpload (/home/nils/gif-it/server/uploadAPI/index.js:197:5)
+    at Busboy.<anonymous> (/home/nils/gif-it/server/uploadAPI/index.js:310:13)
+    at Busboy.emit (events.js:310:20)
+    at Busboy.EventEmitter.emit (domain.js:482:12)
+    at Busboy.emit (/home/nils/gif-it/node_modules/busboy/lib/main.js:37:33)
+    at PartStream.<anonymous> (/home/nils/gif-it/node_modules/busboy/lib/types/multipart.js:214:13)
+    at PartStream.emit (events.js:310:20)
+    at PartStream.EventEmitter.emit (domain.js:482:12))
+
+2020-10-22 15:32:54 2020-10-22 15:32:54 The "path" argument must be of type string. Received null 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received null
+    at validateString (internal/validators.js:117:11)
+    at Object.basename (path.js:1156:5)
+    at onGifMade (/home/nils/gif-it/server/uploadAPI/index.js:141:42)
+    at ChildProcess.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:163:7)
+    at ChildProcess.emit (events.js:310:20)
+    at ChildProcess.EventEmitter.emit (domain.js:482:12)
+    at maybeClose (internal/child_process.js:1021:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:286:5))
+
+2020-10-22 15:43:36 2020-10-22 15:43:36 The "path" argument must be of type string. Received null 
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received null
+    at validateString (internal/validators.js:117:11)
+    at Object.basename (path.js:1156:5)
+    at onGifMade (/home/nils/gif-it/server/uploadAPI/index.js:145:42)
+    at ChildProcess.<anonymous> (/home/nils/gif-it/server/mediaUtil/gifMaker.js:163:7)
+    at ChildProcess.emit (events.js:310:20)
+    at ChildProcess.EventEmitter.emit (domain.js:482:12)
+    at maybeClose (internal/child_process.js:1021:16)
+    at Socket.<anonymous> (internal/child_process.js:443:11)
+    at Socket.emit (events.js:310:20)
+    at Socket.EventEmitter.emit (domain.js:482:12))
+

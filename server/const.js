@@ -1,13 +1,15 @@
 const os = require('os');
 
+const BASE_DIR_NAME = '/gif-it-files';
+
 const FilePaths = {
-    // Where uploads go from the users
-    UPLOAD_DIR: os.tmpdir + '/' + 'gif-it',
+    BASE_DIR: os.homedir + BASE_DIR_NAME,
+    // Where uploads from the users go
+    UPLOAD_DIR: os.homedir + BASE_DIR_NAME + '/uploads',
     // Where we put the gifs before copying to s3
-    // or where we serve them from if we are in DEV mode.
-    GIF_SAVE_DIR: os.homedir + '/gifs',
-    AUTH_TOKEN_FILE: os.homedir + '/auth_tokens.json',
-    BUGS_LOG_FILE: os.homedir + '/bug_reports.txt'
+    GIF_SAVE_DIR: os.homedir + BASE_DIR_NAME + '/gifs',
+    AUTH_TOKEN_FILE: os.homedir + BASE_DIR_NAME + '/auth_tokens.json',
+    CURRENT_UPLOADS_FILE: os.homedir + BASE_DIR_NAME + '/currentUploads.json'
 }
 
 const MAX_UPLOAD_SIZE = 70; // in MB

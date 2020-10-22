@@ -54,11 +54,9 @@ function scaleByWidth(mat, desiredWidth) {
 function original(srcElem, dstElem, dimensions = null) {
     let srcMat;
     if(!dimensions) {
-        console.log("gettting web scaled");
         srcMat = getWebScaledMat(srcElem);
     }
     else {
-        console.log("scaling: " + dimensions);
         srcMat = cv.imread(srcElem);
         srcMat = scaleByWidth(srcMat, dimensions.width);
     }
@@ -69,10 +67,7 @@ function original(srcElem, dstElem, dimensions = null) {
 
 function grayscale(srcElem, dstElem, dimensions = null) {
     let srcMat;
-    console.log("src elem: ");
-    console.log(srcElem);
     if(!dimensions) {
-        console.log("getting web scale.")
         srcMat = getWebScaledMat(srcElem);
     }
     else {
@@ -106,7 +101,6 @@ function gaussianBlur(srcElem, dstElem, dimensions = null) {
 }
 
 function loadMat(elem) {
-    console.log(elem);
     return cv.imread(elem);
 }
 

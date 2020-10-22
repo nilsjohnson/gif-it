@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid as Box, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
 const MAX_LENGTH = 1000;
 

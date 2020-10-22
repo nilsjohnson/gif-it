@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles';
-import { Container, Typography, Grid, Box, Card } from '@material-ui/core/';
+import { Typography, Grid, Box, Card } from '@material-ui/core/';
 import { getAlbumById } from '../../util/data';
 import MediaBox from '../MediaBox';
 

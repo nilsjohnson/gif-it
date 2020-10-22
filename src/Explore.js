@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { getNew, search } from "./util/data";
-import { Container, Box, Grid, Typography } from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 import Header from "./Components/Header";
 import MediaCard from "./Components/MediaCard";
 import SearchBar from "./Components/SearchBar";

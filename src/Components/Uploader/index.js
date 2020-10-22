@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from 'prop-types';
 import { Container, Grid, Card, Box, TextField, Button, Typography } from "@material-ui/core";
 import UploaderBase from "./UploaderBase";
 import { withStyles } from '@material-ui/core/styles';
@@ -11,43 +10,10 @@ import ShowError from "./ShowError";
 import { UploadState } from "./UploadState";
 import { UploadType } from "./UploadType";
 import FileBar from './FileBar';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import { useSpring, animated } from 'react-spring/web.cjs';
 
+// TODO, use ref...
 const INPUT_ID = "img-uploader-input";
 const MAX_UPLOAD_SIZE = 70;
-
-const Fade = React.forwardRef(function Fade(props, ref) {
-    const { in: open, children, onEnter, onExited, ...other } = props;
-    const style = useSpring({
-        from: { opacity: 0 },
-        to: { opacity: open ? 1 : 0 },
-        onStart: () => {
-            if (open && onEnter) {
-                onEnter();
-            }
-        },
-        onRest: () => {
-            if (!open && onExited) {
-                onExited();
-            }
-        },
-    });
-
-    return (
-        <animated.div ref={ref} style={style} {...other}>
-            {children}
-        </animated.div>
-    );
-});
-
-Fade.propTypes = {
-    children: PropTypes.element,
-    in: PropTypes.bool.isRequired,
-    onEnter: PropTypes.func,
-    onExited: PropTypes.func,
-};
 
 const useStyles = theme => ({
     container: {
@@ -116,7 +82,7 @@ class Uploader extends UploaderBase {
         /*
           To handle gif conversion progress updates
          */
-        this.socket.on("ConversionProgress", (data) => {
+        this.socket.on("conversion-progress", (data) => {
             // console.log("Conversion Data:");
             // console.log(data);
             const { uploadId } = data;
@@ -129,8 +95,8 @@ class Uploader extends UploaderBase {
         /*
           Marks the conversion as complete so we can serve the .gif
          */
-        this.socket.on("ConversionComplete", (data) => {
-            console.log("ConversionComplete");
+        this.socket.on("conversion-complete", (data) => {
+            console.log("conversion-complete");
             let { fileName, uploadId, thumbName } = data;
 
             if (fileName) {
@@ -153,21 +119,13 @@ class Uploader extends UploaderBase {
      */
     convert = (uploadId, quality) => {
         console.log(`convert: ${uploadId}`);
-        this.socket.emit("ConvertRequested", {
+        this.socket.emit("convert-requested", {
             uploadId: uploadId,
             quality: quality
         });
 
         this.updateUploads(uploadId, { uploadState: UploadState.RENDERING });
     }
-
-    markShared = (uploadId) => {
-        console.log(`marking ${uploadId} as shared`);
-        this.socket.emit("MarkShared", {
-            uploadId: uploadId,
-        });
-    }
-
 
     /**
      * Adds a tag to an upload
@@ -218,9 +176,6 @@ class Uploader extends UploaderBase {
      * an album or a single media item and POSTs to server accordingly
      */
     share = () => {
-        console.log("woof!");
-        console.log(this.state);
-
         const { albumTitle = "" } = this.state;
         let album, media;
 
@@ -235,7 +190,7 @@ class Uploader extends UploaderBase {
             // it's a video to gif
             if (this.uploads[i].uploadType === UploadType.VID_TO_GIF) {
                 if (this.uploads[i].uploadState === UploadState.DONE) {
-                    this.markShared(this.uploads[i].uploadId);
+                    // this.markShared(this.uploads[i].uploadId);
                 }
                 else {
                     let file = this.uploads[i].getFile(this.uploads[i].file);
@@ -404,7 +359,6 @@ class Uploader extends UploaderBase {
 
     getUploadComponent = (upload) => {
         const { uploadState, uploadType } = upload;
-        const { classes } = this.props;
 
         if (uploadState === null) {
             return (
@@ -515,7 +469,7 @@ class Uploader extends UploaderBase {
                     {this.getNumValidUploads() > 1 &&
 
                         <Grid
-                            container setItemDescription
+                            container
                             direction="row"
                             justify="flex-start"
                             alignItems="center"
@@ -579,27 +533,6 @@ class Uploader extends UploaderBase {
                     }
 
                 </Grid>
-
-                <Modal
-                    aria-labelledby="spring-modal-title"
-                    aria-describedby="spring-modal-description"
-                    className={classes.modal}
-                    open={this.state.uploadingModalOpen}
-                    onClose={this.closeUploadingModal}
-                    closeAfterTransition
-                    BackdropComponent={Backdrop}
-                    BackdropProps={{
-                        timeout: 500,
-                    }}
-                >
-                    {/* null should say open..this is quick fix for the production build */}
-                    <Fade in={null}>
-                        <div className={classes.paper}>
-                            <h2 id="spring-modal-title">Spring modal</h2>
-                            <p id="spring-modal-description">react-spring animates me.</p>
-                        </div>
-                    </Fade>
-                </Modal>
             </Container>
 
         );

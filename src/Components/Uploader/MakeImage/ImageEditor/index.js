@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, IconButton, Box, Typography, CircularProgress } from "@material-ui/core";
+import { Grid, Box, CircularProgress } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import { gaussianBlur, grayscale, makeThumbnail, doInitialLoad, original, WEB_WIDTH } from '../../cvUtil';
 
@@ -35,7 +35,6 @@ class ImageEditor extends Component {
     constructor(props) {
         super(props);
         const { upload, setMakeImages } = this.props;
-        console.log(upload);
 
         let file = upload.getFile(upload.file);
 
@@ -63,9 +62,7 @@ class ImageEditor extends Component {
     }
 
     doInitialLoad = () => {
-        console.log("initial loading.");
-        console.log(this.srcElement.current);
-        console.log(this.outputWebElement.current);
+        console.log("Doing initial loading of image...");
 
         doInitialLoad(this.srcElement.current, this.outputWebElement.current, (width, height) => {
             let dimensions = {
@@ -85,9 +82,9 @@ class ImageEditor extends Component {
     }
 
     setNewSize = (newDimensions) => {
-        console.log("new: ");
+        console.log("new dims: ");
         console.log(newDimensions);
-        console.log("old");
+        console.log("old dims");
         console.log(this.state.dimensions);
 
         let callback = null;
@@ -182,7 +179,7 @@ class ImageEditor extends Component {
     }
 
     render() {
-        const { classes, upload } = this.props;
+        const { classes } = this.props;
         return (
             <Grid
                 container item

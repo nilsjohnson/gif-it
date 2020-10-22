@@ -58,7 +58,7 @@ function processTags(tags) {
 
 
 /**
- * Uploads a file to s3
+ * Uploads a file to s3, using the the filename ask the object key
  * @param {*} objectPath   The path of the file
  * @param {*} onSucess     callback if success
  * @param {*} onFail       callback if failure
@@ -103,13 +103,11 @@ function deleteFromS3(key = "", onSucess = null, onFail = null) {
 
     s3.deleteObject(params, (err, data) => {
         if (err) {
-            console.log(err, err.stack);
             if (onFail) {
                 onFail(err);
             }
         }
         else {
-            if (DEBUG) { console.log(`${key} deleted from s3 successfully.`); }
             if (onSucess) {
                 onSucess(data);
             }

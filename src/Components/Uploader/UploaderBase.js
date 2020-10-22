@@ -1,7 +1,7 @@
 import { Component } from "react";
 import socketIOClient from "socket.io-client";
 import { uploadFile, getServer } from "../../util/data"
-import { getPresignedPost, doSignedS3Post, postPhotoGallery } from '../../util/data';
+import { getPresignedPost, doSignedS3Post } from '../../util/data';
 import { UploadState } from "./UploadState";
 import { UploadType } from "./UploadType";
 import FileManager from "./FileManager";
@@ -54,6 +54,7 @@ class UploaderBase extends Component {
         this.fileManager = new FileManager();
 
         this._isMounted = null;
+        this.isUploading = false;
     }
 
     /**
@@ -150,13 +151,26 @@ class UploaderBase extends Component {
             this.upload();
         });
 
+        this.socket.on("reconnect", () => {
+            console.log("reconnect fired.");
+
+            let ids = [];
+            for(let i = 0; i < this.uploads.length; i++) {
+                ids.push(this.uploads[i].uploadId)
+            }
+
+            this.socket.emit('update-socket-id', {
+                socketId: this.socket.id,
+                uploadIds: ids
+            });
+        })
+
         /*
           Updates the placeholder uploader with its 'real' id
           and sets its status to uploading.
         */
-        this.socket.on("UploadStart", data => {
+        this.socket.on("upload-start", data => {
             console.log('Upload Started, upload object returned: ');
-            console.log(data);
 
             const { uploadId, tempUploadId } = data;
 
@@ -168,22 +182,10 @@ class UploaderBase extends Component {
         /*
           To handle upload progress updates
         */
-        this.socket.on("UploadProgress", data => {
+        this.socket.on("upload-progress", data => {
             const { uploadId, percentUploaded } = data;
-
             this.updateUploads(uploadId, {
                 percentUploaded: percentUploaded
-            });
-        });
-
-        /*
-          Sets the uploads status to the next step, 'settingOptions'.
-        */
-        this.socket.on("uploadComplete", (data) => {
-            const { uploadId } = data;
-            console.log("Upload complete");
-            this.updateUploads(uploadId, {
-                uploadState: UploadState.SETTING_OPTIONS
             });
         });
 
@@ -197,6 +199,21 @@ class UploaderBase extends Component {
                 tagSuggestions: tags
             });
         });
+
+        /*
+          Updates the placeholder uploader with its 'real' id
+          and sets its status to uploading.
+        */
+       this.socket.on("err", data => {
+        console.log('err');
+
+        const { uploadId, err } = data;
+
+        this.updateUploads(uploadId, {
+            uploadState: UploadState.ERR,
+            err
+        });
+    });
 
         /*
           If a socket is disconnected it will reconnect but reassign its ID. This means that the
@@ -241,10 +258,13 @@ class UploaderBase extends Component {
      * Takes files from unprocessedFiles and recursively uploads them.
      */
     upload = async (callback = null) => {
+        this.isUploading = true;
+
         if (this.curFileNum >= this.uploads.length) {
             if (callback) {
                 callback();
             }
+            this.isUploading = false;
             return;
         }
 
@@ -258,14 +278,13 @@ class UploaderBase extends Component {
 
         let upload = this.uploads[this.curFileNum];
         let file = this.fileManager.getFile(this.uploads[this.curFileNum].file);
-        let uploadId = this.uploads[this.curFileNum].uploadId;
         let uploadState = this.uploads[this.curFileNum].uploadState;
 
         // if this is the first time going through the uploads,
         // we need to validate them for filesize and type.
         if (uploadState === null) {
             if (file.size / (1000 * 1000) > this.maxUploadSize) {
-                this.updateUploads(uploadId, {
+                this.updateUploads(upload.uploadId, {
                     uploadState: UploadState.ERR,
                     err: `File too large. Please choose file < ${this.maxUploadSize}mb.`
                 });
@@ -273,7 +292,7 @@ class UploaderBase extends Component {
                 return this.upload(callback);
             }
             if (!this.isValidType(file.type)) {
-                this.updateUploads(uploadId, {
+                this.updateUploads(upload.uploadId, {
                     uploadState: UploadState.ERR,
                     err: `Invalid filetype. Please choose only ${this.allowedMimeTypes}`
                 });
@@ -291,17 +310,17 @@ class UploaderBase extends Component {
                 // The user selected a gif. We run it though the
                 // video pipeline and re-render it as a gif.
                 if (uploadState === null && file.type === 'image/gif') {
-                    console.log("It's a gif. We're converting to to gif again...");
-                    this.updateUploads(uploadId, {
+                    console.log("It's a gif. We're converting gif => gif");
+                    this.updateUploads(upload.uploadId, {
                         uploadState: UploadState.UPLOADING,
                         uploadType: UploadType.VID_TO_GIF
                     });
-                    this.doVidToGifUpload(file, uploadId, callback);
+                    this.doVidToGifUpload(upload, callback);
                 }
                 // The user selected some image. Render it in the browser for editing.
                 else if (uploadState === null) {
                     // the user hasn't done anything with this yet.
-                    this.updateUploads(uploadId, {
+                    this.updateUploads(upload.uploadId, {
                         uploadState: UploadState.SETTING_OPTIONS,
                         uploadType: UploadType.IMG
                     });
@@ -310,7 +329,6 @@ class UploaderBase extends Component {
                 }
                 // This is not a gif, and it's ready to be uploaded.
                 else if (file.type !== 'image/gif' && uploadState !== null) {
-                    console.log("about to make images");
                     this.doImageUpload(upload, callback);
                 }
 
@@ -318,11 +336,11 @@ class UploaderBase extends Component {
             case 'video/':
                 // only upload if status is null.
                 if (uploadState === null) {
-                    this.updateUploads(uploadId, {
+                    this.updateUploads(upload.uploadId, {
                         uploadState: UploadState.UPLOADING,
                         uploadType: UploadType.VID_TO_GIF
                     });
-                    this.doVidToGifUpload(file, uploadId, callback);
+                    this.doVidToGifUpload(upload, callback);
                 }
                 else {
                     this.curFileNum++;
@@ -362,7 +380,6 @@ class UploaderBase extends Component {
 
         for (let i = 0; i < this.unprocessedFiles.length; i++) {
             this.numFilesChosen++;
-            console.log(this.socket);
             let temp = {
                 uploadId: `temp_id_${i + this.numFilesChosen}_${this.unprocessedFiles[i].name}`,
                 percentUploaded: 0,
@@ -382,24 +399,9 @@ class UploaderBase extends Component {
                 // upload will be called on connect.
                 this.createSocket();
             }
-            // if the socket is not null
-            else if (this.socket.connected) {
-                // and the user has selected more files than were
-                // iterated though after the connection was made
-                if(this.numFilesChosen >= this.curFileNum) {
-                    // we make it upload again.
-                    this.upload();
-                }
-                else {
-                    // otherwise this upload will get uploaded in the current
-                    // upload recursion. Do nothing.
-                }
+            else if (this.socket.connected && !this.isUploading) {
+                this.upload();
             }
-            else {
-                // Once the socket actually connects, the uploads 
-                // will be ready to go. So we do nothing in this case.
-            }
-
         }
 
         // reset this array so that user can add more files and update the state.
@@ -538,25 +540,29 @@ class UploaderBase extends Component {
     }
 
     setUploadRate = (startTime, endTime, fileSize) => {
-        this.estimatedUploadRate = (fileSize * PROGRESS_BAR_UPDATE_INTERVAL/1000 / (endTime - startTime));
+        this.estimatedUploadRate = (fileSize * PROGRESS_BAR_UPDATE_INTERVAL / 1000 / (endTime - startTime));
     }
 
-    doVidToGifUpload = (file, tempUploadId, callback) => {
+    doVidToGifUpload = (upload, callback) => {
+        let file = this.fileManager.getFile(upload.file);
+
         let formData = new FormData();
         formData.append("files", file);
 
-        return uploadFile(this.socket.id, tempUploadId, formData, 'make_gif')
+        return uploadFile(this.socket.id, upload.uploadId, formData, 'make_gif')
             .then(response => {
                 if (response.ok) {
                     console.log(`${file.name} for video-to-gif uploaded.`);
-                    // note: we change the state from the socket response, 
-                    // since the upload id will have changed at this point
+                    this.updateUploads(upload.uploadId, {
+                        uploadState: UploadState.SETTING_OPTIONS
+                    });
+
                     this.curFileNum++;
                     this.upload(callback);
                 }
                 else {
                     response.json().then(resJson => {
-                        this.updateUploads(tempUploadId, { error: resJson.error });
+                        this.updateUploads(upload.uploadId, { error: resJson.error });
                         this.curFileNum++;
                         this.upload(callback);
                     });
@@ -641,7 +647,7 @@ class UploaderBase extends Component {
                         // starts the progress bar rolling and the timer going again
 
                         //this.doProgressBar(this.uploads[this.curFileNum], totalUploadSize, this.estimatedUploadRate);
-                        
+
                         progressTimer.doProgressBar();
                         startTime = new Date().getTime();
                         // upload photo to s3

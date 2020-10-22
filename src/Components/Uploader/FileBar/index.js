@@ -47,14 +47,15 @@ function getMessage(uploadState) {
             return "Waiting to be rendered..."; 
         case UploadState.PENDING_SHARE:
             return "Please Wait...";    
+        default:
+            return "Please Wait...";    
     }
 }
 
 
 export default function FileBar(props) {
     const { upload = {}, removeUpload, shiftUpload, showShift } = props;
-    console.log("fb");
-    console.log(upload);
+
     const classes = useStyles();
 
     const callRemoveUpload = () => {

@@ -1,6 +1,5 @@
-import { Box, Grid, IconButton, withStyles, Typography, TextField } from '@material-ui/core';
+import { Box, withStyles, TextField } from '@material-ui/core';
 import React, { Component } from 'react';
-import FilterIcon from '@material-ui/icons/Filter';
 
 
 const useStyles = theme => ({

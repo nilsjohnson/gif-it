@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { TextField, Grid, Tooltip, withStyles, Box } from '@material-ui/core';
+import { TextField, Grid, Tooltip, withStyles } from '@material-ui/core';
 
 const useStyles = theme => ({
     input: {

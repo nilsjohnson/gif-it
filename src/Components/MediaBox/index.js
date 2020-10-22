@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles';
-import { Card, Box, Grid, CardMedia, Typography, Container } from '@material-ui/core/';
+import { Card, Box, Grid, CardMedia, Typography } from '@material-ui/core/';
 import { getMediaById } from '../../util/data';
 import { ShareBox } from './ShareBox';
 import Tag from '../Tag/Tag';
 import FullWidthDivider from '../FullWidthDivider';
-import { Link } from 'react-router-dom';
 
 const useStyles = theme => ({
     fullWidth: {

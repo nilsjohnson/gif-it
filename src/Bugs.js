@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "./Components/Header";
-import { Link, Grid, Container, TextField, Box, Card, Button, Typography, withStyles, useIsFocusVisible, CircularProgress, Modal } from "@material-ui/core";
+import { Link, Grid, Container, TextField, Box, Card, Button, Typography, withStyles, CircularProgress, Modal } from "@material-ui/core";
 import Footer from "./Components/Footer";
 import { doSignedS3Post, submitBugReport } from "./util/data";
 import { Redirect } from "react-router";

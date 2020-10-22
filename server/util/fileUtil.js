@@ -4,6 +4,9 @@ const crypto = require("crypto");
 const { FilePaths } = require('../const');
 
 
+if (!fs.existsSync(FilePaths.BASE_DIR)) {
+    fs.mkdirSync(FilePaths.BASE_DIR);
+}
 
 if (!fs.existsSync(FilePaths.UPLOAD_DIR)) {
     fs.mkdirSync(FilePaths.UPLOAD_DIR);
@@ -27,7 +30,7 @@ function getUniqueID() {
         id = crypto.randomBytes(6).toString("base64");
     }
 
-   return id;
+    return id;
 }
 
 /**
@@ -38,10 +41,10 @@ function getUniqueID() {
 function checkUnique(fileName, directory) {
     let name = path.parse(fileName).name;
     let ext = path.parse(fileName).ext
-    
+
     let i = 2;
     let file = path.join(directory + "/" + fileName);
-    while(fs.existsSync(file)) {
+    while (fs.existsSync(file)) {
         fileName = `${name} (${i})${ext}`;
         file = path.join(directory + "/" + fileName);
         i++;
@@ -59,7 +62,7 @@ function writeObj(obj, name) {
             console.log(error)
         }
         else {
-           // console.log("file saved!");
+            // console.log("file saved!");
         }
     });
 }
@@ -67,19 +70,42 @@ function writeObj(obj, name) {
 /**
  * Reads JSON object from file and returns it. Sync.
  * @ return     the object, or an empty object if file doenst exist.
- */ 
+ */
 function readObj(name) {
     let obj = {};
-    try {
-        obj = JSON.parse(fs.readFileSync(name));
+
+    if (!fs.existsSync(name)) {
+        console.log(name + " doesnt exist. Returing empty object.");
     }
-    catch (err) {
-        //console.log(err);
+    else {
+        try {
+            obj = JSON.parse(fs.readFileSync(name));
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
+
     return obj;
 }
 
+/**
+ * Deletes a file - Async
+ * @param {} path 
+ */
+function deleteFile(path) {
+    if(!path) {
+        console.log("Cannot delete file. Path: " + path);
+        return;
+    }
+    fs.unlink(path, (err) => {
+        if (err) {
+            console.log(err)
+        }
+    });
+}
 
+exports.deleteFile = deleteFile;
 exports.writeObj = writeObj;
 exports.readObj = readObj;
 exports.getExtension = getExtension;

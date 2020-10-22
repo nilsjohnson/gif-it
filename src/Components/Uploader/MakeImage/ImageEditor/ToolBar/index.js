@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { Grid, IconButton, Box, Typography } from "@material-ui/core";
-import CropIcon from '@material-ui/icons/Crop';
+import { Grid, IconButton, Typography } from "@material-ui/core";
 import FilterPalette from './FilterPalette';
-
 import FilterIcon from '@material-ui/icons/Filter';
 import AspectRatioIcon from '@material-ui/icons/AspectRatio';
-
 import { withStyles } from '@material-ui/core/styles';
 import ResizePalette from './ResizePalette';
 
@@ -69,7 +64,7 @@ class ToolBar extends Component {
     };
 
     render() {
-        const { filtersAnchorEl, cropAnchorEl, resizeAnchorEl } = this.state;
+        const { filtersAnchorEl, resizeAnchorEl } = this.state;
 
         return (
             <Grid item container

@@ -1,5 +1,8 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
+const path = require('path');
+const { FilePaths } = require('../const');
+const Job = require('../uploadAPI/Job')
 
 
 const QUALITY = {
@@ -12,7 +15,7 @@ const QUALITY = {
 
 let jobs = [];
 let numJobsRunning = 0;
-const MAX_JOBS = 2;
+const MAX_JOBS = 4;
 
 const DEBUG_CONVERT = false;
 
@@ -48,11 +51,13 @@ function getOptions(src, dst, quality) {
   }
 }
 
+/**
+ * Converts a video to a gif and a makes thumbnail
+ * @param {Job} job 
+ */
 function convertToGif(job) {
   const {
     src,
-    dst,
-    socketId,
     uploadId,
     quality,
     onStdout,
@@ -65,6 +70,12 @@ function convertToGif(job) {
   let curSpeed = null;
   let progress = null;
   let qual;
+  let fullSizeFileName = uploadId + ".gif";
+  let thumbFileName = uploadId + ".thumb.gif";
+  let dstFullSize = path.join(FilePaths.GIF_SAVE_DIR, fullSizeFileName);
+  let dstThumbnail = path.join(FilePaths.GIF_SAVE_DIR, thumbFileName);
+  // ffmpeg output, as a string
+  let output_str = null;
 
   switch (quality) {
     case "sm":
@@ -77,12 +88,12 @@ function convertToGif(job) {
       qual = QUALITY.MD;
   }
 
-  const makeGifProcess = spawn('ffmpeg', getOptions(src, dst, qual));
+  const makeGifProcess = spawn('ffmpeg', getOptions(src, dstFullSize, qual));
   makeGifProcess.stdout.on('data', (data) => { });
   // this callback, calls back the onProgress callback to notify user conversion status 
   makeGifProcess.stderr.on('data', (output) => {
     let temp, data;
-    let output_str = output.toString();
+    output_str = output.toString();
 
     if (DEBUG_CONVERT) { console.log(output_str); }
 
@@ -116,40 +127,42 @@ function convertToGif(job) {
 
     data.curOutput = output_str;
     data.uploadId = uploadId;
-    onProgress(socketId, data);
+    onProgress(data);
   });
   makeGifProcess.on('close', (code) => {
     // if the gif was made successfully
     if (code === 0) {
+
+
       // as far as user knows, we are done, however, we 
       // silently make a thumbnail now in the background
-      let gifFileName = `${uploadId}.gif`;
-      let thumbFileName = `${uploadId}.thumb.gif`;
-      let thumbDst = dst.replace('.gif', '.thumb.gif');
-      // notify gif was successfully made
-      onGifMade(socketId, uploadId, gifFileName, thumbFileName);
-
-      // make thumbnail
-      const makeThumbProcess = spawn('ffmpeg', getOptions(src, thumbDst, QUALITY.THUMB));
+      const makeThumbProcess = spawn('ffmpeg', getOptions(src, dstThumbnail, QUALITY.THUMB));
       makeThumbProcess.stdout.on('data', (data) => { });
       makeThumbProcess.stderr.on('data', (data) => { });
       makeThumbProcess.on('close', (code) => {
         if (code === 0) {
           // success
-          onThumbMade(`${uploadId}.thumb.gif`);
+          onThumbMade(uploadId, dstThumbnail);
         }
         else { // TODO if fails, its probably beacuse the video was < 3 seconds...We should be able to check that before hand and reduce if necessary.
           // make copy the gif to the thumbnail. AKA the gif and thumbnail are the same.
           // this will happen as a last resort but ensures there is always a thumbnail.
-          fs.createReadStream('test.log').pipe(fs.createWriteStream('newLog.log'));
-          onThumbMade(`${uploadId}.thumb.gif`);
+          fs.copyFile(dstFullSize, dstThumbnail, (err) => {
+            if (err) throw err;
+            console.log('thumbnail not made successfully, so fullsize file is being used as thumbnail instead.');
+            onThumbMade(uploadId, dstThumbnail);
+          });
+          
         }
       });
+
+      // notify gif was successfully made, along with the thumbnail that's coming up
+      onGifMade(uploadId, dstFullSize, dstThumbnail);
     }
     // gif was not made successfully
     else {
       console.log(`Problem converting ${src} to .gif.`);
-      onGifMade(socketId, uploadId, null, null);
+      onGifMade(uploadId, null, null, output_str);
     }
     if (jobs.length > 0) {
       convertToGif(jobs.shift());
@@ -162,24 +175,11 @@ function convertToGif(job) {
 
 }
 
-
 /**
- * This behemoth of a function converts a video to a gif.
  * 
- * @param {*} src             The input 
- * @param {*} dst             The output
- * @param {*} socketId        The socketId associated with this upload
- * @param {*} uploadId        The uploadId associated with this upload
- * @param {*} quality         accepts 'sm', 'md' or large
- * @param {*} onStdout        The output stream. Not implemented. Dont use.
- * @param {*} onProgress      Callback for progress
- * @param {*} onGifMade       Callback for when gif is made. 
- *                                success: onGifMade(sockeId, uploadId, gifPath, thumbPath)
- *                                failure: onGifMade(sockeId, uploadId, null, null)
- * @param {*} onThumbMade     Callback for when thumbnail is made. Thumbnail will always be made. 
+ * @param {Job} job 
  */
-function addJob(src, dst, socketId, uploadId, quality, onStdout, onProgress, onGifMade, onThumbMade) {
-  const job = { src, dst, socketId, uploadId, quality, onStdout, onProgress, onGifMade, onThumbMade };
+function addJob(job) {
   jobs.push(job);
 
   if (jobs.length > 0 && numJobsRunning < MAX_JOBS) {

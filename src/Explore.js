@@ -119,17 +119,21 @@ class Explore extends Component {
       this.noUrlParms = false;
 
       return (
-        <Container disableGutters={true} maxWidth="lg" >
+        <React.Fragment>
           {media
             ?
-            <MediaBox
-              mId={media}
-            />
+            <Container disableGutters={true} maxWidth="sm" >
+              <MediaBox
+                mId={media}
+              />
+            </Container>
             :
-            <Album
-              albumId={albumId}
-            />}
-        </Container>
+            <Container disableGutters={true} maxWidth="lg" >
+              <Album
+                albumId={albumId}
+              />
+            </Container>}
+        </React.Fragment>
       );
     }
     else {

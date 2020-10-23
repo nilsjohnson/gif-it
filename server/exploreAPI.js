@@ -3,8 +3,10 @@ const { makeAllPossibleTags } = require("./util/util");
 const { MAX_SEARCH_INPUT_LENGTH } = require('./const');
 const log = require("./util/logger");
 const MediaDAO = require('./data/MediaDAO');
+const AuthDAO = require("./data/AuthDAO");
 
 let mediaDAO = new MediaDAO();
+let authDAO = new AuthDAO();
 
 app.get('/explore', function (req, res) {
   console.log("hit");
@@ -92,4 +94,62 @@ app.get(`/album/:albumId`, function(req, res) {
   }, err => {
     res.status(500).send(err);
   });
+});
+
+app.get(`/user/media`, function(req, res) {
+  console.log("Im it.");
+  let userId = authDAO.authenticate(req.headers);
+
+  if(!userId) {
+    res.status(500).send("user not authenticated");
+    return;
+  }
+  console.log("found user: " + userId);
+  
+
+  mediaDAO.getMediaByUserId(userId, (media) => {
+      console.log("onsuccess");
+      console.log(media);
+      res.send(media)
+  }, err => {
+    console.log(err);
+    res.status(500).send(err);
+  });
+});
+
+app.delete(`/user/deleteMedia/:mId`, function(req, res) {
+  let userId = authDAO.authenticate(req.headers);
+  let mId = req.params.mId;
+  console.log(mId + " delete req.");
+
+  // deleteMediaById(userId, mId, onSuccess, onFail) {
+
+  mediaDAO.deleteMediaById(userId, mId, () => {
+    // success
+    res.status(200).send();
+  }, () => {
+    // failure
+    res.status(500).send();
+  });
+
+  res.status(200).send();
+
+});
+
+app.delete(`/user/deleteAlbum/:aId`, function(req, res) {
+  let userId = authDAO.authenticate(req.headers);
+  let aId = req.params.aId;
+  console.log(aId + " delete req.");
+
+
+  mediaDAO.deleteAlbumById(userId, aId, () => {
+    // success
+    res.status(200).send();
+  }, () => {
+    // failure
+    res.status(500).send();
+  });
+
+  res.status(200).send();
+
 });

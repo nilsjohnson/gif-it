@@ -36,10 +36,11 @@ const useStyles = theme => ({
         margin: theme.spacing(2)
     },
     inputContainer: {
-        marginTop: theme.spacing(1),
-        height: '200px',
+        marginTop: theme.spacing(2),
+        marginBottom: 0,
+        height: 200,
         width: '100%',
-        background: 'linear-gradient(100deg, rgba(25,209,146,0.5746673669467788) 0%, rgba(15,95,209,0.6222864145658263) 100%)'
+        background: `linear-gradient(100deg, rgba(25,209,146,0.5746673669467788) 0%, rgba(15,95,209,0.6222864145658263) 100%)`
     },
     uploadItem: {
         minWidth: '375px',
@@ -47,18 +48,6 @@ const useStyles = theme => ({
     },
     fullWidth: {
         width: '100%'
-    },
-
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
     },
     inputBtn: {
         display: 'none'

@@ -4,13 +4,14 @@ import Explore from './Explore';
 import SignUp from './SignUp';
 import Login from './Login';
 import Verify from './Verify';
-import Dashboard from './Dashboard'
+import Dashboard from './Components/Dashboard'
 import { BrowserRouter, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import './css/style.css';
 import Blog from './Blog';
 import Bugs from './Bugs';
+import Upload from './Upload';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/login" component={Login} exact />
                 <Route path="/verify" component={Verify} exact />
                 <Route path="/dashboard" component={Dashboard} exact /> 
+                <Route path="/upload" component={Upload} exact />
                 <Route path="/blog" component={Blog} exact /> 
                 <Route path="/bugs" component={Bugs} exact /> 
             </ThemeProvider>

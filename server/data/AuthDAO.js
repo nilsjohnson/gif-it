@@ -32,8 +32,6 @@ async function insertUserVerification(connection, args) {
     return await query(connection, sql, args);
 }
 
-
-
 /**
  * @returns a 32 byte random string of hex digits
  */
@@ -137,6 +135,9 @@ class AuthDAO extends DAO {
                     onFail("Problem Creating New User.")
                 }
             }
+            finally {
+                connection.release();
+            }
         });
     }
 
@@ -190,11 +191,8 @@ class AuthDAO extends DAO {
                     // this is a bad login attempt
                     else {
                         onFail(LoginError.INVALID_USERNAME_PASSWORD)
-                        return connection.release();
                     }
-
                     onSuccess(token);
-                    connection.release();
                 }
                 else {
                     onFail(LoginError.INVALID_USERNAME_PASSWORD)
@@ -204,6 +202,9 @@ class AuthDAO extends DAO {
             catch (ex) {
                 log(ex);
                 onFail("Databse Issue.");
+                connection.release();
+            }
+            finally {
                 connection.release();
             }
         });
@@ -244,7 +245,9 @@ class AuthDAO extends DAO {
 
                 let sql = `UPDATE user_verification SET ? WHERE code = ${connection.escape(code)} AND id = ${connection.escape(userId)}`;
                 connection.query(sql, { verified: 1 }, (error, results, fields) => {
-                    console.log(results);
+                    
+                    connection.release();
+
                     if (error) {
                         this.logFailure(error);
                         reject(error);

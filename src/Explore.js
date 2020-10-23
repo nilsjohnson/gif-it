@@ -138,7 +138,7 @@ class Explore extends Component {
     }
     else {
       return (
-        <div>
+        <Container maxWidth='lg'>
           {this.isLogoutRedirect() &&
             <Typography align='center' variant="h6">
               You are now logged out.
@@ -167,7 +167,7 @@ class Explore extends Component {
               </Grid>
             ))}
           </Grid>
-        </div>
+        </Container>
       );
     }
   }

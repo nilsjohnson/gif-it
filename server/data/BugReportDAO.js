@@ -22,13 +22,14 @@ class BugReportDAO extends DAO {
             try {
                 report.date = this.getTimeStamp();
                 await insertBugReport(connection, report);
-                connection.release();
                 onSuccess();
             }
             catch (ex) {
-                connection.release();
                 log(ex);
                 onFail(ex);
+            }
+            finally {
+                connection.release();
             }
         });
     }

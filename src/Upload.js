@@ -6,7 +6,7 @@ import { checkToken } from './util/data';
 import Uploader from "./Components/Uploader";
 import Footer from "./Components/Footer";
 
-class Dashboard extends Component {
+class Upload extends Component {
     constructor(props) {
         super(props);
 
@@ -42,5 +42,5 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard;
+export default Upload;
 

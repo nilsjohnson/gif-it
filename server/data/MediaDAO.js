@@ -5,6 +5,45 @@ const { BUCKET_NAME } = require("../const");
 /** function that gets called to execute sql. See MediaDAO constructor. */
 let query;
 
+async function deleteAlbumById(connection, aId) {
+    let sql = `
+        DELETE FROM album WHERE album.id = ?
+    `;
+
+    return await query(connection, sql, aId);
+}
+
+async function deleteMediaById(connection, mId) {
+    let sql = `
+        DELETE FROM media WHERE media.id = ?
+    `;
+
+    return await query(connection, sql, mId);
+}
+
+async function getMediaByUserId(connection, userId) {
+    let sql = `
+            SELECT 
+            media.id, 
+            media.descript, 
+            media.fileName, 
+            media.thumbName,
+            album_items.item_index, 
+            album.title AlbumTitle, 
+            album.id as albumId
+        FROM media
+            JOIN upload on media.id = upload.id
+            LEFT JOIN album_items ON media.id = album_items.media_id
+            LEFT JOIN album ON album.id = album_items.album_id
+            JOIN media_owner ON media.id = media_owner.media_id
+            JOIN user ON user.id = media_owner.owner_id
+        WHERE user.id = ? AND (album_items.item_index is null OR album_items.item_index = 0)
+        ORDER BY upload.date DESC;
+    `;
+
+    return await query(connection, sql, userId);
+}
+
 async function getMostRecentMedia(connection, limit) {
     let sql =
         `SELECT 
@@ -93,8 +132,6 @@ async function getAlbumById(connection, args) {
 
     let results = await query(connection, sql, args);
     results = parseTags(results);
-    console.log("raw");
-    console.log(results);
 
     return results;
 }
@@ -162,7 +199,6 @@ async function insertTags(connection, uploadId, tags) {
             // get tagId by tag
             args = tags[i];
             results = await getTagId(connection, args);
-            console.log(results);
             tagId = results[0].id;
         }
 
@@ -189,7 +225,7 @@ function parseTags(results) {
 class MediaDAO extends DAO {
     constructor() {
         super(
-            51,             // max connectiond 
+            10,             // max connectiond 
             'localhost',    // location
             'bryn',         // username
             'doggie',       // pw
@@ -198,6 +234,93 @@ class MediaDAO extends DAO {
 
         // allow private methods access to the classes sql execution method
         query = this.query;
+    }
+
+    // TODO, actually validate this album belongs to user...
+    deleteAlbumById(userId, aId, onSuccess, onFail) {
+        this.getConnection(async connection => {
+            if (!connection) {
+                return onFail("Couldn't get a db connection :(");
+            }
+
+            try {
+
+                await this.startTransaction(connection);
+
+                let results = await getAlbumById(connection, aId);
+            
+                for(let i = 0; i < results.length; i++) {
+                    await deleteMediaById(connection, results[i].id);
+                }
+                results = await deleteAlbumById(connection, aId);
+                
+                await this.completeTransation(connection);
+                onSuccess(results);
+            }
+            catch (ex) {
+                console.log("ohh noess");
+                console.log(ex);
+                onFail(ex);
+            }
+            finally {
+                connection.release();
+            }
+        });
+    }
+
+    // TODO actually validate media belongs to user..
+    deleteMediaById(userId, mId, onSuccess, onFail) {
+        this.getConnection(async connection => {
+            if (!connection) {
+                return onFail("Couldn't get a db connection :(");
+            }
+
+            try {
+                let results = await deleteMediaById(connection, mId)
+                if(results) {
+                    console.log("wahoo!");
+                    console.log(results);
+                }
+                else {
+                    console.log("ahh?");
+                    console.log(results);
+                }
+                onSuccess(results);
+            }
+            catch (ex) {
+                onFail(ex);
+            }
+            finally {
+                connection.release();
+            }
+        });
+    }
+
+    getMediaByUserId(userId, onSuccess, onFail) {
+        this.getConnection(async connection => {
+            if (!connection) {
+                return onFail("Couldn't get a db connection :(");
+            }
+
+            try {
+                let results = await getMediaByUserId(connection, userId)
+                console.log(results);
+                if (DEV) {
+                    for (let i = 0; i < results.length; i++) {
+                        results[i].fileName = makeDevPath(results[i].fileName);
+                        results[i].thumbName = makeDevPath(results[i].thumbName);
+                    }
+                }
+
+                onSuccess(results);
+            }
+            catch (ex) {
+                onFail(ex);
+            }
+            finally {
+                connection.release();
+            }
+        });
     }
 
     /**
@@ -254,6 +377,9 @@ class MediaDAO extends DAO {
             catch (ex) {
                 onFail(ex);
             }
+            finally {
+                connection.release();
+            }
         });
     }
 
@@ -270,21 +396,19 @@ class MediaDAO extends DAO {
 
             try {
                 let results = await getMediaById(connection, mId);
-                console.log(results);
                 if (DEV) {
                     results[0].fileName = makeDevPath(results[0].fileName);
                     results[0].thumbName = makeDevPath(results[0].thumbName);
                     results[0].fullSizeName = makeDevPath(results[0].fullSizeName);
                 }
-                console.log("Here is the media: ");
-                console.log(results);
                 onSuccess(results[0]);
-
-                connection.release();
             }
             catch (ex) {
                 log(ex);
                 onFail("Database problem. Couldn't create album.");
+            }
+            finally {
+                connection.release();
             }
         });
     }
@@ -340,8 +464,6 @@ class MediaDAO extends DAO {
             fullSizeName
         } = media;
 
-        console.log(media);
-
         let args, results;
 
         this.getConnection(async (connection) => {
@@ -380,14 +502,17 @@ class MediaDAO extends DAO {
                 results = await insertMediaOwner(connection, args);
 
                 await this.completeTransation(connection);
-                return onSuccess(uploadId);
+                onSuccess(uploadId);
 
             }
             catch (ex) {
                 console.log("catching db err");
                 log(ex);
                 connection.rollback();
-                return onFail("Problem inserting media into database. Please try again later.");
+                onFail("Problem inserting media into database. Please try again later.");
+            }
+            finally {
+                connection.release();
             }
         });
     }
@@ -417,7 +542,9 @@ class MediaDAO extends DAO {
                 log(ex);
                 onFail("database issue");
             }
-            connection.release()
+            finally {
+                connection.release();
+            }
 
         });
     }
@@ -495,6 +622,9 @@ class MediaDAO extends DAO {
                 connection.rollback();
                 onFail("Database problem. Couldn't create album.");
             }
+            finally {
+                connection.release();
+            }
         });
     }
 
@@ -503,8 +633,6 @@ class MediaDAO extends DAO {
             try {
                 // get the album. There should only be 1.
                 let results = await getAlbumById(connection, albumId);
-                console.log("here is the album: ");
-                console.log(results);
 
                 // if we didnt find album, return null;
                 if (!results || results.length < 1) {
@@ -530,15 +658,14 @@ class MediaDAO extends DAO {
                     });
                 }
 
-                console.log("Here is the response: ");
-                console.log(album);
-
-                connection.release();
                 onSuccess(album);
             }
             catch (ex) {
                 log(ex);
                 onFail("Database Problem.");
+            }
+            finally {
+                connection.release();
             }
 
         });

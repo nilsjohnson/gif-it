@@ -1,7 +1,7 @@
 import { readAuthToken } from './util';
 
 // note: this bool must be set propery prior to building for production
-let production = false;
+let production = true;
 let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
 
 /**
@@ -152,6 +152,32 @@ function submitBugReport(data = {}) {
   });
 }
 
+function getUserMedia() {
+  return fetch(`${server}/user/media/`, {
+    headers: {
+      'authorization': readAuthToken()
+    }
+  });
+}
+
+function deleteMediaById(mId = '') {
+  return fetch(`${server}/user/deleteMedia/${mId}`, {
+    method: 'DELETE',
+    headers: {
+      'authorization': readAuthToken()
+    }
+  });
+}
+
+function deleteAlbumById(aId = '') {
+  return fetch(`${server}/user/deleteAlbum/${aId}`, {
+    method: 'DELETE',
+    headers: {
+      'authorization': readAuthToken()
+    }
+  });
+}
+
 export {
   getAlbumById,
   postPhotoGallery,
@@ -168,5 +194,8 @@ export {
   getMediaById,
   uploadFile,
   search,
-  submitBugReport
+  submitBugReport,
+  getUserMedia,
+  deleteMediaById,
+  deleteAlbumById
 }

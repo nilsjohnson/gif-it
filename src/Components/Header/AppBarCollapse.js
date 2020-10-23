@@ -81,7 +81,8 @@ class AppBarCollapse extends Component {
         return (
             <div>
                 <Button className={classes.btn} variant="contained" color="primary" href='./'>Explore</Button>
-                <Button className={classes.btn} variant="contained" color="primary" href='./dashboard'>Upload</Button>
+                <Button className={classes.btn} variant="contained" color="primary" href='./upload'>Upload</Button>
+                <Button className={classes.btn} variant="contained" color="primary" href='./dashboard'>Dashboard</Button>
                 {this.state.authenticated
                     ?
                     <span>

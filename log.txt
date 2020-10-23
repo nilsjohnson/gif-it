@@ -1276,3 +1276,52 @@ TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Re
     at Socket.emit (events.js:310:20)
     at Socket.EventEmitter.emit (domain.js:482:12))
 
+2020-10-23 13:10:03 2020-10-23 13:10:03 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at ServerResponse.json (/home/nils/gif-it/node_modules/express/lib/response.js:267:15)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:158:21)
+    at /home/nils/gif-it/server/exploreAPI.js:115:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:244:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-23 13:10:55 2020-10-23 13:10:55 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at ServerResponse.json (/home/nils/gif-it/node_modules/express/lib/response.js:267:15)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:158:21)
+    at /home/nils/gif-it/server/exploreAPI.js:115:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:244:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-23 16:17:50 sendmail: Cannot open mail:25
+
+2020-10-23 16:17:50 Confirmation Email Not Sent. Code: 1
+2020-10-23 16:27:35 Error: ER_NO_SUCH_TABLE: Table 'gif_it.album_items' doesn't exist
+2020-10-23 16:28:22 sendmail: Cannot open mail:25
+
+2020-10-23 16:28:22 Confirmation Email Not Sent. Code: 1
+2020-10-23 16:28:46 Error: ER_NO_SUCH_TABLE: Table 'gif_it.album' doesn't exist
+2020-10-23 16:46:54 sendmail: Cannot open mail:25
+
+2020-10-23 16:46:54 Confirmation Email Not Sent. Code: 1
+2020-10-23 16:52:47 2020-10-23 16:52:47 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:290:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-23 16:52:47 2020-10-23 16:52:47 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/MediaDAO.js:290:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-23 17:15:54 sendmail: Cannot open mail:25
+
+2020-10-23 17:15:54 Confirmation Email Not Sent. Code: 1
+2020-10-23 18:31:58 sendmail: Cannot open mail:25
+
+2020-10-23 18:31:58 Confirmation Email Not Sent. Code: 1

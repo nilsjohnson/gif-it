@@ -6,12 +6,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 const styles = theme => ({
   buttonCollapse: {
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up(750)]: {
       display: "none"
-    },
-    margin: "10px",
-    boxShadow: "none"
+    }
   }
+    
 });
 
 class ButtonAppBarCollapse extends React.Component {
@@ -20,14 +19,16 @@ class ButtonAppBarCollapse extends React.Component {
     this.state = {
       anchorEl: null
     };
-    this.handleMenu = this.handleMenu.bind(this);
   }
-  handleMenu = event => {
+  
+  handleMenu = (event) => {
     this.setState({ anchorEl: event.currentTarget });
-  };
+  }
+
   handleClose = () => {
     this.setState({ anchorEl: null });
-  };
+  }
+
   render() {
     const { classes } = this.props;
     const { anchorEl } = this.state;
@@ -39,7 +40,6 @@ class ButtonAppBarCollapse extends React.Component {
           <MenuIcon />
         </IconButton>
         <Menu
-          id="menu-appbar"
           anchorEl={anchorEl}
           anchorOrigin={{
             vertical: "top",

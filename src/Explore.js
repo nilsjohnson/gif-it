@@ -57,7 +57,7 @@ class Explore extends Component {
    */
   isLogoutRedirect = () => {
     let url = new URL(window.location.href);
-    return url.searchParams.get("loggedOut") === 'true';
+    return url.searchParams.get("out") === 'true';
   }
 
 

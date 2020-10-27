@@ -120,7 +120,7 @@ class MediaBox extends Component {
                         <FullWidthDivider gutterBottom />    
                         <ShareBox
                             fileName={this.state.fileName}
-                            id={this.props.mId}
+                            link={`/explore?mId=${this.props.mId}`}
                         />
 
                     </Grid>

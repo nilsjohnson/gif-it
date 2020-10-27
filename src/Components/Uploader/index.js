@@ -10,6 +10,7 @@ import ShowError from "./ShowError";
 import { UploadState } from "./UploadState";
 import { UploadType } from "./UploadType";
 import FileBar from './FileBar';
+import EnterAlbumTitle from "./EnterAlbumTitle";
 
 // TODO, use ref...
 const INPUT_ID = "img-uploader-input";
@@ -298,9 +299,9 @@ class Uploader extends UploaderBase {
         return formData;
     }
 
-    setAlbumTitle = (event) => {
+    setAlbumTitle = (value) => {
         this.setState({
-            albumTitle: event.target.value
+            albumTitle: value
         });
     }
 
@@ -466,11 +467,8 @@ class Uploader extends UploaderBase {
                             <Grid item xs={false} sm={1} md={2}></Grid>
                             <Grid item xs={12} sm={10} md={8}>
                                 <Box className={classes.titleWell} p={2}>
-                                    <TextField
-                                        fullWidth={true}
-                                        label="Album Title"
-                                        variant="outlined"
-                                        onChange={this.setAlbumTitle}
+                                    <EnterAlbumTitle
+                                        setAlbumTitle={this.setAlbumTitle}
                                     />
                                 </Box>
                             </Grid>

@@ -7,15 +7,26 @@ export default class ProgressTimer {
         this.interval = interval;
         this.totalUploaded = 0;
         this.uploadComplete = false;
+
+        console.log('file size: ' + this.amountToUpload)
     }
 
     doProgressBar() {
         setTimeout(() => {
-            if (this.totalUploaded >= this.amountToUpload) { return; }
-            this.totalUploaded += this.rate;
-            let percent = Math.round(this.totalUploaded / this.amountToUpload * 100);
-            percent = percent < 100 ? percent : 100;
+            if (this.totalUploaded >= this.amountToUpload)
+            { 
+                return; 
+            }
             
+            this.totalUploaded += this.rate;
+            console.log("rate: " + this.rate);
+            console.log("total up: " + this.totalUploaded);
+
+            let percent = Math.round(this.totalUploaded / this.amountToUpload * 100);
+            console.log(percent);
+            percent = percent < 100 ? percent : 100;
+           
+
             if(!this.uploadComplete) {
                 this.updateUploads(this.uploadId, { percentUploaded: percent });
                 
@@ -35,7 +46,7 @@ export default class ProgressTimer {
     }
 
     setTotalUploaded(amount) {
-        console.log("actual amount received..")
+        console.log("----- actual total amount received upldate -----")
         this.totalUploaded = amount;
     }
 
@@ -44,6 +55,7 @@ export default class ProgressTimer {
     }
 
     updateRate(rate) {
+        console.log("----- upload rate update ------ ")
         this.rate = rate;
     }
 

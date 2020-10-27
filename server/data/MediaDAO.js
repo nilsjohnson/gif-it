@@ -22,24 +22,31 @@ async function deleteMediaById(connection, mId) {
 }
 
 async function getMediaByUserId(connection, userId) {
-    let sql = `
-            SELECT 
+    let sql = 
+        `SELECT 
             media.id, 
             media.descript, 
             media.fileName, 
             media.thumbName,
             album_items.item_index, 
-            album.title AlbumTitle, 
-            album.id as albumId
+            album.title as AlbumTitle,
+            album.id as albumId,
+            user.id as userId,
+            user.username,
+            upload.date,
+            (SELECT count(album_items.media_id)
+                FROM album_items
+                    JOIN media ON album_items.media_id = media.id
+                WHERE album_items.album_id = albumId    
+            ) as numAlbumItems
         FROM media
             JOIN upload on media.id = upload.id
             LEFT JOIN album_items ON media.id = album_items.media_id
             LEFT JOIN album ON album.id = album_items.album_id
-            JOIN media_owner ON media.id = media_owner.media_id
-            JOIN user ON user.id = media_owner.owner_id
+            JOIN media_owner ON media_owner.media_id = media.id
+            JOIN user on user.id = media_owner.owner_id
         WHERE user.id = ? AND (album_items.item_index is null OR album_items.item_index = 0)
-        ORDER BY upload.date DESC;
-    `;
+        ORDER BY upload.date DESC`;
 
     return await query(connection, sql, userId);
 }
@@ -53,13 +60,24 @@ async function getMostRecentMedia(connection, limit) {
             media.thumbName,
             album_items.item_index, 
             album.title as AlbumTitle,
-            album.id as albumId
+            album.id as albumId,
+            user.id as userId,
+            user.username,
+            upload.date,
+            (SELECT count(album_items.media_id)
+                FROM album_items
+                    JOIN media ON album_items.media_id = media.id
+                WHERE album_items.album_id = albumId    
+            ) as numAlbumItems
         FROM media
             JOIN upload on media.id = upload.id
             LEFT JOIN album_items ON media.id = album_items.media_id
             LEFT JOIN album ON album.id = album_items.album_id
+            JOIN media_owner ON media_owner.media_id = media.id
+            JOIN user on user.id = media_owner.owner_id
         WHERE album_items.item_index is null OR album_items.item_index = 0
-        ORDER BY upload.date DESC
+        -- ORDER BY upload.date DESC
+        ORDER BY RAND() -- YEAHH, let's make this a little more fun for now..
         LIMIT ${limit}`;
 
     return await query(connection, sql, limit);
@@ -67,10 +85,31 @@ async function getMostRecentMedia(connection, limit) {
 
 async function getMediaByTags(connection, tags) {
     let sql =
-        `SELECT distinct media.fileName, media.descript, media.thumbName, media.id from media
-            JOIN media_tag ON media.id = media_tag.media_id
-            JOIN tag ON media_tag.tag_id = tag.id
-        WHERE `;
+    `SELECT 
+    media.id, 
+    media.descript, 
+    media.fileName, 
+    media.thumbName,
+    album_items.item_index, 
+    album.title as AlbumTitle,
+    album.id as albumId,
+    user.id as userId,
+    user.username,
+    upload.date,
+    (SELECT count(album_items.media_id)
+        FROM album_items
+            JOIN media ON album_items.media_id = media.id
+        WHERE album_items.album_id = albumId    
+    ) as numAlbumItems
+FROM media
+    JOIN upload on media.id = upload.id
+    LEFT JOIN album_items ON media.id = album_items.media_id
+    LEFT JOIN album ON album.id = album_items.album_id
+    JOIN media_owner ON media_owner.media_id = media.id
+    JOIN user on user.id = media_owner.owner_id
+    JOIN media_tag on media_tag.media_id = media.id
+    JOIN tag on media_tag.tag_id = tag.id
+WHERE (album_items.item_index is null OR album_items.item_index = 0) AND `
 
     for (let i = 0; i < tags.length; i++) {
         sql += `tag = ?`;
@@ -95,6 +134,7 @@ async function getMediaById(connection, id) {
             LEFT JOIN media_tag ON media.id = media_tag.media_id
             LEFT JOIN tag ON media_tag.tag_id = tag.id
         WHERE media.id = ?`;
+        
     let results = await query(connection, sql, id);
     if (results[0].tags) {
         let tags = JSON.parse(results[0].tags);
@@ -405,7 +445,6 @@ class MediaDAO extends DAO {
             }
             catch (ex) {
                 log(ex);
-                onFail("Database problem. Couldn't create album.");
             }
             finally {
                 connection.release();
@@ -530,6 +569,9 @@ class MediaDAO extends DAO {
 
             try {
                 let results = await getMediaByTags(connection, tags);
+                console.log("okie dokie");
+                console.log(results);
+
                 if (DEV) {
                     for (let i = 0; i < results.length; i++) {
                         results[i].thumbName = makeDevPath(results[i].thumbName);

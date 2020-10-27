@@ -17,7 +17,8 @@ class Explore extends Component {
     super(props);
 
     this.state = ({
-      media: []
+      media: [],
+      message: ''
     });
 
     this.noUrlParms = true;
@@ -86,7 +87,15 @@ class Explore extends Component {
     search(query).then(res => {
       if (res.ok) {
         res.json().then(resJson => {
-          this.setMedia(resJson)
+          if (resJson.length === 0) {
+            this.setState({
+              message: "Sorry, no results found. :( ",
+              media: resJson
+            });
+          }
+          else {
+            this.setMedia(resJson);
+          }
         }).catch(err => console.log(`Problem parsing JSON from request: ${err}`))
       } else {
         res.json().then(resJson => {
@@ -101,7 +110,8 @@ class Explore extends Component {
    */
   setMedia = (media) => {
     this.setState({
-      media: media
+      media: media,
+      message: ''
     });
   }
 
@@ -163,9 +173,19 @@ class Explore extends Component {
                   src={media.thumbName}
                   description={media.albumId ? media.AlbumTitle : media.descript}
                   linkAddress={media.albumId ? `/explore?albumId=${media.albumId}` : `/explore?mId=${media.id}`}
+                  username={media.username}
+                  date={new Date(media.date)}
+                  id={media.id}
+                  album={media.albumId}
+                  numItems={media.numAlbumItems > 0 ? media.numAlbumItems : 1}
                 />
               </Grid>
             ))}
+
+            {this.state.message &&
+              <Grid item xs={12}>
+                <Typography align='center' variant="h6">Sorry! No Results.</Typography>
+              </Grid>}
           </Grid>
         </Container>
       );

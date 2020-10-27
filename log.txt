@@ -1325,3 +1325,66 @@ TypeError: onFail is not a function
 2020-10-23 18:31:58 sendmail: Cannot open mail:25
 
 2020-10-23 18:31:58 Confirmation Email Not Sent. Code: 1
+2020-10-26 16:29:38 Error: ER_DATA_TOO_LONG: Data too long for column 'title' at row 1
+2020-10-26 17:35:24 Error: ER_DUP_ENTRY: Duplicate entry 'tina3' for key 'user.username'
+2020-10-26 17:35:33 sendmail: Cannot open mail:25
+
+2020-10-26 17:35:33 Confirmation Email Not Sent. Code: 1
+2020-10-26 17:44:52 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.date
+        FROM media
+            JOIN upload on media.id = upload.id
+       ' at line 11
+2020-10-26 17:45:23 Error: ER_NONUNIQ_TABLE: Not unique table/alias: 'upload'
+2020-10-26 18:18:13 Error: ER_DUP_ENTRY: Duplicate entry 'tina4' for key 'user.username'
+2020-10-26 18:18:19 sendmail: Cannot open mail:25
+
+2020-10-26 18:18:19 Confirmation Email Not Sent. Code: 1
+2020-10-26 18:29:40 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 8
+2020-10-26 18:29:50 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 8
+2020-10-26 18:29:59 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 8
+2020-10-26 18:31:09 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 8
+2020-10-26 18:31:09 Database problem. Couldn't create album.
+2020-10-26 18:31:27 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 8
+2020-10-26 18:31:27 Database problem. Couldn't create album.
+2020-10-26 18:32:30 Error: ER_BAD_FIELD_ERROR: Unknown column 'upload.date' in 'field list'
+2020-10-26 18:32:30 Database problem. Couldn't create album.
+2020-10-26 18:33:12 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #4 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-10-26 18:33:12 Database problem. Couldn't create album.
+2020-10-26 18:36:18 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE media.id = 'BzQQ1Iu2'' at line 21
+2020-10-26 18:36:18 Database problem. Couldn't create album.
+2020-10-26 18:37:13 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE media.id = 'BzQQ1Iu2'' at line 21
+2020-10-26 19:46:53 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #4 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-10-26 19:48:13 Error: ER_BAD_FIELD_ERROR: Unknown column 'user.id' in 'field list'
+2020-10-26 19:48:28 Error: ER_BAD_FIELD_ERROR: Unknown column 'user.id' in 'field list'
+2020-10-26 19:50:08 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 5
+2020-10-26 19:50:08 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 5
+2020-10-26 19:50:08 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 5
+2020-10-26 19:50:08 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 5
+2020-10-26 19:50:08 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 5
+2020-10-26 19:50:18 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 5
+2020-10-26 19:50:23 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 5
+2020-10-26 19:50:23 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 5
+2020-10-26 19:50:23 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 5
+2020-10-26 19:50:29 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
+            (SELECT COUNT(media_tag.tag_id' at line 5
+2020-10-26 19:52:37 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE media.id = 'Cg4FEvZ1'' at line 21
+2020-10-26 20:12:11 Error: ER_BAD_FIELD_ERROR: Unknown column 'albumItems.item_id' in 'on clause'
+2020-10-26 20:12:33 Error: ER_BAD_FIELD_ERROR: Unknown column 'album_items.item_id' in 'on clause'
+2020-10-26 20:55:02 Error: ER_BAD_FIELD_ERROR: Unknown column 'tag' in 'where clause'
+2020-10-26 20:55:04 Error: ER_BAD_FIELD_ERROR: Unknown column 'tag' in 'where clause'
+2020-10-26 20:56:03 Error: ER_BAD_FIELD_ERROR: Unknown column 'tag' in 'where clause'
+2020-10-26 20:56:43 Error: ER_BAD_FIELD_ERROR: Unknown column 'media_tag.media_d' in 'on clause'

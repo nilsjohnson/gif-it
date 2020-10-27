@@ -56,6 +56,7 @@ app.get('/media/:mId', function(req, res) {
     }
   }, err => {
     // onFail
+    log(err);
     res.sendStatus(500);
   });
 

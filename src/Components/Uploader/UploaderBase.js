@@ -540,7 +540,9 @@ class UploaderBase extends Component {
     }
 
     setUploadRate = (startTime, endTime, fileSize) => {
-        this.estimatedUploadRate = (fileSize * PROGRESS_BAR_UPDATE_INTERVAL / 1000 / (endTime - startTime));
+        let rate = fileSize / (endTime - startTime);
+        rate = rate * PROGRESS_BAR_UPDATE_INTERVAL;
+        this.estimatedUploadRate = rate;
     }
 
     doVidToGifUpload = (upload, callback) => {
@@ -586,17 +588,12 @@ class UploaderBase extends Component {
         let fullSizeFile = this.fileManager.getFile(upload.fullSizeImage);
         let thumbnailFile = this.fileManager.getFile(upload.thumbSizeImage);
 
-        console.log(originalFile);
-        console.log(webSizeFile);
-        console.log(fullSizeFile);
-        console.log(thumbnailFile);
-
         let totalUploadSize;
         if (!fullSizeFile) {
             totalUploadSize = webSizeFile.size;
         }
         else {
-            totalUploadSize = webSizeFile.size * fullSizeFile.size;
+            totalUploadSize = webSizeFile.size + fullSizeFile.size;
         }
 
         let fileParts = originalFile.name.split('.');
@@ -653,6 +650,7 @@ class UploaderBase extends Component {
                         // upload photo to s3
                         return doSignedS3Post(webSizePhotoData.url, photoFormData).then(res => {
                             if (res.ok) {
+                                console.log("websize uploaded.");
                                 endTime = new Date().getTime();
                                 this.setUploadRate(startTime, endTime, webSizeFile.size);
                                 // we now have a better rate estimate to work with.

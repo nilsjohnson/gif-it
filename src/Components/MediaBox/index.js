@@ -9,6 +9,7 @@ import FullWidthDivider from '../FullWidthDivider';
 import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
 import clsx from 'clsx';
+import { Redirect } from 'react-router';
 
 const useStyles = theme => ({
     expand: {
@@ -33,7 +34,8 @@ class MediaBox extends Component {
 
         this.state = {
             media: this.props.media ? this.props.media : {},
-            shareExpanded: false
+            shareExpanded: false,
+            redirect: null
         };
     }
 
@@ -103,6 +105,12 @@ class MediaBox extends Component {
                         });
                     })
                 }
+                else if(res.status === 404) {
+                    console.log("its a 404!");
+                    this.setState({
+                        redirect: '/404'
+                    });
+                }
                 else {
                     console.log(`Problem fetching gif by id: ${res}`);
                 }
@@ -111,6 +119,10 @@ class MediaBox extends Component {
     }
 
     render() {
+        if(this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+        }
+
         const { classes } = this.props;
         const { media = {} } = this.state;
         const { description = "", fullSizeName = "", fileName = "", tags = {} } = media;

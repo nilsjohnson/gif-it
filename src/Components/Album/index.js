@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Typography, Grid, Box, Card } from '@material-ui/core/';
 import { getAlbumById } from '../../util/data';
 import MediaBox from '../MediaBox';
+import { Redirect } from 'react-router';
 
 const useStyles = theme => ({
     container: {
@@ -30,20 +31,35 @@ class Album extends Component {
             title: "",
             description: "",
             ownerId: null,
-            items: []
+            items: [],
+            redirect: null
         };
     }
 
     componentDidMount = () => {
         getAlbumById(this.props.albumId).then(res => {
-            res.json().then(resJson => {
-                console.log(resJson);
-                this.setState(resJson);
-            }).catch(err => console.log(`JSON err: ${err}`))
+            if(res.ok) {
+                res.json().then(resJson => {
+                    console.log(resJson);
+                    this.setState(resJson);
+                }).catch(err => console.log(`JSON err: ${err}`))
+            }
+            else if(res.status === 404) {
+                console.log("redirect");
+                this.setState({redirect: '/404'})
+            }
+            else {
+                console.log(res);
+            }
+            
         }).catch(err => console.log(`fetch err. ${err}`));
     }
 
     render() {
+        if(this.state.redirect) {
+            return <Redirect to={this.state.redirect}/>
+        }
+
         const { classes } = this.props;
         return (
             <React.Fragment>

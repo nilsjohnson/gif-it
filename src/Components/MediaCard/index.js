@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import PhotoIcon from '@material-ui/icons/Photo';
 import CardActions from '@material-ui/core/CardActions';
-import { Collapse, Box, CardContent, CardMedia, Card, Typography, Tooltip } from '@material-ui/core';
+import { Collapse, Box, CardContent, CardMedia, Card, Typography } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
 import clsx from 'clsx';
@@ -46,9 +46,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MediaCard(props) {
   const classes = useStyles();
-  const { linkAddress, src, description, username, date, id, album, numItems, showUser = true } = props;
+  const { media = {}, showUser = true } = props;
 
   const [expanded, setExpanded] = React.useState(false);
+
+  const getShareBox = () => {
+    if (media.albumId) {
+      return (
+        <ShareBox
+          links={[{ title: "share album", link: `https://gif-it.io/explore?albumId=${media.albumId}` }]}
+        />
+      );
+    }
+    else {
+      return (
+        <ShareBox
+          links={[{ title: "share media", link: `https://gif-it.io/explore?mId=${media.id}` }]}
+        />
+      );
+    }
+
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -58,31 +76,47 @@ export default function MediaCard(props) {
     <Card className={classes.root}>
       <CardContent>
         <Link
-          to={linkAddress}
+          to={`${media.albumId ? `/explore?albumId=${media.albumId}` : `/explore?mId=${media.id}`}`}
         >
           <CardMedia
             component="img"
-            alt={description}
+            alt={media.description}
             height="auto"
-            image={src}
-            title={src}
+            image={media.thumbName}
+            title={media.fileName}
           />
         </Link>
       </CardContent>
 
       <CardActions disableSpacing={true}>
         <Box className={classes.typeBox} m={1}>
-          {album ? <PhotoLibraryIcon /> : <PhotoIcon />}
+          {media.albumId ? <PhotoLibraryIcon /> : <PhotoIcon />}
         </Box>
         <Box>
-          <Typography  variant="h6" component="h5">{`${description ? description : id}`}</Typography>
-          <Typography noWrap={true} variant="body1" component="h5">{`${numItems} item${numItems > 1 ? 's' : ''}`}</Typography>
+          <Typography variant="h6"
+            component="h5">
+            {`${media.description ? media.description : media.fileName}`}
+          </Typography>
+          <Typography noWrap
+            variant="body1"
+            component="h5">
+            {`${media.numAlbumItems === 0 ? 1 : media.numAlbumItems} item${media.numAlbumItems > 1 ? 's' : ''}`}
+          </Typography>
         </Box>
       </CardActions>
       <CardActions disableSpacing={true}>
         <Box>
-          {showUser && <Typography color="textSecondary" noWrap={true} variant="subtitle1" component="h5">{`uploaded by ${username}`}</Typography>}
-          <Typography color="textSecondary" noWrap={true} variant="subtitle2" component="h5">{dateToAge(date)}</Typography>
+          {showUser &&
+            <Typography color="textSecondary"
+              noWrap={true} variant="subtitle1"
+              component="h5">
+              {`uploaded by ${media.username}`}
+            </Typography>}
+          <Typography color="textSecondary"
+            noWrap={true} variant="subtitle2"
+            component="h5">
+            {dateToAge(new Date(media.date))}
+          </Typography>
         </Box>
         <IconButton
           className={clsx(classes.expand, {
@@ -96,10 +130,9 @@ export default function MediaCard(props) {
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <ShareBox
-          fileName={src}
-          link={linkAddress}
-        />
+        <Box p={1}>
+        {getShareBox()}
+        </Box>
       </Collapse>
     </Card>
   );

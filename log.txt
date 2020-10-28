@@ -1388,3 +1388,10 @@ TypeError: onFail is not a function
 2020-10-26 20:55:04 Error: ER_BAD_FIELD_ERROR: Unknown column 'tag' in 'where clause'
 2020-10-26 20:56:03 Error: ER_BAD_FIELD_ERROR: Unknown column 'tag' in 'where clause'
 2020-10-26 20:56:43 Error: ER_BAD_FIELD_ERROR: Unknown column 'media_tag.media_d' in 'on clause'
+2020-10-27 19:54:21 sendmail: Cannot open mail:25
+
+2020-10-27 19:54:21 Confirmation Email Not Sent. Code: 1
+2020-10-27 20:27:29 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DISTINCT album.id as albumId,
+    user.id as userId,
+    user.username,
+    uplo' at line 8

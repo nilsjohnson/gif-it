@@ -20,14 +20,23 @@ class EditBox extends Component {
 
     delete = (event) => {
         const { media } = this.props;
-        
-        if(media.albumId) {
-            console.log("deleting album " + media.albumId);
-            this.props.deleteAlbum(media.albumId);
+        if (media.albumId) {
+            /* glbal confirm */
+            if (window.confirm(`Delete ${media.albumTitle ? `"${media.albumTitle}"` : 'album'}?`)) {
+                console.log("deleting album " + media.albumId);
+                this.props.deleteAlbum(media.albumId);
+            }
+            else {
+                return;
+            }
+
         }
         else {
-            console.log("deleting single item " + media.id);
-            this.props.deleteItem(media.id);
+            if (window.confirm("Delete this item?")) {
+                console.log("deleting single item " + media.id);
+                this.props.deleteItem(media.id);
+            }
+
         }
     }
 
@@ -37,16 +46,9 @@ class EditBox extends Component {
         return (
             <Box className={classes.editWell}>
                 <MediaCard
-                  key={media.id}
-                  src={media.thumbName}
-                  description={media.albumId ? media.AlbumTitle : media.descript}
-                  linkAddress={media.albumId ? `/explore?albumId=${media.albumId}` : `/explore?mId=${media.id}`}
-                  username={media.username}
-                  date={new Date(media.date)}
-                  id={media.id}
-                  album={media.albumId}
-                  numItems={media.numAlbumItems > 0 ? media.numAlbumItems : 1 }
-                  showUser={false}
+                    key={media.id}
+                    media={media}
+                    showUser={false}
                 />
                 <Grid
                     container className={classes.btnBox}

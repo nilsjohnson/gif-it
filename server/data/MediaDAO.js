@@ -59,7 +59,7 @@ async function getMostRecentMedia(connection, limit) {
             media.fileName, 
             media.thumbName,
             album_items.item_index, 
-            album.title as AlbumTitle,
+            album.title as albumTitle,
             album.id as albumId,
             user.id as userId,
             user.username,

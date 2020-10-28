@@ -47,8 +47,21 @@ const useStyles = makeStyles((theme) => ({
 export default function MediaCard(props) {
   const classes = useStyles();
   const { media = {}, showUser = true } = props;
+  console.log(media);
 
   const [expanded, setExpanded] = React.useState(false);
+
+  const makeTitle = () => {
+    if(media.albumTitle) {
+      return media.albumTitle
+    }
+    if(media.description) {
+      return media.description.split('\n');
+    }
+    else {
+      return media.fileName;
+    }
+  }
 
   const getShareBox = () => {
     if (media.albumId) {
@@ -95,7 +108,7 @@ export default function MediaCard(props) {
         <Box>
           <Typography variant="h6"
             component="h5">
-            {`${media.description ? media.description : media.fileName}`}
+            { makeTitle() }
           </Typography>
           <Typography noWrap
             variant="body1"

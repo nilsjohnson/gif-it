@@ -196,7 +196,6 @@ class AuthDAO extends DAO {
                 }
                 else {
                     onFail(LoginError.INVALID_USERNAME_PASSWORD)
-                    return connection.release();
                 }
             }
             catch (ex) {

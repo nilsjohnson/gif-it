@@ -85,7 +85,7 @@ async function getMostRecentMedia(connection, limit) {
 
 async function getMediaByTags(connection, tags) {
     let sql =
-    `SELECT distinct
+    `SELECT
     media.id, 
     media.descript as description, 
     media.fileName, 
@@ -121,7 +121,8 @@ WHERE `
 
 async function getMediaById(connection, id) {
     let sql =
-        `SELECT 
+        `SELECT
+        media.id, 
         media.descript as description, 
         media.fileName, 
         media.fullSizeName,

@@ -49,11 +49,13 @@ class MediaBox extends Component {
 
     getShareBox = () => {
         const { media } = this.state;
+        console.log("state");
+        console.log(this.state);
         let links = [];
 
         links.push({
             title: "on gif-it.io",
-            link: `https://gif-it.io/explore?mId=${media.fileName}`
+            link: `https://gif-it.io/explore?mId=${media.id}`
         });
 
         if (media.fullSizeName) {

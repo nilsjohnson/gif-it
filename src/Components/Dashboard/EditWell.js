@@ -21,7 +21,8 @@ class EditBox extends Component {
     delete = (event) => {
         const { media } = this.props;
         if (media.albumId) {
-            if (confirm(`Delete ${media.albumTitle ? `"${media.albumTitle}"` : 'album'}?`)) {
+            /* glbal confirm */
+            if (window.confirm(`Delete ${media.albumTitle ? `"${media.albumTitle}"` : 'album'}?`)) {
                 console.log("deleting album " + media.albumId);
                 this.props.deleteAlbum(media.albumId);
             }
@@ -31,7 +32,7 @@ class EditBox extends Component {
 
         }
         else {
-            if (confirm("Delete this item?")) {
+            if (window.confirm("Delete this item?")) {
                 console.log("deleting single item " + media.id);
                 this.props.deleteItem(media.id);
             }

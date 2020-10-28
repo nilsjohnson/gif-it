@@ -1395,3 +1395,433 @@ TypeError: onFail is not a function
     user.id as userId,
     user.username,
     uplo' at line 8
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:39 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:39 2020-10-28 16:11:39 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:11:54 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:11:54 2020-10-28 16:11:54 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-10-28 16:12:31 Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+2020-10-28 16:12:31 2020-10-28 16:12:31 Cannot set headers after they are sent to the client 
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at ServerResponse.header (/home/nils/gif-it/node_modules/express/lib/response.js:771:10)
+    at ServerResponse.send (/home/nils/gif-it/node_modules/express/lib/response.js:170:12)
+    at /home/nils/gif-it/server/exploreAPI.js:100:21
+    at /home/nils/gif-it/server/data/MediaDAO.js:708:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+

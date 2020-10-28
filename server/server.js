@@ -57,6 +57,14 @@ require('./userAPI');
 require('./clientS3TransferAPI');
 require('./bugAPI');
 
+/*
+Redirects all other requests to be handled by client.
+*/
+app.get('/*', function (req, res) {
+	console.log("resource not found. Redirecting to client..");
+	res.redirect('index.html');
+});
+
 // listen for API requests
 http.listen(PORT_NUM, () => {
 	console.log(`App listening on port ${PORT_NUM}`);

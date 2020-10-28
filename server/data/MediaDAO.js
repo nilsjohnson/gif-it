@@ -439,10 +439,15 @@ class MediaDAO extends DAO {
                 let results = await getMediaById(connection, mId);
                 if (DEV) {
                     results[0].fileName = makeDevPath(results[0].fileName);
-                    results[0].thumbName = makeDevPath(results[0].thumbName);
                     results[0].fullSizeName = makeDevPath(results[0].fullSizeName);
                 }
-                onSuccess(results[0]);
+
+                if(results[0].id) {
+                    onSuccess(results[0]);
+                }
+                else {
+                    onSuccess(null)
+                }
             }
             catch (ex) {
                 log(ex);

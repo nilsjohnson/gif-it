@@ -47,12 +47,14 @@ app.get('/media/:mId', function(req, res) {
   console.log("fetching gif: " + mId);
 
   mediaDAO.getMediaById(mId, (media) => {
+    console.log("media:");
+    console.log(media);
     // onSucess
     if(media) {
       res.json(media);
     }
     else {
-      res.sendStatus(400);
+      res.sendStatus(404);
     }
   }, err => {
     // onFail
@@ -90,6 +92,12 @@ app.get(`/album/:albumId`, function(req, res) {
     if(DEBUG) {
       console.log("here is the album: ");
       console.log(album);
+
+      if(!album) {
+        console.log("sending 404");
+        res.status(404).send();
+        return;
+      }
     }
     res.json(album);
   }, err => {

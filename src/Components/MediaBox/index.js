@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles';
-import { Card, Box, Grid, CardMedia, Typography } from '@material-ui/core/';
+import { Collapse, Card, Box, Grid, CardMedia, CardActions, Typography } from '@material-ui/core/';
 import { getMediaById } from '../../util/data';
 import { ShareBox } from './ShareBox';
 import Tag from '../Tag/Tag';
 import FullWidthDivider from '../FullWidthDivider';
+import IconButton from '@material-ui/core/IconButton';
+import ShareIcon from '@material-ui/icons/Share';
+import clsx from 'clsx';
 
 const useStyles = theme => ({
-    fullWidth: {
-
+    expand: {
+        transform: 'rotate(0deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }),
     },
-    root: {
-        // paddingBottom: theme.spacing(2)
-    }
+    expandOpen: {
+        transform: 'rotate(180deg)',
+    },
 });
 
 /**
@@ -25,11 +32,42 @@ class MediaBox extends Component {
         super(props);
 
         this.state = {
-            tags: this.props.tags ? this.props.tags : [],
-            descriptionLines: this.props.description ? this.splitLines(this.props.description) : [],
-            fileName: this.props.fileName ? this.props.fileName : "",
-            fullSizeName: this.props.fullSizeName ? this.props.fullSizeName : ""
+            media: this.props.media ? this.props.media : {},
+            shareExpanded: false
         };
+    }
+
+    setShareExpanded = (val) => {
+        this.setState({
+            shareExpanded: val
+        });
+    }
+
+    handleExpandClick = () => {
+        this.setShareExpanded(!this.state.shareExpanded);
+    }
+
+    getShareBox = () => {
+        const { media } = this.state;
+        let links = [];
+
+        links.push({
+            title: "on gif-it.io",
+            link: `https://gif-it.io/explore?mId=${media.fileName}`
+        });
+
+        if (media.fullSizeName) {
+            links.push({
+                title: "full resolution",
+                link: `https://gif-it.io/${media.fullSizeName}`
+            });
+        }
+
+        return (
+            <ShareBox
+                links={links}
+            />
+        );
     }
 
     splitLines = (str) => {
@@ -40,18 +78,26 @@ class MediaBox extends Component {
     }
 
     componentDidMount = () => {
+        // if there is no mediaId prop, this because the media
+        // item was passed as a prop, so we dont need to fetch it.
         if (!this.props.mId) {
             return;
         }
+
         getMediaById(this.props.mId)
             .then(res => {
                 if (res.ok) {
                     res.json().then(resJson => {
+                        // set null values to empty for rendering
+                        if(!resJson.tags) {
+                            resJson.tags = {}
+                        }
+                        if(!resJson.description) {
+                            resJson.description = ''
+                        }
+
                         this.setState({
-                            tags: resJson.tags,
-                            fileName: resJson.fileName,
-                            descriptionLines: resJson.descript ? resJson.descript.split('\n') : [],
-                            fullSizeName: resJson.fullSizeName
+                            media: resJson
                         });
                     })
                 }
@@ -64,6 +110,9 @@ class MediaBox extends Component {
 
     render() {
         const { classes } = this.props;
+        const { media = {} } = this.state;
+        const { description = "", fullSizeName = "", fileName = "", tags = {} } = media;
+        let descriptionLines = description ? description.split('\n') : [];
 
         return (
             <Card>
@@ -74,16 +123,16 @@ class MediaBox extends Component {
                         justify="flex-start"
                         alignItems="flex-start"
                     >
-                        {this.state.fullSizeName ?
-                            <a href={`https://gif-it.io/${this.state.fullSizeName}`}
+                        {fullSizeName ?
+                            <a href={`https://gif-it.io/${fullSizeName}`}
                                 className={classes.fullWidth}
                             >
                                 <CardMedia
                                     component="img"
                                     alt="Cool Gif"
                                     height="auto"
-                                    image={this.state.fileName}
-                                    title={this.state.descriptionLines[0]}
+                                    image={fileName}
+                                    title={descriptionLines[0]}
                                 />
                             </a>
                             :
@@ -91,8 +140,8 @@ class MediaBox extends Component {
                                 component="img"
                                 alt="Cool Gif"
                                 height="auto"
-                                image={this.state.fileName}
-                                title={this.state.descriptionLines[0]}
+                                image={fileName}
+                                title={descriptionLines[0]}
                             />}
 
                         <Grid item>
@@ -102,28 +151,40 @@ class MediaBox extends Component {
                                 justify="flex-start"
                                 alignItems="flex-start"
                             >
-                                {Object.keys(this.state.tags).map((key, index) =>
-                                    <Tag key={index} tag={key} count={this.state.tags[key]} explorable={true} />
+                                {Object.keys(tags).map((key, index) =>
+                                    <Tag key={index} tag={key} count={tags[key]} explorable={true} />
                                 )}
                             </Grid>
                         </Grid>
 
-                        {this.state.descriptionLines.length > 1 ? <FullWidthDivider /> : ""}
+                        {description.length > 1 ? <FullWidthDivider /> : ""}
                         <Grid item>
-                            {this.state.descriptionLines.map((line, index) =>
+                            {descriptionLines.map((line, index) =>
                                 <Typography key={index}>
                                     {line}
                                 </Typography>
                             )}
                         </Grid>
-                        
-                        <FullWidthDivider gutterBottom />    
-                        <ShareBox
-                            fileName={this.state.fileName}
-                            link={`/explore?mId=${this.props.mId}`}
-                        />
 
+                        <FullWidthDivider gutterBottom />
                     </Grid>
+                    <CardActions disableSpacing={true}>
+                            <IconButton
+                                className={clsx(classes.expand, {
+                                    [classes.expandOpen]: this.state.shareExpanded,
+                                })}
+                                onClick={this.handleExpandClick}
+                                aria-expanded={this.state.shareExpanded}
+                                aria-label="show more"
+                            >
+                                <ShareIcon />
+                            </IconButton>
+                        </CardActions>
+                        <Collapse in={this.state.shareExpanded} timeout="auto" unmountOnExit>
+                            <Box p={1}>
+                                {this.getShareBox()}
+                            </Box>
+                        </Collapse>
                 </Box>
             </Card >
         );
@@ -132,6 +193,7 @@ class MediaBox extends Component {
 
 MediaBox.propTypes = {
     mId: PropTypes.string,
+    media: PropTypes.object
 }
 
 export default withStyles(useStyles)(MediaBox);

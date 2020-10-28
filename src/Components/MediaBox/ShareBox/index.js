@@ -8,27 +8,22 @@ import LinkCopyBox from "./LinkCopyBox";
  * This component is used to show links for the various ways to share a gif.
  */
 export function ShareBox(props) {
-    const { fileName, link } = props;
+    const { links = [] } = props;
 
     return (
         <Grid
-            item container
+            container
             direction="column"
             justify="flex-start"
             alignItems="flex-start"
         >
-            <LinkCopyBox
-                type="on gif-it"
-                text={`https://gif-it.io${link}`}
-            />
-            <LinkCopyBox
-                type="html"
-                text={`<img src='https://gif-it.io/${fileName}'>`}
-            />
-            <LinkCopyBox
-                type="just the file"
-                text={`https://gif-it.io/${fileName}`}
-            />
+            {links.map((elem, index) => (
+                <LinkCopyBox
+                    key={index}
+                    type={elem.title}
+                    text={elem.link}
+                />
+            ))}
         </Grid>
 
     );

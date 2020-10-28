@@ -25,11 +25,11 @@ async function getMediaByUserId(connection, userId) {
     let sql = 
         `SELECT 
             media.id, 
-            media.descript, 
+            media.descript as description, 
             media.fileName, 
             media.thumbName,
             album_items.item_index, 
-            album.title as AlbumTitle,
+            album.title as albumTitle,
             album.id as albumId,
             user.id as userId,
             user.username,
@@ -55,7 +55,7 @@ async function getMostRecentMedia(connection, limit) {
     let sql =
         `SELECT 
             media.id, 
-            media.descript, 
+            media.descript as description, 
             media.fileName, 
             media.thumbName,
             album_items.item_index, 
@@ -85,13 +85,13 @@ async function getMostRecentMedia(connection, limit) {
 
 async function getMediaByTags(connection, tags) {
     let sql =
-    `SELECT 
+    `SELECT distinct
     media.id, 
-    media.descript, 
+    media.descript as description, 
     media.fileName, 
     media.thumbName,
     album_items.item_index, 
-    album.title as AlbumTitle,
+    album.title as albumTitle,
     album.id as albumId,
     user.id as userId,
     user.username,
@@ -109,7 +109,7 @@ FROM media
     JOIN user on user.id = media_owner.owner_id
     JOIN media_tag on media_tag.media_id = media.id
     JOIN tag on media_tag.tag_id = tag.id
-WHERE (album_items.item_index is null OR album_items.item_index = 0) AND `
+WHERE `
 
     for (let i = 0; i < tags.length; i++) {
         sql += `tag = ?`;
@@ -122,7 +122,7 @@ WHERE (album_items.item_index is null OR album_items.item_index = 0) AND `
 async function getMediaById(connection, id) {
     let sql =
         `SELECT 
-        media.descript, 
+        media.descript as description, 
         media.fileName, 
         media.fullSizeName,
         JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 

@@ -120,21 +120,21 @@ class Explore extends Component {
    */
   getView = () => {
 
-    let media = this.getMediaParam();
+    let mId = this.getMediaParam();
     let searchInput = this.getSearchParam();
     let albumId = this.getAlbumParam();
     searchInput = (searchInput ? searchInput : "");
 
-    if (media || albumId) {
+    if (mId || albumId) {
       this.noUrlParms = false;
 
       return (
         <React.Fragment>
-          {media
+          {mId
             ?
             <Container disableGutters={true} maxWidth="sm" >
               <MediaBox
-                mId={media}
+                mId={mId}
               />
             </Container>
             :
@@ -166,18 +166,11 @@ class Explore extends Component {
             spacing={2}
           >
             {/* linkAddress, src, altText, description  */}
-            {this.state.media.map((media) => (
+            {this.state.media.map((media, index) => (
               <Grid item xs={12} sm={6} md={4} key={media.id}>
                 <MediaCard
-                  key={media.id}
-                  src={media.thumbName}
-                  description={media.albumId ? media.AlbumTitle : media.descript}
-                  linkAddress={media.albumId ? `/explore?albumId=${media.albumId}` : `/explore?mId=${media.id}`}
-                  username={media.username}
-                  date={new Date(media.date)}
-                  id={media.id}
-                  album={media.albumId}
-                  numItems={media.numAlbumItems > 0 ? media.numAlbumItems : 1}
+                  key={index}
+                  media={media}
                 />
               </Grid>
             ))}

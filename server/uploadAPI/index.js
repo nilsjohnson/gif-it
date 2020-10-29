@@ -4,8 +4,8 @@ const Busboy = require('busboy');
 const { app, http } = require('../server');
 const { FilePaths, MAX_UPLOAD_SIZE } = require('../const');
 const { getUniqueID, checkUnique, readObj, writeObj, deleteFile } = require("../util/fileUtil");
-const AuthDAO = require('../data/AuthDAO');
-const MediaDAO = require('../data/MediaDAO');
+const authDAO = require('../data/AuthDAO');
+const mediaDAO = require('../data/MediaDAO');
 const { addJob } = require('../mediaUtil/gifMaker');
 const { transferGifToS3, deleteFromS3 } = require('../util/util');
 const Upload = require('./Upload');
@@ -15,8 +15,6 @@ const log = require('../util/logger');
 const io = require('socket.io')(http);
 io.set('origins', DEV ? 'http://localhost:3000' : 'https://gif-it.io:*');
 
-let authDAO = new AuthDAO();
-let mediaDAO = new MediaDAO();
 
 const MAX_TIME_TO_HOLD_FILE = 60 * 60 * 5; // seconds
 

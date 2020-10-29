@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const DAO = require("./DAO");
 const tokenHandler = require('../authUtil/TokenHandler');
-const { NewUserError, LoginError } = require("./dataAccessErrors");
+const { NewUserError, LoginError } = require("./errors");
 const log = require("../util/logger");
 
 let query;
@@ -60,7 +60,7 @@ function getHash(password, salt) {
  */
 class AuthDAO extends DAO {
     constructor() {
-        super(10, 'localhost', 'gracie', 'pass123$', 'gif_it');
+        super(30, 'localhost', 'gracie', 'pass123$', 'gif_it');
         this.tokenHandler = tokenHandler;
         query = this.query;
     }
@@ -218,11 +218,6 @@ class AuthDAO extends DAO {
         const token = headers.authorization;
         let userId = tokenHandler.getUserId(token);
 
-        if (DEBUG) {
-            console.log(`UserId: ${userId}`);
-            console.log(`Auth Token: ${token}`);
-        }
-
         if (userId) {
             return userId;
         }
@@ -268,4 +263,5 @@ class AuthDAO extends DAO {
     }
 }
 
-module.exports = AuthDAO;
+let authDAO = new AuthDAO;
+module.exports = authDAO;

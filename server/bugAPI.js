@@ -1,22 +1,17 @@
-const BugReportDAO = require("./data/BugReportDAO");
+const bugReportDAO = require("./data/BugReportDAO");
 const { app } = require("./server");
 
-const AuthDAO = require('./data/AuthDAO');
+const authDAO = require('./data/AuthDAO');
 const AWS = require('aws-sdk');
 const { BUCKET_NAME } = require('./const');
 const { getUniqueID } = require("./util/fileUtil");
 const log = require('./util/logger');
-
 
 AWS.config.update({
     region: 'us-east-1'
 });
 
 let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
-
-let authDAO = new AuthDAO();
-let bugReportDAO = new BugReportDAO();
-
 
 app.post(`/submitBugReport`, function (req, res) {
     let userId = authDAO.authenticate(req.headers);
@@ -91,6 +86,5 @@ app.post(`/submitBugReport`, function (req, res) {
             res.status(500).send();
         });
     }
-
 });
 

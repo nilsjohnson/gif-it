@@ -78,13 +78,11 @@ function transferGifToS3(objectPath, onSucess = null, onFail = null) {
     // call S3 to retrieve upload file to specified bucket
     s3.upload(uploadParams, function (err, data) {
         if (err) {
-            if (DEBUG) { console.log(`Problem Transfering to S3: ${err}`); }
             if (onFail) {
                 onFail(err);
             }
         }
         if (data) {
-            if (DEBUG) { console.log(`Transfer to S3 sucess: ${data}`); }
             if (onSucess) {
                 onSucess(data);
             }

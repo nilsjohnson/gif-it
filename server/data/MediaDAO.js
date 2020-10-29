@@ -5,18 +5,47 @@ const { BUCKET_NAME } = require("../const");
 /** function that gets called to execute sql. See MediaDAO constructor. */
 let query;
 
+async function getAlbumByInfoById(connection, aId) {
+    let sql =
+    `SELECT 
+        album.id as albumId,
+        album.owner_id as userId,
+        media.id as mediaId,
+        media.fileName,
+        media.thumbName,
+        media.fullSizeName
+    FROM album
+        JOIN album_items ON album.id = album_items.album_id
+        JOIN media ON media.id = album_items.media_id
+    WHERE album.id = ?`;
+
+    return await query(connection, sql, aId);
+}
+
+async function getFileInfoById(connection, mId) {
+    let sql = 
+    `SELECT 
+        media.id as mediaId,
+        media.fileName,
+        media.thumbName,
+        media.fullSizeName,
+        user.id as userId
+    FROM media
+        JOIN media_owner on media.id = media_owner.media_id
+        JOIN user on media_owner.owner_id = user.id
+    WHERE media.id = ?`;
+
+    return await query(connection, sql, mId);
+}
+
 async function deleteAlbumById(connection, aId) {
-    let sql = `
-        DELETE FROM album WHERE album.id = ?
-    `;
+    let sql = `DELETE FROM album WHERE album.id = ?`;
 
     return await query(connection, sql, aId);
 }
 
 async function deleteMediaById(connection, mId) {
-    let sql = `
-        DELETE FROM media WHERE media.id = ?
-    `;
+    let sql = `DELETE FROM media WHERE media.id = ?`;
 
     return await query(connection, sql, mId);
 }
@@ -219,7 +248,6 @@ async function getTagId(connection, tag) {
 
 async function insertTags(connection, uploadId, tags) {
     if (!tags || tags.length < 1) {
-        console.log("no tags.");
         return;
     }
 
@@ -266,7 +294,7 @@ function parseTags(results) {
 class MediaDAO extends DAO {
     constructor() {
         super(
-            10,             // max connectiond 
+            50,             // max connectiond 
             'localhost',    // location
             'bryn',         // username
             'doggie',       // pw
@@ -277,30 +305,40 @@ class MediaDAO extends DAO {
         query = this.query;
     }
 
-    // TODO, actually validate this album belongs to user...
     deleteAlbumById(userId, aId, onSuccess, onFail) {
+        let mediaToDelete = [];
         this.getConnection(async connection => {
             if (!connection) {
                 return onFail("Couldn't get a db connection :(");
             }
 
             try {
-
+                // start transaction
                 await this.startTransaction(connection);
-
-                let results = await getAlbumById(connection, aId);
-            
-                for(let i = 0; i < results.length; i++) {
-                    await deleteMediaById(connection, results[i].id);
+                // get the albums owner, and the items
+                let results = await getAlbumByInfoById(connection, aId);
+                // if the owner isn't the person who requested this, throw error
+                if(results[0].userId !== userId) {
+                    throw `User ${userId} does not own album ${aId}. Cannot Delete.`;
                 }
+                // delete each media item
+                for(let i = 0; i < results.length; i++) {
+                    await deleteMediaById(connection, results[i].mediaId);
+                    // add each file associated with media
+                    mediaToDelete.push(results[i].fileName);
+                    mediaToDelete.push(results[i].thumbName);
+                    if(results[i].fullSizeName) {
+                        mediaToDelete.push(results[i].fullSizeName);
+                    }
+                }
+                // delete the album
                 results = await deleteAlbumById(connection, aId);
-                
+                // finish transaction
                 await this.completeTransation(connection);
-                onSuccess(results);
+                // done!
+                onSuccess(mediaToDelete);
             }
             catch (ex) {
-                console.log("ohh noess");
-                console.log(ex);
                 onFail(ex);
             }
             finally {
@@ -309,24 +347,42 @@ class MediaDAO extends DAO {
         });
     }
 
-    // TODO actually validate media belongs to user..
     deleteMediaById(userId, mId, onSuccess, onFail) {
+        let results;
+        let filesToDelete = [];
+
         this.getConnection(async connection => {
             if (!connection) {
                 return onFail("Couldn't get a db connection :(");
             }
 
             try {
-                let results = await deleteMediaById(connection, mId)
-                if(results) {
-                    console.log("wahoo!");
-                    console.log(results);
+                await this.startTransaction(connection);
+
+                // get the user who owns this media
+                results = await getFileInfoById(connection, mId);
+                // if the userIds dont match, throw exception
+                if(results[0].userId !== userId) {
+                    log(`User ${userId} attempting to delete ${mId}, which they do not own.`);
+                    await this.completeTransation(connection);
+                    throw `Illegal request. ${userId} cannot delete media with id ${mId}`;
                 }
-                else {
-                    console.log("ahh?");
-                    console.log(results);
+
+                if(results[0].fileName) {
+                    filesToDelete.push(results[0].fileName);
                 }
-                onSuccess(results);
+                if(results[0].thumbName) {
+                    filesToDelete.push(results[0].thumbName);
+                }
+                if(results[0].fullSizeName) {
+                    filesToDelete.push(results[0].fullSizeName);
+                }
+                
+                results = await deleteMediaById(connection, mId);
+             
+                onSuccess(filesToDelete);
+                await this.completeTransation(connection);
+
             }
             catch (ex) {
                 onFail(ex);
@@ -345,7 +401,6 @@ class MediaDAO extends DAO {
 
             try {
                 let results = await getMediaByUserId(connection, userId)
-                console.log(results);
                 if (DEV) {
                     for (let i = 0; i < results.length; i++) {
                         results[i].fileName = makeDevPath(results[i].fileName);
@@ -407,6 +462,7 @@ class MediaDAO extends DAO {
 
             try {
                 let results = await getMostRecentMedia(connection, qty)
+                console.log(results);
                 if (DEV) {
                     for (let i = 0; i < results.length; i++) {
                         results[i].fileName = makeDevPath(results[i].fileName);
@@ -551,7 +607,6 @@ class MediaDAO extends DAO {
 
             }
             catch (ex) {
-                console.log("catching db err");
                 log(ex);
                 connection.rollback();
                 onFail("Problem inserting media into database. Please try again later.");
@@ -575,8 +630,6 @@ class MediaDAO extends DAO {
 
             try {
                 let results = await getMediaByTags(connection, tags);
-                console.log("okie dokie");
-                console.log(results);
 
                 if (DEV) {
                     for (let i = 0; i < results.length; i++) {
@@ -727,4 +780,5 @@ function makeDevPath(fileName) {
     return fileName;
 }
 
-module.exports = MediaDAO;
+let mediaDAO = new MediaDAO();
+module.exports = mediaDAO;

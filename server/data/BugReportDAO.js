@@ -35,4 +35,5 @@ class BugReportDAO extends DAO {
     }
 }
 
-module.exports = BugReportDAO;
+let bugReportDAO = new BugReportDAO();
+module.exports = bugReportDAO;

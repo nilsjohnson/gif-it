@@ -17,8 +17,6 @@ let jobs = [];
 let numJobsRunning = 0;
 const MAX_JOBS = 4;
 
-const DEBUG_CONVERT = false;
-
 function getOptions(src, dst, quality) {
   if (quality === QUALITY.THUMB) {
     return ['-i', src,
@@ -95,8 +93,6 @@ function convertToGif(job) {
     let temp, data;
     output_str = output.toString();
 
-    if (DEBUG_CONVERT) { console.log(output_str); }
-
     temp = extractSpeed(output_str);
     curSpeed = (temp ? temp : curSpeed);
 
@@ -105,8 +101,6 @@ function convertToGif(job) {
     }
     temp = caclulateProgress(output_str, totalDuration);
     progress = (temp ? temp : progress);
-
-    if (DEBUG_CONVERT) { console.log(`${progress}% converted`); }
 
     // if we have progress and speed values
     if (progress && curSpeed) {
@@ -260,15 +254,6 @@ function groupToSeconds(group) {
 
   let totalSeconds = secInHour + secInMin + sec + centiSec;
 
-  if (DEBUG_CONVERT) {
-    console.log("Getting the total seconds from regex group.");
-    console.log("\t" + secInHour);
-    console.log("\t" + secInMin);
-    console.log("\t" + sec);
-    console.log("\t" + centiSec);
-    console.log("    + " + "_______");
-    console.log("\t" + totalSeconds + " Total Seconds");
-  }
   return totalSeconds;
 }
 

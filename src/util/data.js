@@ -1,7 +1,7 @@
 import { readAuthToken } from './util';
 
 // note: this bool must be set propery prior to building for production
-let production = false;
+let production = 0;
 let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
 
 /**

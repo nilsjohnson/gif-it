@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require("crypto");
 const { FilePaths } = require('../const');
+const log = require('./logger');
 
 
 if (!fs.existsSync(FilePaths.BASE_DIR)) {
@@ -59,7 +60,7 @@ Writes object to file as JSON. Async.
 function writeObj(obj, name) {
     fs.writeFile(name, JSON.stringify(obj, null, 2), function (err) {
         if (err) {
-            console.log(error)
+            log(err);
         }
         else {
             // console.log("file saved!");

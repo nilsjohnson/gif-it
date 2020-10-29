@@ -1825,3 +1825,53 @@ Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the cli
     at /home/nils/gif-it/server/data/MediaDAO.js:708:17
     at processTicksAndRejections (internal/process/task_queues.js:97:5))
 
+2020-10-29 11:04:16 Error: connect ETIMEDOUT
+2020-10-29 11:18:42 log is not defined 
+ReferenceError: log is not defined
+    at /home/nils/gif-it/server/userAPI.js:28:9
+    at Response.<anonymous> (/home/nils/gif-it/server/util/util.js:110:17)
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:369:18)
+    at Request.callListeners (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:78:10)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:688:14)
+    at Request.transition (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:22:10)
+    at AcceptorStateMachine.runTo (/home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:14:12)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:26:10
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:38:9))
+
+2020-10-29 11:18:42 log is not defined 
+ReferenceError: log is not defined
+    at /home/nils/gif-it/server/userAPI.js:28:9
+    at Response.<anonymous> (/home/nils/gif-it/server/util/util.js:110:17)
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:369:18)
+    at Request.callListeners (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:78:10)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:688:14)
+    at Request.transition (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:22:10)
+    at AcceptorStateMachine.runTo (/home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:14:12)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:26:10
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:38:9))
+
+2020-10-29 11:18:42 log is not defined 
+ReferenceError: log is not defined
+    at /home/nils/gif-it/server/userAPI.js:28:9
+    at Response.<anonymous> (/home/nils/gif-it/server/util/util.js:110:17)
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:369:18)
+    at Request.callListeners (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:106:20)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/sequential_executor.js:78:10)
+    at Request.emit (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:688:14)
+    at Request.transition (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:22:10)
+    at AcceptorStateMachine.runTo (/home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:14:12)
+    at /home/nils/gif-it/node_modules/aws-sdk/lib/state_machine.js:26:10
+    at Request.<anonymous> (/home/nils/gif-it/node_modules/aws-sdk/lib/request.js:38:9))
+
+2020-10-29 11:20:08 [object Object]
+2020-10-29 11:20:08 [object Object]
+2020-10-29 11:20:08 [object Object]
+2020-10-29 17:07:37 sendmail: Cannot open mail:25
+
+2020-10-29 17:07:37 Confirmation Email Not Sent. Code: 1
+2020-10-29 17:23:13 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'media.fileName,
+        media.thumbName,
+        media.fullSizeName
+    FROM alb' at line 5

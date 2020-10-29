@@ -1,11 +1,11 @@
 const { app } = require("./server");
 const log = require("./util/logger");
-const AuthDAO = require("./data/AuthDAO");
+const authDAO = require("./data/AuthDAO");
 const MailSender = require("./util/sendMail");
-const { NewUserError, LoginError } = require("./data/dataAccessErrors");
+const { NewUserError, LoginError } = require("./data/errors");
 
 const mailSender = new MailSender();
-let authDAO = new AuthDAO();
+
 
 /**
  * For creating new users

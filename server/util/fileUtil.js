@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require("crypto");
 const { FilePaths } = require('../const');
+const log = require('./logger');
 
 
 if (!fs.existsSync(FilePaths.BASE_DIR)) {
@@ -24,6 +25,7 @@ function getFileName_noExtension(fileName) {
     return path.parse(fileName).name
 }
 
+// for generating unique file names
 function getUniqueID() {
     let id = crypto.randomBytes(6).toString("base64");
     while (id.includes('/') || id.includes('+')) {
@@ -59,7 +61,7 @@ Writes object to file as JSON. Async.
 function writeObj(obj, name) {
     fs.writeFile(name, JSON.stringify(obj, null, 2), function (err) {
         if (err) {
-            console.log(error)
+            log(err);
         }
         else {
             // console.log("file saved!");
@@ -105,6 +107,15 @@ function deleteFile(path) {
     });
 }
 
+/**
+ * Reads a file - Synchronous
+ * @param {*} path 
+ */
+function readFile(path) {
+    return fs.readFileSync(path, {encoding: 'utf-8'});
+}
+
+exports.readFile = readFile;
 exports.deleteFile = deleteFile;
 exports.writeObj = writeObj;
 exports.readObj = readObj;

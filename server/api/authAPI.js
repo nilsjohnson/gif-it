@@ -1,11 +1,11 @@
-const { app } = require("./server");
-const log = require("./util/logger");
-const AuthDAO = require("./data/AuthDAO");
-const MailSender = require("./util/sendMail");
-const { NewUserError, LoginError } = require("./data/dataAccessErrors");
+const { app } = require("../server");
+const log = require("../util/logger");
+const authDAO = require("../data/AuthDAO");
+const MailSender = require("../util/sendMail");
+const { NewUserError, LoginError } = require("../data/errors");
 
 const mailSender = new MailSender();
-let authDAO = new AuthDAO();
+
 
 /**
  * For creating new users
@@ -44,13 +44,14 @@ app.post('/auth/newUser', function (req, res) {
 
 
 app.post('/auth/login', function (req, res) {
+    console.log('login hit');
     let ipAdder = req.ip;
     let password = req.body.pw;
     let usernameOrEmail = req.body.usernameOrEmail;
 
     authDAO.logIn(usernameOrEmail, password, ipAdder, (token) => {
         // onSuccess
-        console.log(token);
+        console.log("login success: " + token);
         res.json(token);
     }, err => {
         // onFail
@@ -71,14 +72,18 @@ app.post('/auth/login', function (req, res) {
 });
 
 app.get('/auth/checkToken/', function (req, res) {
-    if (authDAO.authenticate(req.headers)) {
+    console.log("checkin token..");
+    authDAO.authenticate(req.headers).then(userId => {
         res.status(200).send();
-    }
-    else {
+    }).catch(err => {
+        log(err);
         res.status(401).send();
-    }
+    });
 });
 
+/**
+ * for verifying an email addr
+ */
 app.get('/verify/:userId/:code', function (req, res) {
     console.log("verify hit");
     let userId = req.params.userId;
@@ -98,19 +103,15 @@ app.get('/verify/:userId/:code', function (req, res) {
 });
 
 app.get('/auth/signOut', function (req, res) {
-    authDAO.signUserOut(req.headers);
-    res.status(200).send();
+    authDAO.signUserOut(req.headers, () => {
+        // sign out success
+        console.log("sign out succuss!")
+        res.status(200).send();
+    }, (err) => {
+        // sign out fail
+        console.log("signout err");
+        log(err);
+        res.status(500).send();
+    });
+   
 });
-
-/**
- * Authenticates any request.
- * @param {*} userId 
- * @param {*} authToken 
- * @param {*} ipAddr 
- * @throws exception if error
- */
-function authenticate(userId, authToken, ipAddr) {
-    authDAO.authenticate(userId, authToken, ipAddr);
-}
-
-exports.authenticate = authenticate;

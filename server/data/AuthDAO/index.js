@@ -1,14 +1,46 @@
 const crypto = require("crypto");
-const DAO = require("./DAO");
-const tokenHandler = require('../authUtil/TokenHandler');
-const { NewUserError, LoginError } = require("./dataAccessErrors");
-const log = require("../util/logger");
+const DAO = require("../DAO");
+const { NewUserError, LoginError } = require("../errors");
+const log = require("../../util/logger");
+const { readFile } = require("../../util/fileUtil");
+const { FilePaths } = require("../../const");
+const AuthToken = require("./AuthToken");
+const TokenCache = require("./TokenCache");
+
+// loads the salt we use for salting auth tokens.
+const AUTH_TOKEN_SALT = readFile(FilePaths.BASE_DIR + '/authSalt.txt');
 
 let query;
 
+async function deleteAuthToken(connection, tokenHash) {
+    let sql = `DELETE FROM authToken WHERE tokenHash = ?`;
+
+    return await query(connection, sql, tokenHash);
+}
+
+async function getUserByTokenHash(connection, hash) {
+    let sql =
+        `SELECT 
+            authToken.userId, 
+            authToken.dateCreated
+        FROM authToken
+        WHERE authToken.tokenHash = ?`;
+
+    return await query(connection, sql, hash);
+}
+
+async function insertAuthoken(connection, args) {
+    let sql = `INSERT INTO authToken SET ?`;
+    return await query(connection, sql, args);
+}
+
 async function logIn(connection, args) {
     let sql =
-        `SELECT user.id, user_credential.hashed, user_credential.salt, user_verification.verified 
+        `SELECT 
+            user.id, 
+            user_credential.hashed, 
+            user_credential.salt, 
+            user_verification.verified 
     FROM user_credential 
         JOIN user ON user_credential.id = user.id
         JOIN user_verification ON user_verification.id = user.id 
@@ -56,12 +88,28 @@ function getHash(password, salt) {
 }
 
 /**
+ * @ returns a brand new auth token.
+ */
+function generateAuthToken() {
+    let token = crypto.randomBytes(64).toString("hex");
+    let hash = getAuthTokenHash(token);
+    let t = new AuthToken(token, hash);
+    console.log("generated new token");
+    console.log(t);
+    return t;
+}
+
+function getAuthTokenHash(token) {
+    return crypto.pbkdf2Sync(token, AUTH_TOKEN_SALT, 100000, 64, 'sha512').toString('hex');
+}
+
+/**
  * DAO for creating and authenticating users.
  */
 class AuthDAO extends DAO {
     constructor() {
-        super(10, 'localhost', 'gracie', 'pass123$', 'gif_it');
-        this.tokenHandler = tokenHandler;
+        super(20, 'localhost', 'gracie', 'pass123$', 'gif_it');
+        this.tokenCache = new TokenCache();
         query = this.query;
     }
 
@@ -111,12 +159,20 @@ class AuthDAO extends DAO {
                     code: verificationCode
                 });
 
-                // we are going to log this user in right away. So we're gonna make a token.
-                let token = tokenHandler.createNewAuthToken(userId, ipAddr);
+                // we are going to log this user in right away, so we make a token.
+                let authToken = generateAuthToken();
+                // cache this auth token
+                this.tokenCache.addAuthTokenToCache(userId, authToken.token);
+                // add auth token to db
+                insertAuthoken(connection, {
+                    tokenHash: authToken.tokenHash,
+                    userId: userId,
+                    dateCreated: this.getTimeStamp()
+                });
 
                 // done. Send back the userId, and the verification code.
                 await this.completeTransation(connection);
-                return onSuccess(userId, verificationCode, token);
+                return onSuccess(userId, verificationCode, authToken.token);
             }
             catch (error) {
                 log(error);
@@ -139,17 +195,6 @@ class AuthDAO extends DAO {
                 connection.release();
             }
         });
-    }
-
-    /**
-    * Fetches a new auth token for a user
-    * @param {*} nameOrEmail 
-    * @param {*} password 
-    * @param {*} ipAddr 
-    * @param {*} onSuccess callback function
-    */
-    getAuthToken(nameOrEmail, password, ipAddr, onSuccess) {
-        this.tokenHandler.getAuthToken(getAuthToken(nameOrEmail, password, ipAddr, onSuccess));
     }
 
     /**
@@ -180,19 +225,33 @@ class AuthDAO extends DAO {
 
                     // this is a good login attempt
                     if (hash === getHash(password, salt) && userId && verified) {
-                        token = tokenHandler.createNewAuthToken(userId, ipAddr);
+                        //token = generateAuthToken();
                     }
                     // this was a good login attempt, but the account isn't verified.
                     else if (hash === getHash(password, salt) && userId && !verified) {
                         // response = LoginError.NOT_VERIFIED;
                         // we dont reject for this issue at the moment.
-                        token = tokenHandler.createNewAuthToken(userId, ipAddr);
+                        // token = tokenHandler.createNewAuthToken(userId, ipAddr);
                     }
                     // this is a bad login attempt
                     else {
-                        onFail(LoginError.INVALID_USERNAME_PASSWORD)
+                        return onFail(LoginError.INVALID_USERNAME_PASSWORD)
                     }
-                    onSuccess(token);
+
+                    /**
+                     * For now, we dont require users to be verified
+                     * so as long as their pw/username is good, we make a token.
+                     */
+                    token = generateAuthToken();
+                    await insertAuthoken(connection, {
+                        tokenHash: token.tokenHash,
+                        userId: userId,
+                        dateCreated: this.getTimeStamp()
+                    });
+
+                    this.tokenCache.addAuthTokenToCache(userId, token.token);
+
+                    onSuccess(token.token);
                 }
                 else {
                     onFail(LoginError.INVALID_USERNAME_PASSWORD)
@@ -201,7 +260,6 @@ class AuthDAO extends DAO {
             catch (ex) {
                 log(ex);
                 onFail("Databse Issue.");
-                connection.release();
             }
             finally {
                 connection.release();
@@ -215,23 +273,66 @@ class AuthDAO extends DAO {
      * @returns the id of the user, or null if the auth token isn't valid.
      */
     authenticate(headers) {
-        const token = headers.authorization;
-        let userId = tokenHandler.getUserId(token);
+        // get the token from the headers;
+        let token = headers.authorization;
+        let userId = this.tokenCache.getUserIdByToken(token);
 
-        if (DEBUG) {
-            console.log(`UserId: ${userId}`);
-            console.log(`Auth Token: ${token}`);
-        }
+        return new Promise((resolve, reject) => {
+            if(userId) {
+                console.log(`userId ${userId} had token in cache.`);
+                resolve(userId);
+                return;
+            }
+            console.log(`userId ${userId}. Token not found in cache. Doing db call...`);
 
-        if (userId) {
-            return userId;
-        }
-
-        return null;
+            this.getConnection(async connection => {
+                if(!connection) {
+                    reject("couldnt connect to DB");
+                }
+                try {
+                    let tokenHash = getAuthTokenHash(token);
+                    let results = await getUserByTokenHash(connection, tokenHash);
+                    console.log('results from getting db');
+                    console.log(results);
+                    if(results.length > 0 && results[0].userId) {
+                        this.tokenCache.addAuthTokenToCache(results[0].userId, token);
+                        resolve(results[0].userId);
+                    }
+                    else {
+                        reject("user not authenticated.");
+                    }
+                }
+                catch(ex) {
+                    reject(ex);
+                }
+                finally {
+                    connection.release();
+                }
+            })
+        });
     }
 
-    signUserOut(headers) {
-        tokenHandler.deleteToken(headers.authorization);
+    signUserOut(headers, onSuccess, onFail) {
+        const token = headers.authorization;
+        
+        this.tokenCache.deleteToken(token);
+        
+        this.getConnection(async connection => {
+            if(!connection) {
+                this.logFailure('couldnt get db connection');
+            }
+            try {
+                let tokenHash = getAuthTokenHash(token);
+                await deleteAuthToken(connection, tokenHash);
+                onSuccess();
+            }
+            catch(ex) {
+                onFail(ex);
+            }
+            finally {
+                connection.release();
+            }
+        });
     }
 
     verifyUserEmailAddr(userId, code, ipAddr) {
@@ -244,7 +345,7 @@ class AuthDAO extends DAO {
 
                 let sql = `UPDATE user_verification SET ? WHERE code = ${connection.escape(code)} AND id = ${connection.escape(userId)}`;
                 connection.query(sql, { verified: 1 }, (error, results, fields) => {
-                    
+
                     connection.release();
 
                     if (error) {
@@ -268,4 +369,5 @@ class AuthDAO extends DAO {
     }
 }
 
-module.exports = AuthDAO;
+let authDAO = new AuthDAO;
+module.exports = authDAO;

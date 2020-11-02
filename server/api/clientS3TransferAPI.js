@@ -1,12 +1,10 @@
-const { app, http } = require('./server');
-const { MAX_UPLOAD_SIZE } = require('./const');
-const AuthDAO = require('./data/AuthDAO');
+const { app, http } = require('../server');
+const { MAX_UPLOAD_SIZE } = require('../const');
+const authDAO = require('../data/AuthDAO');
 const AWS = require('aws-sdk');
-const { BUCKET_NAME } = require('./const');
-const { getUniqueID } = require("./util/fileUtil");
-const log = require('./util/logger');
-
-let authDAO = new AuthDAO();
+const { BUCKET_NAME } = require('../const');
+const { getUniqueID } = require("../util/fileUtil");
+const log = require('../util/logger');
 
 AWS.config.update({
     region: 'us-east-1'
@@ -21,11 +19,6 @@ app.post('/getPresignedPost', (req, res) => {
         console.log("Sending Redirect.");
         res.redirect('/login');
         return;
-    }
-
-    if (DEBUG) {
-        console.log("getPresignedPost hit. Body:");
-        console.log(req.body);
     }
 
     let action = req.body.action;
@@ -56,7 +49,6 @@ app.post('/getPresignedPost', (req, res) => {
                 log('Presigning post data encountered an error', err);
                 res.send(500);
             } else {
-                if (DEBUG) { console.log(`The post data for signedPost: ${data}`); }
                 console.log(data);
                 res.json({
                     url: data.url,

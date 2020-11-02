@@ -2,6 +2,8 @@ var mysql = require('mysql');
 const log = require('../util/logger');
 const { getTimeStamp } = require('../util/util');
 
+
+
 module.exports = class DAO {
     constructor(maxConnections, host, user, password, database) {
 

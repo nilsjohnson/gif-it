@@ -1,18 +1,17 @@
-global.DEBUG = false;
 global.DEV = false;
 
 for (let i = 2; i < process.argv.length; i++) {
 	switch (process.argv[i]) {
-		case '--debug':
-			DEBUG = true;
-			break;
+		// case '--debug':
+		// 	DEBUG = true;
+		// 	break;
 		case '--dev':
 			DEV = true;
 			break;
 		default:
 			console.log(`${process.argv[i]} is not a command.`);
-			console.log(`usage: [--dubug] [--dev]`);
-			console.log(`Use --debug to print debug statements. Use --dev to not do s3 transfers and serve the gifs using this app.`);
+			console.log(`usage: [--dev]`);
+			console.log(`Use Use --dev to not do s3 transfers and serve the gifs using this app.`);
 			process.exit();
 	}
 }
@@ -27,10 +26,6 @@ const terminate = require('./terminate');
 let corsOptions = {
 	origin: 'https://gif-it.io',
 	optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-
-if (DEBUG) {
-	console.log("DEBUG set to true. App will print debug statements.");
 }
 if (DEV) {
 	console.log("DEV set to true. Using test s3 bucket.");
@@ -50,12 +45,12 @@ exports.app = app;
 exports.http = http;
 
 // define APIs
-require('./exploreAPI');
-require('./uploadAPI');
-require('./authAPI');
-require('./userAPI');
-require('./clientS3TransferAPI');
-require('./bugAPI');
+require('./api/exploreAPI');
+require('./api/uploadAPI');
+require('./api/authAPI');
+require('./api/userAPI');
+require('./api/clientS3TransferAPI');
+require('./api/bugAPI');
 
 /*
 Redirects all other requests to be handled by client.

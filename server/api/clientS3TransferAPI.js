@@ -1,10 +1,10 @@
-const { app, http } = require('./server');
-const { MAX_UPLOAD_SIZE } = require('./const');
-const authDAO = require('./data/AuthDAO');
+const { app, http } = require('../server');
+const { MAX_UPLOAD_SIZE } = require('../const');
+const authDAO = require('../data/AuthDAO');
 const AWS = require('aws-sdk');
-const { BUCKET_NAME } = require('./const');
-const { getUniqueID } = require("./util/fileUtil");
-const log = require('./util/logger');
+const { BUCKET_NAME } = require('../const');
+const { getUniqueID } = require("../util/fileUtil");
+const log = require('../util/logger');
 
 AWS.config.update({
     region: 'us-east-1'

@@ -1,11 +1,11 @@
-const bugReportDAO = require("./data/BugReportDAO");
-const { app } = require("./server");
+const bugReportDAO = require("../data/BugReportDAO");
+const { app } = require("../server");
 
-const authDAO = require('./data/AuthDAO');
+const authDAO = require('../data/AuthDAO');
 const AWS = require('aws-sdk');
-const { BUCKET_NAME } = require('./const');
-const { getUniqueID } = require("./util/fileUtil");
-const log = require('./util/logger');
+const { BUCKET_NAME } = require('../const');
+const { getUniqueID } = require("../util/fileUtil");
+const log = require('../util/logger');
 
 AWS.config.update({
     region: 'us-east-1'

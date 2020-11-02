@@ -147,3 +147,17 @@ GRANT ALL PRIVILEGES ON bugReport TO 'pickles'@'localhost';
 GRANT SELECT ON user TO 'pickles'@'localhost';
 ALTER USER 'pickles'@'localhost' IDENTIFIED WITH mysql_native_password BY 'goodwoofer';
 flush privileges;
+
+-- 10/30 auth tokens now go in DB
+CREATE TABLE authToken (
+    tokenHash CHAR(128) NOT NULL,
+    userId INT NOT NULL,
+    dateCreated DATETIME NOT NULL,
+    PRIMARY KEY (tokenHash),
+    FOREIGN KEY (userId) 
+		REFERENCES user(id)
+		ON DELETE CASCADE
+);
+
+GRANT ALL PRIVILEGES ON authToken to 'gracie'@'localhost';
+flush privileges;

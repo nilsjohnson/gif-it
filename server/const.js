@@ -8,7 +8,6 @@ const FilePaths = {
     UPLOAD_DIR: os.homedir + BASE_DIR_NAME + '/uploads',
     // Where we put the gifs before copying to s3
     GIF_SAVE_DIR: os.homedir + BASE_DIR_NAME + '/gifs',
-    AUTH_TOKEN_FILE: os.homedir + BASE_DIR_NAME + '/auth_tokens.json',
     CURRENT_UPLOADS_FILE: os.homedir + BASE_DIR_NAME + '/currentUploads.json'
 }
 

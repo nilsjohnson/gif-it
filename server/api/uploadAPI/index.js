@@ -1,16 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 const Busboy = require('busboy');
-const { app, http } = require('../server');
-const { FilePaths, MAX_UPLOAD_SIZE } = require('../const');
-const { getUniqueID, checkUnique, readObj, writeObj, deleteFile } = require("../util/fileUtil");
-const authDAO = require('../data/AuthDAO');
-const mediaDAO = require('../data/MediaDAO');
-const { addJob } = require('../mediaUtil/gifMaker');
-const { transferGifToS3, deleteFromS3 } = require('../util/util');
+const { app, http } = require('../../server');
+const { FilePaths, MAX_UPLOAD_SIZE } = require('../../const');
+const { getUniqueID, checkUnique, readObj, writeObj, deleteFile } = require("../../util/fileUtil");
+const authDAO = require('../../data/AuthDAO');
+const mediaDAO = require('../../data/MediaDAO');
+const userDAO = require('../../data/UserDAO');
+const { addJob } = require('../../mediaUtil/gifMaker');
+const { transferGifToS3, deleteFromS3 } = require('../../util/util');
 const Upload = require('./Upload');
 const Job = require('./Job');
-const log = require('../util/logger');
+const log = require('../../util/logger');
 
 const io = require('socket.io')(http);
 io.set('origins', DEV ? 'http://localhost:3000' : 'https://gif-it.io:*');
@@ -136,10 +137,10 @@ function onThumbMade(uploadId, thumbFilePath) {
  * @param {*} thumbFilePath location on disc of the thumbnail
  */
 function onGifMade(uploadId, gifFilePath, thumbFilePath, message = null) {
-    if(gifFilePath === null || thumbFilePath === null) {
+    if (gifFilePath === null || thumbFilePath === null) {
         emit(uploadId, 'err', {
             uploadId: uploadId,
-            err : message 
+            err: message
         });
         return;
     }
@@ -244,7 +245,7 @@ function deleteUploadFromDisk(uploadId) {
 
 function deleteUploadFromS3(uploadId) {
     // remove these from s3
-    if(!curUploads[uploadId]) {
+    if (!curUploads[uploadId]) {
         return;
     }
     if (curUploads[uploadId].fileName) {
@@ -358,44 +359,47 @@ app.post('/upload/:socketId/:tempUploadId/:action', function (req, res) {
  */
 app.post('/upload/addMedia', function (req, res) {
     let userId = authDAO.authenticate(req.headers);
-    if (!userId) {
-        console.log("Sending Redirect.");
-        res.redirect('/login');
-        return;
-    }
 
-    console.log(req.body);
+    authDAO.authenticate(req.headers).then(userId => {
+        console.log(req.body);
 
-    if (req.body.album) {
-        // if this is an 'album' of items
-        let album = req.body.album;
+        if (req.body.album) {
+            // if this is an 'album' of items
+            let album = req.body.album;
 
-        for (let i = 0; i < album.items.length; i++) {
-            onShare(album.items[i].uploadId);
+            for (let i = 0; i < album.items.length; i++) {
+                onShare(album.items[i].uploadId);
+            }
+
+            userDAO.createAlbum(album, userId, req.ip, (albumId) => {
+                // on success
+                console.log("Album created!");
+                res.send({ redirect: `/explore?albumId=${albumId}` });
+            }, err => {
+                // on error
+                console.log(err);
+                res.sendStatus(500);
+            });
+        }
+        else if (req.body.media) {
+            // if this is just a single item
+            let media = req.body.media;
+            onShare(media.uploadId);
+
+            userDAO.addMedia(media, userId, req.ip, mediaId => {
+                // on success
+                res.send({ redirect: `/explore?mId=${mediaId}` });
+            }, err => {
+                // on error
+                console.log(err);
+                res.sendStatus(500);
+            });
         }
 
-        mediaDAO.createAlbum(album, userId, req.ip, (albumId) => {
-            // on success
-            console.log("Album created!");
-            res.send({ redirect: `/explore?albumId=${albumId}` });
-        }, err => {
-            // on error
-            console.log(err);
-            res.sendStatus(500);
-        });
-    }
-    else if (req.body.media) {
-        // if this is just a single item
-        let media = req.body.media;
-        onShare(media.uploadId);
+    }).catch(err => {
+            console.log("Sending Redirect.");
+            res.redirect('/login');
+            return;
+    });
 
-        mediaDAO.addMedia(media, userId, req.ip, mediaId => {
-            // on success
-            res.send({ redirect: `/explore?mId=${mediaId}` });
-        }, err => {
-            // on error
-            console.log(err);
-            res.sendStatus(500);
-        });
-    }
 });

@@ -25,6 +25,7 @@ function getFileName_noExtension(fileName) {
     return path.parse(fileName).name
 }
 
+// for generating unique file names
 function getUniqueID() {
     let id = crypto.randomBytes(6).toString("base64");
     while (id.includes('/') || id.includes('+')) {
@@ -106,6 +107,15 @@ function deleteFile(path) {
     });
 }
 
+/**
+ * Reads a file - Synchronous
+ * @param {*} path 
+ */
+function readFile(path) {
+    return fs.readFileSync(path, {encoding: 'utf-8'});
+}
+
+exports.readFile = readFile;
 exports.deleteFile = deleteFile;
 exports.writeObj = writeObj;
 exports.readObj = readObj;

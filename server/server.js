@@ -45,12 +45,12 @@ exports.app = app;
 exports.http = http;
 
 // define APIs
-require('./exploreAPI');
-require('./uploadAPI');
-require('./authAPI');
-require('./userAPI');
-require('./clientS3TransferAPI');
-require('./bugAPI');
+require('./api/exploreAPI');
+require('./api/uploadAPI');
+require('./api/authAPI');
+require('./api/userAPI');
+require('./api/clientS3TransferAPI');
+require('./api/bugAPI');
 
 /*
 Redirects all other requests to be handled by client.

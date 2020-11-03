@@ -2227,3 +2227,22 @@ Error: Connection already released
 2020-11-02 15:52:23 user not authenticated.
 2020-11-02 16:14:06 user not authenticated.
 2020-11-02 16:27:53 user not authenticated.
+2020-11-03 10:01:42 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:64:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-11-03 10:02:54 user not authenticated.
+2020-11-03 10:02:57 user not authenticated.
+2020-11-03 10:03:00 user not authenticated.
+2020-11-03 10:04:22 sendmail: Cannot open mail:25
+
+2020-11-03 10:04:22 Confirmation Email Not Sent. Code: 1

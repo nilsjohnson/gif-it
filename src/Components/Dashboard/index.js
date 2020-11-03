@@ -24,7 +24,8 @@ class Dashboard extends Component {
 
         this.state = {
             redirect: false,
-            media: []
+            media: [],
+            message: ""
         };
 
     }
@@ -39,7 +40,12 @@ class Dashboard extends Component {
                     if (res.ok) {
                         res.json().then(resJson => {
                             console.log(resJson);
-                            this.setState({ media: resJson });
+                            if (resJson.length > 0) {
+                                this.setState({ media: resJson });
+                            }
+                            else {
+                                this.setState({ message: "You don't have media. Upload some media and it will appear here." });
+                            }
                         }).catch(err => console.log(err));
                     }
                     else {
@@ -138,7 +144,7 @@ class Dashboard extends Component {
                             ))}
                         </Grid>
                         :
-                        <Typography align="center" variant='h6'>You don't appear to have any media uploaded. Upload some media :)</Typography>
+                        <Typography align="center" variant='h6'>{this.state.message}</Typography>
                     }
                 </Container>
                 <Footer />

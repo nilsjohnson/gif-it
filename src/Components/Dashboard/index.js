@@ -8,6 +8,7 @@ import { Container } from "@material-ui/core";
 import EditWell from './EditWell';
 
 
+
 const useStyles = ((theme) => ({
     btnBox: {
         paddingTop: theme.spacing(1)
@@ -15,6 +16,17 @@ const useStyles = ((theme) => ({
     editWell: {
         backgroundColor: "white",
         borderRadius: theme.spacing(.5)
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
     }
 }));
 
@@ -25,7 +37,7 @@ class Dashboard extends Component {
         this.state = {
             redirect: false,
             media: [],
-            message: ""
+            message: "",
         };
 
     }
@@ -54,6 +66,12 @@ class Dashboard extends Component {
                 }).catch(err => console.log(err));
             }
         }).catch(err => console.log(err));
+    }
+
+    popModal = (media) => {
+        console.log('pop modal');
+        this.setState({ mediaToEdit: media });
+        this.handleModalOpen();
     }
 
     removeMedia = (mId) => {
@@ -116,39 +134,38 @@ class Dashboard extends Component {
         if (this.state.redirect) {
             return (<Redirect to='/login' />)
         }
-
-
-
-
         return (
-            <Box>
-                <Header />
-                <Container maxWidth='lg'>
-                    {this.state.media.length > 0 ?
-                        <Grid
-                            container
-                            direction="row"
-                            justify="flex-start"
-                            alignItems="center"
-                            spacing={2}
-                        >
-                            {/* linkAddress, src, altText, description  */}
-                            {this.state.media.map((media) => (
-                                <Grid item xs={12} sm={6} md={4} key={media.id} >
-                                    <EditWell
-                                        media={media}
-                                        deleteItem={this.deleteItem}
-                                        deleteAlbum={this.deleteAlbum}
-                                    />
-                                </Grid>
-                            ))}
-                        </Grid>
-                        :
-                        <Typography align="center" variant='h6'>{this.state.message}</Typography>
-                    }
-                </Container>
-                <Footer />
-            </Box>
+            <div>
+                <Box>
+                    <Header />
+                    <Container maxWidth='lg'>
+                        {this.state.media.length > 0 ?
+                            <Grid
+                                container
+                                direction="row"
+                                justify="flex-start"
+                                alignItems="center"
+                                spacing={2}
+                            >
+                                {/* linkAddress, src, altText, description  */}
+                                {this.state.media.map((media) => (
+                                    <Grid item xs={12} sm={6} md={4} key={media.id} >
+                                        <EditWell
+                                            media={media}
+                                            deleteItem={this.deleteItem}
+                                            deleteAlbum={this.deleteAlbum}
+                                            popModal={this.popModal}
+                                        />
+                                    </Grid>
+                                ))}
+                            </Grid>
+                            :
+                            <Typography align="center" variant='h6'>{this.state.message}</Typography>
+                        }
+                    </Container>
+                    <Footer />
+                </Box>
+            </div >
         );
     }
 }

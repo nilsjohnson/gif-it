@@ -57,6 +57,18 @@ function deleteAuthToken() {
 	writeCookie("auth_token", "", 0);
 }
 
+function saveUserId(userId) {
+    writeCookie("userId", JSON.stringify(userId), 60 * 60 * 24 * 30);
+}
+
+function deleteUserId() {
+    writeCookie("userId", "", 0);
+}
+
+function readUserId() {
+    return parseInt(readCookie("userId"));
+}
+
 function readCookie(cname) {
 	var name = cname + "=";
 	var ca = document.cookie.split(';');
@@ -79,17 +91,15 @@ function writeCookie(variable, value, expires_seconds) {
 	document.cookie = variable + '=' + value + '; expires=' + d.toGMTString() + ';';
 }
 
-function deleteCookie(variable) {
-	document.cookie = variable + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-}
-
 export {
+    readUserId,
+    deleteUserId,
+    saveUserId,
 	dateToAge,
 	deleteAuthToken,
 	formatBytes,
 	readCookie,
 	writeCookie,
-	deleteCookie,
 	saveAuthToken,
 	readAuthToken
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles';
 import { Collapse, Card, Box, Grid, CardMedia, CardActions, Typography } from '@material-ui/core/';
-import { getMediaById } from '../../util/data';
+import { deleteMediaById, getMediaById, updateMediaDescription } from '../../util/data';
 import { ShareBox } from './ShareBox';
 import Tag from '../Tag/Tag';
 import FullWidthDivider from '../FullWidthDivider';
@@ -10,6 +10,11 @@ import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
 import clsx from 'clsx';
 import { Redirect } from 'react-router';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { readUserId } from '../../util/util';
+import EnterDescription from '../Uploader/EnterDescription';
+import TagInputBox from '../TagInputBox';
 
 const useStyles = theme => ({
     expand: {
@@ -22,6 +27,9 @@ const useStyles = theme => ({
     expandOpen: {
         transform: 'rotate(180deg)',
     },
+    editIcons: {
+        marginRight: 'auto'
+    }
 });
 
 /**
@@ -35,6 +43,7 @@ class MediaBox extends Component {
         this.state = {
             media: this.props.media ? this.props.media : {},
             shareExpanded: false,
+            editMode: false,
             redirect: null
         };
     }
@@ -47,6 +56,18 @@ class MediaBox extends Component {
 
     handleExpandClick = () => {
         this.setShareExpanded(!this.state.shareExpanded);
+    }
+
+    addTag = () => {
+        console.log("add tag");
+    }
+
+    removeTag = () => {
+        console.log("rm tag");
+    }
+
+    requestTagSuggestions = () => {
+        console.log("req tag suggest");
     }
 
     getShareBox = () => {
@@ -81,6 +102,58 @@ class MediaBox extends Component {
         return [];
     }
 
+    setNewDescription = (val) => {
+        console.log(val);
+        let tmp = this.state.media;
+        tmp.description = val;
+
+        this.setState({
+            media: tmp
+        });
+
+        updateMediaDescription(tmp.id, val).then(res => {
+            if(!res.ok) {
+                console.log("Description update success");
+            }
+            else {
+                console.log("Description update fail");
+                console.log(res);
+            }
+        }).catch(err => console.log(err));
+    }
+
+    deleteMedia = () => {
+        if (window.confirm(`Delete this item?`)) {
+            deleteMediaById(this.state.media.id).then(res => {
+                if (res.ok) {
+                    if (this.props.removeMedia) {
+                        this.props.removeMedia(this.state.media.id);
+                    }
+                    else {
+                        console.log("media deleted, but no action defined for after.");
+                    }
+
+                }
+                else {
+                    console.log(res);
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+        }
+        else {
+            return;
+        }
+    }
+
+    toggleEditMode = (ev) => {
+        console.log("toggle edit");
+
+        this.setState({
+            editMode: !this.state.editMode
+        });
+    }
+
     componentDidMount = () => {
         // if there is no mediaId prop, this because the media
         // item was passed as a prop, so we dont need to fetch it.
@@ -93,10 +166,10 @@ class MediaBox extends Component {
                 if (res.ok) {
                     res.json().then(resJson => {
                         // set null values to empty for rendering
-                        if(!resJson.tags) {
+                        if (!resJson.tags) {
                             resJson.tags = {}
                         }
-                        if(!resJson.description) {
+                        if (!resJson.description) {
                             resJson.description = ''
                         }
 
@@ -105,7 +178,7 @@ class MediaBox extends Component {
                         });
                     })
                 }
-                else if(res.status === 404) {
+                else if (res.status === 404) {
                     console.log("its a 404!");
                     this.setState({
                         redirect: '/404'
@@ -119,7 +192,7 @@ class MediaBox extends Component {
     }
 
     render() {
-        if(this.state.redirect) {
+        if (this.state.redirect) {
             return <Redirect to={this.state.redirect} />
         }
 
@@ -158,47 +231,90 @@ class MediaBox extends Component {
                                 title={descriptionLines[0]}
                             />}
 
-                        <Grid item>
-                            <Grid
-                                container item
-                                direction="row"
-                                justify="flex-start"
-                                alignItems="flex-start"
-                            >
-                                {Object.keys(tags).map((key, index) =>
-                                    <Tag key={index} tag={key} count={tags[key]} explorable={true} />
-                                )}
-                            </Grid>
-                        </Grid>
+                        
 
-                        {description.length > 1 ? <FullWidthDivider /> : ""}
                         <Grid item>
-                            {descriptionLines.map((line, index) =>
+                            {!this.state.editMode ? descriptionLines.map((line, index) =>
                                 <Typography key={index}>
                                     {line}
                                 </Typography>
-                            )}
+                            ) :
+                                <Grid item container
+                                    direction='row'
+                                    justify="flex-start"
+                                    alignItems="flex-start"
+                                    spacing={2}
+                                >
+                                    <Grid item xs={12}>
+                                        <Box p={2}>
+                                            <EnterDescription
+                                                initialText={this.state.media.description}
+                                                setDescription={this.setNewDescription}
+                                            />
+                                            <TagInputBox
+                                                suggestions={[]}
+                                                tags={Object.keys(this.state.media.tags)}
+                                                addTag={this.addTag}
+                                                removeTag={this.removeTag}
+                                                requestTagSuggestions={this.requestTagSuggestions}
+                                            />
+                                        </Box>
+                                    </Grid>
+                                </Grid>}
                         </Grid>
+
+                        {description.length > 1 ? <FullWidthDivider /> : ""}
+                        {!this.state.editMode &&
+                            <Grid item>
+                                <Grid
+                                    container item
+                                    direction="row"
+                                    justify="flex-start"
+                                    alignItems="flex-start"
+                                >
+                                    {Object.keys(tags).map((key, index) =>
+                                        <Tag key={index} tag={key} count={tags[key]} explorable={true} />
+                                    )}
+                                </Grid>
+                            </Grid>
+                        }
+
 
                         <FullWidthDivider gutterBottom />
                     </Grid>
                     <CardActions disableSpacing={true}>
-                            <IconButton
-                                className={clsx(classes.expand, {
-                                    [classes.expandOpen]: this.state.shareExpanded,
-                                })}
-                                onClick={this.handleExpandClick}
-                                aria-expanded={this.state.shareExpanded}
-                                aria-label="show more"
-                            >
-                                <ShareIcon />
-                            </IconButton>
-                        </CardActions>
-                        <Collapse in={this.state.shareExpanded} timeout="auto" unmountOnExit>
-                            <Box p={1}>
-                                {this.getShareBox()}
-                            </Box>
-                        </Collapse>
+                        {readUserId() === this.state.media.ownerId &&
+                            <div className={classes.editIcons}>
+                                <IconButton
+                                    onClick={this.deleteMedia}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+
+                                <IconButton
+                                    onClick={this.toggleEditMode}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                            </div>
+                        }
+
+                        <IconButton
+                            className={clsx(classes.expand, {
+                                [classes.expandOpen]: this.state.shareExpanded,
+                            })}
+                            onClick={this.handleExpandClick}
+                            aria-expanded={this.state.shareExpanded}
+                            aria-label="share"
+                        >
+                            <ShareIcon />
+                        </IconButton>
+                    </CardActions>
+                    <Collapse in={this.state.shareExpanded} timeout="auto" unmountOnExit>
+                        <Box p={1}>
+                            {this.getShareBox()}
+                        </Box>
+                    </Collapse>
                 </Box>
             </Card >
         );

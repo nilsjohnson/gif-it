@@ -18,25 +18,25 @@ class EditBox extends Component {
 
     }
 
+    edit = (event) => {
+        const { media, popModal } = this.props;
+        popModal(media);
+    }
+
     delete = (event) => {
-        const { media } = this.props;
+        const { media, deleteAlbum, deleteItem } = this.props;
         if (media.albumId) {
-            /* glbal confirm */
             if (window.confirm(`Delete ${media.albumTitle ? `"${media.albumTitle}"` : 'album'}?`)) {
-                console.log("deleting album " + media.albumId);
-                this.props.deleteAlbum(media.albumId);
+                deleteAlbum(media.albumId);
             }
             else {
                 return;
             }
-
         }
         else {
             if (window.confirm("Delete this item?")) {
-                console.log("deleting single item " + media.id);
-                this.props.deleteItem(media.id);
+                deleteItem(media.id);
             }
-
         }
     }
 
@@ -57,11 +57,11 @@ class EditBox extends Component {
                     alignItems="center"
                     spacing={3}
                 >
-                    {/* <Grid item>
-                        <Button color="secondary" variant='contained'>
+                    <Grid item>
+                        <Button onClick={this.edit} color="secondary" variant='contained'>
                             Edit
                         </Button>
-                    </Grid> */}
+                    </Grid>
                     <Grid item>
                         <Button onClick={this.delete} color="primary" variant='contained'>
                             Delete

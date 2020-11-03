@@ -110,6 +110,7 @@ async function getMediaById(connection, id) {
         media.descript as description, 
         media.fileName, 
         media.fullSizeName,
+        user.id as ownerId,
         JSON_OBJECTAGG(IFNULL(tag.tag, '$'), 
             (SELECT COUNT(media_tag.tag_id)
                 FROM media_tag
@@ -118,6 +119,8 @@ async function getMediaById(connection, id) {
         FROM media
             LEFT JOIN media_tag ON media.id = media_tag.media_id
             LEFT JOIN tag ON media_tag.tag_id = tag.id
+            JOIN media_owner ON media.id = media_owner.media_id
+            JOIN user ON user.id = media_owner.owner_id
         WHERE media.id = ?`;
         
     let results = await query(connection, sql, id);
@@ -401,7 +404,8 @@ class MediaDAO extends DAO {
                         tags: tags,
                         fileType: results[i].fileType,
                         description: results[i].descript,
-                        id: results[i].id
+                        id: results[i].id,
+                        ownerId: results[i].owner_id
                     });
                 }
 

@@ -2246,3 +2246,15 @@ Error: listen EADDRINUSE: address already in use :::3001
 2020-11-03 10:04:22 sendmail: Cannot open mail:25
 
 2020-11-03 10:04:22 Confirmation Email Not Sent. Code: 1
+2020-11-03 12:12:51 RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: 6
+2020-11-03 12:13:23 RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: 6
+2020-11-03 12:13:48 RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: 6
+2020-11-03 13:12:04 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 13:53:14 TypeError: Cannot read property 'userId' of undefined
+2020-11-03 13:53:54 TypeError: Cannot read property 'userId' of undefined
+2020-11-03 15:27:59 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/UserDAO.js:410:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-11-03 15:29:45 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?' at line 1

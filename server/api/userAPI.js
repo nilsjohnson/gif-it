@@ -81,7 +81,27 @@ app.delete(`/user/deleteAlbum/:aId`, function (req, res) {
 
     }).catch(err => {
         log(err);
-        res.status(400).send();
+        res.status(401).send();
     })
+});
+
+app.post(`/user/updateDescription`, function (req, res) {
+    console.log(req.body);
+
+    const { mId, description } = req.body;
+
+    authDAO.authenticate(req.headers).then(userId => {
+        userDAO.updateMediaDescription(userId, mId, description, () => {
+            // success
+            res.status(200).send();
+        }, (err) => {
+            // err
+            log(err);
+            res.status(500).send();
+        });
+    }).catch(err => {
+        log(err);
+        res.status(401).send();
+    });
 });
 

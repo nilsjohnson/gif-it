@@ -72,9 +72,8 @@ app.post('/auth/login', function (req, res) {
 });
 
 app.get('/auth/checkToken/', function (req, res) {
-    console.log("checkin token..");
     authDAO.authenticate(req.headers).then(userId => {
-        res.status(200).send();
+        res.status(200).send({userId: userId});
     }).catch(err => {
         log(err);
         res.status(401).send();

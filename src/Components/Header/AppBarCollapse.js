@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import ButtonAppBarCollapse from "./ButtonBarCollapse";
 import { checkToken, signOut } from '../../util/data'
-import { deleteAuthToken } from "../../util/util";
+import { deleteAuthToken, saveUserId } from "../../util/util";
 import { Redirect } from 'react-router-dom';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -53,6 +53,10 @@ class AppBarCollapse extends Component {
         checkToken().then(res => {
             if (res.ok) {
                 this.setState({ authenticated: true });
+                res.json().then(resJson => {
+                    console.log(resJson);
+                    saveUserId(resJson.userId);
+                }).catch(err => console.log(err));
             }
             else if (res.status === 401) {
                 this.setState({ authenticated: false });

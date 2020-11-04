@@ -121,7 +121,8 @@ async function getMediaById(connection, id) {
             LEFT JOIN tag ON media_tag.tag_id = tag.id
             JOIN media_owner ON media.id = media_owner.media_id
             JOIN user ON user.id = media_owner.owner_id
-        WHERE media.id = ?`;
+        WHERE media.id = ?
+        GROUP BY user.id`;
         
     let results = await query(connection, sql, id);
     if (results[0].tags) {
@@ -307,6 +308,7 @@ class MediaDAO extends DAO {
             }
             catch (ex) {
                 log(ex);
+                onFail(ex);
             }
             finally {
                 connection.release();

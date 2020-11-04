@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { TextField } from '@material-ui/core';
 
@@ -16,6 +16,18 @@ export default class EnterAlbumTitle extends Component {
             isValidInput: true,
             errorMessage: ""
         });
+
+        this.inputRef = createRef();
+    }
+
+    /**
+     * Intercepts user pressing enter to remove focus
+     * @param {*} event 
+     */
+    onKeyDown = (event) => {
+        if (event.keyCode === 13) {
+            this.inputRef.current.blur();
+        }
     }
 
     /**
@@ -64,10 +76,12 @@ export default class EnterAlbumTitle extends Component {
     render() {
         return (
             <TextField
-                multiline fullWidth={true} rows={1}
+                inputRef={this.inputRef}
+                multiline={false} fullWidth={true} rows={1}
                 label={"Enter Album Title"}
                 variant="outlined" onChange={this.setCurInput}
                 onBlur={this.setTitle}
+                onKeyDown={this.onKeyDown}
                 value={this.state.curInput}
                 error={!this.state.isValidInput}
                 helperText={this.state.errorMessage}

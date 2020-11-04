@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Button, Grid, MenuItem, Box } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Button, Box } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import ButtonAppBarCollapse from "./ButtonBarCollapse";
 import { checkToken, signOut } from '../../util/data'
-import { deleteAuthToken, saveUserId } from "../../util/util";
+import { deleteAuthToken, deleteUserId, saveUserId } from "../../util/util";
 import { Redirect } from 'react-router-dom';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -54,7 +53,6 @@ class AppBarCollapse extends Component {
             if (res.ok) {
                 this.setState({ authenticated: true });
                 res.json().then(resJson => {
-                    console.log(resJson);
                     saveUserId(resJson.userId);
                 }).catch(err => console.log(err));
             }
@@ -69,6 +67,7 @@ class AppBarCollapse extends Component {
             // regardless if response is ok,
             // delete the auth token and redirect
             deleteAuthToken();
+            deleteUserId()
             this.setState({
                 redirect: "/?out=true",
                 authenticated: false
@@ -77,6 +76,7 @@ class AppBarCollapse extends Component {
         }).catch(err => {
             // if request didnt go through, we still delete token and redirect.
             deleteAuthToken();
+            deleteUserId();
             this.setState({
                 redirect: "/?out=true",
                 authenticated: false
@@ -93,7 +93,6 @@ class AppBarCollapse extends Component {
             <React.Fragment>
                 <Button className={classes.btn}
                     startIcon={<SearchIcon />}
-                    className={classes.btn}
                     variant="contained"
                     color="primary"
                     href='./'>
@@ -102,7 +101,6 @@ class AppBarCollapse extends Component {
 
                 <Button className={classes.btn}
                     startIcon={<CloudUploadIcon />}
-                    className={classes.btn}
                     variant="contained"
                     color="primary"
                     href='./upload'>
@@ -111,7 +109,6 @@ class AppBarCollapse extends Component {
 
                 <Button className={classes.btn}
                     startIcon={<DashboardIcon />}
-                    className={classes.btn}
                     variant="contained"
                     color="primary"
                     href='./dashboard'>

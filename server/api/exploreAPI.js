@@ -48,12 +48,13 @@ app.get('/media/:mId', function (req, res) {
             res.json(media);
         }
         else {
-            res.sendStatus(404);
+            res.status(404).send();
         }
     }, err => {
         // onFail
         log(err);
-        res.sendStatus(500);
+        console.log("fail");
+        res.status(500).send();
     });
 
 });

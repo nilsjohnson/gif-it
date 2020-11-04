@@ -1,34 +1,12 @@
 import React, { Component } from "react";
 import Header from "../Header";
-import { Box, Grid, Button, Divider, withStyles, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import { Redirect } from 'react-router-dom'
 import { checkToken, deleteAlbumById, deleteMediaById, getUserMedia } from '../../util/data';
 import Footer from "../Footer";
 import { Container } from "@material-ui/core";
 import EditWell from './EditWell';
 
-
-
-const useStyles = ((theme) => ({
-    btnBox: {
-        paddingTop: theme.spacing(1)
-    },
-    editWell: {
-        backgroundColor: "white",
-        borderRadius: theme.spacing(.5)
-    },
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    }
-}));
 
 class Dashboard extends Component {
     constructor(props) {
@@ -129,7 +107,6 @@ class Dashboard extends Component {
     }
 
     render() {
-        const { classes } = this.props;
 
         if (this.state.redirect) {
             return (<Redirect to='/login' />)
@@ -170,4 +147,4 @@ class Dashboard extends Component {
     }
 }
 
-export default withStyles(useStyles)(Dashboard);
+export default Dashboard

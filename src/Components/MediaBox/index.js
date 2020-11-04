@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles';
 import { Collapse, Card, Box, Grid, CardMedia, CardActions, Typography } from '@material-ui/core/';
-import { deleteMediaById, getMediaById, updateMediaDescription } from '../../util/data';
+import { addTags, deleteMediaById, deleteTags, getMediaById, updateMediaDescription } from '../../util/data';
 import { ShareBox } from './ShareBox';
 import Tag from '../Tag/Tag';
 import FullWidthDivider from '../FullWidthDivider';
@@ -29,6 +29,9 @@ const useStyles = theme => ({
     },
     editIcons: {
         marginRight: 'auto'
+    },
+    fullWidth: {
+        width: '100%'
     }
 });
 
@@ -58,12 +61,24 @@ class MediaBox extends Component {
         this.setShareExpanded(!this.state.shareExpanded);
     }
 
-    addTag = () => {
-        console.log("add tag");
-    }
+    removeTag = (tag) => {
+        console.log(tag);
+        let tmp = this.state.media;
+        delete tmp.tags[tag];
 
-    removeTag = () => {
-        console.log("rm tag");
+        this.setState({
+            media: tmp
+        });
+
+        deleteTags(tmp.id, [tag]).then(res => {
+            if (!res.ok) {
+                console.log("Tag update success");
+            }
+            else {
+                console.log("Tag update fail");
+                console.log(res);
+            }
+        }).catch(err => console.log(err));
     }
 
     requestTagSuggestions = () => {
@@ -102,6 +117,27 @@ class MediaBox extends Component {
         return [];
     }
 
+    addTag = (tag) => {
+        console.log(tag);
+        let tmp = this.state.media;
+        // TODO, get the number..
+        tmp.tags[tag] = 1;
+
+        this.setState({
+            media: tmp
+        });
+
+        addTags(tmp.id, [tag]).then(res => {
+            if (!res.ok) {
+                console.log("Tag update success");
+            }
+            else {
+                console.log("Tag update fail");
+                console.log(res);
+            }
+        }).catch(err => console.log(err));
+    }
+
     setNewDescription = (val) => {
         console.log(val);
         let tmp = this.state.media;
@@ -112,7 +148,7 @@ class MediaBox extends Component {
         });
 
         updateMediaDescription(tmp.id, val).then(res => {
-            if(!res.ok) {
+            if (!res.ok) {
                 console.log("Description update success");
             }
             else {
@@ -160,12 +196,14 @@ class MediaBox extends Component {
         if (!this.props.mId) {
             return;
         }
-
+        console.log("fettching");
         getMediaById(this.props.mId)
             .then(res => {
+                console.log(res);
                 if (res.ok) {
                     res.json().then(resJson => {
                         // set null values to empty for rendering
+                        console.log(resJson);
                         if (!resJson.tags) {
                             resJson.tags = {}
                         }
@@ -231,9 +269,9 @@ class MediaBox extends Component {
                                 title={descriptionLines[0]}
                             />}
 
-                        
 
-                        <Grid item>
+
+                        <Grid item className={classes.fullWidth}>
                             {!this.state.editMode ? descriptionLines.map((line, index) =>
                                 <Typography key={index}>
                                     {line}

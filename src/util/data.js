@@ -1,7 +1,7 @@
 import { readAuthToken } from './util';
 
 // note: this bool must be set propery prior to building for production
-let production = false;
+let production = true;
 let server = (production ? "https://api.gif-it.io" : "http://localhost:3001");
 
 /**
@@ -192,7 +192,37 @@ function updateMediaDescription(mId = '', description = '') {
     });
 }
 
+function addTags(mId = "", tags = []) {
+    return fetch(`${server}/user/addTags/`, {
+        method: 'POST',
+        body: JSON.stringify({
+            mId: mId,
+            tags: tags
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': readAuthToken()
+        }
+    });
+}
+
+function deleteTags(mId = '', tags = [] ) {
+    return fetch(`${server}/user/removeTags/`, {
+        method: 'POST',
+        body: JSON.stringify({
+            mId: mId,
+            tags: tags
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': readAuthToken()
+        }
+    });
+}
+
 export {
+    deleteTags,
+    addTags,
     updateMediaDescription,
     getAlbumById,
     postPhotoGallery,

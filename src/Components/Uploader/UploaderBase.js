@@ -21,7 +21,8 @@ class UploaderBase extends Component {
             filesHovering: false,
             tooManyFilesSelected: false,
             fileLoadProgress: 0,
-            uploadingModalOpen: false
+            uploadingModalOpen: false,
+            shareClicked: false
         });
 
         // Holding bin for files after the user has dragged/dropped or selected them.

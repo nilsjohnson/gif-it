@@ -13,16 +13,32 @@ AWS.config.update({
 
 let s3 = new AWS.S3({ apiVersion: "2006-03-01" });
 
+/**
+ * API endpoint for submitting a bug report.
+ * Inserts bug report into db and creates a signed S3 post 
+ * if the user has a file associated with report.
+ * User does not have to be authenticated to submit reports.
+ */
 app.post(`/submitBugReport`, function (req, res) {
-    let userId = authDAO.authenticate(req.headers);
     const { message = '', fileInfo = null } = req.body;
+    
+    authDAO.authenticate(req.headers).then(userId => {
+        // this is an authenticated user.
+        insertBugReport(userId, res, message, fileInfo);
+    }).catch(err => {
+        // this is not an authenticated user
+        log(err);
+        insertBugReport(null, res, message, fileInfo);
+    });
+});
+
+// helper function for inserting reports.
+function insertBugReport(userId, res, message, fileInfo) {
     let fileName, report;
-
-    console.log(req.body);
-
     // database won't reject empty strings, so we check here.
     if (message === '') {
         res.status(400).send();
+        return;
     }
 
     // if there is a file associated with this bug report
@@ -43,7 +59,7 @@ app.post(`/submitBugReport`, function (req, res) {
 
         s3.createPresignedPost(params, (err, data) => {
             if (err) {
-                console.log('Presigning post data encountered an error', err);
+                log(err);
             }
             else {
                 report = {
@@ -64,9 +80,9 @@ app.post(`/submitBugReport`, function (req, res) {
 
                 }, (err) => {
                     // on fail
+                    log(err);
                     res.status(500).send();
                 });
-
             }
         });
     }
@@ -86,5 +102,5 @@ app.post(`/submitBugReport`, function (req, res) {
             res.status(500).send();
         });
     }
-});
+}
 

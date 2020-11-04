@@ -10,9 +10,6 @@ const useStyles = theme => ({
     hidden: {
         display: "none"
     },
-    fullWidth: {
-        width: '100%'
-    },
     card: {
         height: '100%',
         display: 'flex',
@@ -27,9 +24,9 @@ const useStyles = theme => ({
 });
 
 class MakeImage extends Component {
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
 
     setDescription = (input) => {
         const { upload = {}, setDescription } = this.props;

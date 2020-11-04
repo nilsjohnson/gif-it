@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Box, Grid, Button, Divider, withStyles } from "@material-ui/core";
+import { Box, Grid, Button, withStyles } from "@material-ui/core";
 import MediaCard from '../MediaCard';
+import { Redirect } from 'react-router';
 
 const useStyles = ((theme) => ({
     btnBox: {
@@ -16,11 +17,17 @@ class EditBox extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            redirect: null
+        }
+
     }
 
-    edit = (event) => {
-        const { media, popModal } = this.props;
-        popModal(media);
+    redirect = (event) => {
+        const { media } = this.props;
+        let redirect = media.albumId ? `/explore?albumId=${media.albumId}` : `/explore?mId=${media.id}`
+
+        this.setState({redirect: redirect});
     }
 
     delete = (event) => {
@@ -41,6 +48,12 @@ class EditBox extends Component {
     }
 
     render() {
+        if(this.state.redirect) {
+            return (
+                <Redirect to={this.state.redirect} />
+            );
+        }
+
         const { media, classes } = this.props;
 
         return (
@@ -58,7 +71,7 @@ class EditBox extends Component {
                     spacing={3}
                 >
                     <Grid item>
-                        <Button onClick={this.edit} color="secondary" variant='contained'>
+                        <Button onClick={this.redirect} color="secondary" variant='contained'>
                             Edit
                         </Button>
                     </Grid>

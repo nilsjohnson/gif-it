@@ -1,5 +1,7 @@
 # [gif-it.io](https://gif-it.io "Free + Easy Gif Conversion")
 
+### [Demo](https://gif-it.io/gif-it.io_demo_sm.mp4 "watch demo")
+
 ### gif-it.io is a website where users can create gifs and share images..
 
 To run project:
@@ -57,7 +59,7 @@ If you are developing the app, typically you might want to pass both.
 - Create a dashboard for logged in users where they can:
   - ~~upload videos to convert to gifs~~
   - ~~upload images~~
-  - view, edit and delete their uploads
+  - ~~view, edit and delete their uploads~~
   - see things they've liked
   - Have a profile
 - Have more options for rendering gifs (frames per second, size, speed)  

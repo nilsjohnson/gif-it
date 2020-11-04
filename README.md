@@ -3,7 +3,7 @@
 ### [Watch Demo Here!](https://gif-it.io/gif-it.io_demo_sm.mp4 "watch demo")
 Here is a quick demo of the webapp showing off some of its features.
 
-### gif-it.io is a website where users can create gifs and share images..
+## gif-it.io is a website where users can create gifs and share images..
 
 To run project:
 

@@ -2227,3 +2227,88 @@ Error: Connection already released
 2020-11-02 15:52:23 user not authenticated.
 2020-11-02 16:14:06 user not authenticated.
 2020-11-02 16:27:53 user not authenticated.
+2020-11-03 10:01:42 listen EADDRINUSE: address already in use :::3001 
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (net.js:1313:16)
+    at listenInCluster (net.js:1361:12)
+    at Server.listen (net.js:1449:7)
+    at Object.<anonymous> (/home/nils/gif-it/server/server.js:64:6)
+    at Module._compile (internal/modules/cjs/loader.js:1156:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1176:10)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47)
+
+2020-11-03 10:02:54 user not authenticated.
+2020-11-03 10:02:57 user not authenticated.
+2020-11-03 10:03:00 user not authenticated.
+2020-11-03 10:04:22 sendmail: Cannot open mail:25
+
+2020-11-03 10:04:22 Confirmation Email Not Sent. Code: 1
+2020-11-03 12:12:51 RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: 6
+2020-11-03 12:13:23 RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: 6
+2020-11-03 12:13:48 RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: 6
+2020-11-03 13:12:04 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 13:53:14 TypeError: Cannot read property 'userId' of undefined
+2020-11-03 13:53:54 TypeError: Cannot read property 'userId' of undefined
+2020-11-03 15:27:59 onFail is not a function 
+TypeError: onFail is not a function
+    at /home/nils/gif-it/server/data/UserDAO.js:410:17
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-11-03 15:29:45 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?' at line 1
+2020-11-03 16:09:37 res.status.send is not a function 
+TypeError: res.status.send is not a function
+    at /home/nils/gif-it/server/api/userAPI.js:63:20
+    at processTicksAndRejections (internal/process/task_queues.js:97:5))
+
+2020-11-03 16:10:30 user not authenticated.
+2020-11-03 16:10:54 user not authenticated.
+2020-11-03 16:10:59 user not authenticated.
+2020-11-03 16:12:57 user not authenticated.
+2020-11-03 16:13:01 user not authenticated.
+2020-11-03 16:13:12 user not authenticated.
+2020-11-03 16:13:20 user not authenticated.
+2020-11-03 16:14:49 user not authenticated.
+2020-11-03 16:40:38 Error: ER_DUP_ENTRY: Duplicate entry 'e6c3Gxzq-26' for key 'media_tag.media_tag_key'
+2020-11-03 16:43:18 Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?
+    )' at line 3
+2020-11-03 16:47:44 Error: ER_DUP_ENTRY: Duplicate entry 'e6c3Gxzq-6' for key 'media_tag.media_tag_key'
+2020-11-03 16:47:46 Error: ER_DUP_ENTRY: Duplicate entry 'e6c3Gxzq-31' for key 'media_tag.media_tag_key'
+2020-11-03 16:47:50 Error: ER_DUP_ENTRY: Duplicate entry 'e6c3Gxzq-32' for key 'media_tag.media_tag_key'
+2020-11-03 16:47:52 Error: ER_DUP_ENTRY: Duplicate entry 'e6c3Gxzq-33' for key 'media_tag.media_tag_key'
+2020-11-03 17:09:56 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:12:35 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:14:35 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:14:53 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:15:14 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:15:23 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:15:53 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:17:40 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:19:34 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:19:46 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:20:21 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:20:21 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:22:00 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:22:00 Error: ER_MIX_OF_GROUP_FUNC_AND_FIELDS: In aggregated query without GROUP BY, expression #5 of SELECT list contains nonaggregated column 'gif_it.user.id'; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:23:22 Error: ER_WRONG_FIELD_WITH_GROUP: Expression #5 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'gif_it.user.id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:23:22 Error: ER_WRONG_FIELD_WITH_GROUP: Expression #5 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'gif_it.user.id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:23:24 Error: ER_WRONG_FIELD_WITH_GROUP: Expression #5 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'gif_it.user.id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:23:24 Error: ER_WRONG_FIELD_WITH_GROUP: Expression #5 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'gif_it.user.id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+2020-11-03 17:29:21 user not authenticated.
+2020-11-03 17:29:21 user not authenticated.
+2020-11-03 17:29:21 user not authenticated.
+2020-11-03 17:29:23 user not authenticated.
+2020-11-04 09:37:08 user not authenticated.
+2020-11-04 09:37:14 user not authenticated.
+2020-11-04 09:37:23 Error: ER_TRUNCATED_WRONG_VALUE_FOR_FIELD: Incorrect integer value: '[object Promise]' for column 'user_id' at row 1
+2020-11-04 09:48:30 user not authenticated.
+2020-11-04 09:49:30 user not authenticated.
+2020-11-04 09:49:33 user not authenticated.
+2020-11-04 09:49:48 user not authenticated.
+2020-11-04 09:50:38 user not authenticated.
+2020-11-04 09:50:43 user not authenticated.
+2020-11-04 09:50:57 sendmail: Cannot open mail:25
+
+2020-11-04 09:50:57 Confirmation Email Not Sent. Code: 1

@@ -12,7 +12,7 @@ export default class EnterDescription extends Component {
         super(props);
 
         this.state = ({
-            curInput: "",
+            curInput: this.props.initialText ? this.props.initialText: '',
             isValidInput: true,
             errorMessage: ""
         });

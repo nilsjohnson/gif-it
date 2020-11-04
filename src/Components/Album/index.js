@@ -36,6 +36,19 @@ class Album extends Component {
         };
     }
 
+    removeMedia = (mId) => {
+
+        let tmp = this.state.items;
+        console.log(tmp);
+        let index = tmp.findIndex(elem => elem.id === mId);
+        console.log(`Splicing at index ${index}`);
+        tmp.splice(index, 1);
+        
+        this.setState({
+            items: tmp
+        });
+    }
+
     componentDidMount = () => {
         getAlbumById(this.props.albumId).then(res => {
             if(res.ok) {
@@ -80,11 +93,11 @@ class Album extends Component {
                     alignItems="center"
                     spacing={2}
                 >
-                    {this.state.items.map((item, index) => (
-                        <Grid className={classes.albumItem} item xs={12} sm={6} md={4} key={index}>
+                    {this.state.items.map((item) => (
+                        <Grid className={classes.albumItem} item xs={12} sm={6} md={4} key={item.id}>
                             <MediaBox
-                                key={index}
                                 media={item}
+                                removeMedia={this.removeMedia}
                             />
                         </Grid>
 

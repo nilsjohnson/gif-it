@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Grid, Card, Box, TextField, Button, Typography } from "@material-ui/core";
+import { Container, Grid, Card, Box, Button, Typography } from "@material-ui/core";
 import UploaderBase from "./UploaderBase";
 import { withStyles } from '@material-ui/core/styles';
 import MakeImage from "./MakeImage";
@@ -194,7 +194,7 @@ class Uploader extends UploaderBase {
             }
         }
 
-        // this.openUploadingModal();
+        this.setState({shareClicked: true});
 
         // now that we are good to go, mark each image as pending upload..
         for (let i = 0; i < this.uploads.length; i++) {
@@ -515,7 +515,12 @@ class Uploader extends UploaderBase {
                             direction="row"
                             justify="center"
                             alignItems="flex-start" >
-                            <Button className={classes.btn} variant="contained" color="primary" onClick={this.share} > Share! </Button>
+                            <Button className={classes.btn} 
+                            variant="contained" 
+                            color="primary" 
+                            onClick={this.share} 
+                            disabled={this.state.shareClicked}
+                            > Share! </Button>
                         </Grid>
                     }
 

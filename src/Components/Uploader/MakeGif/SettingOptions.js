@@ -11,7 +11,7 @@ class SettingOptions extends Component {
 
   render() {
   
-    const { upload = {}, convert, size, setSize, } = this.props;
+    const { convert, size, setSize, } = this.props;
 
     return (
       <Grid

@@ -2,6 +2,21 @@ const DAO = require("./DAO");
 
 let query;
 
+async function deleteTag(connection, args) {
+    let sql =
+    `DELETE FROM media_tag 
+    WHERE media_tag.media_id = ? AND media_tag.tag_id = (
+        SELECT tag.id FROM tag WHERE tag.tag = ?
+    )`;
+
+    return await query(connection, sql, args);
+}
+
+async function updateMediaDescription(connection, args) {
+    let sql = `UPDATE media SET descript = ? WHERE id = ?`;
+    return await query(connection, sql, args);
+}
+
 async function getFileInfoById(connection, mId) {
     let sql = 
     `SELECT 
@@ -17,7 +32,6 @@ async function getFileInfoById(connection, mId) {
 
     return await query(connection, sql, mId);
 }
-
 
 async function deleteMediaById(connection, mId) {
     let sql = `DELETE FROM media WHERE media.id = ?`;
@@ -368,6 +382,104 @@ class UserDAO extends DAO {
                 log(ex);
                 connection.rollback();
                 onFail("Database problem. Couldn't create album.");
+            }
+            finally {
+                connection.release();
+            }
+        });
+    }
+
+    updateMediaDescription(userId, mId, description, onSuccess, onFail) {
+        this.getConnection(async connection => {
+            if(!connection) {
+                onFail("could not get DB connection.");
+            }
+
+            try {
+                await this.startTransaction(connection);
+
+                // get the user who owns this media
+                let results = await getFileInfoById(connection, mId);
+                // if the userIds dont match, throw exception
+                if(results[0].userId !== userId) {
+                    log(`User ${userId} attempting to update ${mId}, which they do not own.`);
+                    await this.completeTransation(connection);
+                    throw `Illegal request. ${userId} cannot delete media with id ${mId}`;
+                }
+
+                results = await updateMediaDescription(connection, [description, mId]);
+                await this.completeTransation(connection);
+
+            }
+            catch (ex) {
+                onFail(ex);
+            }
+            finally {
+                connection.release();
+            }
+        });
+    }
+
+    addTags(userId, mId, tags, onSuccess, onFail) {
+        this.getConnection(async connection => {
+            if(!connection) {
+                onFail("could not get DB connection.");
+            }
+
+            try {
+                await this.startTransaction(connection);
+
+                // get the user who owns this media
+                let results = await getFileInfoById(connection, mId);
+                // if the userIds dont match, throw exception
+                if(results[0].userId !== userId) {
+                    log(`User ${userId} attempting to update ${mId}, which they do not own.`);
+                    await this.completeTransation(connection);
+                    throw `Illegal request. ${userId} cannot delete media with id ${mId}`;
+                }
+
+                await insertTags(connection, mId, tags);
+
+                await this.completeTransation(connection);
+
+            }
+            catch (ex) {
+                onFail(ex);
+            }
+            finally {
+                connection.release();
+            }
+        });
+    }
+
+    deleteTags(userId, mId, tags, onSuccess, onFail) {
+        this.getConnection(async connection => {
+            if(!connection) {
+                onFail("could not get DB connection.");
+            }
+
+            try {
+                await this.startTransaction(connection);
+
+                // get the user who owns this media
+                let results = await getFileInfoById(connection, mId);
+                // if the userIds dont match, throw exception
+                if(results[0].userId !== userId) {
+                    log(`User ${userId} attempting to update ${mId}, which they do not own.`);
+                    await this.completeTransation(connection);
+                    throw `Illegal request. ${userId} cannot delete media with id ${mId}`;
+                }
+
+                for(let i = 0; i < tags.length; i++) {
+                    results = await deleteTag(connection, [mId, tags[i]]);
+                }
+                
+
+                await this.completeTransation(connection);
+
+            }
+            catch (ex) {
+                onFail(ex);
             }
             finally {
                 connection.release();

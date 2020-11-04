@@ -203,6 +203,7 @@ class ImageEditor extends Component {
                                 className={classes.hidden}
                                 src={this.state.originalImage}
                                 onLoad={this.doInitialLoad}
+                                alt=''
                             />
 
                             {/* this is the the thumbnail */}

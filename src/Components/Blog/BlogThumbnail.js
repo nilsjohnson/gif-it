@@ -22,9 +22,9 @@ const useStyles = theme => ({
 });
 
 class BlogThumbnail extends Component {
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
 
     render() {
         const { classes, post } = this.props;

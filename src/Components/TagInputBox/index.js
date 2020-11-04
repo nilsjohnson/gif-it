@@ -115,6 +115,8 @@ class TagBox extends Component {
     makeTag = (input) => {
         // trim it
         let tag = input.trim();
+        // all lower
+        // tag = tag.toLowerCase(); TODO?
         // remove a leading #
         if (tag.startsWith('#')) {
             tag = tag.substring(1)

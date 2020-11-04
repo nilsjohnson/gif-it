@@ -268,9 +268,10 @@ class AuthDAO extends DAO {
     }
 
     /**
-     * Parses auth token from headers
+     * Parses auth token from request headers
      * @param {*} headers 
-     * @returns the id of the user, or null if the auth token isn't valid.
+     * @returns A Promise. Resolves with the user Id, otherwise
+     * rejects. TODO reject with proper error
      */
     authenticate(headers) {
         // get the token from the headers;

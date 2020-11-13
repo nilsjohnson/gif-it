@@ -19,7 +19,7 @@ const MAX_UPLOAD_SIZE = 70;
 const useStyles = theme => ({
     container: {
         backgroundColor: theme.palette.primary.light,
-        padding: theme.spacing(2),
+        padding: theme.spacing(1),
         border: `4px dashed ${theme.palette.secondary.light}`,
         marginTop: theme.spacing(2),
         width: '100%',
@@ -44,7 +44,13 @@ const useStyles = theme => ({
         background: `linear-gradient(100deg, rgba(25,209,146,0.5746673669467788) 0%, rgba(15,95,209,0.6222864145658263) 100%)`
     },
     uploadItem: {
-        minWidth: '375px',
+        [theme.breakpoints.down('sm')]: {
+            minWidth: '100%',
+          },
+          [theme.breakpoints.up('sm')]: {
+            minWidth: 375,
+          },
+
         maxWidth: '800px'
     },
     fullWidth: {
@@ -194,7 +200,7 @@ class Uploader extends UploaderBase {
             }
         }
 
-        this.setState({shareClicked: true});
+        this.setState({ shareClicked: true });
 
         // now that we are good to go, mark each image as pending upload..
         for (let i = 0; i < this.uploads.length; i++) {
@@ -515,11 +521,11 @@ class Uploader extends UploaderBase {
                             direction="row"
                             justify="center"
                             alignItems="flex-start" >
-                            <Button className={classes.btn} 
-                            variant="contained" 
-                            color="primary" 
-                            onClick={this.share} 
-                            disabled={this.state.shareClicked}
+                            <Button className={classes.btn}
+                                variant="contained"
+                                color="primary"
+                                onClick={this.share}
+                                disabled={this.state.shareClicked}
                             > Share! </Button>
                         </Grid>
                     }

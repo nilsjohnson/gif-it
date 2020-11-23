@@ -148,7 +148,7 @@ GRANT SELECT ON user TO 'pickles'@'localhost';
 ALTER USER 'pickles'@'localhost' IDENTIFIED WITH mysql_native_password BY 'goodwoofer';
 flush privileges;
 
--- 10/30 auth tokens now go in DB
+-- 10/30/2020 auth tokens now go in DB
 CREATE TABLE authToken (
     tokenHash CHAR(128) NOT NULL,
     userId INT NOT NULL,
@@ -161,3 +161,19 @@ CREATE TABLE authToken (
 
 GRANT ALL PRIVILEGES ON authToken to 'gracie'@'localhost';
 flush privileges;
+
+-- 11/13/2020 users can reset passworeds
+CREATE TABlE pwResetCodes (
+    id INT NOT NULL AUTO_INCREMENT,
+    userId INT NOT NULL,
+    codeHash CHAR(128) NOT NULL,
+    salt CHAR(64) NOT NULL,
+    dateCreated DATETIME NOT NULL,
+    codeUsed TINYINT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (userId) 
+		REFERENCES user(id)
+		ON DELETE CASCADE
+);
+
+GRANT ALL PRIVILEGES ON pwResetCodes to 'gracie'@'localhost';

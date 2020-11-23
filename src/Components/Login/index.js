@@ -78,7 +78,7 @@ class Login extends Component {
     }
 
     onEnterPressed = (event) => {
-        if(event.keyCode === 13) {
+        if (event.keyCode === 13) {
             this.login();
         }
     }
@@ -94,7 +94,6 @@ class Login extends Component {
                 if (res.ok) {
                     res.json().then(token => {
                         saveAuthToken(token);
-                        console.log("redirecting home");
                         this.setState({ redirect: "/dashboard" });
                     }).catch(jsonErr => console.log(jsonErr));
                 }
@@ -184,7 +183,7 @@ class Login extends Component {
                                     />
                                 </Grid>
                                 {this.state.message &&
-                                    <Typography  variant="subtitle1">
+                                    <Typography variant="subtitle1">
                                         {this.state.message}
                                     </Typography>}
                             </Grid>
@@ -195,17 +194,25 @@ class Login extends Component {
                                 color="primary"
                                 className={classes.submit}
                             >
-
                                 Log In
                             </Button>
                         </form>
-                        <Grid container justify="flex-end">
+                        <Grid container
+                            direction="column"
+                            justify="flex-end"
+                            alignItems="flex-end"
+                        >
                             <Grid item>
                                 <Link href="/signup" variant="body2">
                                     Don't have account? Sign Up!
-                                    </Link>
+                                </Link>
                             </Grid>
-                        </Grid>    
+                            <Grid item>
+                                <Link href="/resetpw" variant="body2">
+                                    Forgot Password?
+                                </Link>
+                            </Grid>
+                        </Grid>
                     </div>
                 </Paper>
             </Container>

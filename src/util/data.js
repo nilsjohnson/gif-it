@@ -220,7 +220,36 @@ function deleteTags(mId = '', tags = [] ) {
     });
 }
 
+function resetPw(emailAddr = '') {
+    return fetch(`${server}/auth/resetPw`, {
+        method: 'POST',
+        body: JSON.stringify({
+            emailAddr: emailAddr
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': readAuthToken()
+        }
+    });
+}
+
+function submitNewPassword(code = '', pw = "") {
+    return fetch(`${server}/auth/submitNewPassword`, {
+        method: 'POST',
+        body: JSON.stringify({
+            code: code,
+            password: pw
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': readAuthToken()
+        }
+    });
+}
+
 export {
+    submitNewPassword,
+    resetPw,
     deleteTags,
     addTags,
     updateMediaDescription,

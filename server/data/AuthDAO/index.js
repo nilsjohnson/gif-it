@@ -1,16 +1,43 @@
 const crypto = require("crypto");
 const DAO = require("../DAO");
-const { NewUserError, LoginError } = require("../errors");
+const { NewUserError, LoginError, PasswordResetError } = require("../errors");
 const log = require("../../util/logger");
 const { readFile } = require("../../util/fileUtil");
 const { FilePaths } = require("../../const");
 const AuthToken = require("./AuthToken");
 const TokenCache = require("./TokenCache");
+const ResetCode = require("./ResetCode");
 
-// loads the salt we use for salting auth tokens.
+// loads the salts we use for salting auth tokens and pw reset codes
 const AUTH_TOKEN_SALT = readFile(FilePaths.BASE_DIR + '/authSalt.txt');
 
+
 let query;
+
+async function markPwResetCodeUsed(connection, id) {
+    let sql = 'UPDATE pwResetCodes SET codeUsed = 1 WHERE id = ?';
+    return await query(connection, sql, id);
+}
+
+async function deleteCredentials(connection, userId) {
+    let sql = `DELETE FROM user_credential WHERE id = ?`;
+    return await query(connection, sql, userId);
+}
+
+async function getResetPwInfo(connection, id) {
+    let sql = `SELECT userId, codeHash, salt, codeUsed, dateCreated from pwResetCodes WHERE id = ?`;
+    return await query(connection, sql, id);
+}
+
+async function insertResetCode(connection, args) {
+    let sql = `INSERT INTO pwResetCodes SET ?`;
+    return await query(connection, sql, args);
+}
+
+async function getUserIdByEmail(connection, emailAddr) {
+    let sql = `SELECT user.id as userId, user.username FROM user WHERE user.email = ?`;
+    return await query(connection, sql, emailAddr);
+}
 
 async function deleteAuthToken(connection, tokenHash) {
     let sql = `DELETE FROM authToken WHERE tokenHash = ?`;
@@ -79,6 +106,19 @@ function createVerificationCode() {
 }
 
 /**
+ * @returns a 9 byte random reset code
+ */
+function createResetCode() {
+    let code = crypto.randomBytes(9).toString("base64");
+    
+    while (code.includes('/') || code.includes('+')) {
+        code = crypto.randomBytes(9).toString("base64");
+    }
+
+    return code; 
+}
+
+/**
  * @returns A hashed password.
  * @param {*} password 
  * @param {*} salt 
@@ -101,6 +141,14 @@ function generateAuthToken() {
 
 function getAuthTokenHash(token) {
     return crypto.pbkdf2Sync(token, AUTH_TOKEN_SALT, 100000, 64, 'sha512').toString('hex');
+}
+
+/**
+ * @param {*} code The reset code 
+ * @returns The hash of a reset code
+ */
+function getResetCodeHash(code, salt) {
+    return crypto.pbkdf2Sync(code, salt, 100000, 64, 'sha512').toString('hex');
 }
 
 /**
@@ -239,8 +287,8 @@ class AuthDAO extends DAO {
                     }
 
                     /**
-                     * For now, we dont require users to be verified
-                     * so as long as their pw/username is good, we make a token.
+                     * For now, we dont require users to be verified.
+                     * If their pw/username is good, we make a token.
                      */
                     token = generateAuthToken();
                     await insertAuthoken(connection, {
@@ -366,6 +414,148 @@ class AuthDAO extends DAO {
 
                 });
             });
+        });
+    }
+
+    getResetCode(emailAddr, onSuccess, onFail) {
+        this.getConnection(async connection => {
+            if(!connection) {
+                onFail("Error getting db connection");
+            }
+
+            let results;
+
+            try {
+                this.startTransaction(connection);
+                results = await getUserIdByEmail(connection, emailAddr);
+                console.log(results);
+
+                if(results !== undefined && results.length === 1) {
+                    // good, we got an id from this email;
+                    let userId = results[0].userId;
+                    let username = results[0].username;
+                    let code = createResetCode();
+                    let salt = createSalt();
+                    let hash = getResetCodeHash(code, salt);
+          
+                    results = await insertResetCode(connection, {
+                        userId: userId,
+                        codeHash: hash,
+                        salt: salt,
+                        codeUsed: 0,
+                        dateCreated: this.getTimeStamp()
+                    });
+                    let codeId = results.insertId;
+
+                    onSuccess({
+                        code: code + codeId,
+                        userName: username
+                    });
+                }
+                else {
+                    throw PasswordResetError.EMAIL_NOT_FOUND;
+                }
+
+                this.completeTransation(connection);
+                
+            }
+            catch(ex) {
+                connection.rollback();
+                onFail(ex);
+            }
+            finally {
+                connection.release();
+            }
+
+        });
+    }
+
+    resetPassword(code_str, password, onSuccess, onFail) {
+        this.getConnection(async connection => {
+            if(!connection) {
+                onFail("Error getting db connection");
+            }
+
+            let results;
+
+            try {
+                this.startTransaction(connection);
+
+                let code = code_str.substring(0, 12);
+                let id = parseInt(code_str.substring(12));
+                console.log("code: " + code);
+                console.log("id: " + id);
+
+                let results = await getResetPwInfo(connection, id);
+                console.log(results);
+                if(results.length === 0) {
+                    throw PasswordResetError.CODE_NOT_FOUND;
+                }
+
+                let userId = results[0].userId;
+                let salt = results[0].salt;
+                let codeHash = results[0].codeHash;
+                let dateCreated = results[0].dateCreated;
+                let codeUsed = results[0].codeUsed === 1 ? true : false;
+
+                // validate age of code
+                if(new Date().getTime() - new Date(dateCreated).getTime() > 24 * 60 * 60 * 1000) {
+                    // this code is more than 5 minutes old. We can't use it.
+                    throw PasswordResetError.CODE_EXPIRED;
+                }
+                // validate whether or not the code has been used previously
+                if(codeUsed) {
+                    throw PasswordResetError.CODE_USED;
+                }
+
+                // if the code hashes correctly
+                if(codeHash === getResetCodeHash(code, salt)) {
+                    // delete the old credentials
+                    results = await deleteCredentials(connection, userId);
+              
+                    // make a new salt and hash
+                    const salt = createSalt();
+                    const hash = getHash(password, salt);
+
+                    let credentials = {
+                        hashed: hash,
+                        salt: salt,
+                        id: userId
+                    };
+
+                    // insert the new credentials
+                    results = await insertUserCredential(connection, credentials);
+                    // mark the code as used
+                    results = await markPwResetCodeUsed(connection, id);
+
+                    // log the user in
+                    let token = generateAuthToken();
+                    await insertAuthoken(connection, {
+                        tokenHash: token.tokenHash,
+                        userId: userId,
+                        dateCreated: this.getTimeStamp()
+                    });
+                    // save token in cache
+                    this.tokenCache.addAuthTokenToCache(userId, token.token);
+                    // wahoo!
+                    onSuccess(token.token);
+                }
+                else {
+                    // the code doesn't check out...
+                    throw PasswordResetError.CODE_INVALID;
+                }
+
+                this.completeTransation(connection);
+                
+            }
+            catch(ex) {
+                connection.rollback();
+                onFail(ex);
+            }
+            finally {
+                connection.release();
+            }
+
         });
     }
 }

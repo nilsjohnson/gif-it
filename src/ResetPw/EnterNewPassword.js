@@ -43,7 +43,8 @@ class EnterNewPassword extends Component {
             password: "",
             passwordConfirm: "",
             redirect: null,
-            message: ""
+            message: "",
+            btnDisabled: false
         }
     }
 
@@ -67,6 +68,8 @@ class EnterNewPassword extends Component {
             return;
         }
 
+        this.setBtnDisabled(true);
+
         submitNewPassword(this.getCodeParam(), this.state.password).then(res => {
             if(res.ok) {
                 res.json().then(token => {
@@ -79,7 +82,11 @@ class EnterNewPassword extends Component {
                     this.setState({
                         message: text
                     });
-                }).catch(err => console.log(err));
+                    this.setBtnDisabled(false);
+                }).catch(err => {
+                    console.log(err);
+                    this.setBtnDisabled(false);
+                });
             }
         }).catch(err => console.log(err));
     }
@@ -101,7 +108,13 @@ class EnterNewPassword extends Component {
     getCodeParam = () => {
         let url = new URL(window.location.href);
         return url.searchParams.get("code");
-      }
+    }
+
+    setBtnDisabled = (val) => {
+        this.setState({
+            btnDisabled: val
+        });
+    }
 
 
     render() {
@@ -116,7 +129,7 @@ class EnterNewPassword extends Component {
                 <Header />
                 <Container component="main" maxWidth="xs" >
                     <Paper className={classes.paper}>
-                        <Typography align="center" component="h1" variant="h5"gutterBottom={true}>
+                        <Typography align="center" component="h1" variant="h5" gutterBottom={true}>
                             Reset Password
                             </Typography>
                         <Grid spacing={2}
@@ -142,7 +155,7 @@ class EnterNewPassword extends Component {
                                     label="Confirm Password"
                                     onChange={this.setConfirm}
                                     onKeyDown={this.onEnterPressed}
-                                    gutterBottom={true}
+                                    // gutterBottom={true}
                                 />
                             </Grid>
                             {this.state.message &&
@@ -157,6 +170,7 @@ class EnterNewPassword extends Component {
                                     fullWidth
                                     variant="contained"
                                     color="primary"
+                                    disabled={this.state.btnDisabled}
                                 >
                                     Reset Password
                         </Button>

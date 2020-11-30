@@ -2528,3 +2528,14 @@ TypeError: res.status.send is not a function
 
 2020-11-23 16:47:47 Confirmation Email Not Sent. Code: 1
 2020-11-23 16:48:09 user not authenticated.
+2020-11-30 14:50:33 user not authenticated.
+2020-11-30 14:50:42 user not authenticated.
+2020-11-30 14:50:48 user not authenticated.
+2020-11-30 14:50:55 sendmail: Cannot open mail:25
+
+2020-11-30 14:50:55 Confirmation Email Not Sent. Code: 1
+2020-11-30 14:56:40 user not authenticated.
+2020-11-30 14:56:43 user not authenticated.
+2020-11-30 14:56:50 sendmail: Cannot open mail:25
+
+2020-11-30 14:56:50 Confirmation Email Not Sent. Code: 1

@@ -47,7 +47,8 @@ class GetResetCode extends Component {
         this.state = {
             emailAddr: "",
             message: "",
-            redirect: null
+            redirect: null,
+            btnDisabled: false
         }
     }
 
@@ -55,6 +56,12 @@ class GetResetCode extends Component {
         if (event.keyCode === 13) {
             this.resetPw();
         }
+    }
+
+    setBtnDisabled = (val) => {
+        this.setState({
+            btnDisabled: val
+        });
     }
 
     resetPw = () => {
@@ -66,6 +73,9 @@ class GetResetCode extends Component {
             return;
         }
 
+        // dont let the user click reset multiple times
+        this.setBtnDisabled(true);
+
         resetPw(this.state.emailAddr).then(res => {
             console.log(res);
             if(res.ok) {
@@ -76,9 +86,12 @@ class GetResetCode extends Component {
                 res.text().then(text => {
                     this.setState({message: text})
                 }).catch(err => console.log(err));
-                
+                this.setBtnDisabled(false);
             }
-        }).catch(err => console.log(err));
+        }).catch(err => {
+            console.log(err);
+            this.setBtnDisabled(false);
+        });
     }
 
     makeEmail = (str) => {
@@ -140,6 +153,7 @@ class GetResetCode extends Component {
                                     variant="contained"
                                     color="primary"
                                     className={classes.submit}
+                                    disabled={this.state.btnDisabled}
                                 >
                                     Email Login Code
                             </Button>

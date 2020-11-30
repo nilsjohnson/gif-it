@@ -155,7 +155,6 @@ class EnterNewPassword extends Component {
                                     label="Confirm Password"
                                     onChange={this.setConfirm}
                                     onKeyDown={this.onEnterPressed}
-                                    // gutterBottom={true}
                                 />
                             </Grid>
                             {this.state.message &&

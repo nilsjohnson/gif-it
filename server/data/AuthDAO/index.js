@@ -6,7 +6,6 @@ const { readFile } = require("../../util/fileUtil");
 const { FilePaths } = require("../../const");
 const AuthToken = require("./AuthToken");
 const TokenCache = require("./TokenCache");
-const ResetCode = require("./ResetCode");
 
 // loads the salts we use for salting auth tokens and pw reset codes
 const AUTH_TOKEN_SALT = readFile(FilePaths.BASE_DIR + '/authSalt.txt');
@@ -110,12 +109,12 @@ function createVerificationCode() {
  */
 function createResetCode() {
     let code = crypto.randomBytes(9).toString("base64");
-    
+
     while (code.includes('/') || code.includes('+')) {
         code = crypto.randomBytes(9).toString("base64");
     }
 
-    return code; 
+    return code;
 }
 
 /**
@@ -327,7 +326,7 @@ class AuthDAO extends DAO {
         let userId = this.tokenCache.getUserIdByToken(token);
 
         return new Promise((resolve, reject) => {
-            if(userId) {
+            if (userId) {
                 console.log(`userId ${userId} had token in cache.`);
                 resolve(userId);
                 return;
@@ -335,7 +334,7 @@ class AuthDAO extends DAO {
             console.log(`userId ${userId}. Token not found in cache. Doing db call...`);
 
             this.getConnection(async connection => {
-                if(!connection) {
+                if (!connection) {
                     reject("couldnt connect to DB");
                 }
                 try {
@@ -343,7 +342,7 @@ class AuthDAO extends DAO {
                     let results = await getUserByTokenHash(connection, tokenHash);
                     console.log('results from getting db');
                     console.log(results);
-                    if(results.length > 0 && results[0].userId) {
+                    if (results.length > 0 && results[0].userId) {
                         this.tokenCache.addAuthTokenToCache(results[0].userId, token);
                         resolve(results[0].userId);
                     }
@@ -351,7 +350,7 @@ class AuthDAO extends DAO {
                         reject("user not authenticated.");
                     }
                 }
-                catch(ex) {
+                catch (ex) {
                     reject(ex);
                 }
                 finally {
@@ -363,11 +362,11 @@ class AuthDAO extends DAO {
 
     signUserOut(headers, onSuccess, onFail) {
         const token = headers.authorization;
-        
+
         this.tokenCache.deleteToken(token);
-        
+
         this.getConnection(async connection => {
-            if(!connection) {
+            if (!connection) {
                 this.logFailure('couldnt get db connection');
             }
             try {
@@ -375,7 +374,7 @@ class AuthDAO extends DAO {
                 await deleteAuthToken(connection, tokenHash);
                 onSuccess();
             }
-            catch(ex) {
+            catch (ex) {
                 onFail(ex);
             }
             finally {
@@ -393,7 +392,7 @@ class AuthDAO extends DAO {
                 }
 
                 let sql = `UPDATE user_verification SET ? WHERE code = ${connection.escape(code)} AND id = ${connection.escape(userId)}`;
-                connection.query(sql, { verified: 1 }, (error, results, fields) => {
+                connection.query(sql, { verified: 1 }, async (error, results, fields) => {
 
                     connection.release();
 
@@ -403,8 +402,15 @@ class AuthDAO extends DAO {
                     }
 
                     if (results.changedRows === 1) {
-                        let token = tokenHandler.createNewAuthToken(userId, ipAddr)
-                        resolve(token);
+                        let token = generateAuthToken();
+                        await insertAuthoken(connection, {
+                            tokenHash: token.tokenHash,
+                            userId: userId,
+                            dateCreated: this.getTimeStamp()
+                        });
+
+                        this.tokenCache.addAuthTokenToCache(userId, token.token);
+                        resolve(token.token);
                     }
                     else {
                         this.logFailure(`Could not verify user ${userId}, with verification code ${code}`);
@@ -419,7 +425,7 @@ class AuthDAO extends DAO {
 
     getResetCode(emailAddr, onSuccess, onFail) {
         this.getConnection(async connection => {
-            if(!connection) {
+            if (!connection) {
                 onFail("Error getting db connection");
             }
 
@@ -430,14 +436,14 @@ class AuthDAO extends DAO {
                 results = await getUserIdByEmail(connection, emailAddr);
                 console.log(results);
 
-                if(results !== undefined && results.length === 1) {
+                if (results !== undefined && results.length === 1) {
                     // good, we got an id from this email;
                     let userId = results[0].userId;
                     let username = results[0].username;
                     let code = createResetCode();
                     let salt = createSalt();
                     let hash = getResetCodeHash(code, salt);
-          
+
                     results = await insertResetCode(connection, {
                         userId: userId,
                         codeHash: hash,
@@ -457,9 +463,9 @@ class AuthDAO extends DAO {
                 }
 
                 this.completeTransation(connection);
-                
+
             }
-            catch(ex) {
+            catch (ex) {
                 connection.rollback();
                 onFail(ex);
             }
@@ -472,7 +478,7 @@ class AuthDAO extends DAO {
 
     resetPassword(code_str, password, onSuccess, onFail) {
         this.getConnection(async connection => {
-            if(!connection) {
+            if (!connection) {
                 onFail("Error getting db connection");
             }
 
@@ -488,7 +494,7 @@ class AuthDAO extends DAO {
 
                 let results = await getResetPwInfo(connection, id);
                 console.log(results);
-                if(results.length === 0) {
+                if (results.length === 0) {
                     throw PasswordResetError.CODE_NOT_FOUND;
                 }
 
@@ -499,20 +505,20 @@ class AuthDAO extends DAO {
                 let codeUsed = results[0].codeUsed === 1 ? true : false;
 
                 // validate age of code
-                if(new Date().getTime() - new Date(dateCreated).getTime() > 24 * 60 * 60 * 1000) {
+                if (new Date().getTime() - new Date(dateCreated).getTime() > 24 * 60 * 60 * 1000) {
                     // this code is more than 5 minutes old. We can't use it.
                     throw PasswordResetError.CODE_EXPIRED;
                 }
                 // validate whether or not the code has been used previously
-                if(codeUsed) {
+                if (codeUsed) {
                     throw PasswordResetError.CODE_USED;
                 }
 
                 // if the code hashes correctly
-                if(codeHash === getResetCodeHash(code, salt)) {
+                if (codeHash === getResetCodeHash(code, salt)) {
                     // delete the old credentials
                     results = await deleteCredentials(connection, userId);
-              
+
                     // make a new salt and hash
                     const salt = createSalt();
                     const hash = getHash(password, salt);
@@ -546,9 +552,9 @@ class AuthDAO extends DAO {
                 }
 
                 this.completeTransation(connection);
-                
+
             }
-            catch(ex) {
+            catch (ex) {
                 connection.rollback();
                 onFail(ex);
             }
